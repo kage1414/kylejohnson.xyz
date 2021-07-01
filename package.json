@@ -1,0 +1,19 @@
+{
+  "name": "kylejohnson.xyz",
+  "version": "0.1.0",
+  "description": "Personal website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kage1414/kylejohnson.xyz.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kage1414/kylejohnson.xyz/issues"
+  },
+  "homepage": "https://github.com/kage1414/kylejohnson.xyz#readme"
+}
