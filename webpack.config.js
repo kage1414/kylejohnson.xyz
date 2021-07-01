@@ -1,10 +1,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-var SRC_DIR = path.join(__dirname, '/client/src');
-var DIST_DIR = path.join(__dirname, '/client/dist');
+var SRC_DIR = path.join(__dirname, 'client', 'src');
+var DIST_DIR = path.join(__dirname, 'client', 'dist');
+console.log(SRC_DIR)
 
 module.exports = {
-  entry: `${SRC_DIR}/index.jsx`,
+  entry: `${SRC_DIR}/index.tsx`,
+  context: SRC_DIR,
   output: {
     filename: 'bundle.js',
     path: DIST_DIR,
@@ -13,6 +15,9 @@ module.exports = {
   devServer: {
     port: 3000,
     watchContentBase: true
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.jsx']
   },
   // mode: 'development',
   module: {
@@ -44,7 +49,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './client/src/index.html',
+      template: './index.html',
       inject: 'body'
     })
   ]
