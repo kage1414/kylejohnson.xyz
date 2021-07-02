@@ -1,20 +1,20 @@
 import React, { FC, ReactElement } from 'react';
-import { Logo, Tab, List } from '../styled-components';
 
 interface IProps {
   tabs: Array<{ name: string; display: boolean; }>;
+  switchTabs: any;
 }
 
-const Navbar: FC<IProps> = ({tabs}): ReactElement => {
+const Navbar: FC<IProps> = ({tabs, switchTabs}): ReactElement => {
 
   return (
     <div>
-      <Logo>kyle johnson</Logo>
-      <List>
-        {tabs.map((tab, idx) => (
-          <Tab key={idx}>{tab.name}</Tab>
-        ))}
-      </List>
+      <span>kyle johnson</span>
+      <ul style={{display: 'inline-block'}} >
+        {tabs.map((tab, idx) => {
+          return <li onClick={switchTabs} style={{display: 'inline', margin: '5px'}} key={idx + tab.name}>{tab.name}</li>
+          })}
+      </ul>
     </div>
 
   )

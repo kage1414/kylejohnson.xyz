@@ -21,12 +21,17 @@ class App extends Component<IProps, IState> {
         { name: 'general', display: false }
       ]
     };
+    this.switchTabs = this.switchTabs.bind(this);
+  }
+
+  switchTabs(e: any) {
+    console.log(e)
   }
 
   render() {
     return (
       <>
-        <Navbar tabs={this.state.tabs} />
+        <Navbar tabs={this.state.tabs} switchTabs={this.switchTabs} />
       </>
     )
   }
