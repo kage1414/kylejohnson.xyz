@@ -28,25 +28,35 @@ class App extends Component<IProps, IState> {
   }
 
   switchTabs(e: any) {
-    const tab: string = e.target.dataset.name;
-    for (let i = 0; i < this.state.tabs.length; i++) {
-      const currentTab = this.state.tabs[i];
-      if (tab === currentTab.name) {
-        this.setState({
-          selectedTab: currentTab
-        });
-        break;
+    const idx: number = Number(e.target.dataset.idx);
+    let tabs = this.state.tabs;
+    let selectedTab = this.state.selectedTab;
+    tabs.forEach((tab, i) => {
+      if (i === idx) {
+        tab.display = true;
+        selectedTab = tab;
+      } else {
+        tab.display = false;
       }
-    }
+    })
+
+    this.setState({
+      tabs,
+      selectedTab
+    })
 
   }
 
   render() {
     return (
-      <div style={{margin: '15px'}}>
-        <Navbar tabs={this.state.tabs} switchTabs={this.switchTabs} />
-        <Body selectedTab={this.state.selectedTab}/>
-      </div >
+      <>
+        <div style={{ backgroundColor: 'rgb(206, 227, 248)'}}>
+          <Navbar tabs={this.state.tabs} switchTabs={this.switchTabs} />
+        </div >
+        <div>
+          <Body selectedTab={this.state.selectedTab}/>
+        </div>
+      </>
     )
   }
 }

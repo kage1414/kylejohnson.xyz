@@ -7,7 +7,7 @@ interface IProps {
 const Body: FC<IProps> = ({selectedTab}): ReactElement => {
 
   return (
-    <div>
+    <div style={{marginLeft: '15px'}}>
       {selectedTab.name === 'technical skills' &&
       <span>Technical Skills</span>
       }
