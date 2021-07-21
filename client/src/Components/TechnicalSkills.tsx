@@ -1,7 +1,8 @@
 import React, { FC, ReactElement } from 'react';
 
 interface IProps {
-  data: {type: string; technologies: Array<string>};
+  type: string;
+  technologies: Array<string>;
 }
 
 const TechnicalSkills: FC<IProps> = ({data}): ReactElement => {
