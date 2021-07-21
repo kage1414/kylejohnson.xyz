@@ -20,7 +20,6 @@ const Navbar: FC<IProps> = ({tabs, switchTabs}): ReactElement => {
         </ul>
       </div>
     </div>
-
   )
 
 }
