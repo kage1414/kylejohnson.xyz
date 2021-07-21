@@ -30,7 +30,7 @@ export const Data = {
       type: 'libraries',
       technologies:
         [
-          'Underscore,js',
+          'Underscore.js',
           'Mocha',
           'Chai',
           'Jest',
