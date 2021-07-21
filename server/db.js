@@ -38,7 +38,7 @@ export const Data = {
         ]
     },
     {
-      type: 'technologiesbases',
+      type: 'databases',
       technologies:
         [
           'MySQL',
