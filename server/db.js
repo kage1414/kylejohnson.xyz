@@ -1,9 +1,8 @@
 export const Data = {
   'technical skills': [
     {
-      name: 'frontend',
-      dataType: 'Technologies used: ',
-      data:
+      type: 'frontend',
+      technologies:
         [
           'Javascript',
           'Typescript',
@@ -16,9 +15,8 @@ export const Data = {
         ]
     },
     {
-      name: 'backend',
-      dataType: 'Technologies used: ',
-      data:
+      type: 'backend',
+      technologies:
         [
           'Node.js',
           'Express.js',
@@ -29,9 +27,8 @@ export const Data = {
         ]
     },
     {
-      name: 'libraries',
-      dataType: 'Technologies used: ',
-      data:
+      type: 'libraries',
+      technologies:
         [
           'Underscore,js',
           'Mocha',
@@ -41,9 +38,8 @@ export const Data = {
         ]
     },
     {
-      name: 'databases',
-      dataType: 'Technologies used: ',
-      data:
+      type: 'technologiesbases',
+      technologies:
         [
           'MySQL',
           'PostgreSQL',
@@ -54,9 +50,8 @@ export const Data = {
         ]
     },
     {
-      name: 'tools',
-      dataType: 'Technologies used: ',
-      data:
+      type: 'tools',
+      technologies:
         [
           'CircleCI',
           'Webpack',
