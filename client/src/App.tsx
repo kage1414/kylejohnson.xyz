@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Navbar from './Components/Navbar';
 import Body from './Components/Body';
 
@@ -49,14 +49,14 @@ class App extends Component<IProps, IState> {
 
   render() {
     return (
-      <>
+      <div>
         <div style={{ backgroundColor: 'rgb(206, 227, 248)'}}>
           <Navbar tabs={this.state.tabs} switchTabs={this.switchTabs} />
-        </div >
+        </div>
         <div>
           <Body selectedTab={this.state.selectedTab}/>
         </div>
-      </>
+      </div>
     )
   }
 }

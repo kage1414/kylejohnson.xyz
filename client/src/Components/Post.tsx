@@ -24,7 +24,7 @@ const Post: FC<IProps> = ({title, idx, description}): ReactElement => {
         <div style={{margin: '0 13px', width: '15px', height: '15px', backgroundImage: 'url(https://www.redditstatic.com/sprite-reddit.5kxTB7FXse0.png)', backgroundPositionX: '-64px', backgroundPositionY: '-1654px'}}></div>
       </div>
       <div style={{margin: '2px 0', backgroundImage: 'url(https://www.redditstatic.com/sprite-reddit.5kxTB7FXse0.png)', height: '50px', width: '70px', float: 'left', backgroundPositionY: thumbnails[Math.floor(Math.random() * thumbnails.length)]}}></div>
-      <span style={{paddingTop: '100px', color: 'blue'}}>{title}</span>
+      <span style={{color: 'blue'}}>{title}</span>
       {description &&
         <p>{description}</p>
       }
