@@ -23,7 +23,8 @@ export const Data = {
           'NPM',
           'AWS',
           'Heroku',
-          'CircleCI'
+          'CircleCI',
+          'Microservices'
         ]
     },
     {
@@ -67,28 +68,51 @@ export const Data = {
   'projects': [
     {
       name: 'Charlotte Badger',
-      url: 'https://url.com/Charlotte-Badger',
-      dataType: 'Technologies used: ',
-      data: ['Javascript', 'React', 'Node', 'Express', 'S3', 'EC2', 'PM2', 'Jest', 'Enzyme', 'MongoDB', 'Mongoose']
+      url: 'https://github.com/Charlotte-Badger',
+      technologies: ['Javascript', 'React', 'Node', 'Express', 'S3', 'EC2', 'PM2', 'Jest', 'Enzyme', 'MongoDB', 'Mongoose', 'Microservices', 'WebAPIs'],
+      description: [
+        'Developed Udemy clone in a team, responsible for Course Content microservice.', 
+        'Deployed API to make database accessible by teammates’ services.',
+        'Automate database seeding.',
+        'Implement image data pipeline, seeding data to S3 with references in database.',
+        'Achieve sufficient unit and integration test coverage using Jest and Enzyme.',
+        'Developed a proxy combining all microservices into one, user-accessible page.',
+        'Deploy proxy, Course Content service, and API endpoints to AWS EC2.',
+        'Write and maintain detailed service documentation.'
+      ]
     },
     {
       name: 'ldap',
-      url: 'https://url.com/rpt27-sdc-ldap',
-      dataType: 'Technologies used: ',
-      data: ['Javascript', 'Node', 'Express', 'PostgreSQL', 'Sequelize']
+      url: 'https://github.com/rpt27-sdc-ldap',
+      technologies: ['Javascript', 'Node', 'Express', 'PostgreSQL', 'Sequelize'],
+      description: [
+        'Developed back end of a clone of the Audible book page with a team, utilizing microservice architecture.',
+        'Seeded 10 million records of mock data to a database running on a t2.micro instance',
+        'Asynchronously wrote records to CSV file and imported to PostgreSQL.',
+        'Indexed multiple columns and clustered tables to achieve sub-50ms query times.'
+      ]
     },
     {
       name: 'Student Data Collection',
-      url: 'https://url.com/kage1414/dataCollection',
-      dataType: 'Technologies used: ',
-      data: ['Javascript', 'jQuery', 'AJAX']
+      url: 'https://github.com/kage1414/dataCollection',
+      technologies: ['Javascript', 'jQuery', 'AJAX'],
+      description: [
+        'Implemented a data pipeline using Google APIs for staff to understand student performance using jQuery.',
+        'Filter various aspects of student performance and provide insight without manual input.',
+        'Answer to staff constraints and pre-existing infrastructure.'
+      ]
     },
-
     {
       name: 'Bike Lockr',
-      url: 'https://url.com/kage1414/mvp',
-      dataType: 'Technologies used: ',
-      data: ['Javascript', 'React', 'Node', 'Express', 'MongoDB', 'Axios']
+      url: 'https://github.com/kage1414/mvp',
+      technologies: ['Javascript', 'React', 'Node', 'Express', 'MongoDB', 'Axios', 'Heroku'],
+      description: [
+        'Developed a single page app as a minimum viable product, and implemented new features to enhance product.',
+        'Implement data pipeline using Google Geolocation and Bikewise API to determine the user’s current location and retrieve bicycle theft data.',
+        'Contact OpenWeatherMap API to inform the user of precipitation in the forecast.',
+        'Save new results to MongoDB Atlas as backup.',
+        'Deploy to Heroku.'
+      ]
     }
   ],
   'experience': [
