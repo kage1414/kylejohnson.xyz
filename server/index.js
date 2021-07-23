@@ -2,7 +2,6 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const publicPath = path.join(__dirname, '..', 'client', 'dist');
-const devPORT = 3000;
 
 const http = require('http');
 const https = require('https');

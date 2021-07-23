@@ -38,7 +38,7 @@ class Sidebar extends Component<IProps, IState> {
 
     render() {
         return (
-            <div style={{width: '130px', height: this.state.height, backgroundColor: 'rgb(247, 247, 247)', margin: 0}}>
+            <div style={{width: '100px', height: this.state.height, backgroundColor: 'rgb(247, 247, 247)', margin: 0}}>
                 <div style={{margin: 0}}>
                     {/* Refactor this to React elements in future */}
                     <ul style={{display: 'flex', flexDirection: 'column'}}>
@@ -48,7 +48,7 @@ class Sidebar extends Component<IProps, IState> {
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            width: 117,
+                            width: 85,
                             margin: '10px 0 3px 12px',
                             border: 'rgb(204, 204, 204) 1px solid',
                             backgroundColor: 'white',
@@ -67,7 +67,7 @@ class Sidebar extends Component<IProps, IState> {
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            width: 117,
+                            width: 85,
                             margin: '10px 0 3px 12px',
                             border: 'rgb(204, 204, 204) 1px solid',
                             backgroundColor: 'white',
@@ -85,7 +85,7 @@ class Sidebar extends Component<IProps, IState> {
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            width: 117,
+                            width: 85,
                             margin: '10px 0 3px 12px',
                             border: 'rgb(204, 204, 204) 1px solid',
                             backgroundColor: 'white',
@@ -103,7 +103,7 @@ class Sidebar extends Component<IProps, IState> {
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            width: 117,
+                            width: 85,
                             margin: '10px 0 3px 12px',
                             border: 'rgb(204, 204, 204) 1px solid',
                             backgroundColor: 'white',
@@ -121,7 +121,7 @@ class Sidebar extends Component<IProps, IState> {
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            width: 117,
+                            width: 85,
                             margin: '10px 0 3px 12px',
                             border: 'rgb(204, 204, 204) 1px solid',
                             backgroundColor: 'white',
@@ -139,7 +139,7 @@ class Sidebar extends Component<IProps, IState> {
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            width: 117,
+                            width: 85,
                             margin: '10px 0 3px 12px',
                             border: 'rgb(204, 204, 204) 1px solid',
                             backgroundColor: 'white',
