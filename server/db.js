@@ -23,6 +23,7 @@ export const Data = {
           'NPM',
           'AWS',
           'Heroku',
+          'Cloudflare',
           'CircleCI',
           'Microservices'
         ]
@@ -93,13 +94,14 @@ export const Data = {
       ]
     },
     {
-      name: 'Student Data Collection',
-      url: 'https://github.com/kage1414/dataCollection',
-      technologies: ['Javascript', 'jQuery', 'AJAX'],
+      name: 'kylejohnson.xyz',
+      url: 'https://github.com/kage1414/kylejohnson.xyz',
+      technologies: ['Typescript', 'React', 'Node', 'Express', 'AWS', 'Cloudflare'],
       description: [
-        '• Implemented a data pipeline using Google APIs for staff to understand student performance using jQuery.',
-        '• Filter various aspects of student performance and provide insight without manual input.',
-        '• Answer to staff constraints and pre-existing infrastructure.'
+        '• Developed single page resume-portfolio with Typescript.',
+        '• Implement local data pipline',
+        '• Deploy to AWS.',
+        '• Point domain to AWS instance.'
       ]
     },
     {
@@ -112,6 +114,16 @@ export const Data = {
         '• Contact OpenWeatherMap API to inform the user of precipitation in the forecast.',
         '• Save new results to MongoDB Atlas as backup.',
         '• Deploy to Heroku.'
+      ]
+    },
+    {
+      name: 'Student Data Collection',
+      url: 'https://github.com/kage1414/dataCollection',
+      technologies: ['Javascript', 'jQuery', 'AJAX'],
+      description: [
+        '• Implemented a data pipeline using Google APIs for staff to understand student performance using jQuery.',
+        '• Filter various aspects of student performance and provide insight without manual input.',
+        '• Answer to staff constraints and pre-existing infrastructure.'
       ]
     }
   ],
