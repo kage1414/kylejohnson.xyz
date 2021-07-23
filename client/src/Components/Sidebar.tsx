@@ -55,6 +55,25 @@ class Sidebar extends Component<IProps, IState> {
                             borderBottomLeftRadius: '5px',
                             borderTopLeftRadius: '5px',
                             overflow: 'auto',
+                            fontSize: '14px'
+                        }}>
+                            <span>
+                                Full-Stack<br/>Developer
+                            </span>
+                        </li>
+
+                        <li style={{
+                            minHeight: 50,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: 117,
+                            margin: '10px 0 3px 12px',
+                            border: 'rgb(204, 204, 204) 1px solid',
+                            backgroundColor: 'white',
+                            borderBottomLeftRadius: '5px',
+                            borderTopLeftRadius: '5px',
+                            overflow: 'auto',
                             fontSize: '14px'}}>
                                 <a href={'mailto:kylejohnson92294@gmail.com'}>
                                     email:
@@ -78,7 +97,7 @@ class Sidebar extends Component<IProps, IState> {
                                     kylejohnson<br/>92294<br/>@gmail.com
                                 </a>
                         </li>
-                        
+
                         <li style={{
                             minHeight: 50,
                             display: 'flex',
