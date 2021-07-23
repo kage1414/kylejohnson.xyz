@@ -55,7 +55,7 @@ class Sidebar extends Component<IProps, IState> {
                             borderBottomLeftRadius: '5px',
                             borderTopLeftRadius: '5px',
                             overflow: 'auto',
-                            fontSize: '14px'
+                            fontSize: '12px'
                         }}>
                             <span>
                                 Full-Stack<br/>Developer
@@ -74,7 +74,7 @@ class Sidebar extends Component<IProps, IState> {
                             borderBottomLeftRadius: '5px',
                             borderTopLeftRadius: '5px',
                             overflow: 'auto',
-                            fontSize: '14px'}}>
+                            fontSize: '12px'}}>
                                 <a href={'mailto:kylejohnson92294@gmail.com'}>
                                     kylejohnson<br/>92294<br/>@gmail.com
                                 </a>
@@ -92,7 +92,7 @@ class Sidebar extends Component<IProps, IState> {
                             borderBottomLeftRadius: '5px',
                             borderTopLeftRadius: '5px',
                             overflow: 'auto',
-                            fontSize: '14px'}}>
+                            fontSize: '12px'}}>
                             <span>
                                 Indianapolis
                             </span>
@@ -110,7 +110,7 @@ class Sidebar extends Component<IProps, IState> {
                             borderBottomLeftRadius: '5px',
                             borderTopLeftRadius: '5px',
                             overflow: 'auto',
-                            fontSize: '14px'}}>
+                            fontSize: '12px'}}>
                             <span>
                                 Remote
                             </span>
@@ -128,7 +128,7 @@ class Sidebar extends Component<IProps, IState> {
                             borderBottomLeftRadius: '5px',
                             borderTopLeftRadius: '5px',
                             overflow: 'auto',
-                            fontSize: '14px'}}>
+                            fontSize: '12px'}}>
                                 <a href={'https://github.com/kage1414'}>
                                     github
                                 </a>
@@ -146,7 +146,7 @@ class Sidebar extends Component<IProps, IState> {
                             borderBottomLeftRadius: '5px',
                             borderTopLeftRadius: '5px',
                             overflow: 'auto',
-                            fontSize: '14px'}}>
+                            fontSize: '12px'}}>
                                 <a href={'https://www.linkedin.com/in/kyle-johnson-5737aa52/'}>
                                     linkedin
                                 </a>
