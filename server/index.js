@@ -16,7 +16,7 @@ app.get('/experience')
 
 app.get('/projects')
 
-app.put('/technicalSkill', db.insertOneTechnology)
+app.patch('/technicalSkills', db.insertOneTechnology)
 
 app.post('/technicalSkills', db.insertTechnologies)
 
