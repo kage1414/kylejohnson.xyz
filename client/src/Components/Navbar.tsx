@@ -15,7 +15,7 @@ const Navbar: FC<IProps> = ({tabs, switchTabs}): ReactElement => {
       <div style={{marginLeft: '15px', justifyContent: 'center', alignSelf: 'flex-end'}}>
         <ul style={{margin: '0 5px'}}>
           {tabs.map((tab, idx) => {//@ts-ignore
-            return <li onClick={switchTabs} style={{cursor: 'grab', display: 'inline', margin: '5px'}} key={idx + tab.name} data-idx={idx} data-name={tab.name} className={ tab.display === true ? 'front' : 'back' }>{tab.name}</li>
+            return <li onClick={switchTabs} style={{cursor: 'pointer', display: 'inline', margin: '5px'}} key={idx + tab.name} data-idx={idx} data-name={tab.name} className={ tab.display === true ? 'front' : 'back' }>{tab.name}</li>
             })}
         </ul>
       </div>

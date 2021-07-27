@@ -14,7 +14,7 @@ const Body: FC<IProps> = ({selectedTab}): ReactElement => {
 
   return (
     <div style={{display: 'flex', flexWrap: 'wrap'}}>
-      <div style={{flexBasis: '130px', flexGrow: 1}}>
+      <div style={{flexBasis: '100px', flexGrow: 1}}>
         <Sidebar />
       </div>
       <div style={{flexBasis: '0', flexGrow: 999}}>
