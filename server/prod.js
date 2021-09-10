@@ -6,8 +6,8 @@ const fs = require('fs');
 
 const httpServer = http.createServer(app);
 const httpsServer = https.createServer({
-  key: fs.readFileSync(path.join(__dirname, '../privkey.pem')),
-  cert: fs.readFileSync(path.join(__dirname, '../fullchain.pem'))
+  key: fs.readFileSync(path.join(__dirname, '../../privkey.pem')),
+  cert: fs.readFileSync(path.join(__dirname, '../../fullchain.pem'))
 }, app);
 
 httpServer.listen(80, () => {
