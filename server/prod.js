@@ -10,10 +10,10 @@ const httpsServer = https.createServer({
   cert: fs.readFileSync(path.join(__dirname, '../fullchain.pem'))
 }, app);
 
-httpServer.listen(80, () => {
-  console.log('HTTP listening on port 80');
+httpServer.listen(880, () => {
+  console.log('HTTP listening on port 880');
 });
 
-httpsServer.listen(443, () => {
-  console.log('HTTPS listening on port 443');
+httpsServer.listen(8443, () => {
+  console.log('HTTPS listening on port 8443');
 });
