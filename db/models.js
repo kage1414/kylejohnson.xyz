@@ -12,14 +12,14 @@ const technicalSkillsSchema = mongoose.Schema({
 
 const TechnicalSkills = mongoose.model('technicalSkills', technicalSkillsSchema);
 
-const projectsSchema = mongoose.Schema({
+const applicationsSchema = mongoose.Schema({
   name: String,
   url: String,
   technologies: [String],
   desription: [String]
 });
 
-const Projects = mongoose.model('projects', projectsSchema);
+const Applications = mongoose.model('applications', applicationsSchema);
 
 const educationSchema = mongoose.Schema({
   school: String,
@@ -41,7 +41,7 @@ const Experience = mongoose.model('experience', experienceSchema);
 
 module.exports = {
   TechnicalSkills,
-  Projects,
+  Applications,
   Education,
   Experience
 }

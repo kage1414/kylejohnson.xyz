@@ -147,7 +147,7 @@ class Sidebar extends Component<IProps, IState> {
                             borderTopLeftRadius: '5px',
                             overflow: 'auto',
                             fontSize: '12px'}}>
-                                <a href={'https://www.linkedin.com/in/kyle-johnson-5737aa52/'}>
+                                <a href={'https://www.linkedin.com/in/kylejohnson922/'}>
                                     linkedin
                                 </a>
                         </li>

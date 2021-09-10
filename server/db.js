@@ -7,11 +7,11 @@ export const Data = {
           'Javascript',
           'Typescript',
           'React.js',
+          'GraphQL',
           'Redux',
           'styled-components',
           'HTML5',
-          'CSS',
-          'jQuery'
+          'CSS'
         ]
     },
     {
@@ -20,12 +20,14 @@ export const Data = {
         [
           'Node.js',
           'Express.js',
-          'NPM',
-          'AWS',
+          'GraphQL',
+          'Service Oriented Architecture (SOA)',
+          'AWS / EC2 / S3',
           'Heroku',
-          'Cloudflare',
           'CircleCI',
-          'Microservices'
+          'NGINX',
+          'Memcached',
+          'Cloudflare'
         ]
     },
     {
@@ -46,7 +48,6 @@ export const Data = {
           'MySQL',
           'PostgreSQL',
           'MongoDB',
-          'CouchDB',
           'Sequelize ORM',
           'Mongoose ORM' 
         ]
@@ -55,42 +56,39 @@ export const Data = {
       type: 'tools',
       technologies:
         [
-          'CircleCI',
           'Webpack',
           'Babel',
-          'cURL',
           'Git',
+          'Agile Methodology',
           'VSCode',
           'Ubuntu',
           'Arch Linux'
         ]
     }
   ],
-  'projects': [
+  'applications': [
     {
-      name: 'Charlotte Badger',
+      name: 'Classera',
       url: 'https://github.com/Charlotte-Badger',
       technologies: ['Javascript', 'React', 'Node', 'Express', 'S3', 'EC2', 'PM2', 'Jest', 'Enzyme', 'MongoDB', 'Mongoose', 'Microservices', 'WebAPIs'],
       description: [
-        '• Developed Udemy clone in a team, responsible for Course Content microservice.', 
-        '• Deployed API to make database accessible by teammates’ services.',
-        '• Automate database seeding.',
-        '• Implement image data pipeline, seeding data to S3 with references in database.',
-        '• Achieve sufficient unit and integration test coverage using Jest and Enzyme.',
-        '• Developed a proxy combining all microservices into one, user-accessible page.',
-        '• Deploy proxy, Course Content service, and API endpoints to AWS EC2.',
-        '• Write and maintain detailed service documentation.'
+        '• Built a user facing component using service oriented architecture (SOA) that is responsible for course content.', 
+        '• Architected a multi-tiered, nested MongoDB schema resulting in high performance and availability.', 
+        '• Scripted database seeding with async / await to correctly generate and synchronize educational resources.', 
+        '• Automated testing with Jest, Enzyme, and CircleCI to achieve sufficient unit test coverage.', 
+        '• Consolidated database retrieval methods to minimize initial render speeds.', 
+        '• Prepared and maintained detailed service documentation to support future development.'
       ]
     },
     {
-      name: 'ldap',
+      name: 'Perceptible',
       url: 'https://github.com/rpt27-sdc-ldap',
       technologies: ['Javascript', 'Node', 'Express', 'PostgreSQL', 'Sequelize', 'S3'],
       description: [
-        '• Developed back end of a clone of the Audible book page with a team, utilizing microservice architecture.',
-        '• Seeded 10 million records of mock data to a database running on a t2.micro instance',
-        '• Asynchronously wrote records to CSV file and imported to PostgreSQL.',
-        '• Indexed multiple columns and clustered tables to achieve sub-50ms query times.'
+        '• Engineered a multi-layered backend system using NGINX to reliably meet service level agreement of 1000 RPS with less than 1500ms response duration.',
+        '• Optimized performance of PostgreSQL database containing 10M records by 200%, enabling join queries to complete in under 2ms.',
+        '• Implemented Memcached memory caching, reducing compute load on individual services as well as reducing response times.',
+        '• Implemented horizontal scaling techniques, increasing fault tolerance and system availability, and reliably handling extended load periods of 1000 RPS, up to 2500 RPS.'
       ]
     },
     {
@@ -99,9 +97,9 @@ export const Data = {
       technologies: ['Typescript', 'React', 'Node', 'Express', 'AWS', 'Cloudflare'],
       description: [
         '• Developed single page resume-portfolio with Typescript.',
-        '• Implement local data pipline',
-        '• Deploy to AWS.',
-        '• Point domain to AWS instance.'
+        '• Implement local data pipline.',
+        '• Deploy to AWS and manage DNS through cloudflare.',
+        '• Instantiated SSL encryption using Certbot.'
       ]
     },
     {
@@ -117,17 +115,27 @@ export const Data = {
       ]
     },
     {
-      name: 'Student Data Collection',
+      name: 'LT Data Collection',
       url: 'https://github.com/kage1414/dataCollection',
-      technologies: ['Javascript', 'jQuery', 'AJAX'],
+      technologies: ['Javascript', 'React'],
       description: [
-        '• Implemented a data pipeline using Google APIs for staff to understand student performance using jQuery.',
+        '• Implemented a data pipeline using Google APIs for staff to understand student performance using React.',
         '• Filter various aspects of student performance and provide insight without manual input.',
+        '• Architected a customizable data scheme, allowing for the processing of data in a variety of formats.',
         '• Answer to staff constraints and pre-existing infrastructure.'
       ]
     }
   ],
   'experience': [
+    {
+      employer: 'LyricKeeper',
+      position: 'Full Stack Software Engineer (Volunteer)',
+      description: [
+        '• Diagnosed communication disjunctions between front and back end servers and implemented meaningful and unambiguous error handling which resulted in higher user retention.',
+        '• Deployed virtual agent to keep backend services active, reducing errors during user creation.'
+      ],
+      time: 'August 2021 - Present'
+    },
     {
       employer: 'Lawrence North High School',
       position: 'Ensemble Director, Collaborative Pianist, Technical Assistant',
@@ -139,7 +147,7 @@ export const Data = {
         '• Record, edit, and produce videos using Adobe Premiere and Logic Pro X in lieu of live performances during the Covid-19 pandemic.',
         '• Design and run live sound and lighting to improve audience experience of in-house performances.'
       ],
-      time: 'August 2017 - PRESENT'
+      time: 'August 2017 - August 2021'
     },
     {
       employer: 'Woodcrafters Woodshop',
@@ -157,8 +165,8 @@ export const Data = {
   'education': [
     {
       school: 'Hack Reactor',
-      time: 'December 2020 - Expected Graduation Date: September 11, 2021',
-      certificate: 'Software Engineering Immersive'
+      time: 'December 2020 - September 2021',
+      certificate: 'Advanced Software Engineering Immersive'
     },
     {
       school: 'Millikin University',

@@ -13,7 +13,7 @@ app.get('/education')
 
 app.get('/experience')
 
-app.get('/projects')
+app.get('/applications')
 
 app.patch('/technicalSkills', db.insertOneTechnology)
 

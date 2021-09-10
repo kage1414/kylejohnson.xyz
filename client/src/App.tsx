@@ -1,6 +1,7 @@
-import { Component } from 'react';
+import { useEffect, useState, Component } from 'react';
 import Navbar from './Components/Navbar';
 import Body from './Components/Body';
+import { useCookies } from 'react-cookie';
 
 interface IProps {
 }
@@ -14,15 +15,34 @@ class App extends Component<IProps, IState> {
 
   constructor(props: IProps) {
     super(props);
+    let selectedTabCookie: any;
+    let tabs = [
+      { name: 'technical skills', display: true },
+      { name: 'applications', display: false },
+      { name: 'experience', display: false },
+      { name: 'education', display: false },
+      { name: 'general', display: false }
+    ]
+    
+    let cookies: Array<string> = document.cookie.split('; ');
+
+    for (let ele of cookies) {
+      let kv: Array<string> = ele.split('=');
+      if (kv[0] === 'lastOpenTab') {
+        selectedTabCookie = JSON.parse(kv[1]);
+        for (let tab of tabs) {
+          if (tab.name === selectedTabCookie.name) {
+            tab.display = true;
+          } else {
+            tab.display = false;
+          }
+        }
+      }
+    }
+
     this.state = {
-      tabs: [
-        { name: 'technical skills', display: true },
-        { name: 'projects', display: false },
-        { name: 'experience', display: false },
-        { name: 'education', display: false },
-        { name: 'general', display: false }
-      ],
-      selectedTab: { name: 'technical skills', display: true }
+      tabs,
+      selectedTab: selectedTabCookie || { name: 'technical skills', display: true }
     };
     this.switchTabs = this.switchTabs.bind(this);
   }
@@ -39,6 +59,8 @@ class App extends Component<IProps, IState> {
         tab.display = false;
       }
     })
+
+    document.cookie = `lastOpenTab=${JSON.stringify(selectedTab)}`;
 
     this.setState({
       tabs,
