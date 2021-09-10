@@ -6,8 +6,8 @@ const publicPath = path.join(__dirname, '..', 'client', 'dist');
 const bodyParser = require('body-parser');
 
 app.use('/', express.static(publicPath, { dotfiles: 'allow' }))
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded());
 
 // app.get('/education')
 
