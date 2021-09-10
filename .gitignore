@@ -23,3 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 .env
 package-lock.json
+bundle.js
+fullchain.pem
+privkey.pem
