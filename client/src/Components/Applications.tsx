@@ -36,12 +36,12 @@ const Applications: FC<IProps> = ({name, technologies, url, description}): React
           }>
             <a
             href={url}>
-              {name}
+            {name}
             </a>
           </h2>
-          <ul style={{marginBottom: '12px'}}>{description.map((text: string, idx: number) => (<li key={text + idx} style={{margin: '5px 0', lineHeight: '18px', color: idx % 2 === 0 ? 'black' : '#686868'}}>{text}</li>))}</ul>
-          <div style={{margin: '6px'}}>
-          <div style={{ height: '16px', margin: '6px 0', fontWeight: 100, padding: '3px', border: 'rgb(199, 199, 199) 1px solid', backgroundColor: 'rgb(240, 243, 252' }}>Tech Stack:</div>
+        <ul style={{ marginBottom: '12px' }}>{description.map((text: string, idx: number) => (<li key={text + idx} style={{ margin: '5px 0', lineHeight: '18px', borderTop: idx > 0 ? 'solid 1px gray' : 'none', marginTop: idx > 0 ? '5px' : '0', paddingTop: idx > 0 ? '5px' : '0'}}>{text}</li>))}</ul>
+          <div style={{margin: '6px 0'}}>
+          <div style={{ height: '16px', margin: '6px 0', fontWeight: 100, padding: '3px', border: 'rgb(199, 199, 199) 1px solid', backgroundColor: 'rgb(240, 243, 252' }}>Tech Stack</div>
             {technologies.map((title: string, idx) => {
               return <Post key={title + idx} title={title} idx={idx} />
             })}
