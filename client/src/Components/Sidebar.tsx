@@ -24,7 +24,8 @@ class Sidebar extends Component {
                             fontSize: '12px'
                         }}>
                             <span>
-                                Full-Stack<br/>Developer
+                                Full Stack<br/>Software<br/>
+                                Engineer
                             </span>
                         </li>
 
