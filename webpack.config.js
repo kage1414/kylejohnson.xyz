@@ -1,7 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-var SRC_DIR = path.join(__dirname, 'client', 'src');
-var DIST_DIR = path.join(__dirname, 'client', 'dist');
+const CopyPlugin = require("copy-webpack-plugin");
+const SRC_DIR = path.join(__dirname, 'client', 'src');
+const DIST_DIR = path.join(__dirname, 'client', 'dist');
 console.log(SRC_DIR)
 
 module.exports = {
@@ -51,6 +52,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './index.html',
       inject: 'body'
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: path.join(SRC_DIR, 'assets'), to: DIST_DIR }
+      ]
     })
   ]
 };
