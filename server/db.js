@@ -116,7 +116,7 @@ export const Data = {
     },
     {
       name: 'LT Data Collection',
-      url: 'https://github.com/kage1414/dataCollection',
+      url: 'https://github.com/kage1414/lt-data-collection',
       technologies: ['Javascript', 'React'],
       description: [
         'Implemented a data pipeline using Google APIs for staff to understand student performance using React.',
