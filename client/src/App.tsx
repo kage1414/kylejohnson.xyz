@@ -35,10 +35,6 @@ class App extends Component<IProps, IState> {
       {
         name: 'education',
         display: false
-      },
-      {
-        name: 'general',
-        display: false
       }
     ];
 

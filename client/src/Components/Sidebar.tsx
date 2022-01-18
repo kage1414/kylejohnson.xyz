@@ -66,7 +66,7 @@ class Sidebar extends Component<IProps, IState> {
               fontSize: '12px'
             }}>
               <span>
-                Full-Stack<br />Developer
+                Full-Stack<br />SWE
               </span>
             </li>
 
