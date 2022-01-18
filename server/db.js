@@ -172,16 +172,6 @@ export const Data = {
       time: '2021 - Present'
     },
     {
-      employer: 'LyricKeeper',
-      position: 'Full Stack Software Engineer',
-      description: [
-        'Diagnose communication disjunctions between front and back end servers and implement meaningful and unambiguous error handling utilizing React Hooks, resulting in higher user retention.',
-        'Deploy virtual agent to keep backend services active, reducing errors during user creation.',
-        'Enhance usability with new “next and previous lyric” feature, improving and adding value to the user experience.'
-      ],
-      time: '2021 - Present'
-    },
-    {
       employer: 'Lawrence North High School',
       position: 'Ensemble Director, Collaborative Pianist, Technical Assistant',
       description: [
