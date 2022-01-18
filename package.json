@@ -29,7 +29,7 @@
   },
   "scripts": {
     "start": "node server/netlify-server.js",
-    "build": "webpack --mode production && netlify-lambda build express",
+    "build": "webpack --mode production && netlify-lambda build server/netlify-server.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "webpack --mode development --watch & nodemon server/dev.js"
@@ -75,7 +75,6 @@
     "eslint-plugin-jsonc": "^2.0.0",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
-    "eslint-plugin-typescript": "^0.14.0",
     "html-webpack-plugin": "^5.3.2",
     "mini-css-extract-plugin": "^2.0.0",
     "source-map-loader": "^3.0.0",
