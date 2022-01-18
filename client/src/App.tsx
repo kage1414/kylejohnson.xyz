@@ -16,7 +16,7 @@ class App extends Component<IProps, IState> {
 
   constructor(props: IProps) {
     super(props);
-    let selectedTabCookie: any;
+    // let selectedTabCookie: any;
     const tabs = [
       {
         name: 'experience',
@@ -40,25 +40,25 @@ class App extends Component<IProps, IState> {
       }
     ];
 
-    const cookies: Array<string> = document.cookie.split('; ');
+    // const cookies: Array<string> = document.cookie.split('; ');
 
-    for (const ele of cookies) {
-      const kv: Array<string> = ele.split('=');
-      if (kv[0] === 'lastOpenTab') {
-        selectedTabCookie = JSON.parse(kv[1]);
-        for (const tab of tabs) {
-          if (tab.name === selectedTabCookie.name) {
-            tab.display = true;
-          } else {
-            tab.display = false;
-          }
-        }
-      }
-    }
+    // for (const ele of cookies) {
+    //   const kv: Array<string> = ele.split('=');
+    //   if (kv[0] === 'lastOpenTab') {
+    //     selectedTabCookie = JSON.parse(kv[1]);
+    //     for (const tab of tabs) {
+    //       if (tab.name === selectedTabCookie.name) {
+    //         tab.display = true;
+    //       } else {
+    //         tab.display = false;
+    //       }
+    //     }
+    //   }
+    // }
 
     this.state = {
       tabs,
-      selectedTab: selectedTabCookie || {
+      selectedTab: {
         name: 'experience',
         display: true
       }
@@ -79,7 +79,7 @@ class App extends Component<IProps, IState> {
       }
     });
 
-    document.cookie = `lastOpenTab=${JSON.stringify(selectedTab)}`;
+    // document.cookie = `lastOpenTab=${JSON.stringify(selectedTab)}`;
 
     this.setState({
       tabs,

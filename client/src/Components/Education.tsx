@@ -7,7 +7,29 @@ interface IProps {
   certificate?: string;
 }
 
-const Education: FC<IProps> = ({ school, time, degree, certificate }): ReactElement => {
+interface IData {
+  Data: any;
+  selectedTab: any;
+}
+
+const Education: FC<IData> = ({ Data, selectedTab }) => (
+  <div style={{
+    marginLeft: '15px',
+    display: 'flex',
+    alignContent: 'flex-start',
+    flexFlow: 'row wrap'
+  }}>
+    {Data[selectedTab.name].map((data: { school: string; time: string; degree?: string; certificate?: string; }, idx: number) => (
+      <EducationElement school={data.school}
+        degree={data.degree}
+        time={data.time}
+        certificate={data.certificate}
+        key={data.school + idx} />
+    ))}
+  </div>
+);
+
+const EducationElement: FC<IProps> = ({ school, time, degree, certificate }): ReactElement => {
 
   return (
     <div style={{

@@ -7,7 +7,30 @@ interface IProps {
   position: string;
 }
 
-const Experience: FC<IProps> = ({ employer, time, description, position }): ReactElement => {
+interface IData {
+  Data: any;
+  selectedTab: any;
+}
+
+const Experience: FC<IData> = ({ Data, selectedTab }): ReactElement => (
+
+  <div style={{
+    marginLeft: '15px',
+    display: 'flex',
+    alignContent: 'flex-start',
+    flexFlow: 'row wrap'
+  }}>
+    {Data[selectedTab.name].map((data: { employer: string; description: Array<string>; position: string; time: string; }, idx: number) => (
+      <ExperienceElement description={data.description}
+        employer={data.employer}
+        time={data.time}
+        position={data.position}
+        key={data.employer + idx} />
+    ))}
+  </div>
+);
+
+const ExperienceElement: FC<IProps> = ({ employer, time, description, position }): ReactElement => {
 
   return (
     <div style={{
@@ -30,6 +53,7 @@ const Experience: FC<IProps> = ({ employer, time, description, position }): Reac
         <ul style={{ margin: '6px' }}>{description.map((text: string, idx: number) => (<li key={text + idx}
           style={{
             margin: '5px 0',
+            width: '300px',
             lineHeight: '18px',
             color: idx % 2 === 0 ? 'black' : '#686868'
           }}>{`• ${text}`}</li>))}</ul>

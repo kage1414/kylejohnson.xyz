@@ -6,7 +6,25 @@ interface IProps {
   technologies: Array<string>;
 }
 
-const TechnicalSkills: FC<IProps> = ({ type, technologies }): ReactElement => {
+interface IData {
+  Data: any;
+  selectedTab: any;
+}
+
+const TechnicalSkills: FC<IData> = ({ Data, selectedTab }) => (
+  <div style={{
+    marginLeft: '15px',
+    display: 'flex',
+    alignContent: 'flex-start',
+    flexFlow: 'row wrap'
+  }}>
+    {Data[selectedTab.name].map((data: { type: string; technologies: Array<string>; }, idx: number) => <TechnicalSkillsElement type={data.type}
+      technologies={data.technologies}
+      key={data.type + idx} />)}
+  </div>
+);
+
+const TechnicalSkillsElement: FC<IProps> = ({ type, technologies }): ReactElement => {
 
   return (
     <div style={{
