@@ -29,7 +29,7 @@
   },
   "scripts": {
     "start": "node server/netlify-server.js",
-    "build": "webpack --mode production && netlify-lambda build server/netlify-server.js",
+    "build": "webpack --mode production && node server/index.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "webpack --mode development --watch & nodemon server/dev.js"
