@@ -74,16 +74,11 @@ class App extends Component<IProps, IState> {
 
   componentDidMount() {
     window.addEventListener('resize', () => {
-      console.log(window.innerWidth)
-      console.log(window.outerWidth)
       this.setState({
         windowWidth: window.innerWidth
       })
     })
-    window.addEventListener('scroll', () => {
-      console.log(window.innerWidth)
-      console.log(window.outerWidth)
-    })
+    this.mobileCheck();
   }
 
   mobileCheck() {
