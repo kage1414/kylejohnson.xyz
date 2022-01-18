@@ -26,3 +26,4 @@ package-lock.json
 bundle.js
 fullchain.pem
 privkey.pem
+dist

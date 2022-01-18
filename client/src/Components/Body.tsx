@@ -5,20 +5,28 @@ import Applications from './Applications';
 import Sidebar from './Sidebar'
 import Experience from './Experience';
 import Education from './Education';
+import BottomBar from './BottomBar';
 
 interface IProps {
   selectedTab: { name: string; display: boolean; };
+  windowWidth: number;
+  mobile: boolean;
 }
 
-const Body: FC<IProps> = ({selectedTab}): ReactElement => {
+const Body: FC<IProps> = ({selectedTab, windowWidth, mobile}): ReactElement => {
+
+  let showSidebar: boolean;
+  showSidebar = windowWidth > 430 || mobile;
 
   return (
     <div style={{display: 'flex', flexWrap: 'wrap'}}>
-      <div style={{flexBasis: '100px', flexGrow: 1}}>
-        <Sidebar />
-      </div>
+      {(showSidebar) &&
+        <div style={{flexBasis: '100px', flexGrow: 1}}>
+          <Sidebar />
+        </div>
+      }
       <div style={{flexBasis: '0', flexGrow: 999}}>
-      {selectedTab.name === 'technical skills' &&
+      {selectedTab.name === 'technical_skills' &&
         <div style={{marginLeft: '15px', display: 'flex', alignContent: 'flex-start', flexFlow: 'row wrap'}}>
           {Data[selectedTab.name].map((data: {type: string; technologies: Array<string>;}, idx) => <TechnicalSkills type={data.type} technologies={data.technologies} key={data.type + idx}/>)}
         </div>
@@ -45,6 +53,7 @@ const Body: FC<IProps> = ({selectedTab}): ReactElement => {
         </div>
       }
       </div>
+      {/* <BottomBar/> */}
     </div>
   )
 
