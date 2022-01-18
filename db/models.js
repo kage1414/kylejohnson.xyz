@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/', {
   dbName: 'kylejohnson-xyz'
 }, () => {
-  console.log("connected")
-  })
+  console.log("connected");
+});
 
 const technicalSkillsSchema = mongoose.Schema({
   type: String,
@@ -44,4 +44,4 @@ module.exports = {
   Applications,
   Education,
   Experience
-}
+};

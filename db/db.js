@@ -1,14 +1,14 @@
 const models = require('./models');
 
 const insertOneTechnology = (req, res) => {
-  
-  let type = req.body.technicalSkills.type;
-  let technology = req.body.technicalSkills.technology
 
-  let query = models.TechnicalSkills.updateOne({type},
-    { $addToSet: {technologies: technology} },
+  const { type } = req.body.technicalSkills;
+  const { technology } = req.body.technicalSkills;
+
+  const query = models.TechnicalSkills.updateOne({ type },
+    { $addToSet: { technologies: technology } },
     { upsert: true }
-  ).exec()
+  ).exec();
 
   Promise.resolve(query)
     .then(() => {
@@ -21,27 +21,27 @@ const insertOneTechnology = (req, res) => {
       } else {
         res.sendStatus(400);
       }
-    })
+    });
 
-}
+};
 
 const insertTechnologies = (req, res) => {
 
-  let technicalSkills = req.body.technicalSkills;
+  const { technicalSkills } = req.body;
 
-  let queries = [];
+  const queries = [];
 
   technicalSkills.forEach((skill) => {
-    let type = skill.type;
-    let technologies = skill.technologies
+    const { type } = skill;
+    const { technologies } = skill;
 
-    let query = models.TechnicalSkills.updateOne({type},
-      { $addToSet: {technologies: technologies} },
+    const query = models.TechnicalSkills.updateOne({ type },
+      { $addToSet: { technologies: technologies } },
       { upsert: true }
-    ).exec()
+    ).exec();
 
     queries.push(query);
-  })
+  });
 
   Promise.all(queries)
     .then((response) => {
@@ -50,9 +50,9 @@ const insertTechnologies = (req, res) => {
         if (resp.upserted) {
           count++;
         }
-      })
+      });
       res.status(200);
-      res.send(`Updated ${count} skillsets`)
+      res.send(`Updated ${count} skillsets`);
     })
     .catch((err) => {
       if (err) {
@@ -62,9 +62,9 @@ const insertTechnologies = (req, res) => {
       } else {
         res.sendStatus(400);
       }
-    })
+    });
 
-}
+};
 
 module.exports.insertOneTechnology = insertOneTechnology;
 module.exports.insertTechnologies = insertTechnologies;

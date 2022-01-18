@@ -4,8 +4,11 @@
     "@babel/preset-react"
   ],
   "plugins": [
-    ["babel-plugin-styled-components", {
-      "namespace": "content"
-    }]
+    [
+      "babel-plugin-styled-components",
+      {
+        "namespace": "content"
+      }
+    ]
   ]
 }

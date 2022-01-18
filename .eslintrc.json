@@ -69,6 +69,11 @@
     "@typescript-eslint/no-empty-interface": 0,
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/explicit-module-boundary-types": 0,
-    "object-property-newline": "error"
+    "object-property-newline": "error",
+    "eol-last": [
+      "error",
+      "always"
+    ],
+    "@typescript-eslint/no-var-requires": 0
   }
 }
