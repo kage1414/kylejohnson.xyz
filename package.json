@@ -16,17 +16,20 @@
     "express": "^4.17.1",
     "http": "0.0.1-security",
     "https": "^1.0.0",
+    "netlify-lambda": "^2.0.15",
     "nodemon": "^2.0.9",
     "path": "^0.12.7",
     "react": "^17.0.2",
     "react-cookie": "^4.1.1",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
+    "serverless-http": "^2.7.0",
     "styled-components": "^5.3.0",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "npm install && webpack --mode production && node server/prod.js",
+    "start": "node server/prod.js",
+    "build": "webpack --mode production && netlify-lambda build express",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "webpack --mode development --watch & nodemon server/dev.js"
