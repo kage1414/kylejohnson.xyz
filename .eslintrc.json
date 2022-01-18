@@ -1,0 +1,74 @@
+{
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  //   "parserOptions": { "ecmaVersion": 6 },
+  "parser": "@typescript-eslint/parser", // Specifies the ESLint parser
+  "parserOptions": {
+    "ecmaVersion": 2020, // Allows for the parsing of modern ECMAScript features
+    "sourceType": "module", // Allows for the use of imports
+    "ecmaFeatures": {
+      "jsx": true // Allows for the parsing of JSX
+    }
+  },
+  "settings": {
+    "react": {
+      "version": "detect" // Tells eslint-plugin-react to automatically detect the version of React to use
+    }
+  },
+  "extends": [
+    "plugin:react/recommended", // Uses the recommended rules from @eslint-plugin-react
+    "plugin:react-hooks/recommended", // Uses the recommended rules from @eslint-plugin-react-hooks
+    "plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+    "plugin:jest/recommended",
+    "eslint:recommended"
+  ],
+  "rules": {
+    "no-dupe-keys": 1,
+    // "no-extra-parens": 1,
+    "array-callback-return": 1,
+    "eqeqeq": 2,
+    "no-empty-pattern": 2,
+    "no-useless-return": 1,
+    "no-shadow": 1,
+    "no-unused-vars": 2,
+    "no-undef": 2,
+    "no-unneeded-ternary": 1,
+    "no-const-assign": 2,
+    "no-var": 1,
+    "prefer-arrow-callback": 1,
+    "prefer-const": 1,
+    "prefer-destructuring": 1,
+    "prefer-template": 1,
+    "react/no-unescaped-entities": 0,
+    "react/prop-types": 0,
+    "react-hooks/rules-of-hooks": 2,
+    "react-hooks/exhaustive-deps": 2,
+    // we want to force semicolons
+    "semi": [
+      "error",
+      "always"
+    ],
+    // we use 2 spaces to indent our code
+    "indent": [
+      "error",
+      2
+    ],
+    // we want to avoid extraneous spaces
+    "no-multi-spaces": [
+      "error"
+    ],
+    "react/jsx-max-props-per-line": [
+      "error",
+      {
+        "maximum": 1,
+        "when": "always"
+      }
+    ],
+    "@typescript-eslint/no-empty-interface": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "object-property-newline": "error"
+  }
+}
