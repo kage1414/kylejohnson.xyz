@@ -1,5 +1,5 @@
 const path = require('path');
-const app  = require('./index.js').app;
+const { app } = require('./index.js');
 const http = require('http');
 const https = require('https');
 const fs = require('fs');
