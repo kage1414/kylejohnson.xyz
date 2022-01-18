@@ -1,8 +1,10 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import Navbar from './Components/Navbar';
 import Body from './Components/Body';
 
+// eslint-ignore
 interface IProps {
+  hello?: string;
 }
 
 interface IState {
@@ -15,21 +17,36 @@ class App extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     let selectedTabCookie: any;
-    let tabs = [
-      { name: 'experience', display: true },
-      { name: 'technical skills', display: false },
-      { name: 'applications', display: false },
-      { name: 'education', display: false },
-      { name: 'general', display: false }
-    ]
-    
-    let cookies: Array<string> = document.cookie.split('; ');
+    const tabs = [
+      {
+        name: 'experience',
+        display: true
+      },
+      {
+        name: 'technical skills',
+        display: false
+      },
+      {
+        name: 'applications',
+        display: false
+      },
+      {
+        name: 'education',
+        display: false
+      },
+      {
+        name: 'general',
+        display: false
+      }
+    ];
 
-    for (let ele of cookies) {
-      let kv: Array<string> = ele.split('=');
+    const cookies: Array<string> = document.cookie.split('; ');
+
+    for (const ele of cookies) {
+      const kv: Array<string> = ele.split('=');
       if (kv[0] === 'lastOpenTab') {
         selectedTabCookie = JSON.parse(kv[1]);
-        for (let tab of tabs) {
+        for (const tab of tabs) {
           if (tab.name === selectedTabCookie.name) {
             tab.display = true;
           } else {
@@ -41,15 +58,18 @@ class App extends Component<IProps, IState> {
 
     this.state = {
       tabs,
-      selectedTab: selectedTabCookie || { name: 'technical skills', display: true }
+      selectedTab: selectedTabCookie || {
+        name: 'experience',
+        display: true
+      }
     };
     this.switchTabs = this.switchTabs.bind(this);
   }
 
   switchTabs(e: any) {
-    const idx: number = Number(e.target.dataset.idx);
-    let tabs = this.state.tabs;
-    let selectedTab = this.state.selectedTab;
+    const idx = Number(e.target.dataset.idx);
+    const { tabs } = this.state;
+    let { selectedTab } = this.state;
     tabs.forEach((tab, i) => {
       if (i === idx) {
         tab.display = true;
@@ -57,28 +77,29 @@ class App extends Component<IProps, IState> {
       } else {
         tab.display = false;
       }
-    })
+    });
 
     document.cookie = `lastOpenTab=${JSON.stringify(selectedTab)}`;
 
     this.setState({
       tabs,
       selectedTab
-    })
+    });
 
   }
 
   render() {
     return (
       <div>
-        <div style={{ backgroundColor: 'rgb(206, 227, 248)'}}>
-          <Navbar tabs={this.state.tabs} switchTabs={this.switchTabs} />
+        <div style={{ backgroundColor: 'rgb(206, 227, 248)' }}>
+          <Navbar tabs={this.state.tabs}
+            switchTabs={this.switchTabs} />
         </div>
         <div>
-          <Body selectedTab={this.state.selectedTab}/>
+          <Body selectedTab={this.state.selectedTab} />
         </div>
       </div>
-    )
+    );
   }
 }
 

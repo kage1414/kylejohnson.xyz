@@ -53,7 +53,7 @@ export const Data = {
           'PostgreSQL',
           'MongoDB',
           'Sequelize ORM',
-          'Mongoose ORM' 
+          'Mongoose ORM'
         ]
     },
     {
@@ -76,11 +76,11 @@ export const Data = {
       url: 'https://github.com/Charlotte-Badger',
       technologies: ['Javascript', 'React', 'Node', 'Express', 'S3', 'EC2', 'PM2', 'Jest', 'Enzyme', 'MongoDB', 'Mongoose', 'Microservices', 'WebAPIs'],
       description: [
-        '• Built a user facing component using service oriented architecture (SOA) that is responsible for course content.', 
-        '• Architected a multi-tiered, nested MongoDB schema resulting in high performance and availability.', 
-        '• Scripted database seeding with async / await to correctly generate and synchronize educational resources.', 
-        '• Automated testing with Jest, Enzyme, and CircleCI to achieve sufficient unit test coverage.', 
-        '• Consolidated database retrieval methods to minimize initial render speeds.', 
+        '• Built a user facing component using service oriented architecture (SOA) that is responsible for course content.',
+        '• Architected a multi-tiered, nested MongoDB schema resulting in high performance and availability.',
+        '• Scripted database seeding with async / await to correctly generate and synchronize educational resources.',
+        '• Automated testing with Jest, Enzyme, and CircleCI to achieve sufficient unit test coverage.',
+        '• Consolidated database retrieval methods to minimize initial render speeds.',
         '• Prepared and maintained detailed service documentation to support future development.'
       ]
     },
@@ -141,7 +141,7 @@ export const Data = {
         'Deploy end-to-end testing suites to maintain 80% code coverage.',
         'Refactor legacy PHP to utilize more reliable Hack implementations.',
         'Implement static typing to frontend React components using Flow.'
-        
+
       ],
       time: '2021 - Present'
     },
@@ -155,8 +155,8 @@ export const Data = {
         'Lead Junior Engineers to develop understanding of new libraries, coding best practices, and test development strategies.',
         'Correct anti-patterns in Junior Engineer’s codebases to prevent additional issues in the future.',
         'Measure performance of Junior Engineers and report anti-patterns to management when necessary.'
-        
-        
+
+
       ],
       time: '2021 - Present'
     },
@@ -167,7 +167,7 @@ export const Data = {
         'Diagnose communication disjunctions between front and back end servers and implement meaningful and unambiguous error handling utilizing React Hooks, resulting in higher user retention.',
         'Deploy virtual agent to keep backend services active, reducing errors during user creation.',
         'Enhance usability with new “next and previous lyric” feature, improving and adding value to the user experience.'
-        
+
       ],
       time: '2021 - Present'
     },
@@ -210,4 +210,4 @@ export const Data = {
     }
   ],
   'general': []
-}
+};

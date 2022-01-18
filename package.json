@@ -24,12 +24,10 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "node server/prod.js",
-    "build": "webpack --mode production",
+    "start": "webpack --mode production && node server/prod.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server-dev": "nodemon server/dev.js",
-    "react-dev": "webpack --mode development --watch"
+    "dev": "webpack --mode development --watch & nodemon server/dev.js"
   },
   "eslintConfig": {
     "extends": [
