@@ -10,6 +10,7 @@
     "@types/jest": "^26.0.23",
     "@types/node": "^12.20.15",
     "body-parser": "^1.19.0",
+    "copy-webpack-plugin": "^9.0.1",
     "eslint": "^7.31.0",
     "express": "^4.17.1",
     "http": "0.0.1-security",
@@ -24,12 +25,10 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "node server/prod.js",
-    "build": "webpack --mode production",
+    "start": "webpack --mode production & node server/prod.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server-dev": "nodemon server/dev.js",
-    "react-dev": "webpack --mode development --watch"
+    "dev": "webpack --mode development --watch & nodemon server/dev.js"
   },
   "eslintConfig": {
     "extends": [
