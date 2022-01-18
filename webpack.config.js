@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 const SRC_DIR = path.join(__dirname, 'client', 'src');
 const DIST_DIR = path.join(__dirname, 'client', 'dist');
-console.log(SRC_DIR)
+console.log(SRC_DIR);
 
 module.exports = {
   entry: `${SRC_DIR}/index.tsx`,
@@ -55,7 +55,10 @@ module.exports = {
     }),
     new CopyPlugin({
       patterns: [
-        { from: path.join(SRC_DIR, 'assets'), to: DIST_DIR }
+        {
+          from: path.join(SRC_DIR, 'assets'),
+          to: DIST_DIR
+        }
       ]
     })
   ]
