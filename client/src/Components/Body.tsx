@@ -5,7 +5,6 @@ import Applications from './Applications';
 import Sidebar from './Sidebar';
 import Experience from './Experience';
 import Education from './Education';
-import BottomBar from './BottomBar';
 
 interface IProps {
   selectedTab: { name: string; display: boolean; };
@@ -30,7 +29,7 @@ const Body: FC<IProps> = ({ selectedTab }): ReactElement => {
         flexBasis: '0',
         flexGrow: 999
       }}>
-        {selectedTab.name === 'technical skills' &&
+        {selectedTab.name === 'technical_skills' &&
           <TechnicalSkills Data={Data}
             selectedTab={selectedTab} />
         }

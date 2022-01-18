@@ -25,7 +25,7 @@ class App extends Component<IProps, IState> {
         display: true
       },
       {
-        name: 'technical skills',
+        name: 'technical_skills',
         display: false
       },
       {
