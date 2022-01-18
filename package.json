@@ -25,11 +25,7 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-<<<<<<< HEAD
-    "start": "webpack --mode production & node server/prod.js",
-=======
     "start": "webpack --mode production && node server/prod.js",
->>>>>>> 621119f73787e989915ff31ffa10f5f678ff5088
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "webpack --mode development --watch & nodemon server/dev.js"
