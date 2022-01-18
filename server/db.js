@@ -6,21 +6,25 @@ export const Data = {
         [
           'Javascript',
           'Typescript',
-          'React.js',
+          'Flow',
+          'React.js (Hooks and Redux)',
           'GraphQL',
           'Redux',
           'styled-components',
           'HTML5',
-          'CSS'
+          'CSS3'
         ]
     },
     {
       type: 'backend',
       technologies:
         [
+          'Hack',
+          'PHP',
           'Node.js',
           'Express.js',
           'GraphQL',
+          'Relay',
           'Service Oriented Architecture (SOA)',
           'AWS / EC2 / S3',
           'Heroku',
@@ -128,38 +132,69 @@ export const Data = {
   ],
   'experience': [
     {
-      employer: 'LyricKeeper',
-      position: 'Full Stack Software Engineer (Volunteer)',
+      employer: 'K2 Partnering Solutions at Facebook / Meta',
+      position: 'Full Stack Software Engineer',
       description: [
-        '• Diagnosed communication disjunctions between front and back end servers and implemented meaningful and unambiguous error handling which resulted in higher user retention.',
-        '• Deployed virtual agent to keep backend services active, reducing errors during user creation.'
+        'Refactor synchronous operations in data pipelines to use async / await, improving speed and reliability.',
+        'Debug controllers delivering incorrectly formatted data and modify backend code to return data in correct format.',
+        'Analyze and remove runtime-dead code from Facebook codebase.',
+        'Deploy end-to-end testing suites to maintain 80% code coverage.',
+        'Refactor legacy PHP to utilize more reliable Hack implementations.',
+        'Implement static typing to frontend React components using Flow.'
+        
       ],
-      time: 'August 2021 - Present'
+      time: '2021 - Present'
+    },
+    {
+      employer: 'Galvanize / Hack Reactor',
+      position: 'Software Engineer Resident',
+      description: [
+        'Mentor Junior Engineers struggling with blockers and help implement solutions that allow for continued development.',
+        'Conduct daily meetings with Junior Engineers to strengthen and clarify their understanding of technical concepts.',
+        'Debug the codebases of Junior Engineers as needed to assess their personal growth.',
+        'Lead Junior Engineers to develop understanding of new libraries, coding best practices, and test development strategies.',
+        'Correct anti-patterns in Junior Engineer’s codebases to prevent additional issues in the future.',
+        'Measure performance of Junior Engineers and report anti-patterns to management when necessary.'
+        
+        
+      ],
+      time: '2021 - Present'
+    },
+    {
+      employer: 'LyricKeeper',
+      position: 'Full Stack Software Engineer',
+      description: [
+        'Diagnose communication disjunctions between front and back end servers and implement meaningful and unambiguous error handling utilizing React Hooks, resulting in higher user retention.',
+        'Deploy virtual agent to keep backend services active, reducing errors during user creation.',
+        'Enhance usability with new “next and previous lyric” feature, improving and adding value to the user experience.'
+        
+      ],
+      time: '2021 - Present'
     },
     {
       employer: 'Lawrence North High School',
       position: 'Ensemble Director, Collaborative Pianist, Technical Assistant',
       description: [
-        '• Direct, rehearse, and perform with combo band to accompany Show Choirs.',
-        '• Collaborate with the choir director to produce award-winning shows.',
-        '• Coordinate the transportation, setup, and teardown of equipment.',
-        '• Implement student data collection workflow using Google Forms and jQuery.',
-        '• Record, edit, and produce videos using Adobe Premiere and Logic Pro X in lieu of live performances during the Covid-19 pandemic.',
-        '• Design and run live sound and lighting to improve audience experience of in-house performances.'
+        'Direct, rehearse, and perform with combo band to accompany Show Choirs.',
+        'Collaborate with the choir director to produce award-winning shows.',
+        'Coordinate the transportation, setup, and teardown of equipment.',
+        'Implement student data collection workflow using Google Forms and jQuery.',
+        'Record, edit, and produce videos using Adobe Premiere and Logic Pro X in lieu of live performances during the Covid-19 pandemic.',
+        'Design and run live sound and lighting to improve audience experience of in-house performances.'
       ],
-      time: 'August 2017 - August 2021'
+      time: '2017 - 2021'
     },
     {
       employer: 'Woodcrafters Woodshop',
       position: 'Assistant Carpenter',
       description: [
-        '• Program CNC for optimal material usage and time efficiency.',
-        '• Optimize toolpaths to significantly decrease total program runtime by 5 minutes.',
-        '• Increase production by ~20%.',
-        '• Construct and assemble final product.',
-        '• Deliver products to customers.'
+        'Program CNC for optimal material usage and time efficiency.',
+        'Optimize toolpaths to significantly decrease total program runtime by 5 minutes.',
+        'Increase production by ~20%.',
+        'Construct and assemble final product.',
+        'Deliver products to customers.'
       ],
-      time: 'June 2015 - July 2017'
+      time: '2015 - 2017'
     }
   ],
   'education': [

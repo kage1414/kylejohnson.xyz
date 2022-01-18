@@ -16,9 +16,9 @@ class App extends Component<IProps, IState> {
     super(props);
     let selectedTabCookie: any;
     let tabs = [
-      { name: 'technical skills', display: true },
+      { name: 'experience', display: true },
+      { name: 'technical skills', display: false },
       { name: 'applications', display: false },
-      { name: 'experience', display: false },
       { name: 'education', display: false },
       { name: 'general', display: false }
     ]
