@@ -1,4 +1,4 @@
-export const Data = {
+module.exports = {
   'technical_skills': [
     {
       type: 'frontend',
@@ -143,7 +143,8 @@ export const Data = {
         'Implement static typing to frontend React components using Flow.'
 
       ],
-      time: '2021 - Present'
+      time: '2021 - Present',
+      logo: 'Meta-logo.png'
     },
     {
       employer: 'Galvanize / Hack Reactor',

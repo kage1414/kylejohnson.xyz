@@ -7,12 +7,11 @@ interface IProps {
 }
 
 interface IData {
-  Data: any;
-  selectedTab: any;
+  technicalSkillsData: Array<any>;
 }
 
 
-const TechnicalSkills: FC<IData> = ({ Data, selectedTab }) => {
+const TechnicalSkills: FC<IData> = ({ technicalSkillsData }) => {
   return (
     <div style={{
       marginLeft: '15px',
@@ -20,7 +19,7 @@ const TechnicalSkills: FC<IData> = ({ Data, selectedTab }) => {
       alignContent: 'flex-start',
       flexFlow: 'row wrap'
     }}>
-      {Data[selectedTab.name].map((data: { type: string; technologies: Array<string>; }, idx: number) => <TechnicalSkillsElement type={data.type}
+      {technicalSkillsData.map((data: { type: string; technologies: Array<string>; }, idx: number) => <TechnicalSkillsElement type={data.type}
         technologies={data.technologies}
         key={data.type + idx} />)}
     </div>

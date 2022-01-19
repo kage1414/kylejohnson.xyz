@@ -8,18 +8,17 @@ interface IProps {
 }
 
 interface IData {
-  Data: any;
-  selectedTab: any;
+  educationData: Array<any>;
 }
 
-const Education: FC<IData> = ({ Data, selectedTab }) => (
+const Education: FC<IData> = ({ educationData }) => (
   <div style={{
     marginLeft: '15px',
     display: 'flex',
     alignContent: 'flex-start',
     flexFlow: 'row wrap'
   }}>
-    {Data[selectedTab.name].map((data: { school: string; time: string; degree?: string; certificate?: string; }, idx: number) => (
+    {educationData.map((data: { school: string; time: string; degree?: string; certificate?: string; }, idx: number) => (
       <EducationElement school={data.school}
         degree={data.degree}
         time={data.time}

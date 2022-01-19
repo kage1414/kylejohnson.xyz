@@ -9,26 +9,28 @@ interface IProps {
 }
 
 interface IData {
-  Data: any;
-  selectedTab: any;
+  applicationData: Array<any>;
 }
 
-const Applications: FC<IData> = ({ Data, selectedTab }) => (
-  <div style={{
-    marginLeft: '15px',
-    display: 'flex',
-    alignContent: 'flex-start',
-    flexFlow: 'row wrap'
-  }}>
-    {Data[selectedTab.name].map((data: { name: string; technologies: Array<string>; url: string; description: Array<string>; }, idx: number) => (
-      <ApplicationElement description={data.description}
-        name={data.name}
-        technologies={data.technologies}
-        url={data.url}
-        key={data.name + idx} />
-    ))}
-  </div>
-);
+const Applications: FC<IData> = ({ applicationData }) => {
+
+  return (
+    <div style={{
+      marginLeft: '15px',
+      display: 'flex',
+      alignContent: 'flex-start',
+      flexFlow: 'row wrap'
+    }}>
+      {applicationData.map((data: { name: string; technologies: Array<string>; url: string; description: Array<string>; }, idx: number) => (
+        <ApplicationElement description={data.description}
+          name={data.name}
+          technologies={data.technologies}
+          url={data.url}
+          key={data.name + idx} />
+      ))}
+    </div>
+  );
+};
 
 const ApplicationElement: FC<IProps> = ({ name, technologies, url, description }): ReactElement => {
 
