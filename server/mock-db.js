@@ -59,7 +59,7 @@ module.exports = {
         ]
     },
     {
-      type: 'other',
+      type: 'other tools',
       technologies: [
         'Underscore.js',
         'Cloudflare',
