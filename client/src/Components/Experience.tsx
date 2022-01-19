@@ -5,32 +5,37 @@ interface IProps {
   time: string;
   description: Array<string>;
   position: string;
+  logo?: string;
 }
 
 interface IData {
-  Data: any;
-  selectedTab: any;
+  experienceData: Array<any>;
 }
 
-const Experience: FC<IData> = ({ Data, selectedTab }): ReactElement => (
+const Experience: FC<IData> = ({ experienceData }): ReactElement => {
 
-  <div style={{
-    marginLeft: '15px',
-    display: 'flex',
-    alignContent: 'flex-start',
-    flexFlow: 'row wrap'
-  }}>
-    {Data[selectedTab.name].map((data: { employer: string; description: Array<string>; position: string; time: string; }, idx: number) => (
-      <ExperienceElement description={data.description}
-        employer={data.employer}
-        time={data.time}
-        position={data.position}
-        key={data.employer + idx} />
-    ))}
-  </div>
-);
+  return (
+    < div style={{
+      marginLeft: '15px',
+      display: 'flex',
+      alignContent: 'flex-start',
+      flexFlow: 'row wrap'
+    }}>
+      {
+        experienceData.map((data: { employer: string; description: Array<string>; position: string; time: string; logo: string; }, idx: number) => (
+          <ExperienceElement description={data.description}
+            employer={data.employer}
+            time={data.time}
+            position={data.position}
+            key={data.employer + idx}
+            logo={data.logo} />
+        ))
+      }
+    </div >
+  );
+};
 
-const ExperienceElement: FC<IProps> = ({ employer, time, description, position }): ReactElement => {
+const ExperienceElement: FC<IProps> = ({ employer, time, description, position, logo }): ReactElement => {
 
   return (
     <div style={{

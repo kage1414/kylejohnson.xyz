@@ -1,10 +1,10 @@
-import React, { FC, ReactElement } from 'react';
-import { Data } from '../../../server/db.js';
+import React, { FC, ReactElement, useState, useEffect } from 'react';
 import TechnicalSkills from './TechnicalSkills';
 import Applications from './Applications';
 import Sidebar from './Sidebar';
 import Experience from './Experience';
 import Education from './Education';
+import axios from 'axios';
 
 interface IProps {
   selectedTab: { name: string; display: boolean; };
@@ -13,6 +13,33 @@ interface IProps {
 }
 
 const Body: FC<IProps> = ({ selectedTab }): ReactElement => {
+
+  const [applicationData, setApplicationData] = useState([]);
+  const [educationData, setEducationData] = useState([]);
+  const [experienceData, setExperienceData] = useState([]);
+  const [technicalSkillsData, setTechnicalSkillsData] = useState([]);
+
+  useEffect(() => {
+    axios.get('/applications')
+      .then((response) => {
+        setApplicationData(response.data);
+      });
+
+    axios.get('/education')
+      .then((response) => {
+        setEducationData(response.data);
+      });
+
+    axios.get('/experience')
+      .then((response) => {
+        setExperienceData(response.data);
+      });
+
+    axios.get('/technical_skills')
+      .then((response) => {
+        setTechnicalSkillsData(response.data);
+      });
+  }, []);
 
   return (
     <div style={{
@@ -30,20 +57,16 @@ const Body: FC<IProps> = ({ selectedTab }): ReactElement => {
         flexGrow: 999
       }}>
         {selectedTab.name === 'technical_skills' &&
-          <TechnicalSkills Data={Data}
-            selectedTab={selectedTab} />
+          <TechnicalSkills technicalSkillsData={technicalSkillsData} />
         }
         {selectedTab.name === 'applications' &&
-          <Applications Data={Data}
-            selectedTab={selectedTab} />
+          <Applications applicationData={applicationData} />
         }
         {selectedTab.name === 'experience' &&
-          <Experience Data={Data}
-            selectedTab={selectedTab} />
+          <Experience experienceData={experienceData} />
         }
         {selectedTab.name === 'education' &&
-          <Education Data={Data}
-            selectedTab={selectedTab} />
+          <Education educationData={educationData} />
         }
       </div>
       {/* <BottomBar/> */}

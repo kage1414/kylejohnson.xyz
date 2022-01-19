@@ -158,7 +158,7 @@ export const Data = {
 
 
       ],
-      time: '2021'
+      time: '2021 - Present'
     },
     {
       employer: 'LyricKeeper',
