@@ -28,14 +28,14 @@ const Experience: FC<IData> = ({ experienceData }): ReactElement => {
             time={data.time}
             position={data.position}
             key={data.employer + idx}
-            logo={data.logo} />
+            logo={data.logo} />  
         ))
       }
     </div >
   );
 };
 
-const ExperienceElement: FC<IProps> = ({ employer, time, description, position, logo }): ReactElement => {
+const ExperienceElement: FC<IProps> = ({ employer, time, description, position }): ReactElement => {
 
   return (
     <div style={{
@@ -61,7 +61,7 @@ const ExperienceElement: FC<IProps> = ({ employer, time, description, position, 
             width: '300px',
             lineHeight: '18px',
             color: idx % 2 === 0 ? 'black' : '#686868'
-          }}>{`• ${text}`}</li>))}</ul>
+          }}>{`${text}`}</li>))}</ul>
       </div>
     </div>
   );

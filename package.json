@@ -4,7 +4,7 @@
   "description": "Personal website",
   "private": true,
   "engines": {
-    "node": "14.15.0"
+    "node": "16.*"
   },
   "dependencies": {
     "axios": "^0.25.0",
@@ -73,7 +73,6 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-regex": "^1.8.0",
     "html-webpack-plugin": "^5.3.2",
-    "mini-css-extract-plugin": "^2.0.0",
     "nodemon": "^2.0.9",
     "source-map-loader": "^3.0.0",
     "ts-loader": "^9.2.3",

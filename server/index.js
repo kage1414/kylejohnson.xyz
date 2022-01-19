@@ -2,7 +2,6 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const publicPath = path.join(__dirname, '..', 'client', 'dist');
-const logoPath = path.join(__dirname, '..', 'logos');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3000;
 const db = require('./mock-db');

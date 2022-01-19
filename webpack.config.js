@@ -45,7 +45,11 @@ module.exports = {
         test: /\.css$/i,
         exclude: [/node_modules/, /test/],
         use: ['style-loader', 'css-loader']
-      }
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+      },
     ]
   },
   plugins: [
