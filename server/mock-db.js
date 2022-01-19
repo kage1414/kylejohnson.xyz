@@ -26,23 +26,8 @@ module.exports = {
           'GraphQL',
           'Relay',
           'Service Oriented Architecture (SOA)',
-          'AWS / EC2 / S3',
-          'Heroku',
-          'CircleCI',
           'NGINX',
           'Memcached',
-          'Cloudflare'
-        ]
-    },
-    {
-      type: 'libraries',
-      technologies:
-        [
-          'Underscore.js',
-          'Mocha',
-          'Chai',
-          'Jest',
-          'Enzyme'
         ]
     },
     {
@@ -57,17 +42,31 @@ module.exports = {
         ]
     },
     {
-      type: 'tools',
+      type: 'testing / deployment',
       technologies:
         [
-          'Webpack',
-          'Babel',
+          'Jest / Jest E2E',
+          'Mocha',
+          'Chai',
+          'Jest / Jest E2E',
+          'Enzyme',
+          'React Testing Library',
+          'CircleCI',
+          'AWS / EC2 / S3',
+          'Heroku',
           'Git',
-          'Agile Methodology',
-          'VSCode',
-          'Ubuntu',
-          'Arch Linux'
+          'Webpack'
         ]
+    },
+    {
+      type: 'other',
+      technologies: [
+        'Underscore.js',
+        'Cloudflare',
+        'Ubuntu',
+        'Arch Linux',
+        'XController (Meta)'
+      ]
     }
   ],
   'applications': [
@@ -132,7 +131,7 @@ module.exports = {
   ],
   'experience': [
     {
-      employer: 'K2 Partnering Solutions at Facebook / Meta',
+      employer: 'K2 Partnering Solutions at Meta',
       position: 'Full Stack Software Engineer',
       description: [
         'Refactor synchronous operations in data pipelines to use async / await, improving speed and reliability.',
@@ -143,7 +142,7 @@ module.exports = {
         'Implement static typing to frontend React components using Flow.'
 
       ],
-      time: '2021 - Present',
+      time: '2021',
       logo: 'Meta-logo.png'
     },
     {
