@@ -159,7 +159,7 @@ module.exports = {
 
 
       ],
-      time: '2021 - Present'
+      time: '2021'
     },
     {
       employer: 'LyricKeeper',
