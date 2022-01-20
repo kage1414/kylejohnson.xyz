@@ -33,7 +33,7 @@ const FullPost: FC<IProps> = ({ title, subtitle, body, time, url }): ReactElemen
               fontSize: '16px',
               pointerEvents: url ? 'auto' : 'none',
               cursor: url ? 'pointer' : 'default',
-              textDecoration: 'auto'
+              textDecoration: url ? 'underline' : 'auto'
             }}>{title}</a>
           {subtitle &&
             <p style={{
