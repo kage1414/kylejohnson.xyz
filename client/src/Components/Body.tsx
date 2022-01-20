@@ -10,9 +10,10 @@ interface IProps {
   selectedTab: { name: string; display: boolean; };
   windowWidth?: number;
   mobile?: boolean;
+  displaySidebar: boolean;
 }
 
-const Body: FC<IProps> = ({ selectedTab }): ReactElement => {
+const Body: FC<IProps> = ({ selectedTab, displaySidebar }): ReactElement => {
 
   const [applicationData, setApplicationData] = useState([]);
   const [educationData, setEducationData] = useState([]);
@@ -46,12 +47,14 @@ const Body: FC<IProps> = ({ selectedTab }): ReactElement => {
       display: 'flex',
       flexWrap: 'wrap'
     }}>
-      <div style={{
-        flexBasis: '100px',
-        flexGrow: 1
-      }}>
-        <Sidebar />
-      </div>
+      {displaySidebar &&
+        <div style={{
+          flexBasis: '100px',
+          flexGrow: 1
+        }}>
+          <Sidebar />
+        </div>
+      }
       <div style={{
         flexBasis: '0',
         flexGrow: 999
