@@ -12,6 +12,7 @@ interface IState {
   selectedTab: { name: string; display: boolean; };
   windowWidth?: number;
   mobile?: boolean;
+  displaySidebar: boolean;
 }
 
 class App extends Component<IProps, IState> {
@@ -59,7 +60,8 @@ class App extends Component<IProps, IState> {
       selectedTab: {
         name: 'experience',
         display: true
-      }
+      },
+      displaySidebar: window.innerWidth >= 443
     };
     this.switchTabs = this.switchTabs.bind(this);
   }
@@ -87,12 +89,14 @@ class App extends Component<IProps, IState> {
   }
 
   componentDidMount() {
+    // this.mobileCheck();
     window.addEventListener('resize', () => {
-      this.setState({
-        windowWidth: window.innerWidth
-      });
+      if (window.innerWidth < 443 && this.state.displaySidebar) {
+        this.setState({ displaySidebar: false });
+      } else if (window.innerWidth >= 443 && !this.state.displaySidebar) {
+        this.setState({ displaySidebar: true });
+      }
     });
-    this.mobileCheck();
   }
 
   mobileCheck() {
@@ -113,7 +117,8 @@ class App extends Component<IProps, IState> {
             switchTabs={this.switchTabs} />
         </div>
         <div>
-          <Body selectedTab={this.state.selectedTab} />
+          <Body displaySidebar={this.state.displaySidebar}
+            selectedTab={this.state.selectedTab} />
         </div>
       </div>
     );
