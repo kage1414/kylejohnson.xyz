@@ -27,3 +27,4 @@ bundle.js
 fullchain.pem
 privkey.pem
 dist
+config.js
