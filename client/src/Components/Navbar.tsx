@@ -1,12 +1,23 @@
 import React, { FC, ReactElement } from 'react';
+import { Link, useRouteMatch } from 'react-router-dom';
 
 interface IProps {
-  tabs: Array<{ name: string; display: boolean; }>;
   switchTabs: any;
   windowWidth?: number;
+  selectedTab: string;
 }
 
-const Navbar: FC<IProps> = ({ tabs, switchTabs }): ReactElement => {
+const Navbar: FC<IProps> = ({ switchTabs, selectedTab }): ReactElement => {
+
+  const { url } = useRouteMatch();
+  console.log('url', url);
+
+  const tabStyle = {
+    cursor: 'pointer',
+    display: 'inline',
+    margin: '5px 5px -1px 5px',
+    textDecoration: 'none'
+  };
 
   return (
     <div style={{
@@ -30,18 +41,40 @@ const Navbar: FC<IProps> = ({ tabs, switchTabs }): ReactElement => {
           display: 'flex',
           flexWrap: 'wrap'
         }}>
-          {tabs.map((tab, idx) => {
-            return <li onClick={switchTabs}
-              style={{
-                cursor: 'pointer',
-                display: 'inline',
-                margin: '5px 5px -1px 5px'
-              }}
-              key={idx + tab.name}
-              data-idx={idx}
-              data-name={tab.name}
-              className={tab.display === true ? 'front' : 'back'}>{tab.name}</li>;
-          })}
+          <li >
+            <Link
+              to={`/tab/experience`}
+              onClick={switchTabs}
+              style={tabStyle}
+              data-name={'experience'}
+              className={selectedTab === 'experience' ? 'front' : 'back'}>{'experience'}</Link>
+          </li>
+          <li >
+            <Link
+              to={`/tab/technical_skills`}
+              onClick={switchTabs}
+              style={tabStyle}
+              data-name={'technical_skills'}
+              className={selectedTab === 'technical_skills' ? 'front' : 'back'}>{'technical_skills'}</Link>
+          </li>
+          <li
+            style={{ textDecorationLine: 'none' }}>
+            <Link
+              to={`/tab/applications`}
+              onClick={switchTabs}
+              style={tabStyle}
+              data-name={'applications'}
+              className={selectedTab === 'applications' ? 'front' : 'back'}>{'applications'}</Link>
+          </li>
+          <li
+            style={{ textDecorationLine: 'none' }}>
+            <Link
+              to={`/tab/education`}
+              onClick={switchTabs}
+              style={tabStyle}
+              data-name={'education'}
+              className={selectedTab === 'education' ? 'front' : 'back'}>{'education'}</Link>
+          </li>
         </ul>
       </div>
     </div>

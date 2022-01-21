@@ -1,19 +1,24 @@
-import React, { FC, ReactElement } from 'react';
+import React, { FC, ReactElement, useState, useEffect } from 'react';
 import FullPost from './FullPost';
+import axios from 'axios';
 
-type ApplicationDataElement = {
-  description: Array<string>;
-  name: string;
-  technologies: Array<string>;
-  url: string;
-}
+// type ApplicationDataElement = {
+//   description: Array<string>;
+//   name: string;
+//   technologies: Array<string>;
+//   url: string;
+// }
 
-type IProps = {
-  applicationData: Array<ApplicationDataElement>;
-}
+const Applications: FC = (): ReactElement => {
 
+  const [applicationData, setApplicationData] = useState([]);
 
-const Applications: FC<IProps> = ({ applicationData }): ReactElement => {
+  useEffect(() => {
+    axios.get('/data/applications')
+      .then((response) => {
+        setApplicationData(response.data);
+      });
+  }, []);
 
   return (
     <div style={{

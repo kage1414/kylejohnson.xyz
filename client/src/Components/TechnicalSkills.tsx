@@ -1,17 +1,23 @@
-import React, { FC, ReactElement } from 'react';
+import React, { FC, ReactElement, useState, useEffect } from 'react';
 import Post from './Post';
+import axios from 'axios';
 
 interface IProps {
   type: string;
   technologies: Array<string>;
 }
 
-interface IData {
-  technicalSkillsData: Array<any>;
-}
+const TechnicalSkills: FC = () => {
 
+  const [technicalSkillsData, setTechnicalSkillsData] = useState([]);
 
-const TechnicalSkills: FC<IData> = ({ technicalSkillsData }) => {
+  useEffect(() => {
+    axios.get('/data/technical_skills')
+      .then((response) => {
+        setTechnicalSkillsData(response.data);
+      });
+  }, []);
+
   return (
     <div style={{
       marginLeft: '15px',

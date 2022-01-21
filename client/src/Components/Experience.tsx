@@ -1,11 +1,17 @@
-import React, { FC, ReactElement } from 'react';
+import React, { FC, ReactElement, useEffect, useState } from 'react';
 import FullPost from './FullPost';
+import axios from 'axios';
 
-interface IProps {
-  experienceData: Array<any>;
-}
+const Experience: FC = (): ReactElement => {
 
-const Experience: FC<IProps> = ({ experienceData }): ReactElement => {
+  const [experienceData, setExperienceData] = useState([]);
+
+  useEffect(() => {
+    axios.get('/data/experience')
+      .then((response) => {
+        setExperienceData(response.data);
+      });
+  }, []);
 
   return (
     < div style={{
