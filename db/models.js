@@ -1,47 +1,70 @@
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/', {
-  dbName: 'kylejohnson-xyz'
-}, () => {
-  console.log("connected");
+const { Sequelize, DataTypes } = require('sequelize');
+const { username, password, host, db } = require('./config.js');
+const sequelize = new Sequelize(db, username, password, {
+  host,
+  dialect: 'mysql',
+  // logging: false
 });
 
-const technicalSkillsSchema = mongoose.Schema({
-  type: String,
-  technologies: [String]
+sequelize.authenticate()
+  .then(() => {
+    console.log('connected');
+  })
+  .catch(() => {
+    console.log('not connected');
+  });
+
+const User = sequelize.define('user', {
+  id: {
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
+    allowNull: false,
+    primaryKey: true
+  },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  salt: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  firstName: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  lastName: {
+    type: DataTypes.STRING,
+    allowNull: true
+  }
 });
 
-const TechnicalSkills = mongoose.model('technicalSkills', technicalSkillsSchema);
-
-const applicationsSchema = mongoose.Schema({
-  name: String,
-  url: String,
-  technologies: [String],
-  desription: [String]
+const Session = sequelize.define('session', {
+  cookie: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  id: {
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
+    allowNull: false,
+    primaryKey: true
+  },
 });
 
-const Applications = mongoose.model('applications', applicationsSchema);
+Session.belongsTo(User);
 
-const educationSchema = mongoose.Schema({
-  school: String,
-  time: String,
-  cetificate: String,
-  degree: String
-});
+sequelize.sync()
+  .then(() => {
+    console.log('sync success');
+  })
+  .catch(() => {
+    console.log('Connected');
+  });
 
-const Education = mongoose.model('education', educationSchema);
-
-const experienceSchema = mongoose.Schema({
-  employer: String,
-  time: String,
-  position: String,
-  description: [String]
-});
-
-const Experience = mongoose.model('experience', experienceSchema);
-
-module.exports = {
-  TechnicalSkills,
-  Applications,
-  Education,
-  Experience
-};
+module.exports.User = User;
+module.exports.Session = Session;

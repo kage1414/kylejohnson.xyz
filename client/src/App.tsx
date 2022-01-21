@@ -36,24 +36,12 @@ class App extends Component<IProps, IState> {
       {
         name: 'education',
         display: false
+      },
+      {
+        name: 'login',
+        display: false
       }
     ];
-
-    // const cookies: Array<string> = document.cookie.split('; ');
-
-    // for (const ele of cookies) {
-    //   const kv: Array<string> = ele.split('=');
-    //   if (kv[0] === 'lastOpenTab') {
-    //     selectedTabCookie = JSON.parse(kv[1]);
-    //     for (const tab of tabs) {
-    //       if (tab.name === selectedTabCookie.name) {
-    //         tab.display = true;
-    //       } else {
-    //         tab.display = false;
-    //       }
-    //     }
-    //   }
-    // }
 
     this.state = {
       tabs,

@@ -4,6 +4,7 @@ import Applications from './Applications';
 import Sidebar from './Sidebar';
 import Experience from './Experience';
 import Education from './Education';
+import LoginPage from './LoginPage';
 import axios from 'axios';
 
 interface IProps {
@@ -70,6 +71,9 @@ const Body: FC<IProps> = ({ selectedTab, displaySidebar }): ReactElement => {
         }
         {selectedTab.name === 'education' &&
           <Education educationData={educationData} />
+        }
+        {selectedTab.name === 'login' &&
+          <LoginPage />
         }
       </div>
       {/* <BottomBar/> */}
