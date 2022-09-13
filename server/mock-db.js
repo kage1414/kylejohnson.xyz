@@ -164,14 +164,16 @@ module.exports = {
   experience: [
     {
       employer: 'K2 Partnering Solutions at Meta',
-      position: 'Full Stack Software Engineer',
+      position: 'Enterprise Software Engineer',
       description: [
-        'Refactor synchronous operations in data pipelines to use async / await, improving speed and reliability.',
-        'Debug controllers delivering incorrectly formatted data and modify backend code to return data in correct format.',
-        'Analyze and remove runtime-dead code from Facebook codebase.',
+        'Maintainer of multiple supply chain software tools.',
+        'Design new data storage methods to improve data center planning initiatives.',
+        'Migrate hardcoded data attributes to MySQL database and architect a configurable system to manage data.',
+        'Implement defaulting logic and redesign API response to improve stability of downstream services.',
+        'Consolidate code performing duplicate functions to follow the single responsibility principle.',
+        'Implement high priority feature requests with little notice.',
+        'Analyze and remove runtime-dead code from codebase.',
         'Deploy end-to-end testing suites to maintain 80% code coverage.',
-        'Refactor legacy PHP to utilize more reliable Hack implementations.',
-        'Implement static typing to frontend React components using Flow.',
       ],
       time: '2021',
       logo: 'Meta-logo.png',
@@ -193,9 +195,10 @@ module.exports = {
       employer: 'LyricKeeper',
       position: 'Full Stack Software Engineer',
       description: [
-        'Diagnose communication disjunctions between front and back end servers and implement meaningful and unambiguous error handling utilizing React Hooks, resulting in higher user retention.',
+        'Build user settings page to upgrade and manage premium user subscriptions.',
+        'Enhance usability with new “next / previous lyric” feature, improving and adding value to the user experience.',
+        'Diagnose communication disjunctions between front and back end servers and implement meaningful and unambiguous error handling, resulting in higher user retention.',
         'Deploy virtual agent to keep backend services active, reducing errors during user creation.',
-        'Enhance usability with new “next and previous lyric” feature, improving and adding value to the user experience.',
       ],
       time: '2021 - Present',
     },
@@ -212,18 +215,6 @@ module.exports = {
       ],
       time: '2017 - 2021',
     },
-    // {
-    //   employer: 'Woodcrafters Woodshop',
-    //   position: 'Assistant Carpenter',
-    //   description: [
-    //     'Program CNC for optimal material usage and time efficiency.',
-    //     'Optimize toolpaths to significantly decrease total program runtime by 5 minutes.',
-    //     'Increase production by ~20%.',
-    //     'Construct and assemble final product.',
-    //     'Deliver products to customers.'
-    //   ],
-    //   time: 'June 2015 - July 2017'
-    // }
   ],
   education: [
     {
