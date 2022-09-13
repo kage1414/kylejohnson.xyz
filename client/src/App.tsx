@@ -1,5 +1,9 @@
 import React, { ReactElement, FC, useState, useEffect } from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {
+  createTheme,
+  ThemeProvider,
+  experimental_sx as sx,
+} from '@mui/material/styles';
 import { mobileCheck } from './utils';
 import axios from 'axios';
 import type {
@@ -49,6 +53,20 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: ['verdana', 'arial', 'helvetica', 'sans-serif'].join(','),
+  },
+  components: {
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: true,
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: sx({
+          justifyContent: 'flex-end',
+        }),
+      },
+    },
   },
 });
 
@@ -160,10 +178,6 @@ export default function App() {
                   label={
                     <Typography sx={getTabStyle(0)}>experience</Typography>
                   }
-                  disableRipple
-                  sx={{
-                    justifyContent: 'flex-end',
-                  }}
                 />
                 <Tab
                   label={
@@ -171,20 +185,14 @@ export default function App() {
                       technical_skills
                     </Typography>
                   }
-                  disableRipple
-                  sx={{ justifyContent: 'flex-end' }}
                 />
                 <Tab
                   label={
                     <Typography sx={getTabStyle(2)}>applications</Typography>
                   }
-                  disableRipple
-                  sx={{ justifyContent: 'flex-end' }}
                 />
                 <Tab
                   label={<Typography sx={getTabStyle(3)}>education</Typography>}
-                  disableRipple
-                  sx={{ justifyContent: 'flex-end' }}
                 />
               </Tabs>
             </Grid>
