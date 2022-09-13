@@ -17,6 +17,7 @@ import {
   Typography,
   Toolbar,
   Button,
+  Grid,
 } from '@mui/material';
 import {
   Applications,
@@ -26,6 +27,7 @@ import {
 } from './Components/Pages';
 
 const SIDEBAR_MIN_WIDTH = 443;
+
 interface IProps {
   hello?: string;
 }
@@ -99,6 +101,18 @@ export default function App() {
     });
   };
 
+  const getTabStyle = (tabNumber: number) => {
+    return selectedTab === tabNumber
+      ? {
+          backgroundColor: '#ffffff',
+          border: '#5f99cf solid 1px',
+          borderBottomColor: '#ffffff',
+        }
+      : {
+          backgroundColor: '#eff5ff',
+        };
+  };
+
   useEffect(() => {
     setDisplaySidebar(width >= 443);
   }, [width]);
@@ -116,26 +130,65 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth={false}>
-        <Toolbar color='secondary'>
-          <Box pb={0}>
-            <Typography>kyle johnson</Typography>
-            <Tabs
-              value={selectedTab}
-              onChange={switchTabs}
-              indicatorColor='secondary'
-            >
-              <Tab label={<Typography>experience</Typography>} disableRipple />
-              <Tab
-                label={<Typography>technical_skills</Typography>}
-                disableRipple
-              />
-              <Tab
-                label={<Typography>applications</Typography>}
-                disableRipple
-              />
-              <Tab label={<Typography>education</Typography>} disableRipple />
-            </Tabs>
-          </Box>
+        <Toolbar
+          color='secondary'
+          disableGutters
+          sx={{ backgroundColor: '#cee3f8', borderBottom: '#5f99cf solid 1px' }}
+          variant='dense'
+        >
+          <Grid container pb={0}>
+            <Grid display='flex' alignItems='flex-end'>
+              <Typography variant='h5'>kyle johnson</Typography>
+            </Grid>
+            <Grid item>
+              <Tabs
+                value={selectedTab}
+                onChange={switchTabs}
+                indicatorColor='secondary'
+                sx={{
+                  '& button': { paddingY: 0 },
+                  '& p': {
+                    paddingX: 1,
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    textTransform: 'lowercase',
+                  },
+                }}
+                TabIndicatorProps={{ style: { display: 'none' } }}
+              >
+                <Tab
+                  label={
+                    <Typography sx={getTabStyle(0)}>experience</Typography>
+                  }
+                  disableRipple
+                  sx={{
+                    justifyContent: 'flex-end',
+                  }}
+                />
+                <Tab
+                  label={
+                    <Typography sx={getTabStyle(1)}>
+                      technical_skills
+                    </Typography>
+                  }
+                  disableRipple
+                  sx={{ justifyContent: 'flex-end' }}
+                />
+                <Tab
+                  label={
+                    <Typography sx={getTabStyle(2)}>applications</Typography>
+                  }
+                  disableRipple
+                  sx={{ justifyContent: 'flex-end' }}
+                />
+                <Tab
+                  label={<Typography sx={getTabStyle(3)}>education</Typography>}
+                  disableRipple
+                  sx={{ justifyContent: 'flex-end' }}
+                />
+              </Tabs>
+            </Grid>
+          </Grid>
         </Toolbar>
         <Box>
           <Experience
