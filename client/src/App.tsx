@@ -24,6 +24,8 @@ import {
   Experience,
   TechnicalSkills,
 } from './Components/Pages';
+
+const SIDEBAR_MIN_WIDTH = 443;
 interface IProps {
   hello?: string;
 }
@@ -59,7 +61,7 @@ interface IState {
 export default function App() {
   const [selectedTab, setSelectedTab] = useState(0);
   const [displaySidebar, setDisplaySidebar] = useState(
-    window.innerWidth >= 443
+    window.innerWidth >= SIDEBAR_MIN_WIDTH
   );
   const [width, setWidth] = useState(window.innerWidth);
   const [mobile, setMobile] = useState(mobileCheck());
