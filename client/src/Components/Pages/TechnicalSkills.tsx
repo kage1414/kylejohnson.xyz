@@ -2,44 +2,46 @@ import React, { FC, ReactElement, useState, useEffect } from 'react';
 import axios from 'axios';
 import Post from '../Post';
 
-interface IProps {
-  type: string;
+type TechStack = {
+  stack: string;
   technologies: Array<string>;
-}
-
-export const TechnicalSkills: FC = () => {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    axios.get('/technical_skills').then((response) => {
-      setData(response.data);
-    });
-  }, []);
-
-  return (
-    <div
-      style={{
-        marginLeft: '15px',
-        display: 'flex',
-        alignContent: 'flex-start',
-        flexFlow: 'row wrap',
-      }}
-    >
-      {data.map(
-        (data: { type: string; technologies: Array<string> }, idx: number) => (
-          <TechnicalSkillsElement
-            type={data.type}
-            technologies={data.technologies}
-            key={data.type + idx}
-          />
-        )
-      )}
-    </div>
-  );
 };
 
-const TechnicalSkillsElement: FC<IProps> = ({
-  type,
+export type TechnicalSkillsData = Array<TechStack>;
+
+type Props = {
+  technicalSkillsData: TechnicalSkillsData;
+  display: boolean;
+};
+
+export const TechnicalSkills: FC<Props> = ({
+  technicalSkillsData,
+  display,
+}) => (
+  <>
+    {display && (
+      <div
+        style={{
+          marginLeft: '15px',
+          display: 'flex',
+          alignContent: 'flex-start',
+          flexFlow: 'row wrap',
+        }}
+      >
+        {technicalSkillsData.map(({ stack, technologies }, idx) => (
+          <TechnicalSkillsElement
+            stack={stack}
+            technologies={technologies}
+            key={stack + idx}
+          />
+        ))}
+      </div>
+    )}
+  </>
+);
+
+const TechnicalSkillsElement: FC<TechStack> = ({
+  stack,
   technologies,
 }): ReactElement => {
   return (
@@ -59,10 +61,10 @@ const TechnicalSkillsElement: FC<IProps> = ({
             backgroundColor: 'rgb(240, 243, 252',
           }}
         >
-          {type}
+          {stack}
         </h2>
         <div>
-          {technologies.map((title: string, idx) => {
+          {technologies.map((title, idx) => {
             return <Post key={title + idx} title={title} idx={idx} />;
           })}
         </div>

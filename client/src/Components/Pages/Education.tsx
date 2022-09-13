@@ -1,37 +1,45 @@
-import React, { FC, ReactElement, useEffect, useState } from 'react';
-import axios from 'axios';
+import { FC, ReactElement } from 'react';
 import FullPost from '../FullPost';
 
-interface IProps {
-  data: Array<any>;
-}
-
-export const Education: FC = (): ReactElement => {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    axios.get('/education').then((response) => {
-      setData(response.data);
-    });
-  }, []);
-
-  return (
-    <div
-      style={{
-        marginLeft: '15px',
-        display: 'flex',
-        alignContent: 'flex-start',
-        flexFlow: 'row wrap',
-      }}
-    >
-      {data.map(({ school, time, certificate, degree }, idx: number) => (
-        <FullPost
-          title={school}
-          subtitle={certificate || degree}
-          time={time}
-          key={school + idx}
-        />
-      ))}
-    </div>
-  );
+type Education = {
+  school: string;
+  time: string;
+  certificate?: string;
+  degree?: string;
 };
+
+export type EducationData = Array<Education>;
+
+type Props = {
+  educationData: EducationData;
+  display: boolean;
+};
+
+export const Education: FC<Props> = ({
+  educationData,
+  display,
+}): ReactElement => (
+  <>
+    {display && (
+      <div
+        style={{
+          marginLeft: '15px',
+          display: 'flex',
+          alignContent: 'flex-start',
+          flexFlow: 'row wrap',
+        }}
+      >
+        {educationData.map(
+          ({ school, time, certificate, degree }, idx: number) => (
+            <FullPost
+              title={school}
+              subtitle={certificate || degree}
+              time={time}
+              key={school + idx}
+            />
+          )
+        )}
+      </div>
+    )}
+  </>
+);

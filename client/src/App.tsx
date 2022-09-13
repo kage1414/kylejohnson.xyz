@@ -1,6 +1,13 @@
 import React, { ReactElement, FC, useState, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { mobileCheck } from './utils';
+import axios from 'axios';
+import type {
+  ApplicationData,
+  EducationData,
+  TechnicalSkillsData,
+  ExperienceData,
+} from './Components/Pages';
 import {
   Container,
   AppBar,
@@ -36,10 +43,10 @@ const theme = createTheme({
       contrastText: '#000000',
     },
   },
+  typography: {
+    fontFamily: ['verdana', 'arial', 'helvetica', 'sans-serif'].join(','),
+  },
 });
-
-type Tab = { name: string; component: () => ReactElement };
-type Tabs = Array<Tab>;
 
 interface IState {
   tabs: Array<{ name: string; display: boolean }>;
@@ -49,13 +56,6 @@ interface IState {
   displaySidebar: boolean;
 }
 
-const tabs: Tabs = [
-  { name: 'experience', component: () => <Experience /> },
-  { name: 'technical_skills', component: () => <TechnicalSkills /> },
-  { name: 'applications', component: () => <Applications /> },
-  { name: 'education', component: () => <Education /> },
-];
-
 export default function App() {
   const [selectedTab, setSelectedTab] = useState(0);
   const [displaySidebar, setDisplaySidebar] = useState(
@@ -63,9 +63,38 @@ export default function App() {
   );
   const [width, setWidth] = useState(window.innerWidth);
   const [mobile, setMobile] = useState(mobileCheck());
+  const [applicationData, setApplicationData] = useState<ApplicationData>([]);
+  const [educationData, setEducationData] = useState<EducationData>([]);
+  const [experienceData, setExperienceData] = useState<ExperienceData>([]);
+  const [technicalSkillsData, setTechnicalSkillsData] =
+    useState<TechnicalSkillsData>([]);
 
   const switchTabs = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
+  };
+
+  const fetchApplicationData = () => {
+    axios.get('/applications').then(({ data }) => {
+      setApplicationData(data);
+    });
+  };
+
+  const fetchEducationData = () => {
+    axios.get('/education').then(({ data }) => {
+      setEducationData(data);
+    });
+  };
+
+  const fetchTechnicalSkillsData = () => {
+    axios.get('/technical_skills').then(({ data }) => {
+      setTechnicalSkillsData(data);
+    });
+  };
+
+  const fetchExperienceData = () => {
+    axios.get('/experience').then(({ data }) => {
+      setExperienceData(data);
+    });
   };
 
   useEffect(() => {
@@ -76,26 +105,54 @@ export default function App() {
     window.addEventListener('resize', () => {
       setWidth(window.innerWidth);
     });
+    fetchApplicationData();
+    fetchEducationData();
+    fetchExperienceData();
+    fetchTechnicalSkillsData();
   }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth={false}>
-        <Box>
-          <Toolbar color='secondary'>
+        <Toolbar color='secondary'>
+          <Box pb={0}>
             <Typography>kyle johnson</Typography>
             <Tabs
               value={selectedTab}
               onChange={switchTabs}
               indicatorColor='secondary'
             >
-              {tabs.map(({ name }, i) => (
-                <Tab label={name} disableRipple key={`${name} ${i}`} />
-              ))}
+              <Tab label={<Typography>experience</Typography>} disableRipple />
+              <Tab
+                label={<Typography>technical_skills</Typography>}
+                disableRipple
+              />
+              <Tab
+                label={<Typography>applications</Typography>}
+                disableRipple
+              />
+              <Tab label={<Typography>education</Typography>} disableRipple />
             </Tabs>
-          </Toolbar>
+          </Box>
+        </Toolbar>
+        <Box>
+          <Experience
+            experienceData={experienceData}
+            display={selectedTab === 0}
+          />
+          <TechnicalSkills
+            technicalSkillsData={technicalSkillsData}
+            display={selectedTab === 1}
+          />
+          <Applications
+            applicationData={applicationData}
+            display={selectedTab === 2}
+          />
+          <Education
+            educationData={educationData}
+            display={selectedTab === 3}
+          />
         </Box>
-        <Box>{tabs[selectedTab].component()}</Box>
       </Container>
     </ThemeProvider>
   );
