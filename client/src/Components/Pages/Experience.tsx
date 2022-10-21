@@ -1,6 +1,7 @@
 import React, { FC, ReactElement, useState, useEffect } from 'react';
 import axios from 'axios';
 import FullPost from '../FullPost';
+import { Box } from '@mui/material';
 
 type Experience = {
   employer: string;
@@ -22,7 +23,7 @@ export const Experience: FC<Props> = ({
 }): ReactElement => (
   <>
     {display && (
-      <div
+      <Box
         style={{
           display: 'flex',
           alignContent: 'flex-start',
@@ -40,7 +41,7 @@ export const Experience: FC<Props> = ({
             />
           )
         )}
-      </div>
+      </Box>
     )}
   </>
 );
