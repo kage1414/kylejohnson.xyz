@@ -23,13 +23,7 @@ export const Experience: FC<Props> = ({
 }): ReactElement => (
   <>
     {display && (
-      <Box
-        style={{
-          display: 'flex',
-          alignContent: 'flex-start',
-          flexFlow: 'row wrap',
-        }}
-      >
+      <Box>
         {experienceData.map(
           ({ employer, description, position, time }, idx: number) => (
             <FullPost
