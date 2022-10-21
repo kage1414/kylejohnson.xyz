@@ -1,5 +1,6 @@
 import { FC, ReactElement } from 'react';
 import FullPost from '../FullPost';
+import { Box } from '@mui/material';
 
 type Education = {
   school: string;
@@ -21,14 +22,7 @@ export const Education: FC<Props> = ({
 }): ReactElement => (
   <>
     {display && (
-      <div
-        style={{
-          marginLeft: '15px',
-          display: 'flex',
-          alignContent: 'flex-start',
-          flexFlow: 'row wrap',
-        }}
-      >
+      <Box>
         {educationData.map(
           ({ school, time, certificate, degree }, idx: number) => (
             <FullPost
@@ -39,7 +33,7 @@ export const Education: FC<Props> = ({
             />
           )
         )}
-      </div>
+      </Box>
     )}
   </>
 );
