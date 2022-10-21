@@ -34,12 +34,13 @@ const FullPost: FC<IProps> = ({
   return (
     <Box
       sx={{
-        margin: '10px 3px',
+        marginBottom: 2,
       }}
     >
       <Paper
         sx={{
           backgroundColor: 'rgb(240, 243, 252)',
+          padding: 2,
         }}
         elevation={0}
       >
@@ -49,7 +50,7 @@ const FullPost: FC<IProps> = ({
           time={time}
           url={url}
         />
-        <FullPostBody body={body} />
+        {body && <FullPostBody body={body} />}
         <FullPostFooterList buttons={buttons} />
       </Paper>
     </Box>

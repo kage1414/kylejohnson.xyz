@@ -46,9 +46,9 @@ const theme = createTheme({
       contrastText: '#000000',
     },
     secondary: {
-      main: '#fb4620',
-      light: '#ff7b4d',
-      dark: '#c00000',
+      main: '#0000ff',
+      light: '#ffffff',
+      dark: '#9eb1c4',
       contrastText: '#000000',
     },
   },
@@ -81,7 +81,6 @@ interface IState {
 
 export default function App() {
   const [cookies, setCookie] = useCookies();
-  console.log(cookies['last-page']);
   const [selectedTab, setSelectedTab] = useState(
     Number(cookies['last-page']) || 0
   );

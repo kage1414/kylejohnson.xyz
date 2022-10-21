@@ -6,11 +6,7 @@ interface Props {
 
 export function FullPostFooterList({ buttons }: Props) {
   return (
-    <ul
-      style={{
-        padding: '0 1px',
-      }}
-    >
+    <ul>
       {buttons.map((button) => (
         <li
           key={button}

@@ -1,4 +1,12 @@
-import React, { FC, ReactElement } from 'react';
+import { ReactElement } from 'react';
+import {
+  Box,
+  Paper,
+  List,
+  ListItemText,
+  Typography,
+  Link,
+} from '@mui/material';
 
 interface Props {
   title: string;
@@ -14,26 +22,24 @@ export function FullPostHeader({
   time,
 }: Props): ReactElement {
   return (
-    <div
-      style={{
-        margin: '6px',
-      }}
-    >
-      <a
-        href={url || ''}
-        style={{
-          color: 'rgb(0, 0, 255)',
-          marginBottom: '1px',
-          backgroundColor: 'rgb(240, 243, 252)',
-          fontFamily: 'verdana, arial, helvetica, sans-serif',
-          fontSize: '16px',
-          pointerEvents: url ? 'auto' : 'none',
-          cursor: url ? 'pointer' : 'default',
-          textDecoration: url ? 'underline' : 'auto',
-        }}
+    <Box>
+      <Link
+        href={url}
+        color='secondary'
+        underline='none'
+        // style={{
+        //   color: 'rgb(0, 0, 255)',
+        //   marginBottom: '1px',
+        //   backgroundColor: 'rgb(240, 243, 252)',
+        //   fontFamily: 'verdana, arial, helvetica, sans-serif',
+        //   fontSize: '16px',
+        //   pointerEvents: url ? 'auto' : 'none',
+        //   cursor: url ? 'pointer' : 'default',
+        //   textDecoration: url ? 'underline' : 'auto',
+        // }}
       >
         {title}
-      </a>
+      </Link>
       {subtitle && (
         <p
           style={{
@@ -67,6 +73,6 @@ export function FullPostHeader({
           </a>
         </p>
       )}
-    </div>
+    </Box>
   );
 }
