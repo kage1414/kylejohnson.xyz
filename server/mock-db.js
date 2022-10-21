@@ -68,6 +68,7 @@ module.exports = {
   applications: [
     {
       name: 'Classera',
+      active: true,
       url: 'https://github.com/Charlotte-Badger',
       technologies: [
         'Javascript',
@@ -95,6 +96,7 @@ module.exports = {
     },
     {
       name: 'Perceptible',
+      active: true,
       url: 'https://github.com/rpt27-sdc-ldap',
       technologies: [
         'Javascript',
@@ -113,6 +115,7 @@ module.exports = {
     },
     {
       name: 'kylejohnson.xyz',
+      active: true,
       url: 'https://github.com/kage1414/kylejohnson.xyz',
       technologies: [
         'Typescript',
@@ -131,6 +134,7 @@ module.exports = {
     },
     {
       name: 'Bike Lockr',
+      active: true,
       url: 'https://github.com/kage1414/mvp',
       technologies: [
         'Javascript',
@@ -151,6 +155,7 @@ module.exports = {
     },
     {
       name: 'LT Data Collection',
+      active: true,
       url: 'https://github.com/kage1414/lt-data-collection',
       technologies: ['Javascript', 'React'],
       description: [
@@ -164,6 +169,7 @@ module.exports = {
   experience: [
     {
       employer: 'K2 Partnering Solutions at Meta',
+      active: true,
       position: 'Enterprise Software Engineer',
       description: [
         'Maintainer of multiple supply chain software tools.',
@@ -180,6 +186,7 @@ module.exports = {
     },
     {
       employer: 'Galvanize / Hack Reactor',
+      active: true,
       position: 'Software Engineer Resident',
       description: [
         'Mentor Junior Engineers struggling with blockers and help implement solutions that allow for continued development.',
@@ -193,6 +200,7 @@ module.exports = {
     },
     {
       employer: 'LyricKeeper',
+      active: true,
       position: 'Full Stack Software Engineer',
       description: [
         'Build user settings page to upgrade and manage premium user subscriptions.',
@@ -204,6 +212,7 @@ module.exports = {
     },
     {
       employer: 'Lawrence North High School',
+      active: false,
       position: 'Ensemble Director, Collaborative Pianist, Technical Assistant',
       description: [
         'Direct, rehearse, and perform with combo band to accompany Show Choirs.',
@@ -215,15 +224,30 @@ module.exports = {
       ],
       time: '2017 - 2021',
     },
+    {
+      employer: 'Woodcrafters Woodshop',
+      active: false,
+      position: 'Assistant Carpenter',
+      description: [
+        'Program CNC for optimal material usage and time efficiency.',
+        'Optimize toolpaths to significantly decrease total program runtime by 5 minutes.',
+        'Increase production by ~20%.',
+        'Construct and assemble final product.',
+        'Deliver products to customers.',
+      ],
+      time: 'June 2015 - July 2017',
+    },
   ],
   education: [
     {
       school: 'Hack Reactor',
+      active: true,
       time: '2020 - 2021',
       certificate: 'Advanced Software Engineering Immersive',
     },
     {
       school: 'Millikin University',
+      active: true,
       time: '2013 - 2017',
       degree: 'B.M. Music Education',
     },
