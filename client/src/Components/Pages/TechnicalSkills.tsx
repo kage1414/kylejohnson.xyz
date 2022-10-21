@@ -1,6 +1,7 @@
 import React, { FC, ReactElement, useState, useEffect } from 'react';
 import axios from 'axios';
 import Post from '../Post';
+import { Box } from '@mui/material';
 
 type TechStack = {
   stack: string;
@@ -20,14 +21,7 @@ export const TechnicalSkills: FC<Props> = ({
 }) => (
   <>
     {display && (
-      <div
-        style={{
-          marginLeft: '15px',
-          display: 'flex',
-          alignContent: 'flex-start',
-          flexFlow: 'row wrap',
-        }}
-      >
+      <Box>
         {technicalSkillsData.map(({ stack, technologies }, idx) => (
           <TechnicalSkillsElement
             stack={stack}
@@ -35,7 +29,7 @@ export const TechnicalSkills: FC<Props> = ({
             key={stack + idx}
           />
         ))}
-      </div>
+      </Box>
     )}
   </>
 );
