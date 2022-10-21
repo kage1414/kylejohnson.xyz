@@ -13,6 +13,7 @@ export const Data = {
         'HTML5',
         'CSS3',
       ],
+      active: true,
     },
     {
       stack: 'backend',
@@ -31,10 +32,12 @@ export const Data = {
         'Memcached',
         'Cloudflare',
       ],
+      active: true,
     },
     {
       stack: 'libraries',
       technologies: ['Underscore.js', 'Mocha', 'Chai', 'Jest', 'Enzyme'],
+      active: true,
     },
     {
       stack: 'databases',
@@ -45,6 +48,7 @@ export const Data = {
         'Sequelize ORM',
         'Mongoose ORM',
       ],
+      active: true,
     },
     {
       stack: 'tools',
@@ -57,6 +61,7 @@ export const Data = {
         'Ubuntu',
         'Arch Linux',
       ],
+      active: true,
     },
   ],
   applications: [
@@ -86,6 +91,7 @@ export const Data = {
         'Consolidated database retrieval methods to minimize initial render speeds.',
         'Prepared and maintained detailed service documentation to support future development.',
       ],
+      active: true,
     },
     {
       name: 'Perceptible',
@@ -104,6 +110,7 @@ export const Data = {
         'Implemented Memcached memory caching, reducing compute load on individual services as well as reducing response times.',
         'Implemented horizontal scaling techniques, increasing fault tolerance and system availability, and reliably handling extended load periods of 1000 RPS, up to 2500 RPS.',
       ],
+      active: true,
     },
     {
       name: 'kylejohnson.xyz',
@@ -122,6 +129,7 @@ export const Data = {
         'Deploy to AWS and manage DNS through cloudflare.',
         'Instantiated SSL encryption using Certbot.',
       ],
+      active: true,
     },
     {
       name: 'Bike Lockr',
@@ -142,6 +150,7 @@ export const Data = {
         'Save new results to MongoDB Atlas as backup.',
         'Deploy to Heroku.',
       ],
+      active: true,
     },
     {
       name: 'LT Data Collection',
@@ -153,6 +162,7 @@ export const Data = {
         'Architected a customizable data scheme, allowing for the processing of data in a variety of formats.',
         'Answer to staff constraints and pre-existing infrastructure.',
       ],
+      active: true,
     },
   ],
   experience: [
@@ -168,6 +178,7 @@ export const Data = {
         'Implement static typing to frontend React components using Flow.',
       ],
       time: '2021 - Present',
+      active: true,
     },
     {
       employer: 'Galvanize / Hack Reactor',
@@ -181,6 +192,7 @@ export const Data = {
         'Measure performance of Junior Engineers and report anti-patterns to management when necessary.',
       ],
       time: '2021 - Present',
+      active: true,
     },
     {
       employer: 'LyricKeeper',
@@ -191,6 +203,7 @@ export const Data = {
         'Enhance usability with new “next and previous lyric” feature, improving and adding value to the user experience.',
       ],
       time: '2021 - Present',
+      active: true,
     },
     {
       employer: 'Lawrence North High School',
@@ -204,30 +217,34 @@ export const Data = {
         'Design and run live sound and lighting to improve audience experience of in-house performances.',
       ],
       time: '2017 - 2021',
+      active: false,
     },
-    // {
-    //   employer: 'Woodcrafters Woodshop',
-    //   position: 'Assistant Carpenter',
-    //   description: [
-    //     'Program CNC for optimal material usage and time efficiency.',
-    //     'Optimize toolpaths to significantly decrease total program runtime by 5 minutes.',
-    //     'Increase production by ~20%.',
-    //     'Construct and assemble final product.',
-    //     'Deliver products to customers.'
-    //   ],
-    //   time: 'June 2015 - July 2017'
-    // }
+    {
+      employer: 'Woodcrafters Woodshop',
+      position: 'Assistant Carpenter',
+      description: [
+        'Program CNC for optimal material usage and time efficiency.',
+        'Optimize toolpaths to significantly decrease total program runtime by 5 minutes.',
+        'Increase production by ~20%.',
+        'Construct and assemble final product.',
+        'Deliver products to customers.',
+      ],
+      time: 'June 2015 - July 2017',
+      active: false,
+    },
   ],
   education: [
     {
       school: 'Hack Reactor',
       time: '2020 - 2021',
       certificate: 'Advanced Software Engineering Immersive',
+      active: true,
     },
     {
       school: 'Millikin University',
       time: '2013 - 2017',
       degree: 'B.M. Music Education',
+      active: true,
     },
   ],
   general: [],
