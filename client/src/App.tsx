@@ -1,4 +1,5 @@
 import React, { ReactElement, FC, useState, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
 import {
   createTheme,
   ThemeProvider,
@@ -79,7 +80,11 @@ interface IState {
 }
 
 export default function App() {
-  const [selectedTab, setSelectedTab] = useState(0);
+  const [cookies, setCookie] = useCookies();
+  console.log(cookies['last-page']);
+  const [selectedTab, setSelectedTab] = useState(
+    Number(cookies['last-page']) || 0
+  );
   const [displaySidebar, setDisplaySidebar] = useState(
     window.innerWidth >= SIDEBAR_MIN_WIDTH
   );
@@ -144,6 +149,10 @@ export default function App() {
     fetchExperienceData();
     fetchTechnicalSkillsData();
   }, []);
+
+  useEffect(() => {
+    setCookie('last-page', selectedTab);
+  }, [selectedTab]);
 
   return (
     <ThemeProvider theme={theme}>
