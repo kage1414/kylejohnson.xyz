@@ -1,4 +1,5 @@
 import React, { FC, ReactElement, useState, useEffect } from 'react';
+import { Box } from '@mui/material';
 import axios from 'axios';
 import FullPost from '../FullPost';
 
@@ -22,14 +23,7 @@ export const Applications: FC<Props> = ({
 }): ReactElement => (
   <>
     {display && (
-      <div
-        style={{
-          marginLeft: '15px',
-          display: 'flex',
-          alignContent: 'flex-start',
-          flexFlow: 'row wrap',
-        }}
-      >
+      <Box>
         {applicationData.map(
           ({ name, technologies, url, description }, idx) => {
             const body = [
@@ -38,13 +32,13 @@ export const Applications: FC<Props> = ({
               ...technologies,
             ];
             return (
-              <div key={name + idx}>
+              <Box key={name + idx}>
                 <FullPost body={body} title={name} url={url} />
-              </div>
+              </Box>
             );
           }
         )}
-      </div>
+      </Box>
     )}
   </>
 );
