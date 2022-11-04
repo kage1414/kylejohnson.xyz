@@ -1,18 +1,13 @@
 import { FC, ReactElement, useState, useEffect } from 'react';
 import { Box, Grid } from '@mui/material';
 import axios from 'axios';
-import {
-  Applications,
-  Education,
-  Experience,
-  TechnicalSkills,
-} from '../Components/Pages';
+import { Applications, Education, Experience, TechnicalSkills } from './pages';
 import type {
   ApplicationData,
   EducationData,
   TechnicalSkillsData,
   ExperienceData,
-} from '../Components/Pages';
+} from './pages';
 import { Sidebar } from './Sidebar';
 
 interface IProps {
@@ -63,11 +58,11 @@ export const Feed: FC<IProps> = ({
   return (
     <Grid container>
       {displaySidebar && (
-        <Grid xs={'auto'}>
+        <Grid xs={2}>
           <Sidebar />
         </Grid>
       )}
-      <Grid item xs={'auto'}>
+      <Grid item xs={displaySidebar ? 10 : 12}>
         <Experience
           experienceData={experienceData}
           display={selectedTab === 0}

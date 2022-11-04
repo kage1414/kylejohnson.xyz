@@ -5,10 +5,10 @@ import {
   ThemeProvider,
   experimental_sx as sx,
 } from '@mui/material/styles';
-import Navbar from './Components/Navbar';
-import { Feed } from './Components/Feed';
+import Navbar from './components/Navbar';
+import { Feed } from './components/Feed';
 
-const SIDEBAR_MIN_WIDTH = 720;
+const SIDEBAR_MIN_WIDTH = 689;
 
 const theme = createTheme({
   palette: {
@@ -55,7 +55,6 @@ export default function App() {
   const [width, setWidth] = useState(window.innerWidth);
 
   useEffect(() => {
-    console.log({ width });
     setDisplaySidebar(width >= SIDEBAR_MIN_WIDTH);
   }, [width]);
 
