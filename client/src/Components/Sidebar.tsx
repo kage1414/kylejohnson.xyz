@@ -2,14 +2,11 @@ import { FC, SetStateAction, Dispatch } from 'react';
 import { useWindowWidth } from '@react-hook/window-size/throttled';
 import { Box, Drawer } from '@mui/material';
 
-interface Props {
-  isOpen: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-}
+interface Props {}
 
 const SIDEBAR_MIN_WIDTH = 673;
 
-export const Sidebar: FC<Props> = ({ isOpen, setIsOpen }: Props) => {
+export const Sidebar: FC<Props> = ({}: Props) => {
   const width = useWindowWidth();
   const style = {
     minHeight: 50,
@@ -26,16 +23,12 @@ export const Sidebar: FC<Props> = ({ isOpen, setIsOpen }: Props) => {
     fontSize: '14px',
   };
   return width > SIDEBAR_MIN_WIDTH ? (
-    <Drawer
+    <Box
       style={{
         width: '100px',
         height: '100%',
         backgroundColor: 'rgb(247, 247, 247)',
         margin: 0,
-      }}
-      open={isOpen}
-      onClose={() => {
-        setIsOpen(false);
       }}
     >
       <Box style={{ margin: 0 }}>
@@ -74,17 +67,9 @@ export const Sidebar: FC<Props> = ({ isOpen, setIsOpen }: Props) => {
           <li style={style}>
             <a href={'https://www.linkedin.com/in/kylejohnson922/'}>linkedin</a>
           </li>
-          <li
-            style={{ ...style, ...{ color: 'blue', cursor: 'pointer' } }}
-            onClick={() => {
-              setIsOpen(false);
-            }}
-          >
-            <span>close</span>
-          </li>
         </ul>
       </Box>
-    </Drawer>
+    </Box>
   ) : (
     <></>
   );

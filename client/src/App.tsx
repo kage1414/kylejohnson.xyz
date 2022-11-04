@@ -56,13 +56,8 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Navbar
-        selectedTab={selectedTab}
-        setSelectedTab={setSelectedTab}
-        setIsOpen={setIsOpen}
-        isOpen={isOpen}
-      />
-      <Feed selectedTab={selectedTab} isOpen={isOpen} setIsOpen={setIsOpen} />
+      <Navbar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+      <Feed selectedTab={selectedTab} />
     </ThemeProvider>
   );
 }

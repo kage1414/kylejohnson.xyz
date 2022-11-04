@@ -4,16 +4,9 @@ import { Tabs, Tab, Typography, Toolbar, Grid, Button } from '@mui/material';
 interface IProps {
   setSelectedTab: Dispatch<SetStateAction<number>>;
   selectedTab: number;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-  isOpen: boolean;
 }
 
-const Navbar: FC<IProps> = ({
-  selectedTab,
-  setSelectedTab,
-  setIsOpen,
-  isOpen,
-}): ReactElement => {
+const Navbar: FC<IProps> = ({ selectedTab, setSelectedTab }): ReactElement => {
   const getTabStyle = (tabNumber: number) => {
     return selectedTab === tabNumber
       ? {
@@ -26,14 +19,7 @@ const Navbar: FC<IProps> = ({
         };
   };
   const switchTabs = (event: React.SyntheticEvent, newValue: number) => {
-    if (newValue === 4) {
-      setIsOpen(true);
-    } else {
-      if (isOpen) {
-        setIsOpen(false);
-      }
-      setSelectedTab(newValue);
-    }
+    setSelectedTab(newValue);
   };
   return (
     <Toolbar
@@ -76,7 +62,6 @@ const Navbar: FC<IProps> = ({
             <Tab
               label={<Typography sx={getTabStyle(3)}>education</Typography>}
             />
-            <Tab label={<Typography sx={getTabStyle(4)}>contact</Typography>} />
           </Tabs>
         </Grid>
       </Grid>

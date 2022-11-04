@@ -20,15 +20,9 @@ const BASE_URL = 'http://localhost:3000';
 
 interface IProps {
   selectedTab: number;
-  isOpen: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export const Feed: FC<IProps> = ({
-  selectedTab,
-  isOpen,
-  setIsOpen,
-}): ReactElement => {
+export const Feed: FC<IProps> = ({ selectedTab }): ReactElement => {
   const [applicationData, setApplicationData] = useState<ApplicationData>([]);
   const [educationData, setEducationData] = useState<EducationData>([]);
   const [experienceData, setExperienceData] = useState<ExperienceData>([]);
@@ -68,7 +62,7 @@ export const Feed: FC<IProps> = ({
   return (
     <Grid container wrap='nowrap'>
       <Grid item>
-        <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+        <Sidebar />
       </Grid>
       <Grid item>
         <Experience
