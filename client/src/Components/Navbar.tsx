@@ -1,12 +1,19 @@
 import React, { ReactElement, FC, SetStateAction, Dispatch } from 'react';
-import { Tabs, Tab, Typography, Toolbar, Grid } from '@mui/material';
+import { Tabs, Tab, Typography, Toolbar, Grid, Button } from '@mui/material';
 
 interface IProps {
   setSelectedTab: Dispatch<SetStateAction<number>>;
   selectedTab: number;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  isOpen: boolean;
 }
 
-const Navbar: FC<IProps> = ({ selectedTab, setSelectedTab }): ReactElement => {
+const Navbar: FC<IProps> = ({
+  selectedTab,
+  setSelectedTab,
+  setIsOpen,
+  isOpen,
+}): ReactElement => {
   const getTabStyle = (tabNumber: number) => {
     return selectedTab === tabNumber
       ? {
@@ -19,7 +26,14 @@ const Navbar: FC<IProps> = ({ selectedTab, setSelectedTab }): ReactElement => {
         };
   };
   const switchTabs = (event: React.SyntheticEvent, newValue: number) => {
-    setSelectedTab(newValue);
+    if (newValue === 4) {
+      setIsOpen(true);
+    } else {
+      if (isOpen) {
+        setIsOpen(false);
+      }
+      setSelectedTab(newValue);
+    }
   };
   return (
     <Toolbar
@@ -29,7 +43,7 @@ const Navbar: FC<IProps> = ({ selectedTab, setSelectedTab }): ReactElement => {
       variant='dense'
     >
       <Grid container pb={0}>
-        <Grid display='flex' alignItems='flex-end'>
+        <Grid display='flex' alignItems='flex-end' item>
           <Typography variant='h5'>kyle johnson</Typography>
         </Grid>
         <Grid item>
@@ -62,6 +76,7 @@ const Navbar: FC<IProps> = ({ selectedTab, setSelectedTab }): ReactElement => {
             <Tab
               label={<Typography sx={getTabStyle(3)}>education</Typography>}
             />
+            <Tab label={<Typography sx={getTabStyle(4)}>contact</Typography>} />
           </Tabs>
         </Grid>
       </Grid>

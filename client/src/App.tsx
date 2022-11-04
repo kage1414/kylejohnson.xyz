@@ -48,14 +48,21 @@ export default function App() {
     Number(cookies['last-page']) || 0
   );
 
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   useEffect(() => {
     setCookie('last-page', selectedTab);
   }, [selectedTab]);
 
   return (
     <ThemeProvider theme={theme}>
-      <Navbar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-      <Feed selectedTab={selectedTab} />
+      <Navbar
+        selectedTab={selectedTab}
+        setSelectedTab={setSelectedTab}
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+      />
+      <Feed selectedTab={selectedTab} isOpen={isOpen} setIsOpen={setIsOpen} />
     </ThemeProvider>
   );
 }

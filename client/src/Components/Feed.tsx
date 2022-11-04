@@ -1,4 +1,11 @@
-import { FC, ReactElement, useState, useEffect } from 'react';
+import {
+  FC,
+  ReactElement,
+  useState,
+  useEffect,
+  SetStateAction,
+  Dispatch,
+} from 'react';
 import { Grid } from '@mui/material';
 import axios from 'axios';
 import { Applications, Education, Experience, TechnicalSkills } from './pages';
@@ -13,9 +20,15 @@ const BASE_URL = 'http://localhost:3000';
 
 interface IProps {
   selectedTab: number;
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export const Feed: FC<IProps> = ({ selectedTab }): ReactElement => {
+export const Feed: FC<IProps> = ({
+  selectedTab,
+  isOpen,
+  setIsOpen,
+}): ReactElement => {
   const [applicationData, setApplicationData] = useState<ApplicationData>([]);
   const [educationData, setEducationData] = useState<EducationData>([]);
   const [experienceData, setExperienceData] = useState<ExperienceData>([]);
@@ -55,7 +68,7 @@ export const Feed: FC<IProps> = ({ selectedTab }): ReactElement => {
   return (
     <Grid container wrap='nowrap'>
       <Grid item>
-        <Sidebar />
+        <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
       </Grid>
       <Grid item>
         <Experience
