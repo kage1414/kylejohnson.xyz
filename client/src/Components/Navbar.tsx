@@ -1,25 +1,4 @@
-import React, {
-  ReactElement,
-  FC,
-  useState,
-  useEffect,
-  SetStateAction,
-  Dispatch,
-} from 'react';
-import { useCookies } from 'react-cookie';
-import {
-  createTheme,
-  ThemeProvider,
-  experimental_sx as sx,
-} from '@mui/material/styles';
-import { mobileCheck } from '../utils';
-import axios from 'axios';
-import type {
-  ApplicationData,
-  EducationData,
-  TechnicalSkillsData,
-  ExperienceData,
-} from '../Components/Pages';
+import React, { ReactElement, FC, SetStateAction, Dispatch } from 'react';
 import { Tabs, Tab, Typography, Toolbar, Grid } from '@mui/material';
 
 interface IProps {

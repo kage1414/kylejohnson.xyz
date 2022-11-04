@@ -18,7 +18,7 @@ module.exports = {
     'prettier/prettier': 'error',
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'no-empty-function': 'off',
-    'no-unused-expressions': 'off',
+    'no-unused-expressions': 'warn',
     '@typescript-eslint/array-type': 'off',
     '@typescript-eslint/camelcase': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
