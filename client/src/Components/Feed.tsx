@@ -1,5 +1,5 @@
 import { FC, ReactElement, useState, useEffect } from 'react';
-import { Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import axios from 'axios';
 import {
   Applications,
@@ -13,12 +13,17 @@ import type {
   TechnicalSkillsData,
   ExperienceData,
 } from '../Components/Pages';
+import { Sidebar } from './Sidebar';
 
 interface IProps {
   selectedTab: number;
+  displaySidebar: boolean;
 }
 
-export const Feed: FC<IProps> = ({ selectedTab }): ReactElement => {
+export const Feed: FC<IProps> = ({
+  selectedTab,
+  displaySidebar,
+}): ReactElement => {
   const [applicationData, setApplicationData] = useState<ApplicationData>([]);
   const [educationData, setEducationData] = useState<EducationData>([]);
   const [experienceData, setExperienceData] = useState<ExperienceData>([]);
@@ -56,17 +61,27 @@ export const Feed: FC<IProps> = ({ selectedTab }): ReactElement => {
     fetchTechnicalSkillsData();
   }, []);
   return (
-    <Box>
-      <Experience experienceData={experienceData} display={selectedTab === 0} />
-      <TechnicalSkills
-        technicalSkillsData={technicalSkillsData}
-        display={selectedTab === 1}
-      />
-      <Applications
-        applicationData={applicationData}
-        display={selectedTab === 2}
-      />
-      <Education educationData={educationData} display={selectedTab === 3} />
-    </Box>
+    <Grid container>
+      {displaySidebar && (
+        <Grid xs={'auto'}>
+          <Sidebar />
+        </Grid>
+      )}
+      <Grid item xs={'auto'}>
+        <Experience
+          experienceData={experienceData}
+          display={selectedTab === 0}
+        />
+        <TechnicalSkills
+          technicalSkillsData={technicalSkillsData}
+          display={selectedTab === 1}
+        />
+        <Applications
+          applicationData={applicationData}
+          display={selectedTab === 2}
+        />
+        <Education educationData={educationData} display={selectedTab === 3} />
+      </Grid>
+    </Grid>
   );
 };

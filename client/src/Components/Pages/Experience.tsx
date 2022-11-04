@@ -1,6 +1,6 @@
 import React, { FC, ReactElement, useState, useEffect } from 'react';
 import axios from 'axios';
-import FullPost from '../FullPost';
+import FullPost from '../FullPost/FullPost';
 import { Box } from '@mui/material';
 
 type Experience = {

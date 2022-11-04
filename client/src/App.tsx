@@ -8,7 +8,7 @@ import {
 import Navbar from './Components/Navbar';
 import { Feed } from './Components/Feed';
 
-const SIDEBAR_MIN_WIDTH = 443;
+const SIDEBAR_MIN_WIDTH = 720;
 
 const theme = createTheme({
   palette: {
@@ -55,7 +55,8 @@ export default function App() {
   const [width, setWidth] = useState(window.innerWidth);
 
   useEffect(() => {
-    setDisplaySidebar(width >= 443);
+    console.log({ width });
+    setDisplaySidebar(width >= SIDEBAR_MIN_WIDTH);
   }, [width]);
 
   useEffect(() => {
@@ -71,7 +72,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <Navbar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-      <Feed selectedTab={selectedTab} />
+      <Feed selectedTab={selectedTab} displaySidebar={displaySidebar} />
     </ThemeProvider>
   );
 }

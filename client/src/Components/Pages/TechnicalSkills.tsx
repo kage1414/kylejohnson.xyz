@@ -1,6 +1,5 @@
-import React, { FC, ReactElement, useState, useEffect } from 'react';
-import axios from 'axios';
-import Post from '../Post';
+import { FC, ReactElement } from 'react';
+import Post from '../Post/Post';
 import { Box } from '@mui/material';
 
 type TechStack = {
