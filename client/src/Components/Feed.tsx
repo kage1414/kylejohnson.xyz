@@ -9,6 +9,7 @@ import type {
   ExperienceData,
 } from './pages';
 import { Sidebar } from './Sidebar';
+const BASE_URL = 'http://localhost:3000';
 
 interface IProps {
   selectedTab: number;
@@ -22,25 +23,25 @@ export const Feed: FC<IProps> = ({ selectedTab }): ReactElement => {
     useState<TechnicalSkillsData>([]);
 
   const fetchApplicationData = () => {
-    axios.get('/applications').then(({ data }) => {
+    axios.get(BASE_URL + '/applications').then(({ data }) => {
       setApplicationData(data);
     });
   };
 
   const fetchEducationData = () => {
-    axios.get('/education').then(({ data }) => {
+    axios.get(BASE_URL + '/education').then(({ data }) => {
       setEducationData(data);
     });
   };
 
   const fetchTechnicalSkillsData = () => {
-    axios.get('/technical_skills').then(({ data }) => {
+    axios.get(BASE_URL + '/technical_skills').then(({ data }) => {
       setTechnicalSkillsData(data);
     });
   };
 
   const fetchExperienceData = () => {
-    axios.get('/experience').then(({ data }) => {
+    axios.get(BASE_URL + '/experience').then(({ data }) => {
       setExperienceData(data);
     });
   };

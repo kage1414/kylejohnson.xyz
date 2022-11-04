@@ -1,9 +1,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 const CopyPlugin = require('copy-webpack-plugin');
 const SRC_DIR = path.join(__dirname, 'client', 'src');
 const DIST_DIR = path.join(__dirname, 'client', 'dist');
-console.log(SRC_DIR);
+
+var environment =
+  process.env.NODE_ENV === 'production' ? 'production' : 'development';
 
 module.exports = {
   entry: `${SRC_DIR}/index.tsx`,
