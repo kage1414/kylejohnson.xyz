@@ -6,7 +6,7 @@ interface IProps {
   description?: string;
 }
 
-const Post: FC<IProps> = ({ title, idx, description }): ReactElement => {
+export const Post: FC<IProps> = ({ title, idx, description }): ReactElement => {
   const thumbnails: Array<string> = ['-1267px', '-1099px', '-1043px'];
   let likes: string = Math.floor(Math.random() * 50000).toString();
 
@@ -82,5 +82,3 @@ const Post: FC<IProps> = ({ title, idx, description }): ReactElement => {
     </div>
   );
 };
-
-export default Post;

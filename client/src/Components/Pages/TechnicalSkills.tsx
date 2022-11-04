@@ -1,5 +1,5 @@
 import { FC, ReactElement } from 'react';
-import Post from '../Post/Post';
+import { Post } from '../Post';
 import { Box } from '@mui/material';
 
 type TechStack = {
