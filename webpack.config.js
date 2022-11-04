@@ -1,6 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require("copy-webpack-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
 const SRC_DIR = path.join(__dirname, 'client', 'src');
 const DIST_DIR = path.join(__dirname, 'client', 'dist');
 console.log(SRC_DIR);
@@ -11,14 +11,13 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: DIST_DIR,
-    clean: true
+    clean: true,
   },
   devServer: {
-    port: 3000,
-    watchContentBase: true
+    allowedHosts: 'all',
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx']
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
   // mode: 'development',
   module: {
@@ -32,38 +31,38 @@ module.exports = {
         test: /\.jsx$/,
         exclude: [/node_modules/, /test/],
         use: {
-          loader: 'babel-loader'
-        }
+          loader: 'babel-loader',
+        },
       },
       {
         test: /\.js$/,
         enforce: 'pre',
         exclude: [/node_modules/, /test/],
-        use: ['babel-loader', 'source-map-loader']
+        use: ['babel-loader', 'source-map-loader'],
       },
       {
         test: /\.css$/i,
         exclude: [/node_modules/, /test/],
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
       },
-    ]
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: './index.html',
-      inject: 'body'
+      inject: 'body',
     }),
     new CopyPlugin({
       patterns: [
         {
           from: path.join(SRC_DIR, 'assets'),
-          to: DIST_DIR
-        }
-      ]
-    })
-  ]
+          to: DIST_DIR,
+        },
+      ],
+    }),
+  ],
 };

@@ -1,5 +1,5 @@
 import { FC, ReactElement, useState, useEffect } from 'react';
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import axios from 'axios';
 import { Applications, Education, Experience, TechnicalSkills } from './pages';
 import type {
@@ -12,13 +12,9 @@ import { Sidebar } from './Sidebar';
 
 interface IProps {
   selectedTab: number;
-  displaySidebar: boolean;
 }
 
-export const Feed: FC<IProps> = ({
-  selectedTab,
-  displaySidebar,
-}): ReactElement => {
+export const Feed: FC<IProps> = ({ selectedTab }): ReactElement => {
   const [applicationData, setApplicationData] = useState<ApplicationData>([]);
   const [educationData, setEducationData] = useState<EducationData>([]);
   const [experienceData, setExperienceData] = useState<ExperienceData>([]);
@@ -56,13 +52,11 @@ export const Feed: FC<IProps> = ({
     fetchTechnicalSkillsData();
   }, []);
   return (
-    <Grid container>
-      {displaySidebar && (
-        <Grid xs={2}>
-          <Sidebar />
-        </Grid>
-      )}
-      <Grid item xs={displaySidebar ? 10 : 12}>
+    <Grid container wrap='nowrap'>
+      <Grid item>
+        <Sidebar />
+      </Grid>
+      <Grid item>
         <Experience
           experienceData={experienceData}
           display={selectedTab === 0}

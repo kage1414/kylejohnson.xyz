@@ -1,11 +1,19 @@
-interface Props {
-  buttons: Array<string>;
-}
+const BUTTONS = [
+  `${Math.floor(Math.random() * 100)} comments`,
+  'source',
+  'share',
+  'save',
+  'hide',
+  'give award',
+  'report',
+  'crosspost',
+  'hide all child comments',
+];
 
-export function FullPostFooterList({ buttons }: Props) {
+export function FullPostFooterList() {
   return (
     <ul>
-      {buttons.map((button) => (
+      {BUTTONS.map((button) => (
         <li
           key={button}
           style={{

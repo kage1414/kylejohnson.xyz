@@ -8,8 +8,6 @@ import {
 import Navbar from './components/Navbar';
 import { Feed } from './components/Feed';
 
-const SIDEBAR_MIN_WIDTH = 689;
-
 const theme = createTheme({
   palette: {
     primary: {
@@ -49,29 +47,15 @@ export default function App() {
   const [selectedTab, setSelectedTab] = useState(
     Number(cookies['last-page']) || 0
   );
-  const [displaySidebar, setDisplaySidebar] = useState(
-    window.innerWidth >= SIDEBAR_MIN_WIDTH
-  );
-  const [width, setWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    setDisplaySidebar(width >= SIDEBAR_MIN_WIDTH);
-  }, [width]);
 
   useEffect(() => {
     setCookie('last-page', selectedTab);
   }, [selectedTab]);
 
-  useEffect(() => {
-    window.addEventListener('resize', () => {
-      setWidth(window.innerWidth);
-    });
-  }, []);
-
   return (
     <ThemeProvider theme={theme}>
       <Navbar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-      <Feed selectedTab={selectedTab} displaySidebar={displaySidebar} />
+      <Feed selectedTab={selectedTab} />
     </ThemeProvider>
   );
 }

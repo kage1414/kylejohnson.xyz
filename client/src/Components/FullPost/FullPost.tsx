@@ -17,18 +17,6 @@ export const FullPost: FC<IProps> = ({
   time,
   url,
 }): ReactElement => {
-  const buttons = [
-    `${Math.floor(Math.random() * 100)} comments`,
-    'source',
-    'share',
-    'save',
-    'hide',
-    'give award',
-    'report',
-    'crosspost',
-    'hide all child comments',
-  ];
-
   return (
     <Box
       sx={{
@@ -49,7 +37,7 @@ export const FullPost: FC<IProps> = ({
           url={url}
         />
         {body && <FullPostBody body={body} />}
-        <FullPostFooterList buttons={buttons} />
+        <FullPostFooterList />
       </Paper>
     </Box>
   );

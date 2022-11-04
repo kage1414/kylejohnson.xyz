@@ -1,9 +1,13 @@
 import { FC } from 'react';
+import { useWindowWidth } from '@react-hook/window-size/throttled';
 
 interface Props {}
 
+const SIDEBAR_MIN_WIDTH = 673;
+
 export const Sidebar: FC<Props> = () => {
-  return (
+  const width = useWindowWidth();
+  return width > SIDEBAR_MIN_WIDTH ? (
     <div
       style={{
         width: '100px',
@@ -145,5 +149,7 @@ export const Sidebar: FC<Props> = () => {
         </ul>
       </div>
     </div>
+  ) : (
+    <></>
   );
 };
