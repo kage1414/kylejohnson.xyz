@@ -7,6 +7,7 @@ import {
 } from '@mui/material/styles';
 import Navbar from './components/Navbar';
 import { Feed } from './components/Feed';
+import { BottomBar } from './components/BottomBar';
 
 const theme = createTheme({
   palette: {
@@ -58,6 +59,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <Navbar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
       <Feed selectedTab={selectedTab} />
+      <BottomBar />
     </ThemeProvider>
   );
 }

@@ -4,7 +4,8 @@ const cors = require('cors');
 const app = express();
 const publicPath = path.join(__dirname, '..', 'client', 'dist');
 const bodyParser = require('body-parser');
-const PORT = process.env.PORT || 3000;
+const PROD = process.env.NODE_ENV === 'production';
+const PORT = PROD ? process.env.PORT : 3000;
 const {
   applications,
   education,
@@ -12,7 +13,9 @@ const {
   technical_skills,
 } = require('./mock-db');
 
-app.use(cors());
+if (!PROD) {
+  app.use(cors());
+}
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use('/', express.static(publicPath, { dotfiles: 'allow' }));

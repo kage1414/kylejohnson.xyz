@@ -20,7 +20,8 @@ export const Sidebar: FC<Props> = ({}: Props) => {
     borderBottomLeftRadius: '5px',
     borderTopLeftRadius: '5px',
     overflow: 'auto',
-    fontSize: '14px',
+    fontSize: '12px',
+    fontFamily: 'verdana, arial, helvetica, sans-serif',
   };
   return width > SIDEBAR_MIN_WIDTH ? (
     <Box
