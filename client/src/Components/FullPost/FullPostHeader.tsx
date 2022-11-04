@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import { Box, Typography, Link } from '@mui/material';
-import { FullPostHeaderSubmittedText } from './FullPostHeaderSubmittedText';
+import { FullPostHeaderSubmittedText } from '.';
 
 interface Props {
   title: string;

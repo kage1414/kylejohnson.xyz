@@ -1,8 +1,6 @@
 import { Box, Paper } from '@mui/material';
-import React, { FC, ReactElement } from 'react';
-import { FullPostHeader } from './FullPostHeader';
-import { FullPostBody } from './FullPostBody';
-import { FullPostFooterList } from './FullPostFooterList';
+import { FC, ReactElement } from 'react';
+import { FullPostHeader, FullPostBody, FullPostFooterList } from '.';
 
 interface IProps {
   title: string;
