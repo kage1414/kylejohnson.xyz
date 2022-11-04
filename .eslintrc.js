@@ -14,7 +14,7 @@ module.exports = {
   rules: {
     'object-shorthand': 'error',
     'no-useless-rename': 'error',
-    'no-unused-vars': 'on',
+    'no-unused-vars': 'warn',
     'prettier/prettier': 'error',
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'no-empty-function': 'off',
