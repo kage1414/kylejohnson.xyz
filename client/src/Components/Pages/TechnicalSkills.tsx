@@ -1,6 +1,6 @@
 import { FC, ReactElement } from 'react';
 import { Post } from '../Post';
-import { Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 
 type TechStack = {
   stack: string;
@@ -20,15 +20,17 @@ export const TechnicalSkills: FC<Props> = ({
 }) => (
   <>
     {display && (
-      <Box>
+      <Grid container>
         {technicalSkillsData.map(({ stack, technologies }, idx) => (
-          <TechnicalSkillsElement
-            stack={stack}
-            technologies={technologies}
-            key={stack + idx}
-          />
+          <Grid item>
+            <TechnicalSkillsElement
+              stack={stack}
+              technologies={technologies}
+              key={stack + idx}
+            />
+          </Grid>
         ))}
-      </Box>
+      </Grid>
     )}
   </>
 );
@@ -38,13 +40,13 @@ const TechnicalSkillsElement: FC<TechStack> = ({
   technologies,
 }): ReactElement => {
   return (
-    <div
+    <Box
       style={{
         margin: '10px 0',
         flex: '1',
       }}
     >
-      <div>
+      <Box>
         <h2
           style={{
             height: '16px',
@@ -56,12 +58,12 @@ const TechnicalSkillsElement: FC<TechStack> = ({
         >
           {stack}
         </h2>
-        <div>
+        <Box>
           {technologies.map((title, idx) => {
             return <Post key={title + idx} title={title} idx={idx} />;
           })}
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 };
