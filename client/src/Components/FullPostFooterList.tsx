@@ -1,5 +1,3 @@
-import { ReactElement } from 'react';
-
 interface Props {
   buttons: Array<string>;
 }

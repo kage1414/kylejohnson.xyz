@@ -1,12 +1,5 @@
 import { ReactElement } from 'react';
-import {
-  Box,
-  Paper,
-  List,
-  ListItemText,
-  Typography,
-  Link,
-} from '@mui/material';
+import { Box, Typography, Link } from '@mui/material';
 import { FullPostHeaderSubmittedText } from './FullPostHeaderSubmittedText';
 
 interface Props {

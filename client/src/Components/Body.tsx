@@ -1,5 +1,5 @@
 import React, { FC, ReactElement, useState, useEffect } from 'react';
-import { AppBar, Tabs, Container } from '@mui/material';
+import { Container } from '@mui/material';
 import Sidebar from './Sidebar';
 import axios from 'axios';
 
@@ -10,7 +10,7 @@ interface IProps {
   displaySidebar: boolean;
 }
 
-const Body: FC<IProps> = ({ selectedTab, displaySidebar }): ReactElement => {
+const Body: FC<IProps> = ({ displaySidebar }): ReactElement => {
   const [applicationData, setApplicationData] = useState([]);
   const [educationData, setEducationData] = useState([]);
   const [experienceData, setExperienceData] = useState([]);
