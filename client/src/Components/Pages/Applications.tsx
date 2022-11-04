@@ -1,7 +1,6 @@
-import React, { FC, ReactElement, useState, useEffect } from 'react';
+import { FC, ReactElement } from 'react';
 import { Box } from '@mui/material';
-import axios from 'axios';
-import FullPost from '../FullPost/FullPost';
+import { FullPost } from '../FullPost';
 
 type Application = {
   description: Array<string>;

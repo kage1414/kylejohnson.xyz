@@ -1,5 +1,5 @@
 import { FC, ReactElement } from 'react';
-import FullPost from '../FullPost/FullPost';
+import { FullPost } from '../FullPost';
 import { Box } from '@mui/material';
 
 type Education = {
