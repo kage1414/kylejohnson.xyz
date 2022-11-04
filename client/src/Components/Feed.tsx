@@ -1,58 +1,72 @@
-import React, { FC, ReactElement, useState, useEffect } from 'react';
-import { Container } from '@mui/material';
-import Sidebar from './Sidebar';
+import { FC, ReactElement, useState, useEffect } from 'react';
+import { Box } from '@mui/material';
 import axios from 'axios';
+import {
+  Applications,
+  Education,
+  Experience,
+  TechnicalSkills,
+} from '../Components/Pages';
+import type {
+  ApplicationData,
+  EducationData,
+  TechnicalSkillsData,
+  ExperienceData,
+} from '../Components/Pages';
 
 interface IProps {
-  selectedTab: { name: string; display: boolean };
-  windowWidth?: number;
-  mobile?: boolean;
-  displaySidebar: boolean;
+  selectedTab: number;
 }
 
-const Body: FC<IProps> = ({ displaySidebar }): ReactElement => {
-  const [applicationData, setApplicationData] = useState([]);
-  const [educationData, setEducationData] = useState([]);
-  const [experienceData, setExperienceData] = useState([]);
-  const [technicalSkillsData, setTechnicalSkillsData] = useState([]);
+export const Feed: FC<IProps> = ({ selectedTab }): ReactElement => {
+  const [applicationData, setApplicationData] = useState<ApplicationData>([]);
+  const [educationData, setEducationData] = useState<EducationData>([]);
+  const [experienceData, setExperienceData] = useState<ExperienceData>([]);
+  const [technicalSkillsData, setTechnicalSkillsData] =
+    useState<TechnicalSkillsData>([]);
+
+  const fetchApplicationData = () => {
+    axios.get('/applications').then(({ data }) => {
+      setApplicationData(data);
+    });
+  };
+
+  const fetchEducationData = () => {
+    axios.get('/education').then(({ data }) => {
+      setEducationData(data);
+    });
+  };
+
+  const fetchTechnicalSkillsData = () => {
+    axios.get('/technical_skills').then(({ data }) => {
+      setTechnicalSkillsData(data);
+    });
+  };
+
+  const fetchExperienceData = () => {
+    axios.get('/experience').then(({ data }) => {
+      setExperienceData(data);
+    });
+  };
 
   useEffect(() => {
-    axios.get('/applications').then((response) => {
-      setApplicationData(response.data);
-    });
-
-    axios.get('/education').then((response) => {
-      setEducationData(response.data);
-    });
-
-    axios.get('/experience').then((response) => {
-      setExperienceData(response.data);
-    });
-
-    axios.get('/technical_skills').then((response) => {
-      setTechnicalSkillsData(response.data);
-    });
+    fetchApplicationData();
+    fetchEducationData();
+    fetchExperienceData();
+    fetchTechnicalSkillsData();
   }, []);
-
   return (
-    <Container
-      style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-      }}
-    >
-      {displaySidebar && (
-        <div
-          style={{
-            flexBasis: '100px',
-            flexGrow: 1,
-          }}
-        >
-          <Sidebar />
-        </div>
-      )}
-    </Container>
+    <Box>
+      <Experience experienceData={experienceData} display={selectedTab === 0} />
+      <TechnicalSkills
+        technicalSkillsData={technicalSkillsData}
+        display={selectedTab === 1}
+      />
+      <Applications
+        applicationData={applicationData}
+        display={selectedTab === 2}
+      />
+      <Education educationData={educationData} display={selectedTab === 3} />
+    </Box>
   );
 };
-
-export default Body;
