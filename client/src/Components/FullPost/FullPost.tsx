@@ -12,7 +12,7 @@ interface IProps {
   url?: string;
 }
 
-const FullPost: FC<IProps> = ({
+export const FullPost: FC<IProps> = ({
   title,
   subtitle,
   body,
@@ -56,5 +56,3 @@ const FullPost: FC<IProps> = ({
     </Box>
   );
 };
-
-export default FullPost;
