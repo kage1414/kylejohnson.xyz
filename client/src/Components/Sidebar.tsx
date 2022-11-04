@@ -1,44 +1,51 @@
-import { FC } from 'react';
+import { FC, SetStateAction, Dispatch } from 'react';
 import { useWindowWidth } from '@react-hook/window-size/throttled';
+import { Box, Drawer } from '@mui/material';
 
-interface Props {}
+interface Props {
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
 
 const SIDEBAR_MIN_WIDTH = 673;
 
-export const Sidebar: FC<Props> = () => {
+export const Sidebar: FC<Props> = ({ isOpen, setIsOpen }: Props) => {
   const width = useWindowWidth();
+  const style = {
+    minHeight: 50,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 85,
+    margin: '10px 0 3px 12px',
+    border: 'rgb(204, 204, 204) 1px solid',
+    backgroundColor: 'white',
+    borderBottomLeftRadius: '5px',
+    borderTopLeftRadius: '5px',
+    overflow: 'auto',
+    fontSize: '14px',
+  };
   return width > SIDEBAR_MIN_WIDTH ? (
-    <div
+    <Drawer
       style={{
         width: '100px',
         height: '100%',
         backgroundColor: 'rgb(247, 247, 247)',
         margin: 0,
       }}
+      open={isOpen}
+      onClose={() => {
+        setIsOpen(false);
+      }}
     >
-      <div style={{ margin: 0 }}>
+      <Box style={{ margin: 0 }}>
         <ul
           style={{
             display: 'flex',
             flexDirection: 'column',
           }}
         >
-          <li
-            style={{
-              minHeight: 50,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 85,
-              margin: '10px 0 3px 12px',
-              border: 'rgb(204, 204, 204) 1px solid',
-              backgroundColor: 'white',
-              borderBottomLeftRadius: '5px',
-              borderTopLeftRadius: '5px',
-              overflow: 'auto',
-              fontSize: '12px',
-            }}
-          >
+          <li style={style}>
             <span>
               Full-Stack
               <br />
@@ -46,22 +53,7 @@ export const Sidebar: FC<Props> = () => {
             </span>
           </li>
 
-          <li
-            style={{
-              minHeight: 50,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 85,
-              margin: '10px 0 3px 12px',
-              border: 'rgb(204, 204, 204) 1px solid',
-              backgroundColor: 'white',
-              borderBottomLeftRadius: '5px',
-              borderTopLeftRadius: '5px',
-              overflow: 'auto',
-              fontSize: '12px',
-            }}
-          >
+          <li style={style}>
             <a href={'mailto:kylejohnson92294@gmail.com'}>
               kylejohnson
               <br />
@@ -70,85 +62,29 @@ export const Sidebar: FC<Props> = () => {
               @gmail.com
             </a>
           </li>
-
-          <li
-            style={{
-              minHeight: 50,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 85,
-              margin: '10px 0 3px 12px',
-              border: 'rgb(204, 204, 204) 1px solid',
-              backgroundColor: 'white',
-              borderBottomLeftRadius: '5px',
-              borderTopLeftRadius: '5px',
-              overflow: 'auto',
-              fontSize: '12px',
-            }}
-          >
+          <li style={style}>
             <span>Indianapolis</span>
           </li>
-
-          <li
-            style={{
-              minHeight: 50,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 85,
-              margin: '10px 0 3px 12px',
-              border: 'rgb(204, 204, 204) 1px solid',
-              backgroundColor: 'white',
-              borderBottomLeftRadius: '5px',
-              borderTopLeftRadius: '5px',
-              overflow: 'auto',
-              fontSize: '12px',
-            }}
-          >
+          <li style={style}>
             <span>Remote</span>
           </li>
-
-          <li
-            style={{
-              minHeight: 50,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 85,
-              margin: '10px 0 3px 12px',
-              border: 'rgb(204, 204, 204) 1px solid',
-              backgroundColor: 'white',
-              borderBottomLeftRadius: '5px',
-              borderTopLeftRadius: '5px',
-              overflow: 'auto',
-              fontSize: '12px',
-            }}
-          >
+          <li style={style}>
             <a href={'https://github.com/kage1414'}>github</a>
           </li>
-
-          <li
-            style={{
-              minHeight: 50,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 85,
-              margin: '10px 0 3px 12px',
-              border: 'rgb(204, 204, 204) 1px solid',
-              backgroundColor: 'white',
-              borderBottomLeftRadius: '5px',
-              borderTopLeftRadius: '5px',
-              overflow: 'auto',
-              fontSize: '12px',
-            }}
-          >
+          <li style={style}>
             <a href={'https://www.linkedin.com/in/kylejohnson922/'}>linkedin</a>
           </li>
+          <li
+            style={{ ...style, ...{ color: 'blue', cursor: 'pointer' } }}
+            onClick={() => {
+              setIsOpen(false);
+            }}
+          >
+            <span>close</span>
+          </li>
         </ul>
-      </div>
-    </div>
+      </Box>
+    </Drawer>
   ) : (
     <></>
   );
