@@ -1,52 +1,93 @@
-import React, { FC, ReactElement } from 'react';
+import React, {
+  ReactElement,
+  FC,
+  useState,
+  useEffect,
+  SetStateAction,
+  Dispatch,
+} from 'react';
+import { useCookies } from 'react-cookie';
+import {
+  createTheme,
+  ThemeProvider,
+  experimental_sx as sx,
+} from '@mui/material/styles';
+import { mobileCheck } from '../utils';
+import axios from 'axios';
+import type {
+  ApplicationData,
+  EducationData,
+  TechnicalSkillsData,
+  ExperienceData,
+} from '../Components/Pages';
+import { Tabs, Tab, Typography, Toolbar, Grid } from '@mui/material';
 
 interface IProps {
-  tabs: Array<{ name: string; display: boolean; }>;
-  switchTabs: any;
-  windowWidth?: number;
+  setSelectedTab: Dispatch<SetStateAction<number>>;
+  selectedTab: number;
 }
 
-const Navbar: FC<IProps> = ({ tabs, switchTabs }): ReactElement => {
-
+const Navbar: FC<IProps> = ({ selectedTab, setSelectedTab }): ReactElement => {
+  const getTabStyle = (tabNumber: number) => {
+    return selectedTab === tabNumber
+      ? {
+          backgroundColor: '#ffffff',
+          border: '#5f99cf solid 1px',
+          borderBottomColor: '#ffffff',
+        }
+      : {
+          backgroundColor: '#eff5ff',
+        };
+  };
+  const switchTabs = (event: React.SyntheticEvent, newValue: number) => {
+    setSelectedTab(newValue);
+  };
   return (
-    <div style={{
-      paddingLeft: '12px',
-      paddingTop: '15px',
-      minHeight: '30px',
-      display: 'flex',
-      borderBottom: 'solid rgb(95, 153, 207) 1px',
-      width: '100vw'
-    }}>
-      <div style={{ alignSelf: 'flex-end' }}>
-        <span style={{ fontSize: '30px' }} >kyle johnson</span>
-      </div>
-      <div style={{
-        marginLeft: '15px',
-        justifyContent: 'center',
-        alignSelf: 'flex-end',
-      }}>
-        <ul style={{
-          margin: '0 5px',
-          display: 'flex',
-          flexWrap: 'wrap'
-        }}>
-          {tabs.map((tab, idx) => {
-            return <li onClick={switchTabs}
-              style={{
-                cursor: 'pointer',
-                display: 'inline',
-                margin: '5px 5px -1px 5px'
-              }}
-              key={idx + tab.name}
-              data-idx={idx}
-              data-name={tab.name}
-              className={tab.display === true ? 'front' : 'back'}>{tab.name}</li>;
-          })}
-        </ul>
-      </div>
-    </div>
+    <Toolbar
+      color='secondary'
+      disableGutters
+      sx={{ backgroundColor: '#cee3f8', borderBottom: '#5f99cf solid 1px' }}
+      variant='dense'
+    >
+      <Grid container pb={0}>
+        <Grid display='flex' alignItems='flex-end'>
+          <Typography variant='h5'>kyle johnson</Typography>
+        </Grid>
+        <Grid item>
+          <Tabs
+            value={selectedTab}
+            onChange={switchTabs}
+            indicatorColor='secondary'
+            sx={{
+              '& button': { paddingY: 0 },
+              '& p': {
+                paddingX: 1,
+                fontSize: '12px',
+                fontWeight: 700,
+                textTransform: 'lowercase',
+              },
+            }}
+            TabIndicatorProps={{ style: { display: 'none' } }}
+          >
+            <Tab
+              label={<Typography sx={getTabStyle(0)}>experience</Typography>}
+            />
+            <Tab
+              label={
+                <Typography sx={getTabStyle(1)}>technical_skills</Typography>
+              }
+            />
+            <Tab
+              label={<Typography sx={getTabStyle(2)}>applications</Typography>}
+            />
+            <Tab
+              label={<Typography sx={getTabStyle(3)}>education</Typography>}
+            />
+          </Tabs>
+        </Grid>
+      </Grid>
+    </Toolbar>
   );
-
 };
 
 export default Navbar;
