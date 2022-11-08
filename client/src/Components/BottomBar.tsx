@@ -1,29 +1,35 @@
-import {FC, ReactElement} from 'react';
+import { FC, ReactElement, useState } from 'react';
+import { BottomNavigation, BottomNavigationAction, Link } from '@mui/material';
+import { Email, GitHub, LinkedIn } from '@mui/icons-material';
 
-const BottomBar: FC = (): ReactElement => (
+export const BottomBar: FC = (): ReactElement => {
+  const [value, setValue] = useState<string | null>(null);
+  return (
+    <BottomNavigation
+      showLabels
+      value={value}
+      onChange={(event, newValue) => {
+        setValue(newValue);
+        setTimeout(() => {
+          setValue(null);
+        }, 500);
+      }}
+    >
+      <BottomNavigationAction
+        label={'email'}
+        to='mailto:kylejohnson92294@gmail.com'
+        icon={<Email />}
+        component={Link}
+      />
 
-  <div style={{justifyContent: 'center'}}>
-    <div>
-      Kyle Johnson | Full Stack Developer
-    </div>
-    <div>
-      Indianapolis | Remote
-    </div>
-    <div>
-      <a href={'mailto:kylejohnson92294@gmail.com'}>kylejohnson92294@gmail.com</a>
-    </div>
-    <div>
-      <a href={'https://github.com/kage1414'}>
-        github
-      </a>
-    </div>
-    <div>
-      <a href={'https://www.linkedin.com/in/kylejohnson922/'}>
-        linkedin
-      </a>
-    </div>
-  </div>
-
-)
-
-export default BottomBar;
+      <BottomNavigationAction label={'github'} icon={<GitHub />}>
+        <Link href={'https://github.com/kage1414'}>github</Link>
+      </BottomNavigationAction>
+      <BottomNavigationAction label={'linkedin'} icon={<LinkedIn />}>
+        <Link href={'https://www.linkedin.com/in/kylejohnson922/'}>
+          linkedin
+        </Link>
+      </BottomNavigationAction>
+    </BottomNavigation>
+  );
+};

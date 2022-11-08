@@ -1,155 +1,77 @@
-import React, { Component } from 'react';
+import { FC, SetStateAction, Dispatch } from 'react';
+import { useWindowWidth } from '@react-hook/window-size/throttled';
+import { Box, Drawer } from '@mui/material';
 
-interface IProps {
-}
+interface Props {}
 
-interface IState {
-}
+const SIDEBAR_MIN_WIDTH = 673;
 
-class Sidebar extends Component<IProps, IState> {
-
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-    };
-  }
-
-  render() {
-    return (
-      <div style={{
+export const Sidebar: FC<Props> = ({}: Props) => {
+  const width = useWindowWidth();
+  const style = {
+    minHeight: 50,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 85,
+    margin: '10px 0 3px 12px',
+    border: 'rgb(204, 204, 204) 1px solid',
+    backgroundColor: 'white',
+    borderBottomLeftRadius: '5px',
+    borderTopLeftRadius: '5px',
+    overflow: 'auto',
+    fontSize: '12px',
+    fontFamily: 'verdana, arial, helvetica, sans-serif',
+  };
+  return width > SIDEBAR_MIN_WIDTH ? (
+    <Box
+      style={{
         width: '100px',
         height: '100%',
         backgroundColor: 'rgb(247, 247, 247)',
-        margin: 0
-      }}>
-        <div style={{ margin: 0 }}>
-          {/* Refactor this to React elements in future */}
-          <ul style={{
+        margin: 0,
+      }}
+    >
+      <Box style={{ margin: 0 }}>
+        <ul
+          style={{
             display: 'flex',
-            flexDirection: 'column'
-          }}>
+            flexDirection: 'column',
+          }}
+        >
+          <li style={style}>
+            <span>
+              Full-Stack
+              <br />
+              SWE
+            </span>
+          </li>
 
-            <li style={{
-              minHeight: 50,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 85,
-              margin: '10px 0 3px 12px',
-              border: 'rgb(204, 204, 204) 1px solid',
-              backgroundColor: 'white',
-              borderBottomLeftRadius: '5px',
-              borderTopLeftRadius: '5px',
-              overflow: 'auto',
-              fontSize: '12px'
-            }}>
-              <span>
-                Full-Stack<br />SWE
-              </span>
-            </li>
-
-            <li style={{
-              minHeight: 50,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 85,
-              margin: '10px 0 3px 12px',
-              border: 'rgb(204, 204, 204) 1px solid',
-              backgroundColor: 'white',
-              borderBottomLeftRadius: '5px',
-              borderTopLeftRadius: '5px',
-              overflow: 'auto',
-              fontSize: '12px'
-            }}>
-              <a href={'mailto:kylejohnson92294@gmail.com'}>
-                kylejohnson<br />92294<br />@gmail.com
-              </a>
-            </li>
-
-            <li style={{
-              minHeight: 50,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 85,
-              margin: '10px 0 3px 12px',
-              border: 'rgb(204, 204, 204) 1px solid',
-              backgroundColor: 'white',
-              borderBottomLeftRadius: '5px',
-              borderTopLeftRadius: '5px',
-              overflow: 'auto',
-              fontSize: '12px'
-            }}>
-              <span>
-                Indianapolis
-              </span>
-            </li>
-
-            <li style={{
-              minHeight: 50,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 85,
-              margin: '10px 0 3px 12px',
-              border: 'rgb(204, 204, 204) 1px solid',
-              backgroundColor: 'white',
-              borderBottomLeftRadius: '5px',
-              borderTopLeftRadius: '5px',
-              overflow: 'auto',
-              fontSize: '12px'
-            }}>
-              <span>
-                Remote
-              </span>
-            </li>
-
-            <li style={{
-              minHeight: 50,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 85,
-              margin: '10px 0 3px 12px',
-              border: 'rgb(204, 204, 204) 1px solid',
-              backgroundColor: 'white',
-              borderBottomLeftRadius: '5px',
-              borderTopLeftRadius: '5px',
-              overflow: 'auto',
-              fontSize: '12px'
-            }}>
-              <a href={'https://github.com/kage1414'}>
-                github
-              </a>
-            </li>
-
-            <li style={{
-              minHeight: 50,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 85,
-              margin: '10px 0 3px 12px',
-              border: 'rgb(204, 204, 204) 1px solid',
-              backgroundColor: 'white',
-              borderBottomLeftRadius: '5px',
-              borderTopLeftRadius: '5px',
-              overflow: 'auto',
-              fontSize: '12px'
-            }}>
-              <a href={'https://www.linkedin.com/in/kylejohnson922/'}>
-                linkedin
-              </a>
-            </li>
-
-          </ul>
-        </div>
-      </div>
-    );
-  }
-
-
-}
-
-export default Sidebar;
+          <li style={style}>
+            <a href={'mailto:kylejohnson92294@gmail.com'}>
+              kylejohnson
+              <br />
+              92294
+              <br />
+              @gmail.com
+            </a>
+          </li>
+          <li style={style}>
+            <span>Indianapolis</span>
+          </li>
+          <li style={style}>
+            <span>Remote</span>
+          </li>
+          <li style={style}>
+            <a href={'https://github.com/kage1414'}>github</a>
+          </li>
+          <li style={style}>
+            <a href={'https://www.linkedin.com/in/kylejohnson922/'}>linkedin</a>
+          </li>
+        </ul>
+      </Box>
+    </Box>
+  ) : (
+    <></>
+  );
+};

@@ -1,32 +1,48 @@
 const path = require('path');
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const publicPath = path.join(__dirname, '..', 'client', 'dist');
 const bodyParser = require('body-parser');
-const PORT = process.env.PORT || 3000;
-const db = require('./mock-db');
+const PROD = process.env.NODE_ENV === 'production';
+const PORT = PROD ? process.env.PORT : 3000;
+const {
+  applications,
+  education,
+  experience,
+  technical_skills,
+} = require('./mock-db');
 
+if (!PROD) {
+  app.use(cors());
+}
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use('/', express.static(publicPath, { dotfiles: 'allow' }));
 
+const filterInactive = (element) => {
+  if (element.hasOwnProperty('active') && !element.active) {
+    return false;
+  }
+  return true;
+};
+
 app.get('/applications', (req, res) => {
-  res.send(db.applications);
+  res.send(applications.filter(filterInactive));
 });
 
 app.get('/education', (req, res) => {
-  res.send(db.education);
+  res.send(education.filter(filterInactive));
 });
 
 app.get('/experience', (req, res) => {
-  res.send(db.experience);
+  res.send(experience.filter(filterInactive));
 });
 
 app.get('/technical_skills', (req, res) => {
-  res.send(db['technical_skills']);
+  res.send(technical_skills.filter(filterInactive));
 });
 
 app.listen(PORT, () => {
   console.log('Listening on port,', PORT);
 });
-
