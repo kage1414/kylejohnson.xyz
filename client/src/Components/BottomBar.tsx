@@ -17,7 +17,7 @@ export const BottomBar: FC = (): ReactElement => {
     >
       <BottomNavigationAction
         label={'email'}
-        to='mailto:kylejohnson92294@gmail.com'
+        // to='mailto:kylejohnson92294@gmail.com'
         icon={<Email />}
         component={Link}
       />

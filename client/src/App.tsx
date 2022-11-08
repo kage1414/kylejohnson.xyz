@@ -6,7 +6,7 @@ import {
   experimental_sx as sx,
 } from '@mui/material/styles';
 import Navbar from './components/Navbar';
-import { Feed } from './components/Feed';
+import { FeedContainer } from './components/FeedContainer';
 import { BottomBar } from './components/BottomBar';
 
 const theme = createTheme({
@@ -58,7 +58,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <Navbar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-      <Feed selectedTab={selectedTab} />
+      <FeedContainer selectedTab={selectedTab} />
       <BottomBar />
     </ThemeProvider>
   );

@@ -8,21 +8,21 @@ import {
 } from 'react';
 import { Grid } from '@mui/material';
 import axios from 'axios';
-import { Applications, Education, Experience, TechnicalSkills } from './pages';
+import { Applications, Education, Experience, TechnicalSkills } from './Pages';
 import type {
   ApplicationData,
   EducationData,
   TechnicalSkillsData,
   ExperienceData,
-} from './pages';
+} from './Pages';
 import { Sidebar } from './Sidebar';
 const BASE_URL = 'http://localhost:3000';
 
-interface IProps {
+interface Props {
   selectedTab: number;
 }
 
-export const Feed: FC<IProps> = ({ selectedTab }): ReactElement => {
+export const Feed: FC<Props> = ({ selectedTab }): ReactElement => {
   const [applicationData, setApplicationData] = useState<ApplicationData>([]);
   const [educationData, setEducationData] = useState<EducationData>([]);
   const [experienceData, setExperienceData] = useState<ExperienceData>([]);
