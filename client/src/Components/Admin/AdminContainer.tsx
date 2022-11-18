@@ -20,6 +20,12 @@ interface Props {
   selectedTab: number;
 }
 
+import { EditExperienceContainer } from './EditExperienceContainer';
+
 export function AdminContainer({ selectedTab }: Props): ReactElement {
-  return <Grid container wrap='nowrap'></Grid>;
+  return (
+    <Grid container wrap='nowrap'>
+      <EditExperienceContainer />
+    </Grid>
+  );
 }

@@ -2,7 +2,7 @@ import { FC, ReactElement } from 'react';
 import { FullPost } from '../FullPost';
 import { Box } from '@mui/material';
 
-type Experience = {
+export type Experience = {
   employer: string;
   position: string;
   description: Array<string>;
