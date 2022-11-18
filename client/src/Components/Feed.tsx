@@ -31,25 +31,25 @@ export const Feed: FC<Props> = ({ selectedTab }): ReactElement => {
     useState<TechnicalSkillsData>([]);
 
   const fetchApplicationData = () => {
-    axios.get(BASE_URL + '/applications').then(({ data }) => {
+    axios.get(BASE_URL + '/api/applications').then(({ data }) => {
       setApplicationData(data);
     });
   };
 
   const fetchEducationData = () => {
-    axios.get(BASE_URL + '/education').then(({ data }) => {
+    axios.get(BASE_URL + '/api/education').then(({ data }) => {
       setEducationData(data);
     });
   };
 
   const fetchTechnicalSkillsData = () => {
-    axios.get(BASE_URL + '/technical_skills').then(({ data }) => {
+    axios.get(BASE_URL + '/api/technical_skills').then(({ data }) => {
       setTechnicalSkillsData(data);
     });
   };
 
   const fetchExperienceData = () => {
-    axios.get(BASE_URL + '/experience').then(({ data }) => {
+    axios.get(BASE_URL + '/api/experience').then(({ data }) => {
       setExperienceData(data);
     });
   };

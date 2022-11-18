@@ -72,7 +72,7 @@ export default function App() {
             />
           </Grid>
           <Grid item>
-            <Grid container flexDirection={'row'}>
+            <Grid container flexDirection='row' wrap='nowrap'>
               <Grid item>
                 <Sidebar />
               </Grid>

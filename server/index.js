@@ -18,7 +18,8 @@ if (!PROD) {
 }
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
-app.use('/', express.static(publicPath, { dotfiles: 'allow' }));
+
+app.use(express.static(publicPath, { dotfiles: 'allow' }));
 
 const filterInactive = (element) => {
   if (element.hasOwnProperty('active') && !element.active) {
@@ -27,20 +28,24 @@ const filterInactive = (element) => {
   return true;
 };
 
-app.get('/applications', (req, res) => {
+app.get('/api/applications', (req, res) => {
   res.send(applications.filter(filterInactive));
 });
 
-app.get('/education', (req, res) => {
+app.get('/api/education', (req, res) => {
   res.send(education.filter(filterInactive));
 });
 
-app.get('/experience', (req, res) => {
+app.get('/api/experience', (req, res) => {
   res.send(experience.filter(filterInactive));
 });
 
-app.get('/technical_skills', (req, res) => {
+app.get('/api/technical_skills', (req, res) => {
   res.send(technical_skills.filter(filterInactive));
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
 });
 
 app.listen(PORT, () => {
