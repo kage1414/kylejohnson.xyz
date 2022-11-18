@@ -8,6 +8,7 @@ export const BottomBar: FC = (): ReactElement => {
     <BottomNavigation
       showLabels
       value={value}
+      sx={{}}
       onChange={(event, newValue) => {
         setValue(newValue);
         setTimeout(() => {
