@@ -9,7 +9,7 @@ import Navbar from './components/Navbar';
 import { BottomBar } from './components/BottomBar';
 import { Grid } from '@mui/material';
 import { Sidebar } from './components/Sidebar';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { Feed } from './components/Feed';
 import { AdminContainer } from './components/AdminContainer';
 
@@ -80,8 +80,9 @@ export default function App() {
               </Grid>
               <Grid>
                 <Routes>
+                  <Route path='*' element={<Navigate to='/home' />} />
                   <Route
-                    path='/'
+                    path='/home'
                     element={<Feed selectedTab={selectedTab} />}
                   />
                   <Route
