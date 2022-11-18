@@ -11,7 +11,7 @@ import { Grid } from '@mui/material';
 import { Sidebar } from './components/Sidebar';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { Feed } from './components/Feed';
-import { AdminContainer } from './components/AdminContainer';
+import { AdminContainer } from './components/Admin/AdminContainer';
 
 export type Page = 'feed' | 'admin';
 
