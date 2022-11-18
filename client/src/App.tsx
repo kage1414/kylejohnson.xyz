@@ -56,8 +56,6 @@ export default function App() {
     Number(cookies['last-page']) || 0
   );
 
-  const { innerHeight: height } = window;
-
   useEffect(() => {
     setCookie('last-page', selectedTab);
   }, [selectedTab]);
@@ -76,7 +74,7 @@ export default function App() {
           <Grid item>
             <Grid container flexDirection={'row'}>
               <Grid item>
-                <Sidebar height={height - 48 - 56} />
+                <Sidebar />
               </Grid>
               <Grid>
                 <Routes>

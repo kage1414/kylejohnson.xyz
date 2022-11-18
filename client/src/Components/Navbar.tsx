@@ -1,6 +1,6 @@
 import React, { ReactElement, FC, SetStateAction, Dispatch } from 'react';
 import { Tabs, Tab, Typography, Toolbar, Grid, Button } from '@mui/material';
-import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Page } from '@/App';
 
 interface IProps {
@@ -14,6 +14,7 @@ const Navbar: FC<IProps> = ({
   setSelectedTab,
   page,
 }): ReactElement => {
+  const { pathname } = useLocation();
   const getTabStyle = (tabNumber: number) => {
     return selectedTab === tabNumber
       ? {
@@ -42,7 +43,7 @@ const Navbar: FC<IProps> = ({
           </Link>
         </Grid>
         <Grid item>
-          {page === 'feed' && (
+          {pathname === '/home' && (
             <Tabs
               value={selectedTab}
               onChange={switchTabs}
@@ -76,7 +77,7 @@ const Navbar: FC<IProps> = ({
               />
             </Tabs>
           )}
-          {page === 'admin' && (
+          {pathname === '/admin' && (
             <Tabs
               value={selectedTab}
               onChange={switchTabs}
@@ -92,9 +93,7 @@ const Navbar: FC<IProps> = ({
               }}
               TabIndicatorProps={{ style: { display: 'none' } }}
             >
-              <Tab
-                label={<Typography sx={getTabStyle(0)}>experience</Typography>}
-              />
+              <Tab label={<Typography sx={getTabStyle(0)}>admin</Typography>} />
             </Tabs>
           )}
         </Grid>

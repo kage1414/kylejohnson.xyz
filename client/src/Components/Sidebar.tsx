@@ -3,13 +3,11 @@ import { useWindowWidth } from '@react-hook/window-size/throttled';
 import { Box, Drawer } from '@mui/material';
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 
-interface Props {
-  height: number;
-}
+interface Props {}
 
 const SIDEBAR_MIN_WIDTH = 673;
 
-export const Sidebar: FC<Props> = ({ height }: Props) => {
+export const Sidebar: FC<Props> = ({}: Props) => {
   const width = useWindowWidth();
   const style = {
     minHeight: 50,
@@ -30,7 +28,6 @@ export const Sidebar: FC<Props> = ({ height }: Props) => {
     <Box
       style={{
         width: '100px',
-        minHeight: height,
         backgroundColor: 'rgb(247, 247, 247)',
         margin: 0,
       }}
