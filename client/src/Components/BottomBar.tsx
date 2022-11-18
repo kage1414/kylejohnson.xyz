@@ -22,15 +22,14 @@ export const BottomBar: FC = (): ReactElement => {
         icon={<Email />}
         component={Link}
       />
-
-      <BottomNavigationAction label={'github'} icon={<GitHub />}>
-        <Link href={'https://github.com/kage1414'}>github</Link>
-      </BottomNavigationAction>
-      <BottomNavigationAction label={'linkedin'} icon={<LinkedIn />}>
-        <Link href={'https://www.linkedin.com/in/kylejohnson922/'}>
-          linkedin
-        </Link>
-      </BottomNavigationAction>
+      <BottomNavigationAction
+        label={'github'}
+        icon={<GitHub />}
+      ></BottomNavigationAction>
+      <BottomNavigationAction
+        label={'linkedin'}
+        icon={<LinkedIn />}
+      ></BottomNavigationAction>
     </BottomNavigation>
   );
 };
