@@ -64,11 +64,11 @@ export function EditExperienceRow({ experience }: Props): ReactElement {
                 <Grid container flexDirection='column'>
                   {description.map((desc, i) => {
                     return (
-                      <Grid item>
+                      <Grid item key={`edit ${desc} ${i}`}>
                         <IconButton>
                           <Clear />
                         </IconButton>
-                        <Input value={desc} />
+                        <TextField value={desc} />
                       </Grid>
                     );
                   })}
@@ -78,8 +78,8 @@ export function EditExperienceRow({ experience }: Props): ReactElement {
               <>
                 <Typography>{position}</Typography>
                 <Box>
-                  {description.map((desc) => (
-                    <Typography>{desc}</Typography>
+                  {description.map((desc, i) => (
+                    <Typography key={`show ${desc} ${i}`}>{desc}</Typography>
                   ))}
                 </Box>
               </>

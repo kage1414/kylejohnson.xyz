@@ -1,6 +1,6 @@
 import { ReactElement, useState, useEffect } from 'react';
 import axios from 'axios';
-import { Experience, ExperienceData } from '../Pages';
+import { ExperienceData } from '../Pages';
 import { BASE_URL } from '../../constants';
 import { Box } from '@mui/material';
 import { EditExperienceRow } from './EditExperienceRow';
@@ -15,8 +15,11 @@ export function EditExperience(): ReactElement {
 
   return (
     <Box>
-      {experience.map((exp) => (
-        <EditExperienceRow experience={exp} />
+      {experience.map((exp, i) => (
+        <EditExperienceRow
+          key={`${JSON.stringify(exp)} ${i}`}
+          experience={exp}
+        />
       ))}
     </Box>
   );
