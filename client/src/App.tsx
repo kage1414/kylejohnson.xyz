@@ -6,8 +6,14 @@ import {
   experimental_sx as sx,
 } from '@mui/material/styles';
 import Navbar from './components/Navbar';
-import { FeedContainer } from './components/FeedContainer';
 import { BottomBar } from './components/BottomBar';
+import { Grid } from '@mui/material';
+import { Sidebar } from './components/Sidebar';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Feed } from './components/Feed';
+import { AdminContainer } from './components/AdminContainer';
+
+export type Page = 'feed' | 'admin';
 
 const theme = createTheme({
   palette: {
@@ -45,21 +51,50 @@ const theme = createTheme({
 
 export default function App() {
   const [cookies, setCookie] = useCookies();
+  const [page, setPage] = useState<Page>('feed');
   const [selectedTab, setSelectedTab] = useState(
     Number(cookies['last-page']) || 0
   );
-
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setCookie('last-page', selectedTab);
   }, [selectedTab]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <Navbar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-      <FeedContainer selectedTab={selectedTab} />
-      <BottomBar />
-    </ThemeProvider>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <Grid container flexDirection={'column'}>
+          <Grid item>
+            <Navbar
+              selectedTab={selectedTab}
+              setSelectedTab={setSelectedTab}
+              page={page}
+            />
+          </Grid>
+          <Grid item>
+            <Grid container flexDirection={'row'}>
+              <Grid item>
+                <Sidebar />
+              </Grid>
+              <Grid>
+                <Routes>
+                  <Route
+                    path='/'
+                    element={<Feed selectedTab={selectedTab} />}
+                  />
+                  <Route
+                    path='/admin'
+                    element={<AdminContainer selectedTab={selectedTab} />}
+                  />
+                </Routes>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <BottomBar />
+          </Grid>
+        </Grid>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }

@@ -16,6 +16,7 @@ import type {
   ExperienceData,
 } from './Pages';
 import { Sidebar } from './Sidebar';
+import { Page } from '@/App';
 const BASE_URL = 'http://localhost:3000';
 
 interface Props {
@@ -61,9 +62,7 @@ export const Feed: FC<Props> = ({ selectedTab }): ReactElement => {
   }, []);
   return (
     <Grid container wrap='nowrap'>
-      <Grid item>
-        <Sidebar />
-      </Grid>
+      <Grid item>{/* <Sidebar /> */}</Grid>
       <Grid item>
         <Experience
           experienceData={experienceData}

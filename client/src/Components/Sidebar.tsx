@@ -1,6 +1,7 @@
 import { FC, SetStateAction, Dispatch } from 'react';
 import { useWindowWidth } from '@react-hook/window-size/throttled';
 import { Box, Drawer } from '@mui/material';
+import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 
 interface Props {}
 
@@ -67,6 +68,9 @@ export const Sidebar: FC<Props> = ({}: Props) => {
           </li>
           <li style={style}>
             <a href={'https://www.linkedin.com/in/kylejohnson922/'}>linkedin</a>
+          </li>
+          <li style={style}>
+            <Link to={'/admin'}>Admin</Link>
           </li>
         </ul>
       </Box>
