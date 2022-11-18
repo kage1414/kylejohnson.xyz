@@ -1,8 +1,8 @@
-import { FC, ReactElement, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { BottomNavigation, BottomNavigationAction, Link } from '@mui/material';
 import { Email, GitHub, LinkedIn } from '@mui/icons-material';
 
-export const BottomBar: FC = (): ReactElement => {
+export function BottomBar(): ReactElement {
   const [value, setValue] = useState<string | null>(null);
   return (
     <BottomNavigation
@@ -32,4 +32,4 @@ export const BottomBar: FC = (): ReactElement => {
       ></BottomNavigationAction>
     </BottomNavigation>
   );
-};
+}

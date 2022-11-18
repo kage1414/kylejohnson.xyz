@@ -1,11 +1,4 @@
-import {
-  FC,
-  ReactElement,
-  useState,
-  useEffect,
-  SetStateAction,
-  Dispatch,
-} from 'react';
+import { ReactElement, useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import axios from 'axios';
 import { Applications, Education, Experience, TechnicalSkills } from './Pages';
@@ -15,15 +8,14 @@ import type {
   TechnicalSkillsData,
   ExperienceData,
 } from './Pages';
-import { Sidebar } from './Sidebar';
-import { Page } from '@/App';
+
 const BASE_URL = 'http://localhost:3000';
 
 interface Props {
   selectedTab: number;
 }
 
-export const Feed: FC<Props> = ({ selectedTab }): ReactElement => {
+export function Feed({ selectedTab }: Props): ReactElement {
   const [applicationData, setApplicationData] = useState<ApplicationData>([]);
   const [educationData, setEducationData] = useState<EducationData>([]);
   const [experienceData, setExperienceData] = useState<ExperienceData>([]);
@@ -80,4 +72,4 @@ export const Feed: FC<Props> = ({ selectedTab }): ReactElement => {
       </Grid>
     </Grid>
   );
-};
+}

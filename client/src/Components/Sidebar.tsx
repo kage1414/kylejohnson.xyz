@@ -1,13 +1,13 @@
-import { FC, SetStateAction, Dispatch } from 'react';
+import { ReactElement } from 'react';
 import { useWindowWidth } from '@react-hook/window-size/throttled';
-import { Box, Drawer } from '@mui/material';
-import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
+import { Box } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 interface Props {}
 
 const SIDEBAR_MIN_WIDTH = 673;
 
-export const Sidebar: FC<Props> = ({}: Props) => {
+export function Sidebar({}: Props): ReactElement {
   const width = useWindowWidth();
   const style = {
     minHeight: 50,
@@ -77,4 +77,4 @@ export const Sidebar: FC<Props> = ({}: Props) => {
   ) : (
     <></>
   );
-};
+}

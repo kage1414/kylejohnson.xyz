@@ -10,7 +10,6 @@ import {
   Grid,
 } from '@mui/material';
 import { Clear } from '@mui/icons-material';
-import axios from 'axios';
 
 import type { Experience } from '../Pages';
 

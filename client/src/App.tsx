@@ -5,7 +5,7 @@ import {
   ThemeProvider,
   experimental_sx as sx,
 } from '@mui/material/styles';
-import Navbar from './components/Navbar';
+import { Navbar } from './components/Navbar';
 import { BottomBar } from './components/BottomBar';
 import { Grid } from '@mui/material';
 import { Sidebar } from './components/Sidebar';

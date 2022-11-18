@@ -1,19 +1,19 @@
 import React, { ReactElement, FC, SetStateAction, Dispatch } from 'react';
-import { Tabs, Tab, Typography, Toolbar, Grid, Button } from '@mui/material';
+import { Tabs, Tab, Typography, Toolbar, Grid } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import { Page } from '@/App';
 
-interface IProps {
+interface Props {
   setSelectedTab: Dispatch<SetStateAction<number>>;
   selectedTab: number;
   page: Page;
 }
 
-const Navbar: FC<IProps> = ({
+export function Navbar({
   selectedTab,
   setSelectedTab,
   page,
-}): ReactElement => {
+}: Props): ReactElement {
   const { pathname } = useLocation();
   const getTabStyle = (tabNumber: number) => {
     return selectedTab === tabNumber
@@ -100,6 +100,4 @@ const Navbar: FC<IProps> = ({
       </Grid>
     </Toolbar>
   );
-};
-
-export default Navbar;
+}
