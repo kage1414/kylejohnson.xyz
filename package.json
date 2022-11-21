@@ -32,7 +32,7 @@
   "scripts": {
     "start": "node server/index.js",
     "build": "webpack --mode production",
-    "dev": "webpack serve --hot --mode development & nodemon server/dev.js"
+    "dev": "webpack --hot --mode development & nodemon server/dev.js"
   },
   "eslintConfig": {
     "extends": [
