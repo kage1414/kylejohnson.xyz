@@ -8,8 +8,19 @@ import {
   Input,
   Typography,
   Grid,
+  Divider,
+  List,
+  ListItem,
 } from '@mui/material';
-import { Clear } from '@mui/icons-material';
+import {
+  Clear,
+  DeleteOutline,
+  EditOutlined,
+  Save,
+  Add,
+} from '@mui/icons-material';
+import { EditExperienceRowItem } from './EditExperienceRowItem';
+import { AddExperienceRowItem } from './AddExperienceRowItem';
 
 import type { Experience } from '../Pages';
 
@@ -24,9 +35,16 @@ export function EditExperienceRow({ experience }: Props): ReactElement {
   const [positionInput, setPositionInput] = useState(position);
   const [timeInput, setTimeInput] = useState(time);
   const [isEditing, setIsEditing] = useState(false);
-  // const onChange = () => {
-  //   axios.post('/api/experience');
-  // };
+  const [isCreating, setIsCreating] = useState(false);
+  const onSave = () => {
+    setIsEditing(false);
+  };
+  const onCreate = () => {
+    setIsCreating(true);
+  };
+  const onCancelCreate = () => {
+    setIsCreating(false);
+  };
   console.log(JSON.stringify(description));
   return (
     <Box
@@ -60,18 +78,25 @@ export function EditExperienceRow({ experience }: Props): ReactElement {
                     console.log({ val });
                   }}
                 ></Input>
-                <Grid container flexDirection='column'>
+                <List>
                   {description.map((desc, i) => {
                     return (
-                      <Grid item key={`edit ${desc} ${i}`}>
-                        <IconButton>
-                          <Clear />
-                        </IconButton>
-                        <TextField value={desc} />
-                      </Grid>
+                      <EditExperienceRowItem
+                        description={desc}
+                        key={`edit ${desc} ${i}`}
+                      />
                     );
                   })}
-                </Grid>
+                  <ListItem>
+                    {isCreating ? (
+                      <AddExperienceRowItem onCancel={onCancelCreate} />
+                    ) : (
+                      <IconButton onClick={onCreate}>
+                        <Add />
+                      </IconButton>
+                    )}
+                  </ListItem>
+                </List>
               </>
             ) : (
               <>
@@ -85,6 +110,11 @@ export function EditExperienceRow({ experience }: Props): ReactElement {
             )}
           </Grid>
         </Grid>
+        {isEditing && (
+          <Grid item>
+            <Button onClick={onSave}>Save</Button>
+          </Grid>
+        )}
       </Paper>
     </Box>
   );
