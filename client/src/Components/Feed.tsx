@@ -1,11 +1,4 @@
-import {
-  FC,
-  ReactElement,
-  useState,
-  useEffect,
-  SetStateAction,
-  Dispatch,
-} from 'react';
+import { ReactElement, useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import axios from 'axios';
 import { Applications, Education, Experience, TechnicalSkills } from './Pages';
@@ -15,14 +8,14 @@ import type {
   TechnicalSkillsData,
   ExperienceData,
 } from './Pages';
-import { Sidebar } from './Sidebar';
+
 const BASE_URL = 'http://localhost:3000';
 
-interface IProps {
+interface Props {
   selectedTab: number;
 }
 
-export const Feed: FC<IProps> = ({ selectedTab }): ReactElement => {
+export function Feed({ selectedTab }: Props): ReactElement {
   const [applicationData, setApplicationData] = useState<ApplicationData>([]);
   const [educationData, setEducationData] = useState<EducationData>([]);
   const [experienceData, setExperienceData] = useState<ExperienceData>([]);
@@ -30,25 +23,25 @@ export const Feed: FC<IProps> = ({ selectedTab }): ReactElement => {
     useState<TechnicalSkillsData>([]);
 
   const fetchApplicationData = () => {
-    axios.get(BASE_URL + '/applications').then(({ data }) => {
+    axios.get(BASE_URL + '/api/applications').then(({ data }) => {
       setApplicationData(data);
     });
   };
 
   const fetchEducationData = () => {
-    axios.get(BASE_URL + '/education').then(({ data }) => {
+    axios.get(BASE_URL + '/api/education').then(({ data }) => {
       setEducationData(data);
     });
   };
 
   const fetchTechnicalSkillsData = () => {
-    axios.get(BASE_URL + '/technical_skills').then(({ data }) => {
+    axios.get(BASE_URL + '/api/technical_skills').then(({ data }) => {
       setTechnicalSkillsData(data);
     });
   };
 
   const fetchExperienceData = () => {
-    axios.get(BASE_URL + '/experience').then(({ data }) => {
+    axios.get(BASE_URL + '/api/experience').then(({ data }) => {
       setExperienceData(data);
     });
   };
@@ -61,9 +54,7 @@ export const Feed: FC<IProps> = ({ selectedTab }): ReactElement => {
   }, []);
   return (
     <Grid container wrap='nowrap'>
-      <Grid item>
-        <Sidebar />
-      </Grid>
+      <Grid item>{/* <Sidebar /> */}</Grid>
       <Grid item>
         <Experience
           experienceData={experienceData}
@@ -81,4 +72,4 @@ export const Feed: FC<IProps> = ({ selectedTab }): ReactElement => {
       </Grid>
     </Grid>
   );
-};
+}

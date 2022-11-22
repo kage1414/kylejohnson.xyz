@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { Box, Paper, List, ListItemText, Typography } from '@mui/material';
+import { Box, Paper, List, ListItemText } from '@mui/material';
 
 interface Props {
   body: Array<string>;

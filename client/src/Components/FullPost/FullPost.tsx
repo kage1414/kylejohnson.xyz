@@ -1,8 +1,8 @@
 import { Box, Paper } from '@mui/material';
-import { FC, ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { FullPostHeader, FullPostBody, FullPostFooterList } from '.';
 
-interface IProps {
+interface Props {
   title: string;
   subtitle?: string;
   body?: Array<string>;
@@ -10,13 +10,13 @@ interface IProps {
   url?: string;
 }
 
-export const FullPost: FC<IProps> = ({
+export function FullPost({
   title,
   subtitle,
   body,
   time,
   url,
-}): ReactElement => {
+}: Props): ReactElement {
   return (
     <Box
       sx={{
@@ -41,4 +41,4 @@ export const FullPost: FC<IProps> = ({
       </Paper>
     </Box>
   );
-};
+}

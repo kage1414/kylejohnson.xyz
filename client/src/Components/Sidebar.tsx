@@ -1,12 +1,13 @@
-import { FC, SetStateAction, Dispatch } from 'react';
+import { ReactElement } from 'react';
 import { useWindowWidth } from '@react-hook/window-size/throttled';
-import { Box, Drawer } from '@mui/material';
+import { Box } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 interface Props {}
 
 const SIDEBAR_MIN_WIDTH = 673;
 
-export const Sidebar: FC<Props> = ({}: Props) => {
+export function Sidebar({}: Props): ReactElement {
   const width = useWindowWidth();
   const style = {
     minHeight: 50,
@@ -27,7 +28,6 @@ export const Sidebar: FC<Props> = ({}: Props) => {
     <Box
       style={{
         width: '100px',
-        height: '100%',
         backgroundColor: 'rgb(247, 247, 247)',
         margin: 0,
       }}
@@ -68,10 +68,13 @@ export const Sidebar: FC<Props> = ({}: Props) => {
           <li style={style}>
             <a href={'https://www.linkedin.com/in/kylejohnson922/'}>linkedin</a>
           </li>
+          <li style={style}>
+            <Link to={'/admin'}>Admin</Link>
+          </li>
         </ul>
       </Box>
     </Box>
   ) : (
     <></>
   );
-};
+}

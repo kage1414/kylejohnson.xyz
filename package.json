@@ -13,22 +13,26 @@
     "@mui/lab": "^5.0.0-alpha.98",
     "@mui/material": "^5.10.12",
     "@react-hook/window-size": "^3.1.1",
+    "@types/react-router-dom": "^5.3.3",
     "axios": "^0.25.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "passport-http-bearer": "^1.0.1",
     "path": "^0.12.7",
     "prettier": "^2.7.1",
     "react": "^17.0.2",
     "react-cookie": "^4.1.1",
     "react-dom": "^17.0.2",
+    "react-router-dom": "^6.4.3",
+    "style-loader": "^3.3.1",
     "typescript": "^4.5.4",
     "webpack-dev-server": "^4.11.1"
   },
   "scripts": {
     "start": "node server/index.js",
     "build": "webpack --mode production",
-    "dev": "webpack serve --hot --mode development & nodemon server/dev.js"
+    "dev": "webpack --hot --watch --mode development & nodemon server/dev.js"
   },
   "eslintConfig": {
     "extends": [

@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { Box } from '@mui/material';
 import { FullPost } from '../FullPost';
 
@@ -16,28 +16,30 @@ type Props = {
   display: boolean;
 };
 
-export const Applications: FC<Props> = ({
+export function Applications({
   applicationData,
   display,
-}): ReactElement => (
-  <>
-    {display && (
-      <Box>
-        {applicationData.map(
-          ({ name, technologies, url, description }, idx) => {
-            const body = [
-              ...description,
-              'Technologies used:',
-              ...technologies,
-            ];
-            return (
-              <Box key={name + idx}>
-                <FullPost body={body} title={name} url={url} />
-              </Box>
-            );
-          }
-        )}
-      </Box>
-    )}
-  </>
-);
+}: Props): ReactElement {
+  return (
+    <>
+      {display && (
+        <Box>
+          {applicationData.map(
+            ({ name, technologies, url, description }, idx) => {
+              const body = [
+                ...description,
+                'Technologies used:',
+                ...technologies,
+              ];
+              return (
+                <Box key={name + idx}>
+                  <FullPost body={body} title={name} url={url} />
+                </Box>
+              );
+            }
+          )}
+        </Box>
+      )}
+    </>
+  );
+}

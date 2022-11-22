@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { Post } from '../Post';
 import { Box, Grid } from '@mui/material';
 
@@ -14,31 +14,33 @@ type Props = {
   display: boolean;
 };
 
-export const TechnicalSkills: FC<Props> = ({
+export function TechnicalSkills({
   technicalSkillsData,
   display,
-}) => (
-  <>
-    {display && (
-      <Grid container>
-        {technicalSkillsData.map(({ stack, technologies }, idx) => (
-          <Grid item>
-            <TechnicalSkillsElement
-              stack={stack}
-              technologies={technologies}
-              key={stack + idx}
-            />
-          </Grid>
-        ))}
-      </Grid>
-    )}
-  </>
-);
+}: Props): ReactElement {
+  return (
+    <>
+      {display && (
+        <Grid container>
+          {technicalSkillsData.map(({ stack, technologies }, idx) => (
+            <Grid item>
+              <TechnicalSkillsElement
+                stack={stack}
+                technologies={technologies}
+                key={stack + idx}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+    </>
+  );
+}
 
-const TechnicalSkillsElement: FC<TechStack> = ({
+function TechnicalSkillsElement({
   stack,
   technologies,
-}): ReactElement => {
+}: TechStack): ReactElement {
   return (
     <Box
       style={{
@@ -66,4 +68,4 @@ const TechnicalSkillsElement: FC<TechStack> = ({
       </Box>
     </Box>
   );
-};
+}
