@@ -16,7 +16,6 @@ class Experience extends Model<
   declare employer: string;
   declare active: boolean;
   declare position: string;
-  declare description: string;
   declare time: string;
 }
 
@@ -30,7 +29,7 @@ Experience.init(
       allowNull: false,
     },
     active: {
-      type: new DataTypes.BOOLEAN(),
+      type: DataTypes.BOOLEAN,
     },
     position: {
       type: new DataTypes.STRING(128),
@@ -40,8 +39,6 @@ Experience.init(
       type: new DataTypes.STRING(128),
       allowNull: false,
     },
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE,
   },
   { tableName: 'experiences', sequelize }
 );
@@ -51,3 +48,5 @@ Experience.hasMany(Description, {
   foreignKey: 'experienceId',
   as: 'experiences',
 });
+
+export default Experience;

@@ -16,7 +16,10 @@ class Description extends Model<
 }
 
 Description.init(
-  { id: { type: DataTypes.UUIDV4 } },
+  {
+    id: { type: DataTypes.UUIDV4 },
+    description: { type: new DataTypes.STRING(512) },
+  },
   { tableName: 'descriptions', sequelize }
 );
 

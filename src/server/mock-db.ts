@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   technical_skills: [
     {
       stack: 'frontend',

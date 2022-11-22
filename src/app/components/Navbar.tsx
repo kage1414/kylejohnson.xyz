@@ -1,7 +1,7 @@
 import React, { ReactElement, FC, SetStateAction, Dispatch } from 'react';
 import { Tabs, Tab, Typography, Toolbar, Grid } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
-import { Page } from '@/App';
+import { Page } from '../App';
 
 interface Props {
   setSelectedTab: Dispatch<SetStateAction<number>>;

@@ -28,7 +28,9 @@ interface Props {
 export function AddExperienceRowItem({ onCancel }: Props): ReactElement {
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState('');
-  const onChangeText = ({ target: { value } }) => {
+  const onChangeText = ({
+    target: { value },
+  }: ChangeEvent<HTMLInputElement>) => {
     setValue(value);
   };
   const onSave = () => {

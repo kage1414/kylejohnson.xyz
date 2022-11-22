@@ -2,8 +2,8 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const CopyPlugin = require('copy-webpack-plugin');
-const SRC_DIR = path.join(__dirname, 'client', 'src');
-const DIST_DIR = path.join(__dirname, 'client', 'dist');
+const SRC_DIR = path.join(__dirname, 'src', 'app');
+const DIST_DIR = path.join(__dirname, 'src', 'dist');
 
 var environment =
   process.env.NODE_ENV === 'production' ? 'production' : 'development';
