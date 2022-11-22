@@ -1,8 +1,14 @@
 import { ReactElement } from 'react';
 import { Box, Paper, List, ListItemText } from '@mui/material';
 
+type Description = {
+  description: string;
+  id: string;
+};
+
+export type Body = Description[];
 interface Props {
-  body: Array<string>;
+  body: Body;
 }
 
 export function FullPostBody({ body }: Props): ReactElement {
@@ -10,12 +16,8 @@ export function FullPostBody({ body }: Props): ReactElement {
     <Box>
       <Paper variant='outlined'>
         <List sx={{ marginLeft: 1 }}>
-          {body.map((text: string, idx: number) => (
-            <ListItemText key={text + idx}>
-              {/* <Typography paragraph> */}
-              {text}
-              {/* </Typography> */}
-            </ListItemText>
+          {body.map(({ description, id }) => (
+            <ListItemText key={id}>{description}</ListItemText>
           ))}
         </List>
       </Paper>

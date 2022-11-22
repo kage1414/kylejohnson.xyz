@@ -8,8 +8,8 @@ const PROD = process.env.NODE_ENV === 'production';
 const PORT = process.env.PORT || 3000;
 import mock from './mock-db';
 const { applications, education, technical_skills } = mock;
-// import { filterInactive } from './utils';
 import experience from './experience';
+import { sequelize } from './db/sequelize';
 
 if (!PROD) {
   app.use(cors());
@@ -37,6 +37,8 @@ app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log('Listening on port,', PORT);
+sequelize.sync().then(() => {
+  app.listen(PORT, () => {
+    console.log('Listening on port,', PORT);
+  });
 });

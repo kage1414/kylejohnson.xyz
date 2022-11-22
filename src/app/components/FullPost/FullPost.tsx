@@ -1,11 +1,12 @@
 import { Box, Paper } from '@mui/material';
 import { ReactElement } from 'react';
 import { FullPostHeader, FullPostBody, FullPostFooterList } from '.';
+import type { Body } from './FullPostBody';
 
 interface Props {
   title: string;
   subtitle?: string;
-  body?: Array<string>;
+  body?: Body;
   time?: string;
   url?: string;
 }

@@ -1,10 +1,10 @@
 import mock from './mock-db';
-import Experience from './db/models/experience';
-import { FiberPinRounded } from '@mui/icons-material';
+import { Experience, Description } from './db/sequelize';
 import { Request, Response } from 'express';
 
-const get = (req: Request, res: Response) => {
-  res.send(mock.experience);
+const get = async (req: Request, res: Response) => {
+  const experiences = await Experience.findAll({ include: Description });
+  res.send(experiences);
 };
 
 export default { get };

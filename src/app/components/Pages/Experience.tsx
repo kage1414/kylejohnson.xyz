@@ -1,12 +1,14 @@
 import { ReactElement } from 'react';
 import { FullPost } from '../FullPost';
 import { Box } from '@mui/material';
+import type { Body } from '../FullPost/FullPostBody';
 
 export type Experience = {
   employer: string;
   position: string;
-  description: Array<string>;
+  Descriptions: Body;
   time: string;
+  id: string;
 };
 
 export type ExperienceData = Array<Experience>;
@@ -22,15 +24,17 @@ export function Experience({ experienceData, display }: Props): ReactElement {
       {display && (
         <Box>
           {experienceData.map(
-            ({ employer, description, position, time }, idx: number) => (
-              <FullPost
-                key={employer + position + idx}
-                title={position}
-                subtitle={employer}
-                time={time}
-                body={description}
-              />
-            )
+            ({ employer, Descriptions, position, time, id }) => {
+              return (
+                <FullPost
+                  key={id}
+                  title={position}
+                  subtitle={employer}
+                  time={time}
+                  body={Descriptions}
+                />
+              );
+            }
           )}
         </Box>
       )}
