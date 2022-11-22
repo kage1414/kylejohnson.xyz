@@ -23,7 +23,12 @@ export function TechnicalSkills({
       {display && (
         <Grid container>
           {technicalSkillsData.map(({ stack, technologies }, idx) => (
-            <Grid item>
+            <Grid
+              item
+              key={`${JSON.stringify(stack)} ${JSON.stringify(
+                technologies
+              )} ${idx}`}
+            >
               <TechnicalSkillsElement
                 stack={stack}
                 technologies={technologies}

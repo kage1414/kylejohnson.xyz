@@ -24,25 +24,25 @@ export function Feed({ selectedTab }: Props): ReactElement {
 
   const fetchApplicationData = () => {
     axios.get(BASE_URL + '/api/applications').then(({ data }) => {
-      setApplicationData(data);
+      setApplicationData(data || []);
     });
   };
 
   const fetchEducationData = () => {
     axios.get(BASE_URL + '/api/education').then(({ data }) => {
-      setEducationData(data);
+      setEducationData(data || []);
     });
   };
 
   const fetchTechnicalSkillsData = () => {
     axios.get(BASE_URL + '/api/technical_skills').then(({ data }) => {
-      setTechnicalSkillsData(data);
+      setTechnicalSkillsData(data || []);
     });
   };
 
   const fetchExperienceData = () => {
     axios.get(BASE_URL + '/api/experience').then(({ data }) => {
-      setExperienceData(data);
+      setExperienceData(data || []);
     });
   };
 

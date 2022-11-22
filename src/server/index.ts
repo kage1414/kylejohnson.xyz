@@ -3,10 +3,11 @@ import path from 'path';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 const app = express();
-const publicPath = path.join(__dirname, '..', 'client', 'dist');
+const publicPath = path.join(__dirname, '..', 'dist');
 const PROD = process.env.NODE_ENV === 'production';
 const PORT = process.env.PORT || 3000;
-const { applications, education, technical_skills } = require('./mock-db');
+import mock from './mock-db';
+const { applications, education, technical_skills } = mock;
 // import { filterInactive } from './utils';
 import experience from './experience';
 
@@ -33,7 +34,7 @@ app.get('/api/technical_skills', (req: Request, res: Response) => {
 });
 
 app.get('*', (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
+  res.sendFile(path.join(publicPath, 'index.html'));
 });
 
 app.listen(PORT, () => {
