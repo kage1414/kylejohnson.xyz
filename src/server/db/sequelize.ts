@@ -55,7 +55,7 @@ export const Application = sequelize.define('Application', {
   },
   name: {
     type: new DataTypes.STRING(128),
-    allowNull: false,
+    // allowNull: false,
   },
   active: {
     type: DataTypes.BOOLEAN,

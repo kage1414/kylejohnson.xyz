@@ -2,6 +2,7 @@ import { ReactElement } from 'react';
 import { Box } from '@mui/material';
 import { FullPost } from '../FullPost';
 import type { ApplicationsAttributes } from '@/types';
+import { Application } from './Application';
 
 export type ApplicationData = Array<ApplicationsAttributes>;
 
@@ -18,16 +19,9 @@ export function Applications({
     <>
       {display && (
         <Box>
-          {applicationData.map(
-            ({ name, technologies, url, descriptions }, idx) => {
-              console.log({ name, technologies, url, descriptions });
-              return (
-                <Box key={name + idx}>
-                  <FullPost body={descriptions} title={name} url={url} />
-                </Box>
-              );
-            }
-          )}
+          {applicationData.map((data) => {
+            return <Application data={data} />;
+          })}
         </Box>
       )}
     </>
