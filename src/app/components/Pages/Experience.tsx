@@ -1,12 +1,12 @@
 import { ReactElement } from 'react';
 import { FullPost } from '../FullPost';
 import { Box } from '@mui/material';
-import type { Body } from '../FullPost/FullPostBody';
+import type { Descriptions } from '../FullPost/FullPostBody';
 
 export type Experience = {
   employer: string;
   position: string;
-  Descriptions: Body;
+  Descriptions: Descriptions;
   time: string;
   id: string;
 };

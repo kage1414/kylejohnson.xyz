@@ -6,9 +6,9 @@ type Description = {
   id: string;
 };
 
-export type Body = Description[];
+export type Descriptions = Description[];
 interface Props {
-  body: Body;
+  body: Descriptions;
 }
 
 export function FullPostBody({ body }: Props): ReactElement {

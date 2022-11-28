@@ -1,10 +1,10 @@
 import { ReactElement } from 'react';
 import { Box } from '@mui/material';
 import { FullPost } from '../FullPost';
-import type { Body } from '../FullPost/FullPostBody';
+import type { Descriptions } from '../FullPost/FullPostBody';
 
 type Application = {
-  description: Body;
+  description: Descriptions;
   name: string;
   technologies: Array<string>;
   url: string;
