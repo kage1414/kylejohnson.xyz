@@ -45,7 +45,7 @@
     "dev": "webpack --hot --watch --mode development & nodemon src/server/index.ts",
     "dev-front": "webpack --hot --watch --mode development",
     "dev-back": "nodemon src/server/index.ts",
-    "typegen": "npx stg -D postgres -h localhost -p 5432 -d kylejohnson_xyz --case pascal:camel --out-dir types --clean"
+    "typegen": "npx stg -D postgres -h localhost -p 5432 -d kylejohnson_xyz --case pascal:camel --out-dir src/types --clean"
   },
   "eslintConfig": {
     "extends": [

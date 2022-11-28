@@ -1,16 +1,9 @@
 import { ReactElement } from 'react';
 import { Box } from '@mui/material';
 import { FullPost } from '../FullPost';
-import type { Descriptions } from '../FullPost/FullPostBody';
+import type { ApplicationsAttributes } from '@/types';
 
-type Application = {
-  descriptions: Descriptions;
-  name: string;
-  technologies: Array<string>;
-  url: string;
-};
-
-export type ApplicationData = Array<Application>;
+export type ApplicationData = Array<ApplicationsAttributes>;
 
 type Props = {
   applicationData: ApplicationData;
