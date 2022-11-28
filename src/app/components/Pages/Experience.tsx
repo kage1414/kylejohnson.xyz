@@ -6,7 +6,7 @@ import type { Descriptions } from '../FullPost/FullPostBody';
 export type Experience = {
   employer: string;
   position: string;
-  Descriptions: Descriptions;
+  descriptions: Descriptions;
   time: string;
   id: string;
 };
@@ -24,14 +24,14 @@ export function Experience({ experienceData, display }: Props): ReactElement {
       {display && (
         <Box>
           {experienceData.map(
-            ({ employer, Descriptions, position, time, id }) => {
+            ({ employer, descriptions, position, time, id }) => {
               return (
                 <FullPost
                   key={id}
                   title={position}
                   subtitle={employer}
                   time={time}
-                  body={Descriptions}
+                  body={descriptions}
                 />
               );
             }

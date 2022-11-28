@@ -23,6 +23,7 @@
     "passport-http-bearer": "^1.0.1",
     "path": "^0.12.7",
     "pg": "^8.8.0",
+    "pg-hstore": "^2.3.4",
     "prettier": "^2.7.1",
     "react": "^17.0.2",
     "react-cookie": "^4.1.1",
@@ -31,6 +32,7 @@
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.25.8",
     "sequelize-typescript": "^2.1.5",
+    "sequelize-typescript-generator": "^9.0.1",
     "style-loader": "^3.3.1",
     "ts-node": "^10.9.1",
     "tslib": "^2.4.1",
@@ -42,7 +44,8 @@
     "build": "webpack --mode production",
     "dev": "webpack --hot --watch --mode development & nodemon src/server/index.ts",
     "dev-front": "webpack --hot --watch --mode development",
-    "dev-back": "nodemon src/server/index.ts"
+    "dev-back": "nodemon src/server/index.ts",
+    "typegen": "npx stg -D postgres -h localhost -p 5432 -d kylejohnson_xyz --case pascal:camel --out-dir types --clean"
   },
   "eslintConfig": {
     "extends": [

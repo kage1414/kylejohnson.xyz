@@ -29,9 +29,9 @@ interface Props {
 }
 
 export function EditExperienceRow({ experience }: Props): ReactElement {
-  const { employer, description, position, time } = experience;
+  const { employer, descriptions = [], position, time } = experience;
   const [employerInput, setEmployerInput] = useState(employer);
-  const [descriptionInput, setDescriptionInput] = useState(description);
+  const [descriptionInput, setDescriptionInput] = useState(descriptions);
   const [positionInput, setPositionInput] = useState(position);
   const [timeInput, setTimeInput] = useState(time);
   const [isEditing, setIsEditing] = useState(false);
@@ -45,7 +45,7 @@ export function EditExperienceRow({ experience }: Props): ReactElement {
   const onCancelCreate = () => {
     setIsCreating(false);
   };
-  console.log(JSON.stringify(description));
+  console.log(JSON.stringify(descriptions));
   return (
     <Box
       sx={{
@@ -79,7 +79,7 @@ export function EditExperienceRow({ experience }: Props): ReactElement {
                   }}
                 ></Input>
                 <List>
-                  {description.map((desc, i) => {
+                  {descriptions.map((desc, i) => {
                     return (
                       <EditExperienceRowItem
                         description={desc}
@@ -102,8 +102,10 @@ export function EditExperienceRow({ experience }: Props): ReactElement {
               <>
                 <Typography>{position}</Typography>
                 <Box>
-                  {description.map((desc, i) => (
-                    <Typography key={`show ${desc} ${i}`}>{desc}</Typography>
+                  {descriptions.map((desc, i) => (
+                    <Typography key={`show ${desc} ${i}`}>
+                      {desc.description}
+                    </Typography>
                   ))}
                 </Box>
               </>

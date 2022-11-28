@@ -4,7 +4,7 @@ import { FullPost } from '../FullPost';
 import type { Descriptions } from '../FullPost/FullPostBody';
 
 type Application = {
-  description: Descriptions;
+  descriptions: Descriptions;
   name: string;
   technologies: Array<string>;
   url: string;
@@ -26,15 +26,11 @@ export function Applications({
       {display && (
         <Box>
           {applicationData.map(
-            ({ name, technologies, url, description }, idx) => {
-              const body = [
-                ...description,
-                'Technologies used:',
-                ...technologies,
-              ];
+            ({ name, technologies, url, descriptions }, idx) => {
+              console.log({ name, technologies, url, descriptions });
               return (
                 <Box key={name + idx}>
-                  <FullPost body={body} title={name} url={url} />
+                  <FullPost body={descriptions} title={name} url={url} />
                 </Box>
               );
             }

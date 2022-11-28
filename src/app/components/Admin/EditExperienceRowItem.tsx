@@ -21,8 +21,10 @@ import {
   EditOff,
 } from '@mui/icons-material';
 
+import type { Description } from '../FullPost/FullPostBody';
+
 interface Props {
-  description: string;
+  description: Description;
 }
 
 export function EditExperienceRowItem({ description }: Props): ReactElement {
@@ -39,7 +41,7 @@ export function EditExperienceRowItem({ description }: Props): ReactElement {
       <IconButton>
         <DeleteOutline />
       </IconButton>
-      <TextareaAutosize disabled={!isEditing} value={description} />
+      <TextareaAutosize disabled={!isEditing} value={description.description} />
       {isEditing && (
         <IconButton onClick={onSave}>
           <Typography>Save</Typography>

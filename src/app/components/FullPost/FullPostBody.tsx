@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { Box, Paper, List, ListItemText } from '@mui/material';
 
-type Description = {
+export type Description = {
   description: string;
   id: string;
 };
