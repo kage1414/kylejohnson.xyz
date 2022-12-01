@@ -42,12 +42,15 @@
     "webpack-dev-server": "^4.11.1"
   },
   "scripts": {
-    "start": "node server/index.ts",
+    "start": "webpack --mode production && node server/index.ts",
     "build": "webpack --mode production",
     "dev": "webpack --hot --watch --mode development & nodemon src/server/index.ts",
-    "dev-front": "webpack --hot --watch --mode development",
-    "dev-back": "nodemon src/server/index.ts",
-    "typegen": "npx stg -D postgres -h localhost -p 5432 -d kylejohnson_xyz --case pascal:camel --out-dir src/types --clean"
+    "gen:queries": "npx @edgedb/generate queries",
+    "gen:interfaces": "npx @edgedb/generate interfaces",
+    "gen:eqljs": "npx @edgedb/generate edgeql-js",
+    "gen:all": "npx @edgedb/generate edgeql-js && npx @edgedb/generate interfaces && npx @edgedb/generate queries",
+    "migrate": "edgedb migration create && edgedb migrate",
+    "seed": "ts-node src/server/seed.ts"
   },
   "eslintConfig": {
     "extends": [
@@ -81,6 +84,7 @@
     "@babel/core": "^7.16.7",
     "@babel/preset-env": "^7.16.8",
     "@babel/preset-react": "^7.16.7",
+    "@edgedb/generate": "^0.0.6",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",

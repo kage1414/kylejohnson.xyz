@@ -28,3 +28,6 @@ fullchain.pem
 privkey.pem
 dist
 config.js
+
+dbschema/edgeql-js
+dbschema/interfaces.ts

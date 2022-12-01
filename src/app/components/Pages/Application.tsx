@@ -1,10 +1,9 @@
 import { ReactElement, useEffect } from 'react';
 import { Box } from '@mui/material';
 import { FullPost } from '../FullPost';
-import type { ApplicationModel } from '@/server/db/sequelize/sequelize';
 
 type Props = {
-  data: ApplicationModel;
+  data: any;
 };
 
 export function Application({ data: { id, name, url } }: Props): ReactElement {
