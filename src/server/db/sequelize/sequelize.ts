@@ -168,7 +168,7 @@ interface DescriptionModel
   description: string;
 }
 
-const Description = sequelize.define(
+const Description = sequelize.define<DescriptionModel>(
   'Description',
   {
     id: {

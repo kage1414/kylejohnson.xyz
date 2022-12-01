@@ -3050,6 +3050,11 @@ dottie@^2.0.2:
   resolved "https://registry.npmjs.org/dottie/-/dottie-2.0.2.tgz"
   integrity sha512-fmrwR04lsniq/uSr8yikThDTrM7epXHBAAjH9TbeH3rEA8tdCO7mRzB9hdmdGyJCxF8KERo9CITcm3kGuoyMhg==
 
+edgedb@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/edgedb/-/edgedb-1.0.2.tgz#54aca723fe1f344df2da571a37f74ad24fa3ade5"
+  integrity sha512-p5thPFs6LVZVTvofyh6ZLef2cuvZTr1F8hRFQACwb9DvKjQErUQrmPWCRtcdJpfTSqpTd69RYJxcwr3t7T6ISg==
+
 ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.npmjs.org/ee-first/-/ee-first-1.1.1.tgz"
