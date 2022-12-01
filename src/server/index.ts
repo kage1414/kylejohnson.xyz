@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 import mock from './mock-db';
 const { applications, education, technical_skills } = mock;
 import experience from './experience';
-import { sequelize } from './db/sequelize';
+import { sequelize } from './db/sequelize/sequelize';
 
 if (!PROD) {
   app.use(cors());

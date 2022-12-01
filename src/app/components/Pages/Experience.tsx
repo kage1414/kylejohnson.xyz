@@ -19,6 +19,7 @@ type Props = {
 };
 
 export function Experience({ experienceData, display }: Props): ReactElement {
+  console.log({ experienceData });
   return (
     <>
       {display && (

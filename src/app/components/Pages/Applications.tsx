@@ -1,10 +1,10 @@
 import { ReactElement } from 'react';
 import { Box } from '@mui/material';
 import { FullPost } from '../FullPost';
-import type { ApplicationsAttributes } from '@/types';
 import { Application } from './Application';
+import { ApplicationModel } from '@/server/db/sequelize/sequelize';
 
-export type ApplicationData = Array<ApplicationsAttributes>;
+export type ApplicationData = ApplicationModel[];
 
 type Props = {
   applicationData: ApplicationData;
