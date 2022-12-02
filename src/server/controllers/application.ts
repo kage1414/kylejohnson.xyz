@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
-import { getAllApplications } from '../../../dbschema/queries';
+import {
+  getAllApplications,
+  updateApplication,
+} from '../../../dbschema/queries';
 import { client } from '../edgedb';
 
 const get = (req: Request, res: Response) => {
@@ -8,4 +11,14 @@ const get = (req: Request, res: Response) => {
   });
 };
 
-export default { get };
+const put = (req: Request, res: Response) => {
+  const { id, name, url } = req.body;
+  if (!id) {
+    res.sendStatus(400);
+    return;
+  }
+  updateApplication(client, { id, name, url }).then((value) => {
+    res.send(value);
+  });
+};
+export default { get, put };

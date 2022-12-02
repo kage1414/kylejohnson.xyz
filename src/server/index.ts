@@ -10,6 +10,8 @@ import experience from './controllers/experience';
 import application from './controllers/application';
 import education from './controllers/education';
 import technical_skills from './controllers/technical_skills';
+import description from './controllers/description';
+import technology from './controllers/technology';
 
 if (!PROD) {
   app.use(cors());
@@ -20,6 +22,10 @@ app.use(bodyParser.urlencoded());
 app.use(express.static(publicPath, { dotfiles: 'allow' }));
 
 app.get('/api/applications', application.get);
+app.put('/api/application', application.put);
+
+app.put('/api/application/description', description.putApplication);
+app.put('/api/application/technology', technology.putApplication);
 
 app.get('/api/education', education.get);
 

@@ -45,7 +45,7 @@
     "start": "webpack --mode production && node server/index.ts",
     "build": "webpack --mode production",
     "dev": "yarn migrate; yarn gen:all; webpack --hot --watch --mode development & nodemon src/server/index.ts",
-    "gen:queries": "npx @edgedb/generate queries",
+    "gen:queries": "npx @edgedb/generate queries --file",
     "gen:interfaces": "npx @edgedb/generate interfaces",
     "gen:eqljs": "npx @edgedb/generate edgeql-js",
     "gen:all": "npx @edgedb/generate edgeql-js && npx @edgedb/generate interfaces && npx @edgedb/generate queries --file",
