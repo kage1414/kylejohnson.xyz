@@ -1,0 +1,1 @@
+select Application {name, url, active, descriptions: {description}, technologies: {name, url}};

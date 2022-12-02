@@ -1,0 +1,1 @@
+select TechStack {stack, technologies: {name, url}};

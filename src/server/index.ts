@@ -6,10 +6,10 @@ const app = express();
 const publicPath = path.join(__dirname, '..', 'dist');
 const PROD = process.env.NODE_ENV === 'production';
 const PORT = process.env.PORT || 3000;
-import mock from './mock-db';
-const { applications, education, technical_skills } = mock;
-import experience from './experience';
-import { sequelize } from './db/sequelize/sequelize';
+import experience from '../controllers/experience';
+import application from '../controllers/application';
+import education from '../controllers/education';
+import technical_skills from '../controllers/technical_skills';
 
 if (!PROD) {
   app.use(cors());
@@ -19,26 +19,18 @@ app.use(bodyParser.urlencoded());
 
 app.use(express.static(publicPath, { dotfiles: 'allow' }));
 
-app.get('/api/applications', (req: Request, res: Response) => {
-  res.send(applications);
-});
+app.get('/api/applications', application.get);
 
-app.get('/api/education', (req: Request, res: Response) => {
-  res.send(education);
-});
+app.get('/api/education', education.get);
 
 app.get('/api/experience', experience.get);
 
-app.get('/api/technical_skills', (req: Request, res: Response) => {
-  res.send(technical_skills);
-});
+app.get('/api/technical_skills', technical_skills.get);
 
 app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
-sequelize.sync().then(() => {
-  app.listen(PORT, () => {
-    console.log('Listening on port,', PORT);
-  });
+app.listen(PORT, () => {
+  console.log('Listening on port,', PORT);
 });

@@ -2,9 +2,8 @@ import { ReactElement } from 'react';
 import { Box } from '@mui/material';
 import { FullPost } from '../FullPost';
 import { Application } from './Application';
-import { ApplicationModel } from '@/server/db/sequelize/sequelize';
 
-export type ApplicationData = ApplicationModel[];
+export type ApplicationData = any;
 
 type Props = {
   applicationData: ApplicationData;
@@ -15,11 +14,12 @@ export function Applications({
   applicationData,
   display,
 }: Props): ReactElement {
+  console.log({ applicationData });
   return (
     <>
       {display && (
         <Box>
-          {applicationData.map((data) => {
+          {applicationData.map((data: any) => {
             return <Application data={data} />;
           })}
         </Box>

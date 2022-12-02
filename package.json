@@ -44,11 +44,11 @@
   "scripts": {
     "start": "webpack --mode production && node server/index.ts",
     "build": "webpack --mode production",
-    "dev": "webpack --hot --watch --mode development & nodemon src/server/index.ts",
+    "dev": "yarn migrate; yarn gen:all; yarn seed; webpack --hot --watch --mode development & nodemon src/server/index.ts",
     "gen:queries": "npx @edgedb/generate queries",
     "gen:interfaces": "npx @edgedb/generate interfaces",
     "gen:eqljs": "npx @edgedb/generate edgeql-js",
-    "gen:all": "npx @edgedb/generate edgeql-js && npx @edgedb/generate interfaces && npx @edgedb/generate queries",
+    "gen:all": "npx @edgedb/generate edgeql-js && npx @edgedb/generate interfaces && npx @edgedb/generate queries --file",
     "migrate": "edgedb migration create && edgedb migrate",
     "seed": "ts-node src/server/seed.ts"
   },

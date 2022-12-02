@@ -2,12 +2,7 @@ import { ReactElement } from 'react';
 import { Post } from '../Post';
 import { Box, Grid } from '@mui/material';
 
-type TechStack = {
-  stack: string;
-  technologies: Array<string>;
-};
-
-export type TechnicalSkillsData = Array<TechStack>;
+export type TechnicalSkillsData = Array<any>;
 
 type Props = {
   technicalSkillsData: TechnicalSkillsData;
@@ -18,6 +13,7 @@ export function TechnicalSkills({
   technicalSkillsData,
   display,
 }: Props): ReactElement {
+  console.log({ technicalSkillsData });
   return (
     <>
       {display && (
@@ -42,10 +38,7 @@ export function TechnicalSkills({
   );
 }
 
-function TechnicalSkillsElement({
-  stack,
-  technologies,
-}: TechStack): ReactElement {
+function TechnicalSkillsElement({ stack, technologies }: any): ReactElement {
   return (
     <Box
       style={{
@@ -66,8 +59,8 @@ function TechnicalSkillsElement({
           {stack}
         </h2>
         <Box>
-          {technologies.map((title, idx) => {
-            return <Post key={title + idx} title={title} idx={idx} />;
+          {technologies.map((title: any, idx: number) => {
+            return <Post key={title + idx} title={title.name} idx={idx} />;
           })}
         </Box>
       </Box>
