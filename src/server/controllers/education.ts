@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { getAllEducations } from '../../dbschema/queries';
-import { client } from '../server/edgedb';
+import { getAllEducations } from '../../../dbschema/queries';
+import { client } from '../edgedb';
 
 const get = (req: Request, res: Response) => {
   getAllEducations(client).then((value) => {

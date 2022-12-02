@@ -15,6 +15,16 @@ export async function getAllApplications(client: Client): Promise<{
   return client.query(`select Application {name, url, active, descriptions: {description}, technologies: {name, url}};`);
 }
 
+export async function getAllEducations(client: Client): Promise<{
+  "school": string;
+  "time": string;
+  "certificate": string | null;
+  "degree": string | null;
+  "active": boolean | null;
+}[]> {
+  return client.query(`select Education {school, time, certificate, degree, active};`);
+}
+
 export async function getAllExperiences(client: Client): Promise<{
   "employer": string;
   "position": string;
@@ -35,14 +45,4 @@ export async function getAllTechnicalSkills(client: Client): Promise<{
   }[];
 }[]> {
   return client.query(`select TechStack {stack, technologies: {name, url}};`);
-}
-
-export async function getAllEducations(client: Client): Promise<{
-  "school": string;
-  "time": string;
-  "certificate": string | null;
-  "degree": string | null;
-  "active": boolean | null;
-}[]> {
-  return client.query(`select Education {school, time, certificate, degree, active};`);
 }

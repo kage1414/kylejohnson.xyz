@@ -6,10 +6,10 @@ const app = express();
 const publicPath = path.join(__dirname, '..', 'dist');
 const PROD = process.env.NODE_ENV === 'production';
 const PORT = process.env.PORT || 3000;
-import experience from '../controllers/experience';
-import application from '../controllers/application';
-import education from '../controllers/education';
-import technical_skills from '../controllers/technical_skills';
+import experience from './controllers/experience';
+import application from './controllers/application';
+import education from './controllers/education';
+import technical_skills from './controllers/technical_skills';
 
 if (!PROD) {
   app.use(cors());
