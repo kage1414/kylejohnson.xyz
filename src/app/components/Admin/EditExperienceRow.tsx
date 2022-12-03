@@ -1,4 +1,6 @@
-import { ReactElement, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
+import { CircularProgress } from '@mui/material';
+import axios from 'axios';
 import {
   Box,
   Paper,
@@ -8,35 +10,46 @@ import {
   Input,
   Typography,
   Grid,
-  Divider,
   List,
   ListItem,
 } from '@mui/material';
-import {
-  Clear,
-  DeleteOutline,
-  EditOutlined,
-  Save,
-  Add,
-} from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import { EditExperienceRowItem } from './EditExperienceRowItem';
 import { AddExperienceRowItem } from './AddExperienceRowItem';
 
-import type { Experience } from '../Pages';
+import type { Experience } from 'dbTypes';
 
 interface Props {
   experience: Experience;
+  onSave: () => void;
 }
 
-export function EditExperienceRow({ experience }: Props): ReactElement {
-  const { employer, descriptions = [], position, time } = experience;
+export function EditExperienceRow({ experience, onSave }: Props): ReactElement {
+  const { employer, descriptions = [], position, time, id } = experience;
   const [employerInput, setEmployerInput] = useState(employer);
   const [descriptionInput, setDescriptionInput] = useState(descriptions);
   const [positionInput, setPositionInput] = useState(position);
   const [timeInput, setTimeInput] = useState(time);
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  const onSave = () => {
+  const [loading, setLoading] = useState(false);
+  const [description, setDescription] = useState('');
+  const onLoad = () => {
+    setLoading(true);
+    axios({
+      method: 'GET',
+      url: '/api/description',
+      params: { id },
+    })
+      .then((response) => {
+        setLoading(false);
+        setDescription(response.data.description);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  };
+  const onSaveExperience = () => {
     setIsEditing(false);
   };
   const onCreate = () => {
@@ -45,7 +58,9 @@ export function EditExperienceRow({ experience }: Props): ReactElement {
   const onCancelCreate = () => {
     setIsCreating(false);
   };
-  console.log(JSON.stringify(descriptions));
+  useEffect(() => {
+    onLoad();
+  }, []);
   return (
     <Box
       sx={{
@@ -61,6 +76,60 @@ export function EditExperienceRow({ experience }: Props): ReactElement {
       >
         <Grid container>
           <Grid item>
+            {loading ? (
+              <CircularProgress />
+            ) : (
+              <>
+                {isEditing ? (
+                  <>
+                    <Input
+                      value={position}
+                      onChange={(val) => {
+                        console.log({ val });
+                      }}
+                    ></Input>
+                    <List>
+                      {descriptions.map(({ id }) => {
+                        return (
+                          <EditExperienceRowItem
+                            id={id}
+                            description={description}
+                            onLoad={onLoad}
+                            key={id}
+                          />
+                        );
+                      })}
+                      <ListItem>
+                        {isCreating ? (
+                          <AddExperienceRowItem onCancel={onCancelCreate} />
+                        ) : (
+                          <IconButton onClick={onCreate}>
+                            <Add />
+                          </IconButton>
+                        )}
+                      </ListItem>
+                    </List>
+                  </>
+                ) : (
+                  <>
+                    <Typography>{position}</Typography>
+                    <Box>
+                      {descriptions.map(({ description, id }) => (
+                        <Typography key={id}>{description}</Typography>
+                      ))}
+                    </Box>
+                  </>
+                )}
+              </>
+            )}
+          </Grid>
+        </Grid>
+        {isEditing ? (
+          <Grid item>
+            <Button onClick={onSaveExperience}>Save</Button>
+          </Grid>
+        ) : (
+          <Grid item>
             <Button
               onClick={() => {
                 setIsEditing(!isEditing);
@@ -68,53 +137,6 @@ export function EditExperienceRow({ experience }: Props): ReactElement {
             >
               edit
             </Button>
-          </Grid>
-          <Grid item>
-            {isEditing ? (
-              <>
-                <Input
-                  value={position}
-                  onChange={(val) => {
-                    console.log({ val });
-                  }}
-                ></Input>
-                <List>
-                  {descriptions.map((desc, i) => {
-                    return (
-                      <EditExperienceRowItem
-                        description={desc}
-                        key={`edit ${desc} ${i}`}
-                      />
-                    );
-                  })}
-                  <ListItem>
-                    {isCreating ? (
-                      <AddExperienceRowItem onCancel={onCancelCreate} />
-                    ) : (
-                      <IconButton onClick={onCreate}>
-                        <Add />
-                      </IconButton>
-                    )}
-                  </ListItem>
-                </List>
-              </>
-            ) : (
-              <>
-                <Typography>{position}</Typography>
-                <Box>
-                  {descriptions.map((desc, i) => (
-                    <Typography key={`show ${desc} ${i}`}>
-                      {desc.description}
-                    </Typography>
-                  ))}
-                </Box>
-              </>
-            )}
-          </Grid>
-        </Grid>
-        {isEditing && (
-          <Grid item>
-            <Button onClick={onSave}>Save</Button>
           </Grid>
         )}
       </Paper>

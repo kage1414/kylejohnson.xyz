@@ -1,24 +1,29 @@
 import { ReactElement } from 'react';
 import { Box, Paper, List, ListItemText } from '@mui/material';
+import type { Description, Technology } from 'dbTypes';
 
-export type Description = {
-  description: string;
-  id: string;
-};
-
-export type Descriptions = Description[];
 interface Props {
-  body: Descriptions;
+  descriptions?: Description[];
+  technologies?: Technology[];
 }
 
-export function FullPostBody({ body }: Props): ReactElement {
+export function FullPostBody({
+  descriptions,
+  technologies,
+}: Props): ReactElement {
   return (
     <Box>
       <Paper variant='outlined'>
         <List sx={{ marginLeft: 1 }}>
-          {body.map(({ description, id }) => (
-            <ListItemText key={id}>{description}</ListItemText>
-          ))}
+          {descriptions &&
+            descriptions.map(({ description, id }) => (
+              <ListItemText key={id}>{description}</ListItemText>
+            ))}
+          {technologies && <ListItemText>{'Technologies Used:'}</ListItemText>}
+          {technologies &&
+            technologies.map(({ name, id }) => (
+              <ListItemText key={id}>{name}</ListItemText>
+            ))}
         </List>
       </Paper>
     </Box>

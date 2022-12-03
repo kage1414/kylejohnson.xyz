@@ -1,36 +1,27 @@
 import { ReactElement } from 'react';
 import { FullPost } from '../FullPost';
 import { Box } from '@mui/material';
-
-type Education = {
-  school: string;
-  time: string;
-  certificate?: string;
-  degree?: string;
-};
-
-export type EducationData = Array<Education>;
+import { Education as EducationData } from 'dbTypes';
 
 type Props = {
-  educationData: EducationData;
+  data: EducationData[];
   display: boolean;
 };
 
-export function Education({ educationData, display }: Props): ReactElement {
+export function Education({ data, display }: Props): ReactElement {
   return (
     <>
       {display && (
         <Box>
-          {educationData.map(
-            ({ school, time, certificate, degree }, idx: number) => (
+          {data &&
+            data.map(({ school, time, certificate, degree }, idx: number) => (
               <FullPost
                 title={school}
                 subtitle={certificate || degree}
                 time={time}
                 key={school + idx}
               />
-            )
-          )}
+            ))}
         </Box>
       )}
     </>

@@ -1,41 +1,30 @@
 import { ReactElement } from 'react';
 import { FullPost } from '../FullPost';
 import { Box } from '@mui/material';
-import type { Descriptions } from '../FullPost/FullPostBody';
-
-export type Experience = {
-  employer: string;
-  position: string;
-  descriptions: Descriptions;
-  time: string;
-  id: string;
-};
-
-export type ExperienceData = Array<Experience>;
+import type { Experience as ExperienceData } from 'dbTypes';
 
 type Props = {
-  experienceData: ExperienceData;
+  data: ExperienceData[];
   display: boolean;
 };
 
-export function Experience({ experienceData, display }: Props): ReactElement {
+export function Experience({ data, display }: Props): ReactElement {
   return (
     <>
       {display && (
         <Box>
-          {experienceData.map(
-            ({ employer, descriptions, position, time, id }) => {
+          {data &&
+            data.map(({ employer, descriptions, position, time, id }) => {
               return (
                 <FullPost
                   key={id}
                   title={position}
                   subtitle={employer}
                   time={time}
-                  body={descriptions}
+                  descriptions={descriptions}
                 />
               );
-            }
-          )}
+            })}
         </Box>
       )}
     </>

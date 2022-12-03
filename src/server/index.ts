@@ -29,7 +29,10 @@ app.put('/api/application/technology', technology.putApplication);
 
 app.get('/api/education', education.get);
 
+app.get('/api/description', description.get);
+
 app.get('/api/experience', experience.get);
+app.put('/api/experience/description', description.putExperience);
 
 app.get('/api/technical_skills', technical_skills.get);
 

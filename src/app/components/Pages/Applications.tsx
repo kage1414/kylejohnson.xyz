@@ -1,25 +1,19 @@
 import { ReactElement } from 'react';
 import { Box } from '@mui/material';
-import { FullPost } from '../FullPost';
+import type { Application as ApplicationData } from 'dbTypes';
 import { Application } from './Application';
 
-export type ApplicationData = any;
-
 type Props = {
-  applicationData: ApplicationData;
+  data: ApplicationData[];
   display: boolean;
 };
 
-export function Applications({
-  applicationData,
-  display,
-}: Props): ReactElement {
-  console.log({ applicationData });
+export function Applications({ data = [], display }: Props): ReactElement {
   return (
     <>
       {display && (
         <Box>
-          {applicationData.map((data: any) => {
+          {data.map((data) => {
             return <Application data={data} />;
           })}
         </Box>

@@ -3,11 +3,11 @@ import { Grid } from '@mui/material';
 import axios from 'axios';
 import { Applications, Education, Experience, TechnicalSkills } from './Pages';
 import type {
-  ApplicationData,
-  EducationData,
-  TechnicalSkillsData,
-  ExperienceData,
-} from './Pages';
+  Application as ApplicationData,
+  Education as EducationData,
+  Experience as ExperienceData,
+  TechStack as TechnicalSkillsData,
+} from 'dbTypes';
 
 const BASE_URL = 'http://localhost:3000';
 
@@ -16,11 +16,12 @@ interface Props {
 }
 
 export function Feed({ selectedTab }: Props): ReactElement {
-  const [applicationData, setApplicationData] = useState<ApplicationData>([]);
-  const [educationData, setEducationData] = useState<EducationData>([]);
-  const [experienceData, setExperienceData] = useState<ExperienceData>([]);
-  const [technicalSkillsData, setTechnicalSkillsData] =
-    useState<TechnicalSkillsData>([]);
+  const [applicationData, setApplicationData] = useState<ApplicationData[]>([]);
+  const [educationData, setEducationData] = useState<EducationData[]>([]);
+  const [experienceData, setExperienceData] = useState<ExperienceData[]>([]);
+  const [technicalSkillsData, setTechnicalSkillsData] = useState<
+    TechnicalSkillsData[]
+  >([]);
 
   const fetchApplicationData = () => {
     axios.get(BASE_URL + '/api/applications').then(({ data }) => {
@@ -54,21 +55,14 @@ export function Feed({ selectedTab }: Props): ReactElement {
   }, []);
   return (
     <Grid container wrap='nowrap'>
-      <Grid item>{/* <Sidebar /> */}</Grid>
       <Grid item>
-        <Experience
-          experienceData={experienceData}
-          display={selectedTab === 0}
-        />
+        <Experience data={experienceData} display={selectedTab === 0} />
         <TechnicalSkills
           technicalSkillsData={technicalSkillsData}
           display={selectedTab === 1}
         />
-        <Applications
-          applicationData={applicationData}
-          display={selectedTab === 2}
-        />
-        <Education educationData={educationData} display={selectedTab === 3} />
+        <Applications data={applicationData} display={selectedTab === 2} />
+        <Education data={educationData} display={selectedTab === 3} />
       </Grid>
     </Grid>
   );

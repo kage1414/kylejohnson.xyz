@@ -13,7 +13,6 @@ export function TechnicalSkills({
   technicalSkillsData,
   display,
 }: Props): ReactElement {
-  console.log({ technicalSkillsData });
   return (
     <>
       {display && (

@@ -1,12 +1,13 @@
 import { Box, Paper } from '@mui/material';
 import { ReactElement } from 'react';
 import { FullPostHeader, FullPostBody, FullPostFooterList } from '.';
-import type { Descriptions } from './FullPostBody';
+import type { Description, Technology } from 'dbTypes';
 
 interface Props {
   title: string;
-  subtitle?: string;
-  body?: Descriptions;
+  subtitle?: string | null;
+  descriptions?: Description[];
+  technologies?: Technology[];
   time?: string;
   url?: string;
 }
@@ -14,7 +15,8 @@ interface Props {
 export function FullPost({
   title,
   subtitle,
-  body,
+  descriptions,
+  technologies,
   time,
   url,
 }: Props): ReactElement {
@@ -37,7 +39,12 @@ export function FullPost({
           time={time}
           url={url}
         />
-        {body && <FullPostBody body={body} />}
+        {(descriptions || technologies) && (
+          <FullPostBody
+            descriptions={descriptions}
+            technologies={technologies}
+          />
+        )}
         <FullPostFooterList />
       </Paper>
     </Box>

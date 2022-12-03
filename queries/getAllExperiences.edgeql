@@ -1,1 +1,1 @@
-select Experience {employer, position, time, active, descriptions: {description}};
+select Experience {id, employer, position, time, active, descriptions: {description, id}};

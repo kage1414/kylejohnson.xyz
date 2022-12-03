@@ -1,9 +1,6 @@
-import { ReactElement, useState } from 'react';
+import { ReactElement, useState, useEffect } from 'react';
+import axios from 'axios';
 import {
-  Box,
-  Paper,
-  Button,
-  TextField,
   IconButton,
   Input,
   Typography,
@@ -21,27 +18,57 @@ import {
   EditOff,
 } from '@mui/icons-material';
 
-import type { Description } from '../FullPost/FullPostBody';
+import type { Description } from 'dbTypes';
 
 interface Props {
-  description: Description;
+  id: string;
+  description: string;
+  onLoad: () => void;
 }
 
-export function EditExperienceRowItem({ description }: Props): ReactElement {
+export function EditExperienceRowItem({
+  id,
+  description,
+  onLoad,
+}: Props): ReactElement {
+  const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [descriptionInput, setDescriptionInput] = useState(description);
   const onEdit = () => {
     setIsEditing(!isEditing);
   };
-  const onSave = () => {};
+
+  const onSave = () => {
+    setLoading(true);
+    setIsEditing(false);
+    axios({
+      method: 'PUT',
+      url: '/api/experience/description',
+      data: {
+        description: descriptionInput,
+        id,
+      },
+    }).then((response) => {
+      setLoading(false);
+      onLoad();
+    });
+  };
+
   return (
     <ListItem>
+      <TextareaAutosize
+        disabled={!isEditing || loading}
+        value={descriptionInput}
+        onChange={(e) => {
+          setDescriptionInput(e.target.value);
+        }}
+      />
       <IconButton onClick={onEdit}>
         {isEditing ? <EditOff /> : <EditOutlined />}
       </IconButton>
       <IconButton>
         <DeleteOutline />
       </IconButton>
-      <TextareaAutosize disabled={!isEditing} value={description.description} />
       {isEditing && (
         <IconButton onClick={onSave}>
           <Typography>Save</Typography>

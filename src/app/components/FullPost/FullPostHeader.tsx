@@ -4,7 +4,7 @@ import { FullPostHeaderSubmittedText } from '.';
 
 interface Props {
   title: string;
-  subtitle?: string;
+  subtitle?: string | null;
   time?: string;
   url?: string;
 }
