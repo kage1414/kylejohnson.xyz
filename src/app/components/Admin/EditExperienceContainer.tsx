@@ -1,6 +1,10 @@
 import { ReactElement } from 'react';
-import { EditExperience } from './EditExperience';
+import { EditExperience } from '.';
 
-export function EditExperienceContainer(): ReactElement {
-  return <EditExperience />;
+interface Props {
+  display?: boolean;
+}
+
+export function EditExperienceContainer({ display }: Props): ReactElement {
+  return <>{display && <EditExperience />}</>;
 }

@@ -13,8 +13,6 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { Feed } from './components/Feed';
 import { AdminContainer } from './components/Admin/AdminContainer';
 
-export type Page = 'feed' | 'admin';
-
 const theme = createTheme({
   palette: {
     primary: {
@@ -51,7 +49,6 @@ const theme = createTheme({
 
 export default function App() {
   const [cookies, setCookie] = useCookies();
-  const [page, setPage] = useState<Page>('feed');
   const [selectedTab, setSelectedTab] = useState(
     Number(cookies['last-page']) || 0
   );
@@ -65,11 +62,7 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <Grid container flexDirection={'column'}>
           <Grid item>
-            <Navbar
-              selectedTab={selectedTab}
-              setSelectedTab={setSelectedTab}
-              page={page}
-            />
+            <Navbar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
           </Grid>
           <Grid item>
             <Grid container flexDirection='row' wrap='nowrap'>

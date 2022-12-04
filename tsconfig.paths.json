@@ -3,7 +3,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "dbTypes": ["dbschema/interfaces.ts"]
+      "dbTypes": ["dbschema/interfaces.ts"],
+      "queries": ["dbschema/queries.ts"]
     }
   }
 }

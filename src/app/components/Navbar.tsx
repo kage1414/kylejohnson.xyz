@@ -1,19 +1,25 @@
-import React, { ReactElement, FC, SetStateAction, Dispatch } from 'react';
+import React, { ReactElement, SetStateAction, Dispatch } from 'react';
 import { Tabs, Tab, Typography, Toolbar, Grid } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
-import { Page } from '../App';
 
 interface Props {
   setSelectedTab: Dispatch<SetStateAction<number>>;
   selectedTab: number;
-  page: Page;
 }
 
-export function Navbar({
-  selectedTab,
-  setSelectedTab,
-  page,
-}: Props): ReactElement {
+interface GetTabName {
+  tabNumber: number;
+  path: string;
+}
+
+const FEED_TAB_MAP = {
+  0: 'experience',
+  1: 'technical_skills',
+  2: 'applications',
+  3: 'education',
+};
+
+export function Navbar({ selectedTab, setSelectedTab }: Props): ReactElement {
   const { pathname } = useLocation();
   const getTabStyle = (tabNumber: number) => {
     return selectedTab === tabNumber
@@ -43,59 +49,36 @@ export function Navbar({
           </Link>
         </Grid>
         <Grid item>
-          {pathname === '/home' && (
-            <Tabs
-              value={selectedTab}
-              onChange={switchTabs}
-              indicatorColor='secondary'
-              sx={{
-                '& button': { paddingY: 0 },
-                '& p': {
-                  paddingX: 1,
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  textTransform: 'lowercase',
-                },
-              }}
-              TabIndicatorProps={{ style: { display: 'none' } }}
-            >
-              <Tab
-                label={<Typography sx={getTabStyle(0)}>experience</Typography>}
-              />
-              <Tab
-                label={
-                  <Typography sx={getTabStyle(1)}>technical_skills</Typography>
-                }
-              />
-              <Tab
-                label={
-                  <Typography sx={getTabStyle(2)}>applications</Typography>
-                }
-              />
-              <Tab
-                label={<Typography sx={getTabStyle(3)}>education</Typography>}
-              />
-            </Tabs>
-          )}
-          {pathname === '/admin' && (
-            <Tabs
-              value={selectedTab}
-              onChange={switchTabs}
-              indicatorColor='secondary'
-              sx={{
-                '& button': { paddingY: 0 },
-                '& p': {
-                  paddingX: 1,
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  textTransform: 'lowercase',
-                },
-              }}
-              TabIndicatorProps={{ style: { display: 'none' } }}
-            >
-              <Tab label={<Typography sx={getTabStyle(0)}>admin</Typography>} />
-            </Tabs>
-          )}
+          <Tabs
+            value={selectedTab}
+            onChange={switchTabs}
+            indicatorColor='secondary'
+            sx={{
+              '& button': { paddingY: 0 },
+              '& p': {
+                paddingX: 1,
+                fontSize: '12px',
+                fontWeight: 700,
+                textTransform: 'lowercase',
+              },
+            }}
+            TabIndicatorProps={{ style: { display: 'none' } }}
+          >
+            <Tab
+              label={<Typography sx={getTabStyle(0)}>experience</Typography>}
+            />
+            <Tab
+              label={
+                <Typography sx={getTabStyle(1)}>technical_skills</Typography>
+              }
+            />
+            <Tab
+              label={<Typography sx={getTabStyle(2)}>applications</Typography>}
+            />
+            <Tab
+              label={<Typography sx={getTabStyle(3)}>education</Typography>}
+            />
+          </Tabs>
         </Grid>
       </Grid>
     </Toolbar>

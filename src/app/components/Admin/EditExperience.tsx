@@ -20,7 +20,6 @@ export function EditExperience(): ReactElement {
     DescriptionData[]
   >([]);
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', editable: false },
     { field: 'employer', headerName: 'Employer', editable: true, width: 300 },
     { field: 'position', editable: true, headerName: 'Position', width: 300 },
     { field: 'time', editable: true, headerName: 'Time', width: 300 },
@@ -36,7 +35,6 @@ export function EditExperience(): ReactElement {
       field: 'descriptions',
       width: 300,
       renderCell: (params) => {
-        console.log({ params });
         return (
           <Button
             onClick={() => {
@@ -64,7 +62,6 @@ export function EditExperience(): ReactElement {
       .then(({ data }) => {
         setLoading(false);
         setExperience(data);
-        console.log({ data });
       })
       .catch((response) => {
         console.error(response);
@@ -82,7 +79,6 @@ export function EditExperience(): ReactElement {
         data: newRow,
       })
         .then((response) => {
-          console.log(response.data);
           return response.data;
         })
         .catch((error) => {
@@ -94,14 +90,12 @@ export function EditExperience(): ReactElement {
   );
   const onDescriptionRowUpdate = useCallback(
     (newRow: GridRowModel, oldRow: GridRowModel) => {
-      console.log({ newRow });
       return axios({
         method: 'PUT',
         url: '/api/description',
         data: newRow,
       })
         .then((response) => {
-          console.log('description success', response.data);
           return response.data;
         })
         .catch((error) => {

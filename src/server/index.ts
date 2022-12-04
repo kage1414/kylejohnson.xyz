@@ -12,6 +12,7 @@ import education from './controllers/education';
 import technical_skills from './controllers/technical_skills';
 import description from './controllers/description';
 import technology from './controllers/technology';
+import tech_stack from './controllers/tech_stack';
 
 if (!PROD) {
   app.use(cors());
@@ -38,10 +39,14 @@ app.put('/api/experience', experience.put);
 
 app.get('/api/technical_skills', technical_skills.get);
 
+app.get('/api/technologies', technology.get);
+
+app.get('/api/tech_stacks', tech_stack.get);
+
 app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log('Listening on port,', PORT);
+  console.info(`Listening on port ${PORT}`);
 });

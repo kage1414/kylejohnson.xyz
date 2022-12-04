@@ -1,15 +1,16 @@
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import { Grid } from '@mui/material';
 interface Props {
   selectedTab: number;
 }
 
-import { EditExperienceContainer } from './EditExperienceContainer';
+import { EditExperienceContainer, EditTechnicalSkillsContainer } from '.';
 
 export function AdminContainer({ selectedTab }: Props): ReactElement {
   return (
     <Grid container wrap='nowrap'>
-      <EditExperienceContainer />
+      <EditExperienceContainer display={selectedTab === 0} />
+      <EditTechnicalSkillsContainer display={selectedTab === 1} />
     </Grid>
   );
 }

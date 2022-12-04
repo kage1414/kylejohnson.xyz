@@ -26,7 +26,7 @@ interface Props {
   fetchData: () => void;
   onUpdateRowError: (error: any) => void;
   loading: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   isSecondaryOpen?: boolean;
   isTertiaryOpen?: boolean;
 }
@@ -62,8 +62,8 @@ export function EditSection({
             experimentalFeatures={{ newEditingApi: true }}
             columns={primaryColumns}
             rows={primaryData}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
+            pageSize={10}
+            rowsPerPageOptions={[10]}
             processRowUpdate={onUpdateRowPrimary}
             onProcessRowUpdateError={onUpdateRowError}
           />
@@ -74,8 +74,8 @@ export function EditSection({
                   experimentalFeatures={{ newEditingApi: true }}
                   columns={secondaryColumns}
                   rows={secondaryData || []}
-                  pageSize={5}
-                  rowsPerPageOptions={[5]}
+                  pageSize={10}
+                  rowsPerPageOptions={[10]}
                   processRowUpdate={onUpdateRowSecondary}
                   onProcessRowUpdateError={onUpdateRowError}
                 />

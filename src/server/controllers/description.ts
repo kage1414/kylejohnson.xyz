@@ -13,7 +13,6 @@ const get = (req: Request, res: Response) => {
     return;
   }
   getDescription(client, { id: id.toString() }).then((value) => {
-    console.log(value);
     res.send(value);
   });
 };
