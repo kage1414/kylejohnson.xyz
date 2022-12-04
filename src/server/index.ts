@@ -31,8 +31,10 @@ app.get('/api/education', education.get);
 
 app.get('/api/description', description.get);
 
+app.put('/api/description', description.put);
+
 app.get('/api/experience', experience.get);
-app.put('/api/experience/description', description.putExperience);
+app.put('/api/experience', experience.put);
 
 app.get('/api/technical_skills', technical_skills.get);
 

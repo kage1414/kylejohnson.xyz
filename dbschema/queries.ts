@@ -41,6 +41,50 @@ export async function getAllExperiences(client: Client): Promise<{
   return client.query(`select Experience {id, employer, position, time, active, descriptions: {description, id}};`);
 }
 
+export async function updateApplication(client: Client, args: {
+  "id": string;
+  "name": string;
+  "url": string;
+}): Promise<{
+  "id": string;
+} | null> {
+  return client.querySingle(`update Application
+filter .id = <uuid>$id
+set {
+  name := <str>$name,
+  url := <str>$url
+};`, args);
+}
+
+export async function updateExperience(client: Client, args: {
+  "id": string;
+  "employer": string;
+  "time": string;
+  "position": string;
+  "active": boolean;
+}): Promise<{
+  "id": string;
+  "employer": string;
+  "time": string;
+  "position": string;
+  "active": boolean | null;
+  "descriptions": {
+    "description": string;
+    "id": string;
+  }[];
+} | null> {
+  return client.querySingle(`update Experience
+filter .id = <uuid>$id
+set {
+  employer := <str>$employer,
+  time := <str>$time,
+  position := <str>$position,
+  active := <bool>$active,
+};
+select Experience {id, employer, time, position, active, descriptions: {description, id}}
+filter .id = <uuid>$id;`, args);
+}
+
 export async function addApplicationTechnology(client: Client, args: {
   "id": string;
   "name": string;
@@ -77,44 +121,19 @@ export async function getAllApplications(client: Client): Promise<{
   return client.query(`select Application {name, url, active, descriptions: {description, id}, technologies: {name, url, id}};`);
 }
 
-export async function updateApplication(client: Client, args: {
-  "id": string;
-  "name": string;
-  "url": string;
-}): Promise<{
-  "id": string;
-} | null> {
-  return client.querySingle(`update Application
-filter .id = <uuid>$id
-set {
-  name := <str>$name,
-  url := <str>$url
-};`, args);
-}
-
-export async function getAllEducations(client: Client): Promise<{
-  "school": string;
-  "time": string;
-  "certificate": string | null;
-  "degree": string | null;
-  "active": boolean | null;
-}[]> {
-  return client.query(`select Education {school, time, certificate, degree, active};`);
-}
-
-export async function updateExperienceDescription(client: Client, args: {
+export async function updateDescription(client: Client, args: {
   "id": string;
   "description": string;
 }): Promise<{
-  "description": string;
   "id": string;
+  "description": string;
 } | null> {
   return client.querySingle(`update Description
 filter .id = <uuid>$id
 set {
   description := <str>$description,
 };
-select Description {description, id}
+select Description {id, description}
 filter .id = <uuid>$id;`, args);
 }
 
@@ -126,4 +145,14 @@ export async function getAllTechnicalSkills(client: Client): Promise<{
   }[];
 }[]> {
   return client.query(`select TechStack {stack, technologies: {name, url}};`);
+}
+
+export async function getAllEducations(client: Client): Promise<{
+  "school": string;
+  "time": string;
+  "certificate": string | null;
+  "degree": string | null;
+  "active": boolean | null;
+}[]> {
+  return client.query(`select Education {school, time, certificate, degree, active};`);
 }

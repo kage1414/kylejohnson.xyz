@@ -1,76 +1,134 @@
-import { ReactElement, useState, useEffect } from 'react';
-import {
-  CircularProgress,
-  Table,
-  TableBody,
-  TableRow,
-  TableHead,
-  TableCell,
-  TableContainer,
-} from '@mui/material';
+import { ReactElement, useState, useCallback } from 'react';
 import axios from 'axios';
-import { Experience as ExperienceData } from 'dbTypes';
-import { BASE_URL } from '../../constants';
-import { Box } from '@mui/material';
-import { EditExperienceRow } from './EditExperienceRow';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-
-const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', editable: false },
-  { field: 'active', headerName: 'Active', type: 'boolean', editable: true },
-  { field: 'employer', headerName: 'Employer', editable: true },
-  { field: 'position', headerName: 'Position' },
-  { field: 'time', headerName: 'Time' },
-];
+import {
+  Experience as ExperienceData,
+  Description as DescriptionData,
+} from 'dbTypes';
+import { Button } from '@mui/material';
+import {
+  GridColDef,
+  GridValueGetterParams,
+  GridRowModel,
+} from '@mui/x-data-grid';
+import { EditSection } from './EditSection';
 
 export function EditExperience(): ReactElement {
   const [experience, setExperience] = useState<ExperienceData[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [editingDescriptions, setEditingDescriptions] = useState<
+    DescriptionData[]
+  >([]);
+  const columns: GridColDef[] = [
+    { field: 'id', headerName: 'ID', editable: false },
+    { field: 'employer', headerName: 'Employer', editable: true, width: 300 },
+    { field: 'position', editable: true, headerName: 'Position', width: 300 },
+    { field: 'time', editable: true, headerName: 'Time', width: 300 },
+    {
+      field: 'active',
+      headerName: 'Active',
+      type: 'boolean',
+      editable: true,
+      valueGetter: (params: GridValueGetterParams) =>
+        params.row.active === null ? true : params.row.active,
+    },
+    {
+      field: 'descriptions',
+      width: 300,
+      renderCell: (params) => {
+        console.log({ params });
+        return (
+          <Button
+            onClick={() => {
+              setEditingDescriptions(params.value);
+              setIsOpen(true);
+            }}
+          >{`Descriptions`}</Button>
+        );
+      },
+    },
+  ];
+  const descriptionColumns: GridColDef[] = [
+    { field: 'id', headerName: 'ID', editable: false },
+    {
+      field: 'description',
+      headerName: 'Description',
+      editable: true,
+      width: 500,
+    },
+  ];
   const getExperienceData = () => {
     setLoading(true);
-    axios.get(BASE_URL + '/api/experience').then(({ data }) => {
-      setLoading(false);
-      setExperience(data);
-    });
+    axios
+      .get('/api/experience')
+      .then(({ data }) => {
+        setLoading(false);
+        setExperience(data);
+        console.log({ data });
+      })
+      .catch((response) => {
+        console.error(response);
+        setLoading(false);
+      });
   };
-  useEffect(() => {
+  const onUpdateRowError = (error: any) => {
+    console.error(error);
+  };
+  const onRowUpdate = useCallback(
+    (newRow: GridRowModel, oldRow: GridRowModel) => {
+      return axios({
+        method: 'PUT',
+        url: '/api/experience',
+        data: newRow,
+      })
+        .then((response) => {
+          console.log(response.data);
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return oldRow;
+        });
+    },
+    []
+  );
+  const onDescriptionRowUpdate = useCallback(
+    (newRow: GridRowModel, oldRow: GridRowModel) => {
+      console.log({ newRow });
+      return axios({
+        method: 'PUT',
+        url: '/api/description',
+        data: newRow,
+      })
+        .then((response) => {
+          console.log('description success', response.data);
+          return response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+          return oldRow;
+        });
+    },
+    []
+  );
+  const onClose = () => {
+    setIsOpen(false);
     getExperienceData();
-  }, []);
-
-  useEffect(() => {
-    console.log({ experience });
-  }, [experience]);
+  };
 
   return (
-    <Box height={400} width={900}>
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Employer</TableCell>
-                <TableCell>Position</TableCell>
-                <TableCell>Time</TableCell>
-                <TableCell>Active</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {experience.map(
-                ({ id, employer, time, position, active, descriptions }) => (
-                  <TableRow key={id}>
-                    <TableCell>{employer}</TableCell>
-                    <TableCell>{position}</TableCell>
-                    <TableCell>{time}</TableCell>
-                    <TableCell>{active}</TableCell>
-                  </TableRow>
-                )
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
-    </Box>
+    <EditSection
+      loading={loading}
+      primaryData={experience}
+      secondaryData={editingDescriptions}
+      primaryColumns={columns}
+      secondaryColumns={descriptionColumns}
+      fetchData={getExperienceData}
+      onUpdateRowPrimary={onRowUpdate}
+      onUpdateRowSecondary={onDescriptionRowUpdate}
+      onUpdateRowError={onUpdateRowError}
+      onClose={onClose}
+      isSecondaryOpen={isOpen}
+    />
   );
 }
