@@ -26,10 +26,9 @@ export function EditExperience(): ReactElement {
     {
       field: 'active',
       headerName: 'Active',
-      type: 'boolean',
       editable: true,
-      valueGetter: (params: GridValueGetterParams) =>
-        params.row.active === null ? true : params.row.active,
+      width: 150,
+      type: 'boolean',
     },
     {
       field: 'descriptions',

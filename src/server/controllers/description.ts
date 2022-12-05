@@ -12,9 +12,13 @@ const get = (req: Request, res: Response) => {
     res.sendStatus(400);
     return;
   }
-  getDescription(client, { id: id.toString() }).then((value) => {
-    res.send(value);
-  });
+  getDescription(client, { id: id.toString() })
+    .then((value) => {
+      res.send(value);
+    })
+    .catch(() => {
+      res.sendStatus(400);
+    });
 };
 
 const put = (req: Request, res: Response) => {
@@ -42,9 +46,13 @@ const putApplication = (req: Request, res: Response) => {
     res.sendStatus(400);
     return;
   }
-  addApplicationDescription(client, { id, description }).then((value) => {
-    res.send(value);
-  });
+  addApplicationDescription(client, { id, description })
+    .then((value) => {
+      res.send(value);
+    })
+    .catch(() => {
+      res.sendStatus(400);
+    });
 };
 
 export default { putApplication, get, put };

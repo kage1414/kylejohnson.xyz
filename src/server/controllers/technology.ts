@@ -7,16 +7,20 @@ import {
 import { client } from '../edgedb';
 
 const get = (req: Request, res: Response) => {
-  getAllTechnologies(client).then((value) => {
-    res.send(
-      value.map(({ id, name, stack, priority }) => ({
-        id,
-        name,
-        stack: stack?.stack,
-        priority,
-      }))
-    );
-  });
+  getAllTechnologies(client)
+    .then((value) => {
+      res.send(
+        value.map(({ id, name, stack, priority }) => ({
+          id,
+          name,
+          stack: stack?.stack,
+          priority,
+        }))
+      );
+    })
+    .catch(() => {
+      res.sendStatus(400);
+    });
 };
 
 const put = (req: Request, res: Response) => {
@@ -25,14 +29,18 @@ const put = (req: Request, res: Response) => {
     res.sendStatus(400);
     return;
   }
-  updateTechnology(client, req.body).then((value) => {
-    res.send({
-      id: value?.id,
-      name: value?.name,
-      stack: value?.stack?.stack,
-      priority: value?.priority,
+  updateTechnology(client, req.body)
+    .then((value) => {
+      res.send({
+        id: value?.id,
+        name: value?.name,
+        stack: value?.stack?.stack,
+        priority: value?.priority,
+      });
+    })
+    .catch(() => {
+      res.sendStatus(400);
     });
-  });
 };
 
 const putApplication = (req: Request, res: Response) => {
@@ -41,9 +49,13 @@ const putApplication = (req: Request, res: Response) => {
     res.sendStatus(400);
     return;
   }
-  addApplicationTechnology(client, { id, name, url }).then((value) => {
-    res.send(value);
-  });
+  addApplicationTechnology(client, { id, name, url })
+    .then((value) => {
+      res.send(value);
+    })
+    .catch(() => {
+      res.sendStatus(400);
+    });
 };
 
 export default { putApplication, get, put };

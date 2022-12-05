@@ -6,9 +6,13 @@ import {
 import { client } from '../edgedb';
 
 const get = (req: Request, res: Response) => {
-  getAllApplications(client).then((value) => {
-    res.send(value);
-  });
+  getAllApplications(client)
+    .then((value) => {
+      res.send(value);
+    })
+    .catch(() => {
+      res.sendStatus(400);
+    });
 };
 
 const put = (req: Request, res: Response) => {
@@ -17,8 +21,12 @@ const put = (req: Request, res: Response) => {
     res.sendStatus(400);
     return;
   }
-  updateApplication(client, { id, name, url, priority }).then((value) => {
-    res.send(value);
-  });
+  updateApplication(client, { id, name, url, priority })
+    .then((value) => {
+      res.send(value);
+    })
+    .catch(() => {
+      res.sendStatus(400);
+    });
 };
 export default { get, put };
