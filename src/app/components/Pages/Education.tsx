@@ -17,7 +17,7 @@ export function Education({ data, display }: Props): ReactElement {
             data.map(({ school, time, certificate, degree }, idx: number) => (
               <FullPost
                 title={school}
-                subtitle={certificate || degree}
+                subtitles={[degree, certificate]}
                 time={time}
                 key={school + idx}
               />

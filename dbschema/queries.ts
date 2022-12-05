@@ -36,11 +36,29 @@ export async function getAllTechnicalSkills(client: Client): Promise<{
 order by .stack asc;`);
 }
 
-export async function getTechStacks(client: Client): Promise<{
+export async function getAllExperiences(client: Client): Promise<{
   "id": string;
-  "stack": string;
+  "employer": string;
+  "position": string;
+  "time": string;
+  "active": boolean | null;
+  "descriptions": {
+    "description": string;
+    "id": string;
+  }[];
+  "priority": number | null;
 }[]> {
-  return client.query(`select TechStack {id, stack};`);
+  return client.query(`select Experience 
+{
+  id,
+  employer, 
+  position, 
+  time, 
+  active, 
+  descriptions: {description, id},
+  priority
+}
+order by .priority asc;`);
 }
 
 export async function getAllTechnologies(client: Client): Promise<{
@@ -71,6 +89,118 @@ export async function getDescription(client: Client, args: {
 filter .id = <uuid>$id;`, args);
 }
 
+export async function getTechStacks(client: Client): Promise<{
+  "id": string;
+  "stack": string;
+}[]> {
+  return client.query(`select TechStack {id, stack};`);
+}
+
+export async function updateApplication(client: Client, args: {
+  "id": string;
+  "name"?: string | null;
+  "url"?: string | null;
+  "priority"?: number | null;
+}): Promise<{
+  "id": string;
+  "name": string;
+  "url": string | null;
+  "active": boolean | null;
+  "descriptions": {
+    "description": string;
+    "id": string;
+  }[];
+  "technologies": {
+    "name": string;
+    "url": string | null;
+    "id": string;
+  }[];
+  "priority": number | null;
+} | null> {
+  return client.querySingle(`update Application
+filter .id = <uuid>$id
+set {
+  name := <optional str>$name,
+  url := <optional str>$url,
+  priority := <optional int32>$priority
+};
+select Application {
+  id, 
+  name, 
+  url,
+  active, 
+  descriptions: {description, id}, 
+  technologies: {name, url, id},
+  priority
+}
+filter .id = <uuid>$id;`, args);
+}
+
+export async function updateDescription(client: Client, args: {
+  "id": string;
+  "description"?: string | null;
+  "priority"?: number | null;
+}): Promise<{
+  "id": string;
+  "description": string;
+} | null> {
+  return client.querySingle(`update Description
+filter .id = <uuid>$id
+set {
+  description := <optional str>$description,
+  priority := <optional int32>$priority
+};
+select Description {id, description}
+filter .id = <uuid>$id;`, args);
+}
+
+export async function addApplicationTechnology(client: Client, args: {
+  "id": string;
+  "name": string;
+  "url": string;
+}): Promise<{
+  "id": string;
+} | null> {
+  return client.querySingle(`update Application
+filter .id = <uuid>$id
+set {
+  technologies += ( 
+    insert Technology {
+      name := <str>$name,
+      url := <str>$url
+    }
+  )
+}`, args);
+}
+
+export async function getAllApplications(client: Client): Promise<{
+  "id": string;
+  "name": string;
+  "url": string | null;
+  "active": boolean | null;
+  "descriptions": {
+    "description": string;
+    "id": string;
+  }[];
+  "technologies": {
+    "name": string;
+    "url": string | null;
+    "id": string;
+  }[];
+  "priority": number | null;
+}[]> {
+  return client.query(`select Application {
+  id, 
+  name, 
+  url,
+  active, 
+  descriptions: {description, id}, 
+  technologies: {name, url, id},
+  priority
+}
+order by .priority asc;`);
+}
+
 export async function addTechnology(client: Client, args: {
   "name": string;
   "stack": string;
@@ -88,40 +218,35 @@ export async function addTechnology(client: Client, args: {
 } unless conflict on .name;`, args);
 }
 
-export async function getAllExperiences(client: Client): Promise<{
+export async function updateEducation(client: Client, args: {
   "id": string;
-  "employer": string;
-  "position": string;
+  "school": string;
   "time": string;
-  "active": boolean | null;
-  "descriptions": {
-    "description": string;
-    "id": string;
-  }[];
-  "priority": number | null;
-}[]> {
-  return client.query(`select Experience 
-{
-  id,
-  employer, 
-  position, 
-  time, 
-  active, 
-  descriptions: {description, id},
-  priority
-}
-order by .priority asc;`);
-}
-
-export async function getAllEducations(client: Client): Promise<{
+  "certificate"?: string | null;
+  "degree"?: string | null;
+  "active"?: boolean | null;
+  "priority"?: number | null;
+}): Promise<{
+  "id": string;
   "school": string;
   "time": string;
   "certificate": string | null;
   "degree": string | null;
   "active": boolean | null;
   "priority": number | null;
-}[]> {
-  return client.query(`select Education {
+} | null> {
+  return client.querySingle(`update Education
+filter .id = <uuid>$id
+set {
+  school := <str>$school,
+  time := <str>$time,
+  certificate := <optional str>$certificate,
+  degree := <optional str>$degree,
+  active := <optional bool>$active,
+  priority := <optional int32>$priority
+};
+select Education {
+  id,
   school, 
   time, 
   certificate, 
@@ -129,7 +254,7 @@ export async function getAllEducations(client: Client): Promise<{
   active,
   priority
 }
-order by .priority asc;`);
+filter .id = <uuid>$id;`, args);
 }
 
 export async function updateExperience(client: Client, args: {
@@ -206,107 +331,23 @@ select Technology
 filter .id = <uuid>$id;`, args);
 }
 
-export async function updateDescription(client: Client, args: {
+export async function getAllEducations(client: Client): Promise<{
   "id": string;
-  "description"?: string | null;
-  "priority"?: number | null;
-}): Promise<{
-  "id": string;
-  "description": string;
-} | null> {
-  return client.querySingle(`update Description
-filter .id = <uuid>$id
-set {
-  description := <optional str>$description,
-  priority := <optional int32>$priority
-};
-select Description {id, description}
-filter .id = <uuid>$id;`, args);
-}
-
-export async function getAllApplications(client: Client): Promise<{
-  "id": string;
-  "name": string;
-  "url": string | null;
+  "school": string;
+  "time": string;
+  "certificate": string | null;
+  "degree": string | null;
   "active": boolean | null;
-  "descriptions": {
-    "description": string;
-    "id": string;
-  }[];
-  "technologies": {
-    "name": string;
-    "url": string | null;
-    "id": string;
-  }[];
   "priority": number | null;
 }[]> {
-  return client.query(`select Application {
-  id, 
-  name, 
-  url,
-  active, 
-  descriptions: {description, id}, 
-  technologies: {name, url, id},
+  return client.query(`select Education {
+  id,
+  school, 
+  time, 
+  certificate, 
+  degree, 
+  active,
   priority
 }
 order by .priority asc;`);
-}
-
-export async function addApplicationTechnology(client: Client, args: {
-  "id": string;
-  "name": string;
-  "url": string;
-}): Promise<{
-  "id": string;
-} | null> {
-  return client.querySingle(`update Application
-filter .id = <uuid>$id
-set {
-  technologies += ( 
-    insert Technology {
-      name := <str>$name,
-      url := <str>$url
-    }
-  )
-}`, args);
-}
-
-export async function updateApplication(client: Client, args: {
-  "id": string;
-  "name"?: string | null;
-  "url"?: string | null;
-  "priority"?: number | null;
-}): Promise<{
-  "id": string;
-  "name": string;
-  "url": string | null;
-  "active": boolean | null;
-  "descriptions": {
-    "description": string;
-    "id": string;
-  }[];
-  "technologies": {
-    "name": string;
-    "url": string | null;
-    "id": string;
-  }[];
-  "priority": number | null;
-} | null> {
-  return client.querySingle(`update Application
-filter .id = <uuid>$id
-set {
-  name := <optional str>$name,
-  url := <optional str>$url,
-  priority := <optional int32>$priority
-};
-select Application {
-  id, 
-  name, 
-  url,
-  active, 
-  descriptions: {description, id}, 
-  technologies: {name, url, id},
-  priority
-}
-filter .id = <uuid>$id;`, args);
 }

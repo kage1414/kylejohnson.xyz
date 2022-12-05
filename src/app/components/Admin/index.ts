@@ -6,3 +6,5 @@ export * from './EditSection';
 export * from './EditTechnicalSkillsContainer';
 export * from './EditApplication';
 export * from './EditApplicationContainer';
+export * from './EditEducation';
+export * from './EditEducationContainer';

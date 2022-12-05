@@ -19,7 +19,7 @@ export function Experience({ data, display }: Props): ReactElement {
                 <FullPost
                   key={id}
                   title={position}
-                  subtitle={employer}
+                  subtitles={employer}
                   time={time}
                   descriptions={descriptions}
                 />

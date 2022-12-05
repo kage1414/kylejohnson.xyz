@@ -4,17 +4,21 @@ import { FullPostHeaderSubmittedText } from '.';
 
 interface Props {
   title: string;
-  subtitle?: string | null;
+  subtitles?: string | Array<string | null | undefined>;
   time?: string;
   url?: string;
 }
 
 export function FullPostHeader({
   title,
-  subtitle,
+  subtitles,
   url,
   time,
 }: Props): ReactElement {
+  if (!Array.isArray(subtitles) && typeof subtitles === 'string') {
+    subtitles = [subtitles];
+  }
+
   return (
     <Box>
       <Link
@@ -25,7 +29,12 @@ export function FullPostHeader({
       >
         {title}
       </Link>
-      {subtitle && <Typography>{subtitle}</Typography>}
+      {subtitles &&
+        subtitles
+          .filter((subtitle) => !!subtitle)
+          .map((subtitle, idx) => (
+            <Typography key={`${subtitle} ${idx}`}>{subtitle}</Typography>
+          ))}
       {time && <FullPostHeaderSubmittedText time={time} />}
     </Box>
   );

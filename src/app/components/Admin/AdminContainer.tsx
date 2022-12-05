@@ -8,6 +8,7 @@ import {
   EditExperienceContainer,
   EditTechnicalSkillsContainer,
   EditApplicationContainer,
+  EditEducationContainer,
 } from '.';
 
 export function AdminContainer({ selectedTab }: Props): ReactElement {
@@ -16,6 +17,7 @@ export function AdminContainer({ selectedTab }: Props): ReactElement {
       <EditExperienceContainer display={selectedTab === 0} />
       <EditTechnicalSkillsContainer display={selectedTab === 1} />
       <EditApplicationContainer display={selectedTab === 2} />
+      <EditEducationContainer display={selectedTab === 3} />
     </Grid>
   );
 }

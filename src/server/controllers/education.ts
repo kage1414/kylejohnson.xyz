@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getAllEducations } from '../../../dbschema/queries';
+import { getAllEducations, updateEducation } from '../../../dbschema/queries';
 import { client } from '../edgedb';
 
 const get = (req: Request, res: Response) => {
@@ -8,4 +8,15 @@ const get = (req: Request, res: Response) => {
   });
 };
 
-export default { get };
+const put = (req: Request, res: Response) => {
+  const { id } = req.body;
+  if (!id) {
+    res.sendStatus(400);
+    return;
+  }
+  updateEducation(client, req.body).then((value) => {
+    res.send(value);
+  });
+};
+
+export default { get, put };

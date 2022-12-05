@@ -5,7 +5,7 @@ import type { Description, Technology } from 'dbTypes';
 
 interface Props {
   title: string;
-  subtitle?: string | null;
+  subtitles?: string | Array<string | null | undefined>;
   descriptions?: Description[];
   technologies?: Technology[];
   time?: string;
@@ -14,7 +14,7 @@ interface Props {
 
 export function FullPost({
   title,
-  subtitle,
+  subtitles,
   descriptions,
   technologies,
   time,
@@ -35,7 +35,7 @@ export function FullPost({
       >
         <FullPostHeader
           title={title}
-          subtitle={subtitle}
+          subtitles={subtitles}
           time={time}
           url={url}
         />
