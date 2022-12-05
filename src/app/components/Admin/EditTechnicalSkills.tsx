@@ -18,6 +18,13 @@ export function EditTechnicalSkills(): ReactElement {
       headerName: 'Stack',
       width: 300,
     },
+    {
+      field: 'priority',
+      editable: true,
+      headerName: 'Priority',
+      width: 75,
+      type: 'number',
+    },
   ];
   const getStackOptions = () => {
     axios

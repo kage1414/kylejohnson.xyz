@@ -18,7 +18,7 @@ const get = (req: Request, res: Response) => {
 };
 
 const put = (req: Request, res: Response) => {
-  const { id, description } = req.body;
+  const { id, description, priority } = req.body;
   if (!id || !description) {
     res.sendStatus(400);
     return;
@@ -26,6 +26,7 @@ const put = (req: Request, res: Response) => {
   updateDescription(client, {
     id: id.toString(),
     description: description.toString(),
+    priority,
   })
     .then((value) => {
       res.send(value);

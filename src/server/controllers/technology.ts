@@ -9,26 +9,33 @@ import { client } from '../edgedb';
 const get = (req: Request, res: Response) => {
   getAllTechnologies(client).then((value) => {
     res.send(
-      value.map(({ id, name, stack }) => ({
+      value.map(({ id, name, stack, priority }) => ({
         id,
         name,
         stack: stack?.stack,
+        priority,
       }))
     );
   });
 };
 
 const put = (req: Request, res: Response) => {
-  const { id, name, stack } = req.body;
+  const { id, name, stack, priority } = req.body;
   if (!id) {
     res.sendStatus(400);
     return;
   }
-  updateTechnology(client, { id, name, stack }).then((value) => {
+  updateTechnology(client, {
+    id,
+    name,
+    stack,
+    priority: priority === null ? 0 : priority,
+  }).then((value) => {
     res.send({
       id: value?.id,
       name: value?.name,
       stack: value?.stack?.stack,
+      priority: value?.priority,
     });
   });
 };

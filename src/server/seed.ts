@@ -1,6 +1,7 @@
 import { client } from './edgedb';
 import mock from './mock-db';
 import e from '../../dbschema/edgeql-js';
+import { addTechnology } from '../../dbschema/queries';
 
 const deleteAllRecords = async () => {
   const queryApplication = e.delete(e.Application);
@@ -78,20 +79,6 @@ const seedApplication = async () => {
   return;
 };
 
-const seedTechnology = async () => {
-  await mock.technical_skills.forEach(async (app) => {
-    app.technologies.forEach(async (tech) => {
-      const createTechnology = e
-        .insert(e.Technology, {
-          name: tech,
-        })
-        .unlessConflict();
-      await createTechnology.run(client);
-    });
-  });
-  return;
-};
-
 const seedTechStacks = async () => {
   await mock.technical_skills.forEach(async (app) => {
     const createTechStack = e
@@ -100,6 +87,15 @@ const seedTechStacks = async () => {
       })
       .unlessConflict();
     await createTechStack.run(client);
+  });
+  return;
+};
+
+const seedTechnology = async () => {
+  await mock.technical_skills.forEach(async (app) => {
+    app.technologies.forEach(async (tech) => {
+      await addTechnology(client, { name: tech, stack: app.stack });
+    });
   });
   return;
 };

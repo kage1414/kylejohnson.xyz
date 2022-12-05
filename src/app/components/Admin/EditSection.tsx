@@ -53,7 +53,7 @@ export function EditSection({
   }, []);
 
   return (
-    <Box height={'75vh'} width={'75vw'}>
+    <Box height={'75vh'} width={'85vw'}>
       {loading ? (
         <CircularProgress />
       ) : (

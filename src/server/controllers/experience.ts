@@ -9,7 +9,7 @@ const get = (req: Request, res: Response) => {
 };
 
 const put = (req: Request, res: Response) => {
-  const { id, employer, position, time, active } = req.body;
+  const { id, employer, position, time, active, priority } = req.body;
   if (!id) {
     res.sendStatus(400);
   }
@@ -18,7 +18,8 @@ const put = (req: Request, res: Response) => {
     employer,
     position,
     time,
-    active,
+    active: active === null ? true : active,
+    priority: priority === null ? -1 : priority,
   }).then((value) => {
     res.send(value);
   });

@@ -45,6 +45,13 @@ export function EditExperience(): ReactElement {
         );
       },
     },
+    {
+      field: 'priority',
+      type: 'number',
+      editable: true,
+      headerName: 'Priority',
+      width: 75,
+    },
   ];
   const descriptionColumns: GridColDef[] = [
     { field: 'id', headerName: 'ID', editable: false },

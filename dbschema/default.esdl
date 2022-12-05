@@ -3,20 +3,26 @@ module default {
     required property employer -> str;
     required property position -> str;
     required property time -> str;
-    property active -> bool;
+    property active -> bool {
+      default := true;
+    };
     multi link descriptions -> Description {
       constraint exclusive
     };
+    property priority -> int32;
   }
 
   type Application {
     required property name -> str;
     property url -> str;
-    property active -> bool;
+    property active -> bool {
+      default := true;
+    };
     multi link descriptions -> Description {
       constraint exclusive
     };
     multi link technologies -> Technology;
+    property priority -> int32;
   }
 
   type Education {
@@ -27,10 +33,12 @@ module default {
     property active -> bool {
       default := true;
     };
+    property priority -> int32;
   }
 
   type Description {
     required property description -> str;
+    property priority -> int32;
   }
 
   type Technology {
@@ -39,10 +47,11 @@ module default {
     };
     property url -> str;
     link stack -> TechStack;
+    property priority -> int32;
   }
 
   type TechStack {
-    required property stack -> str{
+    required property stack -> str {
       constraint exclusive;
     };
   }
