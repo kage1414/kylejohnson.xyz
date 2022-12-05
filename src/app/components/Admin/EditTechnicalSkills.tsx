@@ -25,13 +25,6 @@ export function EditTechnicalSkills(): ReactElement {
       width: 75,
       type: 'number',
     },
-    {
-      field: 'active',
-      headerName: 'Active',
-      editable: true,
-      width: 150,
-      type: 'boolean',
-    },
   ];
   const getStackOptions = () => {
     axios
