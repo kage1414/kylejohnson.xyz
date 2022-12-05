@@ -1,1 +1,4 @@
-select TechStack {stack, technologies: {name, url}};
+select TechStack {
+  stack,
+  technologies := .<stack[is Technology] {name, url}
+};

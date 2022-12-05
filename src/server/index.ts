@@ -40,6 +40,7 @@ app.put('/api/experience', experience.put);
 app.get('/api/technical_skills', technical_skills.get);
 
 app.get('/api/technologies', technology.get);
+app.put('/api/technology', technology.put);
 
 app.get('/api/tech_stacks', tech_stack.get);
 

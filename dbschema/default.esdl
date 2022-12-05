@@ -38,12 +38,12 @@ module default {
       constraint exclusive;
     };
     property url -> str;
+    link stack -> TechStack;
   }
 
   type TechStack {
-    required property stack -> str;
-    multi link technologies -> Technology{
-      constraint exclusive
+    required property stack -> str{
+      constraint exclusive;
     };
   }
 }

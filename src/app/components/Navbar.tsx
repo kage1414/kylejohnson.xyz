@@ -35,6 +35,7 @@ export function Navbar({ selectedTab, setSelectedTab }: Props): ReactElement {
   const switchTabs = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
   };
+  console.log({ pathname });
   return (
     <Toolbar
       color='secondary'
@@ -45,7 +46,9 @@ export function Navbar({ selectedTab, setSelectedTab }: Props): ReactElement {
       <Grid container pb={0}>
         <Grid display='flex' alignItems='flex-end' item>
           <Link to={'/'}>
-            <Typography variant='h5'>kyle johnson</Typography>
+            <Typography variant='h5'>
+              {`kyle johnson${pathname === '/admin' ? ' admin' : ''}`}
+            </Typography>
           </Link>
         </Grid>
         <Grid item>

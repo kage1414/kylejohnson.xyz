@@ -3,14 +3,14 @@ import mock from './mock-db';
 import e from '../../dbschema/edgeql-js';
 
 const deleteAllRecords = async () => {
-  const queryExperience = e.delete(e.Experience);
-  await queryExperience.run(client);
   const queryApplication = e.delete(e.Application);
   await queryApplication.run(client);
-  const queryTechStack = e.delete(e.TechStack);
-  await queryTechStack.run(client);
   const queryTechnology = e.delete(e.Technology);
   await queryTechnology.run(client);
+  const queryTechStack = e.delete(e.TechStack);
+  await queryTechStack.run(client);
+  const queryExperience = e.delete(e.Experience);
+  await queryExperience.run(client);
   const queryDescription = e.delete(e.Description);
   await queryDescription.run(client);
   const queryEducation = e.delete(e.Education);
@@ -69,7 +69,6 @@ const seedApplication = async () => {
       const updateApplication = e.update(e.Application, () => ({
         filter_single: { id: applicationResult.id },
         set: {
-          // @ts-ignore
           technologies: { '+=': createTechnology },
         },
       }));
@@ -81,25 +80,26 @@ const seedApplication = async () => {
 
 const seedTechnology = async () => {
   await mock.technical_skills.forEach(async (app) => {
-    const createTechStack = e.insert(e.TechStack, {
-      stack: app.stack,
-    });
-    const techStackResult = await createTechStack.run(client);
     app.technologies.forEach(async (tech) => {
       const createTechnology = e
         .insert(e.Technology, {
           name: tech,
         })
         .unlessConflict();
-      const updateTechStack = e.update(e.TechStack, () => ({
-        filter_single: { id: techStackResult.id },
-        set: {
-          // @ts-ignore
-          technologies: { '+=': createTechnology },
-        },
-      }));
-      await updateTechStack.run(client);
+      await createTechnology.run(client);
     });
+  });
+  return;
+};
+
+const seedTechStacks = async () => {
+  await mock.technical_skills.forEach(async (app) => {
+    const createTechStack = e
+      .insert(e.TechStack, {
+        stack: app.stack,
+      })
+      .unlessConflict();
+    await createTechStack.run(client);
   });
   return;
 };
@@ -122,6 +122,7 @@ const seed = async (): Promise<void> => {
   await seedApplication();
   await seedTechnology();
   await seedEducation();
+  await seedTechStacks();
 };
 
 seed();

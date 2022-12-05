@@ -3,10 +3,9 @@ import axios from 'axios';
 import { Technology as TechnologyData } from 'dbTypes';
 import { GridColDef, GridRowModel } from '@mui/x-data-grid';
 import { EditSection } from './EditSection';
-import { getTechStacks } from '../../../../dbschema/queries';
 
 export function EditTechnicalSkills(): ReactElement {
-  const [experience, setExperience] = useState<TechnologyData[]>([]);
+  const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
   const [loading, setLoading] = useState(false);
   const [stackOptions, setStackOptions] = useState([]);
   const columns: GridColDef[] = [
@@ -18,6 +17,10 @@ export function EditTechnicalSkills(): ReactElement {
       editable: true,
       headerName: 'Stack',
       width: 300,
+      valueParser(value, params?) {
+        console.log(value);
+        return value;
+      },
     },
   ];
   const getStackOptions = () => {
@@ -30,13 +33,13 @@ export function EditTechnicalSkills(): ReactElement {
         console.error(response);
       });
   };
-  const getExperienceData = () => {
+  const getTechnicalSkillsData = () => {
     setLoading(true);
     axios
       .get('/api/technologies')
       .then(({ data }) => {
         setLoading(false);
-        setExperience(data || []);
+        setTechnologies(data || []);
       })
       .catch((response) => {
         console.error(response);
@@ -48,13 +51,14 @@ export function EditTechnicalSkills(): ReactElement {
   };
   const onRowUpdate = useCallback(
     (newRow: GridRowModel, oldRow: GridRowModel) => {
+      const data = { ...newRow, oldStack: oldRow.stack };
       return axios({
         method: 'PUT',
         url: '/api/technology',
-        data: newRow,
+        data,
       })
-        .then((response) => {
-          return response.data;
+        .then(({ data: responseData }) => {
+          return responseData;
         })
         .catch((error) => {
           console.error(error);
@@ -71,9 +75,9 @@ export function EditTechnicalSkills(): ReactElement {
   return (
     <EditSection
       loading={loading}
-      primaryData={experience}
+      primaryData={technologies}
       primaryColumns={columns}
-      fetchData={getExperienceData}
+      fetchData={getTechnicalSkillsData}
       onUpdateRowPrimary={onRowUpdate}
       onUpdateRowError={onUpdateRowError}
     />

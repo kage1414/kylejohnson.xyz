@@ -6,7 +6,7 @@ export default {
         'Javascript',
         'Typescript',
         'Flow',
-        'React.js (Hooks and Redux)',
+        'React',
         'GraphQL',
         'Redux',
         'styled-components',
@@ -19,8 +19,8 @@ export default {
       technologies: [
         'Hack',
         'PHP',
-        'Node.js',
-        'Express.js',
+        'Node',
+        'Express',
         'GraphQL',
         'Relay',
         'Service Oriented Architecture (SOA)',
@@ -57,7 +57,7 @@ export default {
     {
       stack: 'other tools',
       technologies: [
-        'Underscore.js',
+        'Underscore',
         'Cloudflare',
         'Ubuntu',
         'Arch Linux',
