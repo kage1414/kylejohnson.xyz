@@ -1,0 +1,1 @@
+select TechStack {id, stack};

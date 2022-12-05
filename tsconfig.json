@@ -1,5 +1,4 @@
 {
-  "extends": "./tsconfig.paths.json",
   "compilerOptions": {
     "target": "es2018",
     "lib": [
@@ -14,7 +13,6 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -25,6 +23,8 @@
     "strictNullChecks": true
   },
   "include": [
-    "client/src"
-  ]
+    "src"
+  ],
+  "exclude": ["node_modules", "src/dist"],
+  "extends": "./tsconfig.paths.json",
 }

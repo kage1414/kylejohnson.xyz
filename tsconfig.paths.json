@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["client/src/*"]
+      "@/*": ["src/*"],
+      "dbTypes": ["dbschema/interfaces.ts"],
+      "queries": ["dbschema/queries.ts"]
     }
   }
 }
