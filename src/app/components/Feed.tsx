@@ -24,15 +24,19 @@ export function Feed({ selectedTab }: Props): ReactElement {
   >([]);
 
   const fetchApplicationData = () => {
-    axios.get(BASE_URL + '/api/applications').then(({ data }) => {
-      setApplicationData(data || []);
-    });
+    axios
+      .get(BASE_URL + '/api/applications')
+      .then(({ data }: { data: ApplicationData[] }) => {
+        setApplicationData(data.filter((ele) => !!ele.active) || []);
+      });
   };
 
   const fetchEducationData = () => {
-    axios.get(BASE_URL + '/api/education').then(({ data }) => {
-      setEducationData(data || []);
-    });
+    axios
+      .get(BASE_URL + '/api/education')
+      .then(({ data }: { data: EducationData[] }) => {
+        setEducationData(data.filter((ele) => !!ele.active) || []);
+      });
   };
 
   const fetchTechnicalSkillsData = () => {
@@ -42,9 +46,11 @@ export function Feed({ selectedTab }: Props): ReactElement {
   };
 
   const fetchExperienceData = () => {
-    axios.get(BASE_URL + '/api/experience').then(({ data }) => {
-      setExperienceData(data || []);
-    });
+    axios
+      .get(BASE_URL + '/api/experience')
+      .then(({ data }: { data: ExperienceData[] }) => {
+        setExperienceData(data.filter((ele) => !!ele.active) || []);
+      });
   };
 
   useEffect(() => {

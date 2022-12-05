@@ -24,13 +24,6 @@ export function EditExperience(): ReactElement {
     { field: 'position', editable: true, headerName: 'Position', width: 300 },
     { field: 'time', editable: true, headerName: 'Time', width: 300 },
     {
-      field: 'active',
-      headerName: 'Active',
-      editable: true,
-      width: 150,
-      type: 'boolean',
-    },
-    {
       field: 'descriptions',
       width: 300,
       renderCell: (params) => {
@@ -50,6 +43,13 @@ export function EditExperience(): ReactElement {
       editable: true,
       headerName: 'Priority',
       width: 75,
+    },
+    {
+      field: 'active',
+      headerName: 'Active',
+      editable: true,
+      width: 150,
+      type: 'boolean',
     },
   ];
   const descriptionColumns: GridColDef[] = [

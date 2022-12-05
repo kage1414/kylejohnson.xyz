@@ -18,18 +18,18 @@ export function EditEducation(): ReactElement {
     },
     { field: 'degree', headerName: 'Degree', editable: true, width: 200 },
     {
-      field: 'active',
-      headerName: 'Active',
-      editable: true,
-      width: 150,
-      type: 'boolean',
-    },
-    {
       field: 'priority',
       editable: true,
       headerName: 'Priority',
       width: 75,
       type: 'number',
+    },
+    {
+      field: 'active',
+      headerName: 'Active',
+      editable: true,
+      width: 150,
+      type: 'boolean',
     },
   ];
   const getEducationData = () => {

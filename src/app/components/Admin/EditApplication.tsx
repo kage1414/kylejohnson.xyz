@@ -28,14 +28,6 @@ export function EditApplication(): ReactElement {
     { field: 'name', headerName: 'Name', editable: true, width: 200 },
     { field: 'url', headerName: 'Url', editable: true, width: 300 },
     {
-      field: 'active',
-      headerName: 'Active',
-      type: 'boolean',
-      editable: true,
-      valueGetter: (params: GridValueGetterParams) =>
-        params.row.active === null ? true : params.row.active,
-    },
-    {
       field: 'descriptions',
       headerName: 'Descriptions',
       width: 175,
@@ -55,7 +47,6 @@ export function EditApplication(): ReactElement {
       headerName: 'Technologies',
       width: 175,
       renderCell: (params) => {
-        console.log({ params });
         return (
           <Button
             onClick={() => {
@@ -72,6 +63,14 @@ export function EditApplication(): ReactElement {
       editable: true,
       headerName: 'Priority',
       width: 75,
+    },
+    {
+      field: 'active',
+      headerName: 'Active',
+      type: 'boolean',
+      editable: true,
+      valueGetter: (params: GridValueGetterParams) =>
+        params.row.active === null ? true : params.row.active,
     },
   ];
   const descriptionColumns: GridColDef[] = [

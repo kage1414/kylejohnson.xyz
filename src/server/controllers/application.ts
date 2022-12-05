@@ -16,12 +16,12 @@ const get = (req: Request, res: Response) => {
 };
 
 const put = (req: Request, res: Response) => {
-  const { id, name, url, priority } = req.body;
+  const { id, name, url, active, priority } = req.body;
   if (!id) {
     res.sendStatus(400);
     return;
   }
-  updateApplication(client, { id, name, url, priority })
+  updateApplication(client, { id, name, url, active, priority })
     .then((value) => {
       res.send(value);
     })
