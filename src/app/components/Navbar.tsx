@@ -35,7 +35,6 @@ export function Navbar({ selectedTab, setSelectedTab }: Props): ReactElement {
   const switchTabs = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
   };
-  console.log({ pathname });
   return (
     <Toolbar
       color='secondary'

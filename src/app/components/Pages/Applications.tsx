@@ -14,7 +14,7 @@ export function Applications({ data = [], display }: Props): ReactElement {
       {display && (
         <Box>
           {data.map((data) => {
-            return <Application data={data} />;
+            return <Application key={data.id} data={data} />;
           })}
         </Box>
       )}

@@ -17,10 +17,6 @@ export function EditTechnicalSkills(): ReactElement {
       editable: true,
       headerName: 'Stack',
       width: 300,
-      valueParser(value, params?) {
-        console.log(value);
-        return value;
-      },
     },
   ];
   const getStackOptions = () => {
