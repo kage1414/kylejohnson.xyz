@@ -88,7 +88,7 @@ export function EditSection({
                 <DataGrid
                   experimentalFeatures={{ newEditingApi: true }}
                   columns={tertiaryColumns}
-                  rows={secondaryData || []}
+                  rows={tertiaryData || []}
                   pageSize={5}
                   rowsPerPageOptions={[5]}
                   processRowUpdate={onUpdateRowTertiary}
