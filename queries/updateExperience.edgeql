@@ -1,11 +1,11 @@
 update Experience
 filter .id = <uuid>$id
 set {
-  employer := <str>$employer,
-  time := <str>$time,
-  position := <str>$position,
-  active := <bool>$active,
-  priority := <int32>$priority
+  employer := <optional str>$employer,
+  time := <optional str>$time,
+  position := <optional str>$position,
+  active := <optional bool>$active,
+  priority := <optional int32>$priority
 };
 select Experience {id,
   employer,

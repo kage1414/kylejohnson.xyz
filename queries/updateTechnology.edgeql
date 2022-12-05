@@ -1,11 +1,11 @@
 update Technology
 filter .id = <uuid>$id
 set {
-  name := <str>$name,
-  priority := <int32>$priority,
+  name := <optional str>$name,
+  priority := <optional int32>$priority,
   stack := (
     select TechStack
-    filter .stack = <str>$stack
+    filter .stack = <optional str>$stack
     limit 1
   )
 };

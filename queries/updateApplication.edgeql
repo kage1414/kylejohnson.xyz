@@ -1,7 +1,7 @@
 update Application
 filter .id = <uuid>$id
 set {
-  name := <str>$name,
-  url := <str>$url,
-  priority := <int32>$priority
+  name := <optional str>$name,
+  url := <optional str>$url,
+  priority := <optional int32>$priority
 };

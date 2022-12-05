@@ -20,17 +20,12 @@ const get = (req: Request, res: Response) => {
 };
 
 const put = (req: Request, res: Response) => {
-  const { id, name, stack, priority } = req.body;
+  const { id } = req.body;
   if (!id) {
     res.sendStatus(400);
     return;
   }
-  updateTechnology(client, {
-    id,
-    name,
-    stack,
-    priority: priority === null ? 0 : priority,
-  }).then((value) => {
+  updateTechnology(client, req.body).then((value) => {
     res.send({
       id: value?.id,
       name: value?.name,

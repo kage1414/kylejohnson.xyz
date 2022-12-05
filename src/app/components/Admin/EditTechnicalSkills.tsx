@@ -54,11 +54,10 @@ export function EditTechnicalSkills(): ReactElement {
   };
   const onRowUpdate = useCallback(
     (newRow: GridRowModel, oldRow: GridRowModel) => {
-      const data = { ...newRow, oldStack: oldRow.stack };
       return axios({
         method: 'PUT',
         url: '/api/technology',
-        data,
+        data: newRow,
       })
         .then(({ data: responseData }) => {
           return responseData;

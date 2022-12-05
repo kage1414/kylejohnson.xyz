@@ -18,8 +18,8 @@ const put = (req: Request, res: Response) => {
     employer,
     position,
     time,
-    active: active === null ? true : active,
-    priority: priority === null ? -1 : priority,
+    active,
+    priority,
   }).then((value) => {
     res.send(value);
   });
