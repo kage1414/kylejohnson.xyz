@@ -1,17 +1,17 @@
-import { ReactElement, useState, useCallback, useEffect } from "react";
-import axios from "axios";
+import { ReactElement, useState, useCallback, useEffect } from 'react';
+import axios from 'axios';
 import {
   Application as ApplicationData,
   Description as DescriptionData,
   Technology as TechnologyData,
-} from "dbschema/interfaces";
-import { Button } from "@mui/material";
+} from 'dbschema/interfaces';
+import { Button } from '@mui/material';
 import {
   GridColDef,
   GridValueGetterParams,
   GridRowModel,
-} from "@mui/x-data-grid";
-import { EditSection } from "./EditSection";
+} from '@mui/x-data-grid';
+import { EditSection } from './EditSection';
 
 export function EditApplication(): ReactElement {
   const [application, setApplication] = useState<ApplicationData[]>([]);
@@ -25,11 +25,11 @@ export function EditApplication(): ReactElement {
     TechnologyData[]
   >([]);
   const columns: GridColDef[] = [
-    { field: "name", headerName: "Name", editable: true, width: 200 },
-    { field: "url", headerName: "Url", editable: true, width: 300 },
+    { field: 'name', headerName: 'Name', editable: true, width: 200 },
+    { field: 'url', headerName: 'Url', editable: true, width: 300 },
     {
-      field: "descriptions",
-      headerName: "Descriptions",
+      field: 'descriptions',
+      headerName: 'Descriptions',
       width: 175,
       renderCell: (params) => {
         return (
@@ -43,8 +43,8 @@ export function EditApplication(): ReactElement {
       },
     },
     {
-      field: "technologies",
-      headerName: "Technologies",
+      field: 'technologies',
+      headerName: 'Technologies',
       width: 175,
       renderCell: (params) => {
         return (
@@ -58,16 +58,16 @@ export function EditApplication(): ReactElement {
       },
     },
     {
-      field: "priority",
-      type: "number",
+      field: 'priority',
+      type: 'number',
       editable: true,
-      headerName: "Priority",
+      headerName: 'Priority',
       width: 75,
     },
     {
-      field: "active",
-      headerName: "Active",
-      type: "boolean",
+      field: 'active',
+      headerName: 'Active',
+      type: 'boolean',
       editable: true,
       valueGetter: (params: GridValueGetterParams) =>
         params.row.active === null ? true : params.row.active,
@@ -75,22 +75,22 @@ export function EditApplication(): ReactElement {
   ];
   const descriptionColumns: GridColDef[] = [
     {
-      field: "description",
-      headerName: "Description",
+      field: 'description',
+      headerName: 'Description',
       editable: true,
       width: 500,
     },
-    { field: "priority", headerName: "Priority", editable: true },
+    { field: 'priority', headerName: 'Priority', editable: true },
   ];
   const technologyColumns: GridColDef[] = [
-    { field: "name", headerName: "Name", editable: true, width: 150 },
-    { field: "url", headerName: "Url", editable: true, width: 300 },
-    { field: "priority", headerName: "Priority", editable: true },
+    { field: 'name', headerName: 'Name', editable: true, width: 150 },
+    { field: 'url', headerName: 'Url', editable: true, width: 300 },
+    { field: 'priority', headerName: 'Priority', editable: true },
   ];
   const getApplicationData = () => {
     setLoading(true);
     axios
-      .get("/api/applications")
+      .get('/api/applications')
       .then(({ data }) => {
         setLoading(false);
         setApplication(data);
@@ -106,8 +106,8 @@ export function EditApplication(): ReactElement {
   const onRowUpdate = useCallback(
     (newRow: GridRowModel, oldRow: GridRowModel) => {
       return axios({
-        method: "PUT",
-        url: "/api/application",
+        method: 'PUT',
+        url: '/api/application',
         data: newRow,
       })
         .then((response) => {
@@ -123,8 +123,8 @@ export function EditApplication(): ReactElement {
   const onDescriptionRowUpdate = useCallback(
     (newRow: GridRowModel, oldRow: GridRowModel) => {
       return axios({
-        method: "PUT",
-        url: "/api/description",
+        method: 'PUT',
+        url: '/api/description',
         data: newRow,
       })
         .then((response) => {
@@ -140,8 +140,8 @@ export function EditApplication(): ReactElement {
   const onTechnologyRowUpdate = useCallback(
     (newRow: GridRowModel, oldRow: GridRowModel) => {
       return axios({
-        method: "PUT",
-        url: "/api/technology",
+        method: 'PUT',
+        url: '/api/technology',
         data: newRow,
       })
         .then((response) => {

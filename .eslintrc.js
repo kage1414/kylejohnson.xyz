@@ -4,8 +4,9 @@ module.exports = {
     ecmaVersion: 2020, // Allows for the parsing of modern ECMAScript features
     sourceType: 'module', // Allows for the use of imports
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'check-file'],
   extends: [
+    'next/core-web-vitals',
     'react-app',
     'plugin:react-hooks/recommended',
     'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
@@ -14,11 +15,11 @@ module.exports = {
   rules: {
     'object-shorthand': 'error',
     'no-useless-rename': 'error',
-    'no-unused-vars': 'warn',
+    'no-unused-vars': 'off',
     'prettier/prettier': 'error',
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'no-empty-function': 'off',
-    'no-unused-expressions': 'warn',
+    'no-unused-expressions': 'off',
     '@typescript-eslint/array-type': 'off',
     '@typescript-eslint/camelcase': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
@@ -65,6 +66,17 @@ module.exports = {
       {
         patterns: ['..'],
       },
+    ],
+    // Using a custom glob pattern since the built in 'KEBAB_CASE'
+    // doesn't allow numbers in the file/folder name
+    'check-file/folder-naming-convention': [
+      'error',
+      { 'src/**': '+([a-z0-9])*(-+([a-z0-9]))' },
+    ],
+    'check-file/filename-naming-convention': [
+      'error',
+      { 'src/**/*': '+([a-z0-9])*(-+([a-z0-9]))' },
+      { ignoreMiddleExtensions: true },
     ],
   },
   settings: {

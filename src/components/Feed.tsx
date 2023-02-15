@@ -1,15 +1,15 @@
-import { ReactElement, useState, useEffect } from "react";
-import { Grid } from "@mui/material";
-import axios from "axios";
-import { Applications, Education, Experience, TechnicalSkills } from "./Pages";
+import { ReactElement, useState, useEffect } from 'react';
+import { Grid } from '@mui/material';
+import axios from 'axios';
+import { Applications, Education, Experience, TechnicalSkills } from './Pages';
 import type {
   Application as ApplicationData,
   Education as EducationData,
   Experience as ExperienceData,
   TechStack as TechnicalSkillsData,
-} from "dbschema/interfaces";
+} from '../../dbschema/interfaces';
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = 'http://localhost:3000';
 
 interface Props {
   selectedTab: number;
@@ -25,32 +25,32 @@ export function Feed({ selectedTab }: Props): ReactElement {
 
   const fetchApplicationData = () => {
     axios
-      .get("/api/applications")
+      .get('/api/applications')
       .then(({ data }: { data: ApplicationData[] }) => {
         setApplicationData(data.filter((ele) => !!ele.active) || []);
       });
   };
 
   const fetchEducationData = () => {
-    axios.get("/api/education").then(({ data }: { data: EducationData[] }) => {
+    axios.get('/api/education').then(({ data }: { data: EducationData[] }) => {
       setEducationData(data.filter((ele) => !!ele.active) || []);
     });
   };
 
   const fetchTechnicalSkillsData = () => {
-    axios.get("/api/technical_skills").then(({ data }) => {
+    axios.get('/api/technical_skills').then(({ data }) => {
       setTechnicalSkillsData(data || []);
     });
   };
 
   const fetchExperienceData = () => {
     axios
-      .get("/api/experience")
+      .get('/api/experience')
       .then(({ data }: { data: ExperienceData[] }) => {
         setExperienceData(data.filter((ele) => !!ele.active) || []);
       })
       .catch((err) => {
-        console.log("here", { err });
+        console.log('here', { err });
       });
   };
 
@@ -61,7 +61,7 @@ export function Feed({ selectedTab }: Props): ReactElement {
     fetchTechnicalSkillsData();
   }, []);
   return (
-    <Grid container wrap="nowrap">
+    <Grid container wrap='nowrap'>
       <Grid item>
         <Experience data={experienceData} display={selectedTab === 0} />
         <TechnicalSkills

@@ -1,7 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { addApplicationDescription } from "dbschema/queries";
-import { client } from "../../edgedb";
-import { seed } from "../../seed";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { addApplicationDescription } from 'dbschema/queries';
+import { client } from '../../edgedb';
+import { seed } from '../../seed';
 
 export default async function educationHandler(
   req: NextApiRequest,
@@ -9,7 +9,7 @@ export default async function educationHandler(
 ) {
   const { method } = req;
   switch (method) {
-    case "POST":
+    case 'POST':
       await seed();
       res.status(200).end();
       break;

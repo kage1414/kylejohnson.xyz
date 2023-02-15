@@ -1,6 +1,6 @@
-import { ReactElement, useState } from "react";
-import { BottomNavigation, BottomNavigationAction, Link } from "@mui/material";
-import { Email, GitHub, LinkedIn } from "@mui/icons-material";
+import { ReactElement, useState } from 'react';
+import { BottomNavigation, BottomNavigationAction, Link } from '@mui/material';
+import { Email, GitHub, LinkedIn } from '@mui/icons-material';
 
 export function BottomBar(): ReactElement {
   const [value, setValue] = useState<string | null>(null);
@@ -17,17 +17,17 @@ export function BottomBar(): ReactElement {
       }}
     >
       <BottomNavigationAction
-        label={"email"}
+        label={'email'}
         // to='mailto:kylejohnson92294@gmail.com'
         icon={<Email />}
         component={Link}
       />
       <BottomNavigationAction
-        label={"github"}
+        label={'github'}
         icon={<GitHub />}
       ></BottomNavigationAction>
       <BottomNavigationAction
-        label={"linkedin"}
+        label={'linkedin'}
         icon={<LinkedIn />}
       ></BottomNavigationAction>
     </BottomNavigation>

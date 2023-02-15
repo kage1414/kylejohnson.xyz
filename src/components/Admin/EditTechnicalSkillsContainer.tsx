@@ -1,5 +1,5 @@
-import { ReactElement } from "react";
-import { EditTechnicalSkills } from ".";
+import { ReactElement } from 'react';
+import { EditTechnicalSkills } from '.';
 
 interface Props {
   display?: boolean;

@@ -1,10 +1,10 @@
-import { client } from "./edgedb";
-import mock from "./mock-db";
-import e from "../dbschema/edgeql-js";
-import { addTechnology } from "../dbschema/queries";
+import { client } from './edgedb';
+import mock from './mock-db';
+import e from '../dbschema/edgeql-js';
+import { addTechnology } from '../dbschema/queries';
 
 const deleteAllRecords = async () => {
-  console.log("Dropping tables");
+  console.log('Dropping tables');
   const queryApplication = e.delete(e.Application);
   await queryApplication.run(client);
   const queryTechnology = e.delete(e.Technology);
@@ -17,12 +17,12 @@ const deleteAllRecords = async () => {
   await queryDescription.run(client);
   const queryEducation = e.delete(e.Education);
   await queryEducation.run(client);
-  console.log("Tables dropped");
+  console.log('Tables dropped');
   return;
 };
 
 const seedExperience = async () => {
-  console.log("Experience starting...");
+  console.log('Experience starting...');
   await mock.experience.forEach(async (exp) => {
     const createExperience = e.insert(e.Experience, {
       employer: exp.employer,
@@ -37,18 +37,18 @@ const seedExperience = async () => {
       const updateExperience = e.update(e.Experience, () => ({
         filter_single: { id: experienceResult.id },
         set: {
-          descriptions: { "+=": createDescription },
+          descriptions: { '+=': createDescription },
         },
       }));
       await updateExperience.run(client);
     });
   });
-  console.log("Experience complete");
+  console.log('Experience complete');
   return;
 };
 
 const seedApplication = async () => {
-  console.log("Application starting...");
+  console.log('Application starting...');
   await mock.applications.forEach(async (app) => {
     const createApplication = e.insert(e.Application, {
       name: app.name,
@@ -61,7 +61,7 @@ const seedApplication = async () => {
       const updateApplication = e.update(e.Application, () => ({
         filter_single: { id: applicationResult.id },
         set: {
-          descriptions: { "+=": createDescription },
+          descriptions: { '+=': createDescription },
         },
       }));
       await updateApplication.run(client);
@@ -75,25 +75,25 @@ const seedApplication = async () => {
           return {
             on: tech.name,
             else: e.select(tech, () => ({
-              filter: e.op(tech.name, "=", technology),
+              filter: e.op(tech.name, '=', technology),
             })),
           };
         });
       const updateApplication = e.update(e.Application, () => ({
         filter_single: { id: applicationResult.id },
         set: {
-          technologies: { "+=": createTechnology },
+          technologies: { '+=': createTechnology },
         },
       }));
       await updateApplication.run(client);
     });
   });
-  console.log("Application complete");
+  console.log('Application complete');
   return;
 };
 
 const seedTechStacks = async () => {
-  console.log("TechStacks starting...");
+  console.log('TechStacks starting...');
   await mock.technical_skills.forEach(async (app) => {
     const createTechStack = e
       .insert(e.TechStack, {
@@ -102,23 +102,23 @@ const seedTechStacks = async () => {
       .unlessConflict();
     await createTechStack.run(client);
   });
-  console.log("TechStacks complete");
+  console.log('TechStacks complete');
   return;
 };
 
 const seedTechnology = async () => {
-  console.log("Technology starting...");
+  console.log('Technology starting...');
   await mock.technical_skills.forEach(async (app) => {
     await app.technologies.forEach(async (tech) => {
       await addTechnology(client, { name: tech, stack: app.stack });
     });
   });
-  console.log("Technology complete");
+  console.log('Technology complete');
   return;
 };
 
 const seedEducation = async () => {
-  console.log("Education starting...");
+  console.log('Education starting...');
   await mock.education.forEach(async (edu) => {
     const createEducation = e.insert(e.Education, {
       school: edu.school,
@@ -128,7 +128,7 @@ const seedEducation = async () => {
     });
     await createEducation.run(client);
   });
-  console.log("Education complete");
+  console.log('Education complete');
   return;
 };
 

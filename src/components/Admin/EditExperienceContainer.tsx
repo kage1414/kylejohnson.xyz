@@ -1,5 +1,5 @@
-import { ReactElement } from "react";
-import { EditExperience } from ".";
+import { ReactElement } from 'react';
+import { EditExperience } from '.';
 
 interface Props {
   display?: boolean;

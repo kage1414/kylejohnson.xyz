@@ -1,6 +1,6 @@
-import { ReactElement } from "react";
-import { Post } from "../Post";
-import { Box, Grid } from "@mui/material";
+import { ReactElement } from 'react';
+import { Post } from '../Post';
+import { Box, Grid } from '@mui/material';
 
 export type TechnicalSkillsData = Array<any>;
 
@@ -41,18 +41,18 @@ function TechnicalSkillsElement({ stack, technologies }: any): ReactElement {
   return (
     <Box
       style={{
-        margin: "10px 0",
-        flex: "1",
+        margin: '10px 0',
+        flex: '1',
       }}
     >
       <Box>
         <h2
           style={{
-            height: "16px",
-            padding: "3px",
-            border: "rgb(199, 199, 199) 1px solid",
-            margin: "6px",
-            backgroundColor: "rgb(240, 243, 252",
+            height: '16px',
+            padding: '3px',
+            border: 'rgb(199, 199, 199) 1px solid',
+            margin: '6px',
+            backgroundColor: 'rgb(240, 243, 252',
           }}
         >
           {stack}

@@ -1,6 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { addApplicationTechnology } from "dbschema/queries";
-import { client } from "../../../edgedb";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { addApplicationTechnology } from 'dbschema/queries';
+import { client } from '../../../edgedb';
 
 export default function educationHandler(
   req: NextApiRequest,
@@ -8,7 +8,7 @@ export default function educationHandler(
 ) {
   const { body, method } = req;
   switch (method) {
-    case "PUT":
+    case 'PUT':
       const { id, name, url } = body;
       if (!id) {
         res.status(400);

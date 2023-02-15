@@ -1,6 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { getAllExperiences, updateExperience } from "dbschema/queries";
-import { client } from "../../edgedb";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { getAllExperiences, updateExperience } from 'dbschema/queries';
+import { client } from '../../edgedb';
 
 export default function educationHandler(
   req: NextApiRequest,
@@ -8,7 +8,7 @@ export default function educationHandler(
 ) {
   const { body, method } = req;
   switch (method) {
-    case "GET":
+    case 'GET':
       getAllExperiences(client)
         .then((value) => {
           res.status(200).json(value);
@@ -18,7 +18,7 @@ export default function educationHandler(
           res.status(400);
         });
       break;
-    case "PUT":
+    case 'PUT':
       const { id, employer, position, time, active, priority } = body;
       if (!id) {
         res.status(400);

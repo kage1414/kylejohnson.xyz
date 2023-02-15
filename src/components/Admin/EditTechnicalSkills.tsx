@@ -1,8 +1,9 @@
-import React, { ReactElement, useState, useCallback, useEffect } from 'react';
+import { ReactElement, useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
+
 import { Technology as TechnologyData } from '../../../dbschema/interfaces';
-import { GridColDef, GridRowModel } from '@mui/x-data-grid';
 import { EditSection } from './EditSection';
+import { GridColDef, GridRowModel } from '@mui/x-data-grid';
 
 export function EditTechnicalSkills(): ReactElement {
   const [technologies, setTechnologies] = useState<TechnologyData[]>([]);

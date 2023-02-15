@@ -1,8 +1,8 @@
-import { ReactElement, useCallback, useEffect } from "react";
-import { CircularProgress } from "@mui/material";
-import { Box, Dialog } from "@mui/material";
-import { DataGrid, GridColDef, GridRowModel } from "@mui/x-data-grid";
-import { Experience, Description, Technology } from "dbschema/interfaces";
+import { ReactElement, useCallback, useEffect } from 'react';
+import { CircularProgress } from '@mui/material';
+import { Box, Dialog } from '@mui/material';
+import { DataGrid, GridColDef, GridRowModel } from '@mui/x-data-grid';
+import { Experience, Description, Technology } from 'dbschema/interfaces';
 
 interface Props {
   primaryColumns: GridColDef[];
@@ -47,7 +47,7 @@ export function EditSection({
   isTertiaryOpen,
 }: Props): ReactElement {
   return (
-    <Box height={"75vh"} width={"85vw"}>
+    <Box height={'75vh'} width={'85vw'}>
       {loading ? (
         <CircularProgress />
       ) : (
@@ -63,7 +63,7 @@ export function EditSection({
           />
           {secondaryColumns && (
             <Dialog open={!!isSecondaryOpen} onClose={onClose} fullWidth>
-              <Box height={"75vh"} width={"75vw"}>
+              <Box height={'75vh'} width={'75vw'}>
                 <DataGrid
                   experimentalFeatures={{ newEditingApi: true }}
                   columns={secondaryColumns}
@@ -78,7 +78,7 @@ export function EditSection({
           )}
           {tertiaryColumns && (
             <Dialog open={!!isTertiaryOpen} onClose={onClose} fullWidth>
-              <Box height={"75vh"} width={"75vw"}>
+              <Box height={'75vh'} width={'75vw'}>
                 <DataGrid
                   experimentalFeatures={{ newEditingApi: true }}
                   columns={tertiaryColumns}

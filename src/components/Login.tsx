@@ -8,13 +8,13 @@ import {
   Container,
   TextField,
   Button,
-} from "@mui/material";
-import { ReactElement, useState, useEffect } from "react";
-import axios from "axios";
+} from '@mui/material';
+import { ReactElement, useState, useEffect } from 'react';
+import axios from 'axios';
 
 export function Login(): ReactElement {
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   useEffect(() => {
     console.log({ username, password });
@@ -22,17 +22,17 @@ export function Login(): ReactElement {
 
   return (
     <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      minWidth="25vw"
-      minHeight="25vh"
+      display='flex'
+      justifyContent='center'
+      alignItems='center'
+      minWidth='25vw'
+      minHeight='25vh'
     >
       <Grid>
         <Grid>
           <TextField
-            id="username-input"
-            label="username"
+            id='username-input'
+            label='username'
             onChange={(e) => {
               setUsername(e.target.value);
             }}
@@ -40,9 +40,9 @@ export function Login(): ReactElement {
         </Grid>
         <Grid>
           <TextField
-            id="password-input"
-            label="password"
-            type="password"
+            id='password-input'
+            label='password'
+            type='password'
             onChange={(e) => {
               setPassword(e.target.value);
             }}

@@ -1,6 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { getAllApplications, updateApplication } from "dbschema/queries";
-import { client } from "../../edgedb";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { getAllApplications, updateApplication } from 'dbschema/queries';
+import { client } from '../../edgedb';
 
 export default function applicationHandler(
   req: NextApiRequest,
@@ -8,7 +8,7 @@ export default function applicationHandler(
 ) {
   const { body, method } = req;
   switch (method) {
-    case "GET":
+    case 'GET':
       getAllApplications(client)
         .then((value) => {
           res.status(200).json(value);
@@ -18,7 +18,7 @@ export default function applicationHandler(
           res.status(400);
         });
       break;
-    case "PUT":
+    case 'PUT':
       const { id, name, url, active, priority } = body;
       if (!id) {
         res.status(400);

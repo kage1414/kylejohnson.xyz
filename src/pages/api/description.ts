@@ -1,6 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { getDescription, updateDescription } from "../../../dbschema/queries";
-import { client } from "../../edgedb";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { getDescription, updateDescription } from '../../../dbschema/queries';
+import { client } from '../../edgedb';
 
 export default function descriptionHandler(
   req: NextApiRequest,
@@ -9,7 +9,7 @@ export default function descriptionHandler(
   const { body, method, query } = req;
   const { id } = query || body || {};
   switch (method) {
-    case "GET":
+    case 'GET':
       if (!id) {
         res.status(400);
       } else {
@@ -23,7 +23,7 @@ export default function descriptionHandler(
           });
       }
       break;
-    case "PUT":
+    case 'PUT':
       const { description, priority } = body;
       if (!id || !description) {
         res.status(400);

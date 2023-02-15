@@ -1,6 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { getTechStacks } from "dbschema/queries";
-import { client } from "../../edgedb";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { getTechStacks } from 'dbschema/queries';
+import { client } from '../../edgedb';
 
 export default function educationHandler(
   req: NextApiRequest,
@@ -8,7 +8,7 @@ export default function educationHandler(
 ) {
   const { method } = req;
   switch (method) {
-    case "GET":
+    case 'GET':
       getTechStacks(client)
         .then((value) => {
           res.status(200).json(value);
