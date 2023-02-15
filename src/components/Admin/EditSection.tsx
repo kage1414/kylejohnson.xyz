@@ -1,8 +1,8 @@
-import { ReactElement, useCallback, useEffect } from 'react';
-import { CircularProgress } from '@mui/material';
-import { Box, Dialog } from '@mui/material';
-import { DataGrid, GridColDef, GridRowModel } from '@mui/x-data-grid';
-import { Experience, Description, Technology } from 'dbschema/interfaces';
+import { ReactElement, useCallback, useEffect } from "react";
+import { CircularProgress } from "@mui/material";
+import { Box, Dialog } from "@mui/material";
+import { DataGrid, GridColDef, GridRowModel } from "@mui/x-data-grid";
+import { Experience, Description, Technology } from "dbschema/interfaces";
 
 interface Props {
   primaryColumns: GridColDef[];
@@ -14,7 +14,7 @@ interface Props {
   onUpdateRowPrimary: (
     newRow: GridRowModel,
     oldRow: GridRowModel
-  ) => Promise<any>; 
+  ) => Promise<any>;
   onUpdateRowSecondary?: (
     newRow: GridRowModel,
     oldRow: GridRowModel
@@ -46,16 +46,14 @@ export function EditSection({
   isSecondaryOpen,
   isTertiaryOpen,
 }: Props): ReactElement {
-
   return (
-    <Box height={'75vh'} width={'85vw'}>
+    <Box height={"75vh"} width={"85vw"}>
       {loading ? (
         <CircularProgress />
       ) : (
         <>
           <DataGrid
             experimentalFeatures={{ newEditingApi: true }}
-
             columns={primaryColumns}
             rows={primaryData}
             pageSize={10}
@@ -65,7 +63,7 @@ export function EditSection({
           />
           {secondaryColumns && (
             <Dialog open={!!isSecondaryOpen} onClose={onClose} fullWidth>
-              <Box height={'75vh'} width={'75vw'}>
+              <Box height={"75vh"} width={"75vw"}>
                 <DataGrid
                   experimentalFeatures={{ newEditingApi: true }}
                   columns={secondaryColumns}
@@ -80,7 +78,7 @@ export function EditSection({
           )}
           {tertiaryColumns && (
             <Dialog open={!!isTertiaryOpen} onClose={onClose} fullWidth>
-              <Box height={'75vh'} width={'75vw'}>
+              <Box height={"75vh"} width={"75vw"}>
                 <DataGrid
                   experimentalFeatures={{ newEditingApi: true }}
                   columns={tertiaryColumns}

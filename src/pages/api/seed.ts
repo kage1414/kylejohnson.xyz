@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { addApplicationDescription } from "dbschema/queries";
 import { client } from "../../edgedb";
-import { seed } from '../../seed'
+import { seed } from "../../seed";
 
 export default async function educationHandler(
   req: NextApiRequest,
@@ -11,7 +11,7 @@ export default async function educationHandler(
   switch (method) {
     case "POST":
       await seed();
-      res.status(200).end()
-    break
+      res.status(200).end();
+      break;
   }
 }

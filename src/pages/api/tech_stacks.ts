@@ -11,7 +11,7 @@ export default function educationHandler(
     case "GET":
       getTechStacks(client)
         .then((value) => {
-          res.status(200).json(value)
+          res.status(200).json(value);
         })
         .catch((error) => {
           res.write(error);

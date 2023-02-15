@@ -46,10 +46,10 @@ interface ComponentProps {
 }
 
 interface Props {
-  Component: (props: ComponentProps) => ReactElement
+  Component: (props: ComponentProps) => ReactElement;
 }
 
-export default function HomePage({Component}: Props) {
+export default function HomePage({ Component }: Props) {
   const [selectedTab, setSelectedTab] = useState(0);
 
   return (

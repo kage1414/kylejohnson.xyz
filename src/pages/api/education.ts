@@ -11,7 +11,7 @@ export default function educationHandler(
     case "GET":
       getAllEducations(client)
         .then((value) => {
-          res.status(200).json(value)
+          res.status(200).json(value);
         })
         .catch((error) => {
           res.write(error);
@@ -26,7 +26,7 @@ export default function educationHandler(
       } else {
         updateEducation(client, body)
           .then((value) => {
-            res.status(200).json(value)
+            res.status(200).json(value);
           })
           .catch((error) => {
             res.write(error);

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { addApplicationTechnology } from "dbschema/queries";
-import { client } from "../../../edgedb";;
+import { client } from "../../../edgedb";
 
 export default function educationHandler(
   req: NextApiRequest,
@@ -16,7 +16,7 @@ export default function educationHandler(
       }
       addApplicationTechnology(client, { id, name, url })
         .then((value) => {
-          res.status(200).json(value)
+          res.status(200).json(value);
         })
         .catch((error) => {
           res.write(error);

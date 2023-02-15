@@ -1,7 +1,7 @@
-import { ReactElement } from 'react';
-import { FullPost } from '../FullPost';
-import { Box } from '@mui/material';
-import { Education as EducationData } from 'dbschema/interfaces';
+import { ReactElement } from "react";
+import { FullPost } from "../FullPost";
+import { Box } from "@mui/material";
+import { Education as EducationData } from "dbschema/interfaces";
 
 type Props = {
   data: EducationData[];

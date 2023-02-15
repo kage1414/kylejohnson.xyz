@@ -8,10 +8,10 @@ export default function educationHandler(
 ) {
   const { body, method } = req;
   switch (method) {
-    case "GET": 
+    case "GET":
       getAllExperiences(client)
         .then((value) => {
-          res.status(200).json(value)
+          res.status(200).json(value);
         })
         .catch((error) => {
           res.write(JSON.stringify(error));
@@ -32,7 +32,7 @@ export default function educationHandler(
           priority,
         })
           .then((value) => {
-            res.status(200).json(value)
+            res.status(200).json(value);
           })
           .catch((error) => {
             res.write(error);

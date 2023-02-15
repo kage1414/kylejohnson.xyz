@@ -1,16 +1,16 @@
-import { ReactElement, useState, useCallback, useEffect } from 'react';
-import axios from 'axios';
+import { ReactElement, useState, useCallback, useEffect } from "react";
+import axios from "axios";
 import {
   Experience as ExperienceData,
   Description as DescriptionData,
-} from 'dbschema/interfaces';
-import { Button } from '@mui/material';
+} from "dbschema/interfaces";
+import { Button } from "@mui/material";
 import {
   GridColDef,
   GridValueGetterParams,
   GridRowModel,
-} from '@mui/x-data-grid';
-import { EditSection } from './EditSection';
+} from "@mui/x-data-grid";
+import { EditSection } from "./EditSection";
 
 export function EditExperience(): ReactElement {
   const [experience, setExperience] = useState<ExperienceData[]>([]);
@@ -20,11 +20,11 @@ export function EditExperience(): ReactElement {
     DescriptionData[]
   >([]);
   const columns: GridColDef[] = [
-    { field: 'employer', headerName: 'Employer', editable: true, width: 300 },
-    { field: 'position', editable: true, headerName: 'Position', width: 300 },
-    { field: 'time', editable: true, headerName: 'Time', width: 300 },
+    { field: "employer", headerName: "Employer", editable: true, width: 300 },
+    { field: "position", editable: true, headerName: "Position", width: 300 },
+    { field: "time", editable: true, headerName: "Time", width: 300 },
     {
-      field: 'descriptions',
+      field: "descriptions",
       width: 300,
       renderCell: (params) => {
         return (
@@ -38,25 +38,25 @@ export function EditExperience(): ReactElement {
       },
     },
     {
-      field: 'priority',
-      type: 'number',
+      field: "priority",
+      type: "number",
       editable: true,
-      headerName: 'Priority',
+      headerName: "Priority",
       width: 75,
     },
     {
-      field: 'active',
-      headerName: 'Active',
+      field: "active",
+      headerName: "Active",
       editable: true,
       width: 150,
-      type: 'boolean',
+      type: "boolean",
     },
   ];
   const descriptionColumns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', editable: false },
+    { field: "id", headerName: "ID", editable: false },
     {
-      field: 'description',
-      headerName: 'Description',
+      field: "description",
+      headerName: "Description",
       editable: true,
       width: 500,
     },
@@ -64,7 +64,7 @@ export function EditExperience(): ReactElement {
   const getExperienceData = () => {
     setLoading(true);
     axios
-      .get('/api/experience')
+      .get("/api/experience")
       .then(({ data }) => {
         setLoading(false);
         setExperience(data);
@@ -80,8 +80,8 @@ export function EditExperience(): ReactElement {
   const onRowUpdate = useCallback(
     (newRow: GridRowModel, oldRow: GridRowModel) => {
       return axios({
-        method: 'PUT',
-        url: '/api/experience',
+        method: "PUT",
+        url: "/api/experience",
         data: newRow,
       })
         .then((response) => {
@@ -97,8 +97,8 @@ export function EditExperience(): ReactElement {
   const onDescriptionRowUpdate = useCallback(
     (newRow: GridRowModel, oldRow: GridRowModel) => {
       return axios({
-        method: 'PUT',
-        url: '/api/description',
+        method: "PUT",
+        url: "/api/description",
         data: newRow,
       })
         .then((response) => {
@@ -118,7 +118,7 @@ export function EditExperience(): ReactElement {
 
   useEffect(() => {
     getExperienceData();
-  }, [])
+  }, []);
 
   return (
     <EditSection

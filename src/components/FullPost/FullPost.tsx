@@ -1,7 +1,7 @@
-import { Box, Paper } from '@mui/material';
-import { ReactElement } from 'react';
-import { FullPostHeader, FullPostBody, FullPostFooterList } from '.';
-import type { Description, Technology } from 'dbschema/interfaces';
+import { Box, Paper } from "@mui/material";
+import { ReactElement } from "react";
+import { FullPostHeader, FullPostBody, FullPostFooterList } from ".";
+import type { Description, Technology } from "dbschema/interfaces";
 
 interface Props {
   title: string;
@@ -28,7 +28,7 @@ export function FullPost({
     >
       <Paper
         sx={{
-          backgroundColor: 'rgb(240, 243, 252)',
+          backgroundColor: "rgb(240, 243, 252)",
           padding: 2,
         }}
         elevation={0}

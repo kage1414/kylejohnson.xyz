@@ -1,5 +1,5 @@
-import { ReactElement } from 'react';
-import { EditApplication } from '.';
+import { ReactElement } from "react";
+import { EditApplication } from ".";
 
 interface Props {
   display?: boolean;

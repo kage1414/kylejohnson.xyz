@@ -15,7 +15,7 @@ export default function descriptionHandler(
       } else {
         getDescription(client, { id: id.toString() })
           .then((value) => {
-            res.status(200).json(value)
+            res.status(200).json(value);
           })
           .catch((error) => {
             res.write(error);
@@ -34,7 +34,7 @@ export default function descriptionHandler(
           priority,
         })
           .then((value) => {
-            res.status(200).json(value)
+            res.status(200).json(value);
           })
           .catch((error) => {
             res.write(error);

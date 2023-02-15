@@ -11,7 +11,7 @@ export default function applicationHandler(
     case "GET":
       getAllApplications(client)
         .then((value) => {
-          res.status(200).json(value)
+          res.status(200).json(value);
         })
         .catch((error) => {
           res.write(error);
@@ -25,7 +25,7 @@ export default function applicationHandler(
       } else {
         updateApplication(client, { id, name, url, active, priority })
           .then((value) => {
-            res.status(200).json(value)
+            res.status(200).json(value);
           })
           .catch((error) => {
             res.write(error);

@@ -1,7 +1,7 @@
-import { ReactElement, useEffect } from 'react';
-import { Box } from '@mui/material';
-import { FullPost } from '../FullPost';
-import type { Application as ApplicationData } from 'dbschema/interfaces';
+import { ReactElement, useEffect } from "react";
+import { Box } from "@mui/material";
+import { FullPost } from "../FullPost";
+import type { Application as ApplicationData } from "dbschema/interfaces";
 
 type Props = {
   data: ApplicationData;
@@ -12,7 +12,7 @@ export function Application({
 }: Props): ReactElement {
   const body = [
     ...descriptions.map((item) => item.description as string),
-    'Technologies used:',
+    "Technologies used:",
     ...technologies.map((item) => item.name as string),
   ];
   return (
@@ -20,7 +20,7 @@ export function Application({
       <FullPost
         descriptions={descriptions}
         technologies={technologies}
-        title={name || ''}
+        title={name || ""}
         url={url || undefined}
       />
     </Box>
