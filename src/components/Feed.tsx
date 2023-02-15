@@ -1,15 +1,13 @@
 import { ReactElement, useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import axios from 'axios';
 import { Applications, Education, Experience, TechnicalSkills } from './Pages';
-import type {
+import axios from 'axios';
+import {
   Application as ApplicationData,
   Education as EducationData,
   Experience as ExperienceData,
   TechStack as TechnicalSkillsData,
-} from '../dbschema/interfaces';
-
-const BASE_URL = 'http://localhost:3000';
+} from 'dbschema/interfaces';
 
 interface Props {
   selectedTab: number;

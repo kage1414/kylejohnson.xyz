@@ -1,7 +1,7 @@
 import { Box, Paper } from '@mui/material';
 import { ReactElement } from 'react';
 import { FullPostHeader, FullPostBody, FullPostFooterList } from '.';
-import type { Description, Technology } from 'dbschema/interfaces';
+import { Description, Technology } from 'dbschema/interfaces';
 
 interface Props {
   title: string;

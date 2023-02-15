@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { FullPost } from '../FullPost';
 import { Box } from '@mui/material';
-import type { Experience as ExperienceData } from 'dbschema/interfaces';
+import { Experience as ExperienceData } from 'dbschema/interfaces';
 
 type Props = {
   data: ExperienceData[];

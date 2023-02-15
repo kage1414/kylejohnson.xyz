@@ -1,17 +1,11 @@
 import { ReactElement } from 'react';
-import { useWindowWidth } from '@react-hook/window-size/throttled';
 import { Box, Button } from '@mui/material';
 import Link from 'next/link';
 import axios from 'axios';
 
 interface Props {}
 
-const BASE_URL = 'http://localhost:3000';
-
-const SIDEBAR_MIN_WIDTH = 673;
-
 export function Sidebar({}: Props): ReactElement {
-  const width = useWindowWidth();
   const style = {
     minHeight: 50,
     display: 'flex',

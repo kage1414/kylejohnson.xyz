@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { getAllExperiences, updateExperience } from 'dbschema/queries';
 import { client } from '../../edgedb';
 

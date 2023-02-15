@@ -1,4 +1,4 @@
-import type {Client} from "edgedb";
+import {Client} from "edgedb";
 
 export async function addApplicationTechnology(client: Client, args: {
   "id": string;

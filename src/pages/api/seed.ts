@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { addApplicationDescription } from 'dbschema/queries';
 import { client } from '../../edgedb';
 import { seed } from '../../seed';

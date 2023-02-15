@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import { Box, Paper, List, ListItemText } from '@mui/material';
-import type { Description, Technology } from 'dbschema/interfaces';
+import { Description, Technology } from 'dbschema/interfaces';
 
 interface Props {
   descriptions?: Description[];
