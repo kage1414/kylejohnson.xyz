@@ -3,7 +3,7 @@ import {
   addApplicationDescription,
   getDescription,
   updateDescription,
-} from '../../../dbschema/queries';
+} from 'dbschema/queries';
 import { client } from '../edgedb';
 
 const get = (req: Request, res: Response) => {

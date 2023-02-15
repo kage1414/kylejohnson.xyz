@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getAllExperiences, updateExperience } from '../../../dbschema/queries';
+import { getAllExperiences, updateExperience } from 'dbschema/queries';
 import { client } from '../edgedb';
 
 const get = (req: Request, res: Response) => {

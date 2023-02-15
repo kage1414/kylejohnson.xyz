@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getDescription, updateDescription } from '../../../dbschema/queries';
+import { getDescription, updateDescription } from 'dbschema/queries';
 import { client } from '../../edgedb';
 
 export default function descriptionHandler(

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import {
   getAllApplications,
   updateApplication,
-} from '../../../dbschema/queries';
+} from 'dbschema/queries';
 import { client } from '../edgedb';
 
 const get = (req: Request, res: Response) => {

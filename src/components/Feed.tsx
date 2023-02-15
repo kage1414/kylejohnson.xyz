@@ -7,7 +7,7 @@ import type {
   Education as EducationData,
   Experience as ExperienceData,
   TechStack as TechnicalSkillsData,
-} from '../../dbschema/interfaces';
+} from '../dbschema/interfaces';
 
 const BASE_URL = 'http://localhost:3000';
 

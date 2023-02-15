@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getAllTechnicalSkills } from '../../../dbschema/queries';
+import { getAllTechnicalSkills } from 'dbschema/queries';
 import { client } from '../edgedb';
 
 const get = (req: Request, res: Response) => {
