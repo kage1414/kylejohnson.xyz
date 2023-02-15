@@ -1,34 +1,60 @@
-CREATE MIGRATION m14edu5xz7xcezdw3yms7pjwqfunvb3gtepi3mdwnduikgiq7seauq
+CREATE MIGRATION m1zlukjiz3bqkydsmdghnlpmgcrwrv7yhjfr65hhzxatctmxkwtmka
     ONTO initial
 {
   CREATE FUTURE nonrecursive_access_policies;
-  CREATE TYPE default::Application {
-      CREATE PROPERTY active -> std::bool;
-      CREATE REQUIRED PROPERTY name -> std::str;
-      CREATE PROPERTY url -> std::str;
-  };
   CREATE TYPE default::Description {
       CREATE REQUIRED PROPERTY description -> std::str;
-  };
-  CREATE TYPE default::Education {
-      CREATE PROPERTY active -> std::bool;
-      CREATE PROPERTY certificate -> std::str;
-      CREATE PROPERTY degree -> std::str;
-      CREATE REQUIRED PROPERTY school -> std::str;
-      CREATE REQUIRED PROPERTY time -> std::str;
-  };
-  CREATE TYPE default::Experience {
-      CREATE PROPERTY active -> std::bool;
-      CREATE REQUIRED PROPERTY employer -> std::str;
-      CREATE REQUIRED PROPERTY position -> std::str;
-      CREATE REQUIRED PROPERTY time -> std::str;
+      CREATE PROPERTY priority -> std::int32;
   };
   CREATE TYPE default::TechStack {
-      CREATE REQUIRED PROPERTY stack -> std::str;
+      CREATE REQUIRED PROPERTY stack -> std::str {
+          CREATE CONSTRAINT std::exclusive;
+      };
   };
   CREATE TYPE default::Technology {
       CREATE LINK stack -> default::TechStack;
-      CREATE REQUIRED PROPERTY name -> std::str;
+      CREATE REQUIRED PROPERTY name -> std::str {
+          CREATE CONSTRAINT std::exclusive;
+      };
+      CREATE PROPERTY priority -> std::int32;
       CREATE PROPERTY url -> std::str;
+  };
+  CREATE TYPE default::Application {
+      CREATE MULTI LINK descriptions -> default::Description {
+          CREATE CONSTRAINT std::exclusive;
+      };
+      CREATE MULTI LINK technologies -> default::Technology;
+      CREATE PROPERTY active -> std::bool {
+          SET default := true;
+      };
+      CREATE REQUIRED PROPERTY name -> std::str;
+      CREATE PROPERTY priority -> std::int32;
+      CREATE PROPERTY url -> std::str;
+  };
+  CREATE TYPE default::Experience {
+      CREATE MULTI LINK descriptions -> default::Description {
+          CREATE CONSTRAINT std::exclusive;
+      };
+      CREATE PROPERTY active -> std::bool {
+          SET default := true;
+      };
+      CREATE REQUIRED PROPERTY employer -> std::str;
+      CREATE REQUIRED PROPERTY position -> std::str;
+      CREATE PROPERTY priority -> std::int32;
+      CREATE REQUIRED PROPERTY time -> std::str;
+  };
+  CREATE TYPE default::Education {
+      CREATE PROPERTY active -> std::bool {
+          SET default := true;
+      };
+      CREATE PROPERTY certificate -> std::str;
+      CREATE PROPERTY degree -> std::str;
+      CREATE PROPERTY priority -> std::int32;
+      CREATE REQUIRED PROPERTY school -> std::str;
+      CREATE REQUIRED PROPERTY time -> std::str;
+  };
+  CREATE TYPE default::User {
+      CREATE REQUIRED PROPERTY password_hash -> std::str;
+      CREATE REQUIRED PROPERTY username -> std::str;
   };
 };

@@ -55,4 +55,9 @@ module default {
       constraint exclusive;
     };
   }
+
+  type User {
+    required property username -> str;
+    required property password_hash -> str;
+  }
 }
