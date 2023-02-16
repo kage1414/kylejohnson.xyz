@@ -17,6 +17,7 @@ export function Sidebar({}: Props): ReactElement {
     backgroundColor: 'white',
     borderBottomLeftRadius: '5px',
     borderTopLeftRadius: '5px',
+    borderRightWidth: '0',
     overflow: 'auto',
     fontSize: '12px',
     fontFamily: 'verdana, arial, helvetica, sans-serif',
@@ -34,6 +35,7 @@ export function Sidebar({}: Props): ReactElement {
           style={{
             display: 'flex',
             flexDirection: 'column',
+            padding: 0
           }}
         >
           <li style={style}>
