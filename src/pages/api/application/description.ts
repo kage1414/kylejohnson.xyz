@@ -7,13 +7,9 @@ export default function educationHandler(
   res: NextApiResponse
 ) {
   const { body, method } = req;
+  const { id, description } = body;
   switch (method) {
-    case 'PUT':
-      const { id, description } = body;
-      if (!id) {
-        res.status(400);
-        return;
-      }
+    case 'POST':
       addApplicationDescription(client, { id, description })
         .then((value) => {
           res.status(200).json(value);
@@ -22,5 +18,6 @@ export default function educationHandler(
           res.write(error);
           res.status(400);
         });
+      break;
   }
 }

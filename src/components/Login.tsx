@@ -16,9 +16,7 @@ export function Login(): ReactElement {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  useEffect(() => {
-    console.log({ username, password });
-  }, [username, password]);
+  useEffect(() => {}, [username, password]);
 
   return (
     <Box

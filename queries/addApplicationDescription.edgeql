@@ -3,7 +3,7 @@ filter .id = <uuid>$id
 set {
   descriptions += ( 
     insert Description {
-      description := <str>$description
+      description := <optional str>$description
     }
   )
-}
+};

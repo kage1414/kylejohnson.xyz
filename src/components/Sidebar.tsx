@@ -35,7 +35,7 @@ export function Sidebar({}: Props): ReactElement {
           style={{
             display: 'flex',
             flexDirection: 'column',
-            padding: 0
+            padding: 0,
           }}
         >
           <li style={style}>

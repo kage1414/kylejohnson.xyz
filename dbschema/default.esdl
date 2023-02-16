@@ -1,8 +1,8 @@
 module default {
   type Experience {
-    required property employer -> str;
-    required property position -> str;
-    required property time -> str;
+    property employer -> str;
+    property position -> str;
+    property time -> str;
     property active -> bool {
       default := true;
     };
