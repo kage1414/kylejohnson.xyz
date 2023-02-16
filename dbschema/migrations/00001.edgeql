@@ -1,4 +1,4 @@
-CREATE MIGRATION m1zlukjiz3bqkydsmdghnlpmgcrwrv7yhjfr65hhzxatctmxkwtmka
+CREATE MIGRATION m1qvddtloo4xyv3rhvuqys2onur2fstqnmcrufktes7gmtyozy5wiq
     ONTO initial
 {
   CREATE FUTURE nonrecursive_access_policies;
@@ -38,10 +38,10 @@ CREATE MIGRATION m1zlukjiz3bqkydsmdghnlpmgcrwrv7yhjfr65hhzxatctmxkwtmka
       CREATE PROPERTY active -> std::bool {
           SET default := true;
       };
-      CREATE REQUIRED PROPERTY employer -> std::str;
-      CREATE REQUIRED PROPERTY position -> std::str;
+      CREATE PROPERTY employer -> std::str;
+      CREATE PROPERTY position -> std::str;
       CREATE PROPERTY priority -> std::int32;
-      CREATE REQUIRED PROPERTY time -> std::str;
+      CREATE PROPERTY time -> std::str;
   };
   CREATE TYPE default::Education {
       CREATE PROPERTY active -> std::bool {

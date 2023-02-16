@@ -1,5 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getAllExperiences, updateExperience } from 'dbschema/queries';
+import {
+  addExperience,
+  getAllExperiences,
+  updateExperience,
+  deleteExperience,
+} from 'dbschema/queries';
 import { client } from '../../edgedb';
 
 export default function educationHandler(
@@ -7,6 +12,7 @@ export default function educationHandler(
   res: NextApiResponse
 ) {
   const { body, method } = req;
+  const { id, employer, position, time, active, priority } = body;
   switch (method) {
     case 'GET':
       getAllExperiences(client)
@@ -19,7 +25,6 @@ export default function educationHandler(
         });
       break;
     case 'PUT':
-      const { id, employer, position, time, active, priority } = body;
       if (!id) {
         res.status(400);
       } else {
@@ -39,6 +44,31 @@ export default function educationHandler(
             res.status(400);
           });
       }
+      break;
+    case 'POST':
+      addExperience(client, body)
+        .then((value) => {
+          res.status(200).json(value);
+        })
+        .catch((error) => {
+          console.error(error);
+          res.write(error);
+          res.status(400);
+        });
+
+      break;
+    case 'DELETE':
+      console.log({ body });
+      deleteExperience(client, body)
+        .then((value) => {
+          res.status(200).json(value);
+        })
+        .catch((error) => {
+          console.error(error);
+          res.write(error);
+          res.status(400);
+        });
+
       break;
   }
 }

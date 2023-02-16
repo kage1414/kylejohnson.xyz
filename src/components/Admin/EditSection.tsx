@@ -1,20 +1,28 @@
 import { ReactElement, useCallback, useEffect } from 'react';
-import { CircularProgress } from '@mui/material';
+import { Button, CircularProgress, Paper, Grid } from '@mui/material';
 import { Box, Dialog } from '@mui/material';
-import { DataGrid, GridColDef, GridRowModel } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridColDef,
+  GridRowModel,
+  GridToolbarContainer,
+  GridRowModes,
+  GridRowsProp,
+  GridRowModesModel,
+  GridRowId,
+} from '@mui/x-data-grid';
 import { Experience, Description, Technology } from 'dbschema/interfaces';
+import DataGridContainer, { CrudOperations } from './DataGridContainer';
 
 interface Props {
   primaryColumns: GridColDef[];
-  secondaryColumns?: GridColDef[];
-  tertiaryColumns?: GridColDef[];
   primaryData: any[];
+  primaryCrud: CrudOperations;
+  secondaryColumns?: GridColDef[];
   secondaryData?: any[];
+  secondaryCrud?: CrudOperations;
+  tertiaryColumns?: GridColDef[];
   tertiaryData?: any[];
-  onUpdateRowPrimary: (
-    newRow: GridRowModel,
-    oldRow: GridRowModel
-  ) => Promise<any>;
   onUpdateRowSecondary?: (
     newRow: GridRowModel,
     oldRow: GridRowModel
@@ -30,14 +38,27 @@ interface Props {
   isTertiaryOpen?: boolean;
 }
 
+function EditModalFooter(): ReactElement {
+  return (
+    <Grid container direction={'row-reverse'}>
+      <Grid>
+        <Button color='info'>Cancel</Button>
+      </Grid>
+      <Grid item>
+        <Button color='primary'>Add</Button>
+      </Grid>
+    </Grid>
+  );
+}
+
 export function EditSection({
   primaryColumns,
+  primaryData,
+  primaryCrud,
   secondaryColumns,
   tertiaryColumns,
-  primaryData,
   secondaryData,
   tertiaryData,
-  onUpdateRowPrimary,
   onUpdateRowSecondary,
   onUpdateRowTertiary,
   onUpdateRowError,
@@ -45,6 +66,7 @@ export function EditSection({
   onClose,
   isSecondaryOpen,
   isTertiaryOpen,
+  secondaryCrud,
 }: Props): ReactElement {
   return (
     <Box height={'75vh'} width={'85vw'}>
@@ -52,26 +74,23 @@ export function EditSection({
         <CircularProgress />
       ) : (
         <>
-          <DataGrid
-            experimentalFeatures={{ newEditingApi: true }}
+          <DataGridContainer
+            initialRows={primaryData}
             columns={primaryColumns}
-            rows={primaryData}
-            pageSize={10}
-            rowsPerPageOptions={[10]}
-            processRowUpdate={onUpdateRowPrimary}
-            onProcessRowUpdateError={onUpdateRowError}
+            crud={primaryCrud}
           />
-          {secondaryColumns && (
-            <Dialog open={!!isSecondaryOpen} onClose={onClose} fullWidth>
-              <Box height={'75vh'} width={'75vw'}>
-                <DataGrid
-                  experimentalFeatures={{ newEditingApi: true }}
+          {secondaryColumns && secondaryData && secondaryCrud && (
+            <Dialog
+              open={!!isSecondaryOpen}
+              onClose={onClose}
+              fullWidth
+              maxWidth={'xl'}
+            >
+              <Box height={'100vh'}>
+                <DataGridContainer
+                  initialRows={secondaryData}
                   columns={secondaryColumns}
-                  rows={secondaryData || []}
-                  pageSize={10}
-                  rowsPerPageOptions={[10]}
-                  processRowUpdate={onUpdateRowSecondary}
-                  onProcessRowUpdateError={onUpdateRowError}
+                  crud={secondaryCrud}
                 />
               </Box>
             </Dialog>

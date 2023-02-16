@@ -48,7 +48,7 @@ export function Feed({ selectedTab }: Props): ReactElement {
         setExperienceData(data.filter((ele) => !!ele.active) || []);
       })
       .catch((err) => {
-        console.log('here', { err });
+        console.error(err);
       });
   };
 

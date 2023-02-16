@@ -9,6 +9,8 @@ import {
   GridColDef,
   GridValueGetterParams,
   GridRowModel,
+  GridColumns,
+  GridRowId,
 } from '@mui/x-data-grid';
 import { EditSection } from './EditSection';
 
@@ -19,7 +21,7 @@ export function EditExperience(): ReactElement {
   const [editingDescriptions, setEditingDescriptions] = useState<
     DescriptionData[]
   >([]);
-  const columns: GridColDef[] = [
+  const columns: GridColumns = [
     { field: 'employer', headerName: 'Employer', editable: true, width: 300 },
     { field: 'position', editable: true, headerName: 'Position', width: 300 },
     { field: 'time', editable: true, headerName: 'Time', width: 300 },
@@ -77,8 +79,24 @@ export function EditExperience(): ReactElement {
   const onUpdateRowError = (error: any) => {
     console.error(error);
   };
-  const onRowUpdate = useCallback(
-    (newRow: GridRowModel, oldRow: GridRowModel) => {
+
+  const onAddExperience = () => {
+    return axios({
+      method: 'POST',
+      url: '/api/experience',
+      data: {},
+    })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        console.error(error);
+        return;
+      });
+  };
+
+  const onUpdateExperience = useCallback(
+    (newRow: GridRowModel): Promise<GridRowModel> => {
       return axios({
         method: 'PUT',
         url: '/api/experience',
@@ -89,12 +107,26 @@ export function EditExperience(): ReactElement {
         })
         .catch((error) => {
           console.error(error);
-          return oldRow;
+          return;
         });
     },
     []
   );
-  const onDescriptionRowUpdate = useCallback(
+  const onDeleteExperience = useCallback((id: GridRowId) => {
+    return axios({
+      method: 'DELETE',
+      url: '/api/experience',
+      data: { id },
+    })
+      .then((response) => {
+        return response.data.id;
+      })
+      .catch((error) => {
+        console.error(error);
+        return;
+      });
+  }, []);
+  const onUpdateDescription = useCallback(
     (newRow: GridRowModel, oldRow: GridRowModel) => {
       return axios({
         method: 'PUT',
@@ -106,11 +138,12 @@ export function EditExperience(): ReactElement {
         })
         .catch((error) => {
           console.error(error);
-          return oldRow;
+          return;
         });
     },
     []
   );
+
   const onClose = () => {
     setIsOpen(false);
     getExperienceData();
@@ -127,8 +160,11 @@ export function EditExperience(): ReactElement {
       secondaryData={editingDescriptions}
       primaryColumns={columns}
       secondaryColumns={descriptionColumns}
-      onUpdateRowPrimary={onRowUpdate}
-      onUpdateRowSecondary={onDescriptionRowUpdate}
+      primaryCrud={{
+        c: onAddExperience,
+        u: onUpdateExperience,
+        d: onDeleteExperience,
+      }}
       onUpdateRowError={onUpdateRowError}
       onClose={onClose}
       isSecondaryOpen={isOpen}
