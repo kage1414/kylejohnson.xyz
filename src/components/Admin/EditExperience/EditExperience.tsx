@@ -1,12 +1,7 @@
 import { Button } from '@mui/material';
-import {
-  GridColDef,
-  GridColumns,
-  GridRowId,
-  GridRowModel,
-} from '@mui/x-data-grid';
+import { GridColDef, GridColumns, GridRowModel } from '@mui/x-data-grid';
 import axios from 'axios';
-import { ReactElement, useCallback, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 
 import {
   Description as DescriptionData,

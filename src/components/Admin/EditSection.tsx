@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Dialog, Grid } from '@mui/material';
+import { Box, CircularProgress, Dialog } from '@mui/material';
 import { DataGrid, GridColDef, GridRowModel } from '@mui/x-data-grid';
 import { Dispatch, ReactElement, SetStateAction } from 'react';
 
@@ -30,19 +30,6 @@ interface Props {
   isTertiaryOpen?: boolean;
 }
 
-function EditModalFooter(): ReactElement {
-  return (
-    <Grid container direction={'row-reverse'}>
-      <Grid>
-        <Button color='info'>Cancel</Button>
-      </Grid>
-      <Grid item>
-        <Button color='primary'>Add</Button>
-      </Grid>
-    </Grid>
-  );
-}
-
 export function EditSection({
   primaryColumns,
   primaryData,
@@ -53,7 +40,6 @@ export function EditSection({
   secondaryData,
   setSecondaryData,
   tertiaryData,
-  onUpdateRowSecondary,
   onUpdateRowTertiary,
   onUpdateRowError,
   loading,
