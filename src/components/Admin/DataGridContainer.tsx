@@ -53,9 +53,9 @@ function EditToolbar(props: EditToolbarProps) {
 }
 
 export interface CrudOperations {
-  c: (id: string) => Promise<GridRowModel>;
+  c: (id: string, technology_id?: string) => Promise<GridRowModel>;
   u: (newRow: GridRowModel) => Promise<GridRowModel>;
-  d: (id: GridRowId) => Promise<GridRowId>;
+  d: (id: GridRowId, technology_id?: string) => Promise<GridRowId>;
 }
 
 interface DataGridContainerProps {

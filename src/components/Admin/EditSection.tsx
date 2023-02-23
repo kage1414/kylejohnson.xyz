@@ -1,5 +1,5 @@
 import { Box, CircularProgress, Dialog } from '@mui/material';
-import { DataGrid, GridColDef, GridRowModel } from '@mui/x-data-grid';
+import { GridColDef, GridRowModel } from '@mui/x-data-grid';
 import { Dispatch, ReactElement, SetStateAction } from 'react';
 
 import DataGridContainer, { CrudOperations } from './DataGridContainer';
@@ -15,11 +15,9 @@ interface Props {
   secondaryCrud?: CrudOperations;
   tertiaryColumns?: GridColDef[];
   tertiaryData?: any[];
+  tertiaryCrud?: CrudOperations;
+  setTertiaryData?: Dispatch<SetStateAction<any[]>>;
   onUpdateRowSecondary?: (
-    newRow: GridRowModel,
-    oldRow: GridRowModel
-  ) => Promise<any>;
-  onUpdateRowTertiary?: (
     newRow: GridRowModel,
     oldRow: GridRowModel
   ) => Promise<any>;
@@ -27,7 +25,7 @@ interface Props {
   loading: boolean;
   onClose?: () => void;
   isSecondaryOpen?: GridRowModel | null;
-  isTertiaryOpen?: boolean;
+  isTertiaryOpen?: GridRowModel | null;
 }
 
 export function EditSection({
@@ -36,25 +34,19 @@ export function EditSection({
   primaryCrud,
   setPrimaryData,
   secondaryColumns,
-  tertiaryColumns,
+  secondaryCrud,
   secondaryData,
   setSecondaryData,
-  tertiaryData,
-  onUpdateRowTertiary,
+  // tertiaryColumns,
+  // tertiaryData,
+  // tertiaryCrud,
+  // setTertiaryData,
+  // isTertiaryOpen,
   onUpdateRowError,
   loading,
   onClose,
   isSecondaryOpen,
-  isTertiaryOpen,
-  secondaryCrud,
 }: Props): ReactElement {
-  console.log({
-    isSecondaryOpen,
-    setSecondaryData,
-    secondaryColumns,
-    secondaryData,
-    secondaryCrud,
-  });
   return (
     <Box height={'91vh'} width={'93vw'}>
       {loading ? (
@@ -88,21 +80,28 @@ export function EditSection({
                 </Box>
               </Dialog>
             )}
-          {tertiaryColumns && (
-            <Dialog open={!!isTertiaryOpen} onClose={onClose} fullWidth>
-              <Box height={'75vh'} width={'75vw'}>
-                <DataGrid
-                  experimentalFeatures={{ newEditingApi: true }}
-                  columns={tertiaryColumns}
-                  rows={tertiaryData || []}
-                  pageSize={5}
-                  rowsPerPageOptions={[5]}
-                  processRowUpdate={onUpdateRowTertiary}
-                  onProcessRowUpdateError={onUpdateRowError}
-                />
-              </Box>
-            </Dialog>
-          )}
+          {/* For assigning technologies ONLY. Prefer secondary */}
+          {/* {setTertiaryData &&
+            tertiaryColumns &&
+            tertiaryData &&
+            tertiaryCrud && (
+              <Dialog
+                open={!!isTertiaryOpen}
+                onClose={onClose}
+                fullWidth
+                maxWidth='xl'
+              >
+                <Box height={'100vh'}>
+                  <DataGridContainer
+                    rows={tertiaryData}
+                    setRows={setTertiaryData}
+                    columns={tertiaryColumns}
+                    crud={tertiaryCrud}
+                    parentRow={isTertiaryOpen}
+                  />
+                </Box>
+              </Dialog>
+            )} */}
         </>
       )}
     </Box>

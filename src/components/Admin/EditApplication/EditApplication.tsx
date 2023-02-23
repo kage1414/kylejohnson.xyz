@@ -5,7 +5,7 @@ import {
   GridValueGetterParams,
 } from '@mui/x-data-grid';
 import axios from 'axios';
-import { ReactElement, useCallback, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 
 import {
   Application as ApplicationData,
@@ -18,6 +18,11 @@ import {
   onDeleteApplication,
   onUpdateApplication,
 } from './primary-crud';
+import {
+  onAddApplicationTechnology,
+  onDeleteApplicationTechnology,
+  onUpdateApplicationTechnology,
+} from './tertiary-crud';
 import { EditSection } from '../EditSection';
 import {
   onAddDescription,
@@ -30,7 +35,8 @@ export function EditApplication(): ReactElement {
   const [loading, setLoading] = useState(false);
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] =
     useState<GridRowModel | null>(null);
-  const [isTechnologyModalOpen, setIsTechnologyModalOpen] = useState(false);
+  const [isTechnologyModalOpen, setIsTechnologyModalOpen] =
+    useState<GridRowModel | null>(null);
   const [editingDescriptions, setEditingDescriptions] = useState<
     DescriptionData[]
   >([]);
@@ -56,21 +62,21 @@ export function EditApplication(): ReactElement {
         );
       },
     },
-    {
-      field: 'technologies',
-      headerName: 'Technologies',
-      width: 175,
-      renderCell: (params) => {
-        return (
-          <Button
-            onClick={() => {
-              setEditingTechnologies(params.value);
-              setIsTechnologyModalOpen(true);
-            }}
-          >{`Technologies`}</Button>
-        );
-      },
-    },
+    // {
+    //   field: 'technologies',
+    //   headerName: 'Technologies',
+    //   width: 175,
+    //   renderCell: (params) => {
+    //     return (
+    //       <Button
+    //         onClick={() => {
+    //           setEditingTechnologies(params.value);
+    //           setIsTechnologyModalOpen(params.row);
+    //         }}
+    //       >{`Technologies`}</Button>
+    //     );
+    //   },
+    // },
     {
       field: 'priority',
       type: 'number',
@@ -96,18 +102,18 @@ export function EditApplication(): ReactElement {
       width: 500,
     },
   ];
-  const technologyColumns: GridColDef[] = [
-    {
-      field: 'name',
-      headerName: 'Name',
-      editable: true,
-      width: 150,
-      type: 'singleSelect',
-      valueOptions: technologyOptions,
-    },
-    { field: 'url', headerName: 'Url', editable: false, width: 300 },
-    { field: 'priority', headerName: 'Priority', editable: true },
-  ];
+  // const technologyColumns: GridColDef[] = [
+  //   {
+  //     field: 'name',
+  //     headerName: 'Name',
+  //     editable: true,
+  //     width: 150,
+  //     type: 'singleSelect',
+  //     valueOptions: technologyOptions,
+  //   },
+  //   { field: 'url', headerName: 'Url', editable: false, width: 300 },
+  //   { field: 'priority', headerName: 'Priority', editable: true },
+  // ];
   const getApplicationData = () => {
     setLoading(true);
     axios
@@ -132,26 +138,9 @@ export function EditApplication(): ReactElement {
   const onUpdateRowError = (error: any) => {
     console.error(error);
   };
-  const onTechnologyRowUpdate = useCallback(
-    (newRow: GridRowModel, oldRow: GridRowModel) => {
-      return axios({
-        method: 'PUT',
-        url: '/api/technology',
-        data: newRow,
-      })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return oldRow;
-        });
-    },
-    []
-  );
   const onClose = () => {
     setIsDescriptionModalOpen(null);
-    setIsTechnologyModalOpen(false);
+    setIsTechnologyModalOpen(null);
     getApplicationData();
   };
 
@@ -180,10 +169,15 @@ export function EditApplication(): ReactElement {
       }}
       isSecondaryOpen={isDescriptionModalOpen}
       setSecondaryData={setEditingDescriptions}
-      tertiaryData={editingTechnologies}
-      tertiaryColumns={technologyColumns}
-      onUpdateRowTertiary={onTechnologyRowUpdate}
-      isTertiaryOpen={isTechnologyModalOpen}
+      // tertiaryData={editingTechnologies}
+      // tertiaryColumns={technologyColumns}
+      // isTertiaryOpen={isTechnologyModalOpen}
+      // setTertiaryData={setEditingTechnologies}
+      // tertiaryCrud={{
+      //   c: onAddApplicationTechnology,
+      //   u: onUpdateApplicationTechnology,
+      //   d: onDeleteApplicationTechnology,
+      // }}
       onUpdateRowError={onUpdateRowError}
       onClose={onClose}
     />

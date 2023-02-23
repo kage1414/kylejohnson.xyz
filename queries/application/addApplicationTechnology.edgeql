@@ -2,9 +2,13 @@ update Application
 filter .id = <uuid>$id
 set {
   technologies += ( 
-    insert Technology {
-      name := <str>$name,
-      url := <str>$url
-    }
+    select (
+      insert Technology {
+        name := <optional str>$name,
+      } unless conflict on .name else Technology
+    )
   )
-}
+};
+select Technology
+{id, name, url, stack, priority }
+filter .name = <str>$name
