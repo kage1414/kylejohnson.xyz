@@ -13,12 +13,12 @@ import {
   onDeleteExperience,
   onUpdateExperience,
 } from './primary-crud';
+import { EditSection } from '../EditSection';
 import {
   onAddDescription,
   onDeleteDescription,
   onUpdateDescription,
-} from './secondary-crud';
-import { EditSection } from '../EditSection';
+} from '../description-crud';
 
 export function EditExperience(): ReactElement {
   const [experience, setExperience] = useState<ExperienceData[]>([]);
@@ -108,7 +108,7 @@ export function EditExperience(): ReactElement {
       setPrimaryData={setExperience}
       secondaryColumns={descriptionColumns}
       secondaryCrud={{
-        c: onAddDescription,
+        c: onAddDescription('experience'),
         u: onUpdateDescription,
         d: onDeleteDescription,
       }}

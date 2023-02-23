@@ -1,9 +1,15 @@
-import { ReactElement, useState, useCallback, useEffect } from 'react';
+import { GridColDef, GridRowModel } from '@mui/x-data-grid';
 import axios from 'axios';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
 
 import { Technology as TechnologyData } from 'dbschema/interfaces';
+
+import {
+  onAddTechnicalSkill,
+  onDeleteTechnicalSkill,
+  onUpdateTechnicalSkill,
+} from './primary-crud';
 import { EditSection } from '../EditSection';
-import { GridColDef, GridRowModel } from '@mui/x-data-grid';
 
 export function EditTechnicalSkills(): ReactElement {
   const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
@@ -53,23 +59,6 @@ export function EditTechnicalSkills(): ReactElement {
   const onUpdateRowError = (error: any) => {
     console.error(error);
   };
-  const onRowUpdate = useCallback(
-    (newRow: GridRowModel, oldRow: GridRowModel) => {
-      return axios({
-        method: 'PUT',
-        url: '/api/technology',
-        data: newRow,
-      })
-        .then(({ data: responseData }) => {
-          return responseData;
-        })
-        .catch((error) => {
-          console.error(error);
-          return oldRow;
-        });
-    },
-    []
-  );
 
   useEffect(() => {
     getStackOptions();
@@ -81,7 +70,12 @@ export function EditTechnicalSkills(): ReactElement {
       loading={loading}
       primaryData={technologies}
       primaryColumns={columns}
-      onUpdateRowPrimary={onRowUpdate}
+      primaryCrud={{
+        c: onAddTechnicalSkill,
+        u: onUpdateTechnicalSkill,
+        d: onDeleteTechnicalSkill,
+      }}
+      setPrimaryData={setTechnologies}
       onUpdateRowError={onUpdateRowError}
     />
   );

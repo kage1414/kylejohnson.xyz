@@ -16,19 +16,23 @@ export const onUpdateDescription = (newRow: GridRowModel) => {
     });
 };
 
-export const onAddDescription = (id: string) => {
-  return axios({
-    method: 'POST',
-    url: '/api/description',
-    data: { link: 'experience', experience_id: id },
-  })
-    .then((response) => {
-      return response.data;
+type Link = 'experience' | 'application';
+
+export const onAddDescription = (link: Link) => {
+  return (id: string) => {
+    return axios({
+      method: 'POST',
+      url: '/api/description',
+      data: { link, experience_id: id },
     })
-    .catch((error) => {
-      console.error(error);
-      return;
-    });
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        console.error(error);
+        return;
+      });
+  };
 };
 
 export const onDeleteDescription = (id: GridRowId) => {

@@ -11,7 +11,7 @@ interface Props {
   setPrimaryData: Dispatch<SetStateAction<any[]>>;
   secondaryColumns?: GridColDef[];
   secondaryData?: any[];
-  setSecondaryData: Dispatch<SetStateAction<any[]>>;
+  setSecondaryData?: Dispatch<SetStateAction<any[]>>;
   secondaryCrud?: CrudOperations;
   tertiaryColumns?: GridColDef[];
   tertiaryData?: any[];
@@ -60,24 +60,27 @@ export function EditSection({
             columns={primaryColumns}
             crud={primaryCrud}
           />
-          {secondaryColumns && secondaryData && secondaryCrud && (
-            <Dialog
-              open={!!isSecondaryOpen}
-              onClose={onClose}
-              fullWidth
-              maxWidth={'xl'}
-            >
-              <Box height={'100vh'}>
-                <DataGridContainer
-                  rows={secondaryData}
-                  setRows={setSecondaryData}
-                  columns={secondaryColumns}
-                  crud={secondaryCrud}
-                  parentRow={isSecondaryOpen}
-                />
-              </Box>
-            </Dialog>
-          )}
+          {setSecondaryData &&
+            secondaryColumns &&
+            secondaryData &&
+            secondaryCrud && (
+              <Dialog
+                open={!!isSecondaryOpen}
+                onClose={onClose}
+                fullWidth
+                maxWidth={'xl'}
+              >
+                <Box height={'100vh'}>
+                  <DataGridContainer
+                    rows={secondaryData}
+                    setRows={setSecondaryData}
+                    columns={secondaryColumns}
+                    crud={secondaryCrud}
+                    parentRow={isSecondaryOpen}
+                  />
+                </Box>
+              </Dialog>
+            )}
           {tertiaryColumns && (
             <Dialog open={!!isTertiaryOpen} onClose={onClose} fullWidth>
               <Box height={'75vh'} width={'75vw'}>
