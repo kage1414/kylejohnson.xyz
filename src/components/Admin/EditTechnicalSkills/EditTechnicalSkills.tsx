@@ -1,6 +1,6 @@
-import { GridColDef, GridRowModel } from '@mui/x-data-grid';
+import { GridColDef } from '@mui/x-data-grid';
 import axios from 'axios';
-import { ReactElement, useCallback, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 
 import { Technology as TechnologyData } from 'dbschema/interfaces';
 
