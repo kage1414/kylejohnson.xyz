@@ -1,10 +1,10 @@
 import { GridRowId, GridRowModel } from '@mui/x-data-grid';
 import axios from 'axios';
 
-export const onAddTechnicalSkill = () => {
+export const onAddTechnology = () => {
   return axios({
     method: 'POST',
-    url: '/api/technical_skills',
+    url: '/api/technology',
     data: {},
   })
     .then((response) => {
@@ -16,12 +16,12 @@ export const onAddTechnicalSkill = () => {
     });
 };
 
-export const onUpdateTechnicalSkill = (
+export const onUpdateTechnology = (
   newRow: GridRowModel
 ): Promise<GridRowModel> => {
   return axios({
     method: 'PUT',
-    url: '/api/technical_skills',
+    url: '/api/technology',
     data: newRow,
   })
     .then((response) => {
@@ -33,10 +33,10 @@ export const onUpdateTechnicalSkill = (
     });
 };
 
-export const onDeleteTechnicalSkill = (id: GridRowId) => {
+export const onDeleteTechnology = (id: GridRowId) => {
   return axios({
     method: 'DELETE',
-    url: '/api/technical_skills',
+    url: '/api/technology',
     data: { id },
   })
     .then((response) => {

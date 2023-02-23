@@ -33,6 +33,7 @@ export function EditExperience(): ReactElement {
     { field: 'time', editable: true, headerName: 'Time', width: 300 },
     {
       field: 'descriptions',
+      headerName: 'Description Items',
       width: 300,
       renderCell: (params) => {
         return (

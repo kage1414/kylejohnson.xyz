@@ -60,8 +60,8 @@ export interface Application extends std.$Object {
   "url"?: string | null;
 }
 export interface Description extends std.$Object {
-  "description": string;
   "priority"?: number | null;
+  "description"?: string | null;
 }
 export interface Education extends std.$Object {
   "active"?: boolean | null;
@@ -86,7 +86,7 @@ export interface Technology extends std.$Object {
   "stack"?: TechStack | null;
   "priority"?: number | null;
   "url"?: string | null;
-  "name": string;
+  "name"?: string | null;
 }
 export interface User extends std.$Object {
   "password_hash": string;

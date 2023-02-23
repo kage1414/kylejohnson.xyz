@@ -22,7 +22,9 @@ module default {
     multi link descriptions -> Description {
       constraint exclusive
     };
-    multi link technologies -> Technology;
+    multi link technologies -> Technology {
+      on target delete allow;
+    };
     property priority -> int32;
   }
 
@@ -43,7 +45,7 @@ module default {
   }
 
   type Technology {
-    required property name -> str {
+    property name -> str {
       constraint exclusive;
     };
     property url -> str;

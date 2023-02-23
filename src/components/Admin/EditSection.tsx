@@ -49,7 +49,7 @@ export function EditSection({
   secondaryCrud,
 }: Props): ReactElement {
   return (
-    <Box height={'75vh'} width={'85vw'}>
+    <Box height={'91vh'} width={'93vw'}>
       {loading ? (
         <CircularProgress />
       ) : (

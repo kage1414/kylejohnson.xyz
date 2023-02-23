@@ -36,7 +36,7 @@ function EditToolbar(props: EditToolbarProps) {
 
   const handleClick = async () => {
     const newRow = await onRowAdd(parentRow?.id);
-    setRows((oldRows) => [...oldRows, { ...newRow, isNew: true }]);
+    setRows((oldRows) => [{ ...newRow, isNew: true }, ...oldRows]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [newRow.id]: { mode: GridRowModes.Edit },
@@ -177,7 +177,7 @@ export default function DataGridContainer({
   return (
     <Box
       sx={{
-        height: 500,
+        height: '100%',
         width: '100%',
         '& .actions': {
           color: 'text.secondary',

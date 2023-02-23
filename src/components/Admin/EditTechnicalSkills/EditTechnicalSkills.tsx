@@ -5,9 +5,9 @@ import { ReactElement, useCallback, useEffect, useState } from 'react';
 import { Technology as TechnologyData } from 'dbschema/interfaces';
 
 import {
-  onAddTechnicalSkill,
-  onDeleteTechnicalSkill,
-  onUpdateTechnicalSkill,
+  onAddTechnology,
+  onDeleteTechnology,
+  onUpdateTechnology,
 } from './primary-crud';
 import { EditSection } from '../EditSection';
 
@@ -71,9 +71,9 @@ export function EditTechnicalSkills(): ReactElement {
       primaryData={technologies}
       primaryColumns={columns}
       primaryCrud={{
-        c: onAddTechnicalSkill,
-        u: onUpdateTechnicalSkill,
-        d: onDeleteTechnicalSkill,
+        c: onAddTechnology,
+        u: onUpdateTechnology,
+        d: onDeleteTechnology,
       }}
       setPrimaryData={setTechnologies}
       onUpdateRowError={onUpdateRowError}
