@@ -4,6 +4,11 @@ import { ReactElement, useCallback, useEffect, useState } from 'react';
 
 import { Technology as TechnologyData } from 'dbschema/interfaces';
 
+import {
+  onAddEducation,
+  onDeleteEducation,
+  onUpdateEducation,
+} from './primary-crud';
 import { EditSection } from '../EditSection';
 
 export function EditEducation(): ReactElement {
@@ -37,7 +42,7 @@ export function EditEducation(): ReactElement {
   const getEducationData = () => {
     setLoading(true);
     axios
-      .get('/api/education')
+      .get('/api/educations')
       .then(({ data }) => {
         setLoading(false);
         setEducation(data || []);
@@ -50,23 +55,6 @@ export function EditEducation(): ReactElement {
   const onUpdateRowError = (error: any) => {
     console.error(error);
   };
-  const onRowUpdate = useCallback(
-    (newRow: GridRowModel, oldRow: GridRowModel) => {
-      return axios({
-        method: 'PUT',
-        url: '/api/education',
-        data: newRow,
-      })
-        .then(({ data: responseData }) => {
-          return responseData;
-        })
-        .catch((error) => {
-          console.error(error);
-          return oldRow;
-        });
-    },
-    []
-  );
 
   useEffect(() => {
     getEducationData();
@@ -77,7 +65,12 @@ export function EditEducation(): ReactElement {
       loading={loading}
       primaryData={education}
       primaryColumns={columns}
-      onUpdateRowPrimary={onRowUpdate}
+      primaryCrud={{
+        c: onAddEducation,
+        u: onUpdateEducation,
+        d: onDeleteEducation,
+      }}
+      setPrimaryData={setEducation}
       onUpdateRowError={onUpdateRowError}
     />
   );

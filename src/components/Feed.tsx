@@ -1,13 +1,15 @@
-import { ReactElement, useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import { Applications, Education, Experience, TechnicalSkills } from './Pages';
 import axios from 'axios';
+import { ReactElement, useEffect, useState } from 'react';
+
 import {
   Application as ApplicationData,
   Education as EducationData,
   Experience as ExperienceData,
   TechStack as TechnicalSkillsData,
 } from 'dbschema/interfaces';
+
+import { Applications, Education, Experience, TechnicalSkills } from './Pages';
 
 interface Props {
   selectedTab: number;
@@ -30,7 +32,7 @@ export function Feed({ selectedTab }: Props): ReactElement {
   };
 
   const fetchEducationData = () => {
-    axios.get('/api/education').then(({ data }: { data: EducationData[] }) => {
+    axios.get('/api/educations').then(({ data }: { data: EducationData[] }) => {
       setEducationData(data.filter((ele) => !!ele.active) || []);
     });
   };

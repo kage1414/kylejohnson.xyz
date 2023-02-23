@@ -1,16 +1,18 @@
-import { ReactElement, useState, useCallback, useEffect } from 'react';
+import { Button } from '@mui/material';
+import {
+  GridColDef,
+  GridRowModel,
+  GridValueGetterParams,
+} from '@mui/x-data-grid';
 import axios from 'axios';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
+
 import {
   Application as ApplicationData,
   Description as DescriptionData,
   Technology as TechnologyData,
 } from 'dbschema/interfaces';
-import { Button } from '@mui/material';
-import {
-  GridColDef,
-  GridValueGetterParams,
-  GridRowModel,
-} from '@mui/x-data-grid';
+
 import { EditSection } from '../EditSection';
 
 export function EditApplication(): ReactElement {

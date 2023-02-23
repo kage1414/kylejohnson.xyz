@@ -1,8 +1,9 @@
-import { useState, ReactElement } from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Navbar } from './Navbar';
-import { BottomBar } from './BottomBar';
 import { Grid } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ReactElement, useState } from 'react';
+
+import { BottomBar } from './BottomBar';
+import { Navbar } from './Navbar';
 import { Sidebar } from './Sidebar';
 
 const theme = createTheme({

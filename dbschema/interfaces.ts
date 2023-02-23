@@ -68,8 +68,8 @@ export interface Education extends std.$Object {
   "certificate"?: string | null;
   "degree"?: string | null;
   "priority"?: number | null;
-  "school": string;
-  "time": string;
+  "school"?: string | null;
+  "time"?: string | null;
 }
 export interface Experience extends std.$Object {
   "descriptions": Description[];

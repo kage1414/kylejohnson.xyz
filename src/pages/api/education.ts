@@ -1,5 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getAllEducations, updateEducation } from 'dbschema/queries';
+
+import {
+  addEducation,
+  deleteEducation,
+  updateEducation,
+} from 'dbschema/queries';
+
 import { client } from '../../edgedb';
 
 export default function educationHandler(
@@ -8,31 +14,44 @@ export default function educationHandler(
 ) {
   const { body, method } = req;
   switch (method) {
-    case 'GET':
-      getAllEducations(client)
+    case 'PUT':
+      const { id } = body;
+      if (!id) {
+        res.status(400);
+        return;
+      }
+      updateEducation(client, body)
         .then((value) => {
-          res.status(200).json(value);
+          res.send(value);
         })
         .catch((error) => {
           res.write(error);
           res.status(400);
         });
       break;
-    case 'PUT':
-      const { id } = body;
-      if (!id) {
-        res.status(400);
-        return;
-      } else {
-        updateEducation(client, body)
-          .then((value) => {
-            res.status(200).json(value);
-          })
-          .catch((error) => {
-            res.write(error);
-            res.status(400);
-          });
-      }
+    case 'POST':
+      addEducation(client, body)
+        .then((value) => {
+          res.status(200).json(value);
+        })
+        .catch((error) => {
+          console.error(error);
+          res.write(error);
+          res.status(400);
+        });
+
+      break;
+    case 'DELETE':
+      deleteEducation(client, body)
+        .then((value) => {
+          res.status(200).json(value);
+        })
+        .catch((error) => {
+          console.error(error);
+          res.write(error);
+          res.status(400);
+        });
+
       break;
   }
 }

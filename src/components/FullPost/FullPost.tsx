@@ -1,15 +1,17 @@
 import { Box, Paper } from '@mui/material';
 import { ReactElement } from 'react';
-import { FullPostHeader, FullPostBody, FullPostFooterList } from '.';
+
 import { Description, Technology } from 'dbschema/interfaces';
 
+import { FullPostBody, FullPostFooterList, FullPostHeader } from '.';
+
 interface Props {
-  title: string;
+  title?: string | null | undefined;
   subtitles?: string | Array<string | null | undefined>;
   descriptions?: Description[];
   technologies?: Technology[];
-  time?: string;
-  url?: string;
+  time?: string | null | undefined;
+  url?: string | null | undefined;
 }
 
 export function FullPost({

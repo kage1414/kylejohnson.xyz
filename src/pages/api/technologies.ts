@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+
 import { getAllTechnologies } from 'dbschema/queries';
+
 import { client } from '../../edgedb';
 
 export default function educationHandler(

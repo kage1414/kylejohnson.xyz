@@ -35,7 +35,6 @@ export default function educationHandler(
         });
       break;
     case 'POST':
-      console.log({ body });
       addTechnology(client, body)
         .then((value) => {
           res.status(200).json(value);

@@ -29,8 +29,8 @@ module default {
   }
 
   type Education {
-    required property school -> str;
-    required property time -> str;
+    property school -> str;
+    property time -> str;
     property certificate -> str;
     property degree -> str;
     property active -> bool {

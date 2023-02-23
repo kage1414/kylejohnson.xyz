@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+
 import { addApplicationDescription } from 'dbschema/queries';
+
 import { client } from '../../../edgedb';
 
 export default function educationHandler(
