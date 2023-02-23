@@ -1,18 +1,39 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+
 import {
+  addDescription,
+  addExperienceDescription,
+  deleteDescription,
   getDescription,
   updateDescription,
-  deleteDescription,
 } from 'dbschema/queries';
+
 import { client } from '../../edgedb';
+
+type Body = NextApiRequest['body'];
+type Query = NextApiRequest['query'];
+
+interface GetRecordIdParams {
+  query: Query;
+  body: Body;
+}
+
+type GetRecordId = (params: GetRecordIdParams) => string | null;
+
+const getRecordId: GetRecordId = ({ query, body }) => {
+  const queryId = query.id;
+  const bodyId = body.id;
+  const id: string | null = queryId || bodyId || null;
+  return id;
+};
 
 export default function descriptionHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const { body, method, query } = req;
-  const { id } = query || body || {};
   const { description, priority } = body;
+  const id = getRecordId({ body, query });
   switch (method) {
     case 'GET':
       if (!id) {
@@ -46,6 +67,39 @@ export default function descriptionHandler(
           });
       }
       break;
+    case 'POST':
+      const { link, experience_id } = body;
+      if (!experience_id || typeof experience_id !== 'string' || !link) {
+        res.status(400).end();
+      } else {
+        switch (link) {
+          case 'experience':
+            addDescription(client, { description }).then(
+              ({ id: description_id, description: inserted_description }) => {
+                addExperienceDescription(client, {
+                  description_id,
+                  experience_id,
+                }).then(() => {
+                  res.status(200).json({
+                    id: description_id,
+                    description: inserted_description,
+                  });
+                });
+              }
+            );
+            break;
+          default:
+            addDescription(client, { description }).then(
+              ({ id: description_id, description: inserted_description }) => {
+                res.status(200).json({
+                  id: description_id,
+                  description: inserted_description,
+                });
+              }
+            );
+        }
+      }
+      break;
     case 'DELETE':
       if (!id) {
         res.status(400);
@@ -54,9 +108,11 @@ export default function descriptionHandler(
           id: id.toString(),
         })
           .then((value) => {
+            console.log({ value });
             res.status(200).json(value);
           })
           .catch((error) => {
+            console.log('error', error);
             res.write(error);
             res.status(400);
           });

@@ -84,9 +84,9 @@ export interface TechStack extends std.$Object {
 }
 export interface Technology extends std.$Object {
   "stack"?: TechStack | null;
-  "name": string;
   "priority"?: number | null;
   "url"?: string | null;
+  "name": string;
 }
 export interface User extends std.$Object {
   "password_hash": string;

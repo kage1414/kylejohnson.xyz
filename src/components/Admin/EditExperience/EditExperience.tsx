@@ -1,18 +1,29 @@
-import { ReactElement, useState, useCallback, useEffect } from 'react';
-import axios from 'axios';
-import {
-  Experience as ExperienceData,
-  Description as DescriptionData,
-} from 'dbschema/interfaces';
 import { Button } from '@mui/material';
 import {
   GridColDef,
-  GridValueGetterParams,
-  GridRowModel,
   GridColumns,
   GridRowId,
+  GridRowModel,
 } from '@mui/x-data-grid';
-import { EditSection } from './EditSection';
+import axios from 'axios';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
+
+import {
+  Description as DescriptionData,
+  Experience as ExperienceData,
+} from 'dbschema/interfaces';
+
+import {
+  onAddExperience,
+  onDeleteExperience,
+  onUpdateExperience,
+} from './primary-crud';
+import {
+  onAddDescription,
+  onDeleteDescription,
+  onUpdateDescription,
+} from './secondary-crud';
+import { EditSection } from '../EditSection';
 
 export function EditExperience(): ReactElement {
   const [experience, setExperience] = useState<ExperienceData[]>([]);
@@ -80,70 +91,6 @@ export function EditExperience(): ReactElement {
     console.error(error);
   };
 
-  const onAddExperience = () => {
-    return axios({
-      method: 'POST',
-      url: '/api/experience',
-      data: {},
-    })
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        console.error(error);
-        return;
-      });
-  };
-
-  const onUpdateExperience = useCallback(
-    (newRow: GridRowModel): Promise<GridRowModel> => {
-      return axios({
-        method: 'PUT',
-        url: '/api/experience',
-        data: newRow,
-      })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return;
-        });
-    },
-    []
-  );
-  const onDeleteExperience = useCallback((id: GridRowId) => {
-    return axios({
-      method: 'DELETE',
-      url: '/api/experience',
-      data: { id },
-    })
-      .then((response) => {
-        return response.data.id;
-      })
-      .catch((error) => {
-        console.error(error);
-        return;
-      });
-  }, []);
-  const onUpdateDescription = useCallback(
-    (newRow: GridRowModel, oldRow: GridRowModel) => {
-      return axios({
-        method: 'PUT',
-        url: '/api/description',
-        data: newRow,
-      })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return;
-        });
-    },
-    []
-  );
-
   const onClose = () => {
     setIsOpen(false);
     getExperienceData();
@@ -156,15 +103,22 @@ export function EditExperience(): ReactElement {
   return (
     <EditSection
       loading={loading}
-      primaryData={experience}
-      secondaryData={editingDescriptions}
       primaryColumns={columns}
-      secondaryColumns={descriptionColumns}
       primaryCrud={{
         c: onAddExperience,
         u: onUpdateExperience,
         d: onDeleteExperience,
       }}
+      primaryData={experience}
+      setPrimaryData={setExperience}
+      secondaryColumns={descriptionColumns}
+      secondaryCrud={{
+        c: onAddDescription,
+        u: onUpdateDescription,
+        d: onDeleteDescription,
+      }}
+      secondaryData={editingDescriptions}
+      setSecondaryData={setEditingDescriptions}
       onUpdateRowError={onUpdateRowError}
       onClose={onClose}
       isSecondaryOpen={isOpen}

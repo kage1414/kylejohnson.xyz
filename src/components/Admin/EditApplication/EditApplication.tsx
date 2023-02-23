@@ -11,7 +11,7 @@ import {
   GridValueGetterParams,
   GridRowModel,
 } from '@mui/x-data-grid';
-import { EditSection } from './EditSection';
+import { EditSection } from '../EditSection';
 
 export function EditApplication(): ReactElement {
   const [application, setApplication] = useState<ApplicationData[]>([]);

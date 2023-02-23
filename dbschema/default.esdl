@@ -7,6 +7,7 @@ module default {
       default := true;
     };
     multi link descriptions -> Description {
+      on target delete allow;
       constraint exclusive
     };
     property priority -> int32;

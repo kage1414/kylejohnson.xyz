@@ -20,23 +20,77 @@ set {
 };`, args);
 }
 
-export async function addExperience(client: Executor, args: {
-  "employer"?: string | null;
-  "time"?: string | null;
-  "position"?: string | null;
-  "active"?: boolean | null;
-  "priority"?: number | null;
+export async function addTechnology(client: Executor, args: {
+  "name": string;
+  "stack": string;
+}): Promise<{
+  "id": string;
+} | null> {
+  return client.querySingle(`insert Technology
+{
+  name := <str>$name,
+  stack := (
+    select TechStack
+    filter .stack = <str>$stack
+    limit 1
+  )
+} unless conflict on .name;`, args);
+}
+
+export async function deleteDescription(client: Executor, args: {
+  "id": string;
+}): Promise<{
+  "id": string;
+} | null> {
+  return client.querySingle(`delete Description
+filter Description.id = <uuid>$id;`, args);
+}
+
+export async function addUser(client: Executor, args: {
+  "username": string;
+  "password_hash": string;
 }): Promise<{
   "id": string;
 }> {
-  return client.queryRequiredSingle(`insert Experience
+  return client.queryRequiredSingle(`insert User
 {
-  employer := <optional str>$employer,
-  time := <optional str>$time,
-  position := <optional str>$position,
-  active := <optional bool>$active,
-  priority := <optional int32>$priority
-};`, args);
+  username := <str>$username,
+  password_hash := <str>$password_hash
+}`, args);
+}
+
+export async function deleteExperience(client: Executor, args: {
+  "id": string;
+}): Promise<{
+  "id": string;
+} | null> {
+  return client.querySingle(`delete Experience
+filter Experience.id = <uuid>$id;`, args);
+}
+
+export async function getAllExperiences(client: Executor): Promise<{
+  "id": string;
+  "employer": string | null;
+  "position": string | null;
+  "time": string | null;
+  "active": boolean | null;
+  "descriptions": {
+    "description": string;
+    "id": string;
+  }[];
+  "priority": number | null;
+}[]> {
+  return client.query(`select Experience 
+{
+  id,
+  employer, 
+  position, 
+  time, 
+  active, 
+  descriptions: {description, id},
+  priority
+}
+order by .priority asc;`);
 }
 
 export async function addApplicationTechnology(client: Executor, args: {
@@ -56,24 +110,6 @@ set {
     }
   )
 }`, args);
-}
-
-export async function deleteDescription(client: Executor, args: {
-  "id": string;
-}): Promise<{
-  "id": string;
-} | null> {
-  return client.querySingle(`delete Description
-filter Description.id = <uuid>$id;`, args);
-}
-
-export async function deleteExperience(client: Executor, args: {
-  "id": string;
-}): Promise<{
-  "id": string;
-} | null> {
-  return client.querySingle(`delete Experience
-filter Experience.id = <uuid>$id;`, args);
 }
 
 export async function getAllEducations(client: Executor): Promise<{
@@ -125,42 +161,42 @@ export async function getAllApplications(client: Executor): Promise<{
 order by .priority asc;`);
 }
 
-export async function addUser(client: Executor, args: {
-  "username": string;
-  "password_hash": string;
+export async function addExperience(client: Executor, args: {
+  "employer"?: string | null;
+  "time"?: string | null;
+  "position"?: string | null;
+  "active"?: boolean | null;
+  "priority"?: number | null;
 }): Promise<{
   "id": string;
 }> {
-  return client.queryRequiredSingle(`insert User
+  return client.queryRequiredSingle(`insert Experience
 {
-  username := <str>$username,
-  password_hash := <str>$password_hash
-}`, args);
+  employer := <optional str>$employer,
+  time := <optional str>$time,
+  position := <optional str>$position,
+  active := <optional bool>$active,
+  priority := <optional int32>$priority
+};`, args);
 }
 
-export async function getAllExperiences(client: Executor): Promise<{
-  "id": string;
-  "employer": string | null;
-  "position": string | null;
-  "time": string | null;
-  "active": boolean | null;
-  "descriptions": {
-    "description": string;
-    "id": string;
+export async function getAllTechnicalSkills(client: Executor): Promise<{
+  "stack": string;
+  "technologies": {
+    "name": string;
+    "url": string | null;
+    "priority": number | null;
   }[];
-  "priority": number | null;
 }[]> {
-  return client.query(`select Experience 
-{
-  id,
-  employer, 
-  position, 
-  time, 
-  active, 
-  descriptions: {description, id},
-  priority
+  return client.query(`select TechStack {
+  stack,
+  technologies := .<stack[is Technology] {
+    name,
+    url,
+    priority
+  },
 }
-order by .priority asc;`);
+order by .stack asc;`);
 }
 
 export async function getAllTechnologies(client: Executor): Promise<{
@@ -181,6 +217,23 @@ export async function getAllTechnologies(client: Executor): Promise<{
 order by .name asc;`);
 }
 
+export async function addExperienceDescription(client: Executor, args: {
+  "experience_id": string;
+  "description_id": string;
+}): Promise<{
+  "id": string;
+} | null> {
+  return client.querySingle(`update  Experience
+filter .id = <uuid>$experience_id
+set {
+  descriptions += (
+    select Description
+    filter .id = <uuid>$description_id
+    limit 1
+  )
+};`, args);
+}
+
 export async function getDescription(client: Executor, args: {
   "id": string;
 }): Promise<{
@@ -189,23 +242,6 @@ export async function getDescription(client: Executor, args: {
 } | null> {
   return client.querySingle(`select Description {id, description}
 filter .id = <uuid>$id;`, args);
-}
-
-export async function addTechnology(client: Executor, args: {
-  "name": string;
-  "stack": string;
-}): Promise<{
-  "id": string;
-} | null> {
-  return client.querySingle(`insert Technology
-{
-  name := <str>$name,
-  stack := (
-    select TechStack
-    filter .stack = <str>$stack
-    limit 1
-  )
-} unless conflict on .name;`, args);
 }
 
 export async function getTechStacks(client: Executor): Promise<{
@@ -228,43 +264,6 @@ export async function getUser(client: Executor, args: {
 }
 filter .username = <str>$username
 limit 1`, args);
-}
-
-export async function updateDescription(client: Executor, args: {
-  "id": string;
-  "description"?: string | null;
-  "priority"?: number | null;
-}): Promise<{
-  "id": string;
-  "description": string;
-} | null> {
-  return client.querySingle(`update Description
-filter .id = <uuid>$id
-set {
-  description := <optional str>$description,
-  priority := <optional int32>$priority
-};
-select Description {id, description}
-filter .id = <uuid>$id;`, args);
-}
-
-export async function getAllTechnicalSkills(client: Executor): Promise<{
-  "stack": string;
-  "technologies": {
-    "name": string;
-    "url": string | null;
-    "priority": number | null;
-  }[];
-}[]> {
-  return client.query(`select TechStack {
-  stack,
-  technologies := .<stack[is Technology] {
-    name,
-    url,
-    priority
-  },
-}
-order by .stack asc;`);
 }
 
 export async function updateApplication(client: Executor, args: {
@@ -348,6 +347,24 @@ select Education {
 filter .id = <uuid>$id;`, args);
 }
 
+export async function updateDescription(client: Executor, args: {
+  "id": string;
+  "description"?: string | null;
+  "priority"?: number | null;
+}): Promise<{
+  "id": string;
+  "description": string;
+} | null> {
+  return client.querySingle(`update Description
+filter .id = <uuid>$id
+set {
+  description := <optional str>$description,
+  priority := <optional int32>$priority
+};
+select Description {id, description}
+filter .id = <uuid>$id;`, args);
+}
+
 export async function updateExperience(client: Executor, args: {
   "id": string;
   "employer"?: string | null;
@@ -420,4 +437,20 @@ select Technology
   priority
 }
 filter .id = <uuid>$id;`, args);
+}
+
+export async function addDescription(client: Executor, args: {
+  "description"?: string | null;
+}): Promise<{
+  "description": string;
+  "id": string;
+}> {
+  return client.queryRequiredSingle(`select (
+  insert Description {
+    description := <optional str>$description
+  }
+) {
+  description,
+  id
+}`, args);
 }

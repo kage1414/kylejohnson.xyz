@@ -2,7 +2,7 @@ import { ReactElement, useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
 
 import { Technology as TechnologyData } from 'dbschema/interfaces';
-import { EditSection } from './EditSection';
+import { EditSection } from '../EditSection';
 import { GridColDef, GridRowModel } from '@mui/x-data-grid';
 
 export function EditTechnicalSkills(): ReactElement {

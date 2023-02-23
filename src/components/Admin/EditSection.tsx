@@ -1,25 +1,17 @@
-import { ReactElement, useCallback, useEffect } from 'react';
-import { Button, CircularProgress, Paper, Grid } from '@mui/material';
-import { Box, Dialog } from '@mui/material';
-import {
-  DataGrid,
-  GridColDef,
-  GridRowModel,
-  GridToolbarContainer,
-  GridRowModes,
-  GridRowsProp,
-  GridRowModesModel,
-  GridRowId,
-} from '@mui/x-data-grid';
-import { Experience, Description, Technology } from 'dbschema/interfaces';
+import { Box, Button, CircularProgress, Dialog, Grid } from '@mui/material';
+import { DataGrid, GridColDef, GridRowModel } from '@mui/x-data-grid';
+import { Dispatch, ReactElement, SetStateAction } from 'react';
+
 import DataGridContainer, { CrudOperations } from './DataGridContainer';
 
 interface Props {
   primaryColumns: GridColDef[];
   primaryData: any[];
   primaryCrud: CrudOperations;
+  setPrimaryData: Dispatch<SetStateAction<any[]>>;
   secondaryColumns?: GridColDef[];
   secondaryData?: any[];
+  setSecondaryData: Dispatch<SetStateAction<any[]>>;
   secondaryCrud?: CrudOperations;
   tertiaryColumns?: GridColDef[];
   tertiaryData?: any[];
@@ -55,9 +47,11 @@ export function EditSection({
   primaryColumns,
   primaryData,
   primaryCrud,
+  setPrimaryData,
   secondaryColumns,
   tertiaryColumns,
   secondaryData,
+  setSecondaryData,
   tertiaryData,
   onUpdateRowSecondary,
   onUpdateRowTertiary,
@@ -75,7 +69,8 @@ export function EditSection({
       ) : (
         <>
           <DataGridContainer
-            initialRows={primaryData}
+            rows={primaryData}
+            setRows={setPrimaryData}
             columns={primaryColumns}
             crud={primaryCrud}
           />
@@ -88,7 +83,8 @@ export function EditSection({
             >
               <Box height={'100vh'}>
                 <DataGridContainer
-                  initialRows={secondaryData}
+                  rows={secondaryData}
+                  setRows={setSecondaryData}
                   columns={secondaryColumns}
                   crud={secondaryCrud}
                 />
