@@ -27,14 +27,15 @@ interface EditToolbarProps {
   setRowModesModel: (
     newModel: (oldModel: GridRowModesModel) => GridRowModesModel
   ) => void;
-  onRowAdd: () => Promise<GridRowModel>;
+  onRowAdd: CrudOperations['c'];
+  parentRow?: GridRowModel;
 }
 
 function EditToolbar(props: EditToolbarProps) {
-  const { setRows, setRowModesModel, onRowAdd } = props;
+  const { setRows, setRowModesModel, onRowAdd, parentRow } = props;
 
   const handleClick = async () => {
-    const newRow = await onRowAdd();
+    const newRow = await onRowAdd(parentRow?.id);
     setRows((oldRows) => [...oldRows, { ...newRow, isNew: true }]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
@@ -52,7 +53,7 @@ function EditToolbar(props: EditToolbarProps) {
 }
 
 export interface CrudOperations {
-  c: () => Promise<GridRowModel>;
+  c: (id: string) => Promise<GridRowModel>;
   u: (newRow: GridRowModel) => Promise<GridRowModel>;
   d: (id: GridRowId) => Promise<GridRowId>;
 }
@@ -62,6 +63,7 @@ interface DataGridContainerProps {
   setRows: Dispatch<SetStateAction<any[]>>;
   columns: GridColumns;
   crud: CrudOperations;
+  parentRow?: GridRowModel | null;
 }
 
 export default function DataGridContainer({
@@ -69,6 +71,7 @@ export default function DataGridContainer({
   setRows,
   columns,
   crud: { c, u, d },
+  parentRow,
 }: DataGridContainerProps) {
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
 
@@ -200,7 +203,7 @@ export default function DataGridContainer({
           Toolbar: EditToolbar,
         }}
         componentsProps={{
-          toolbar: { setRows, setRowModesModel, onRowAdd: c },
+          toolbar: { setRows, setRowModesModel, onRowAdd: c, parentRow },
         }}
         experimentalFeatures={{ newEditingApi: true }}
       />

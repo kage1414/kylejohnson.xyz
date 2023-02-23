@@ -16,11 +16,11 @@ export const onUpdateDescription = (newRow: GridRowModel) => {
     });
 };
 
-export const onAddDescription = () => {
+export const onAddDescription = (id: string) => {
   return axios({
     method: 'POST',
     url: '/api/description',
-    data: { link: 'experience' },
+    data: { link: 'experience', experience_id: id },
   })
     .then((response) => {
       return response.data;
@@ -32,7 +32,6 @@ export const onAddDescription = () => {
 };
 
 export const onDeleteDescription = (id: GridRowId) => {
-  console.log('delete', { id });
   return axios({
     method: 'DELETE',
     url: '/api/description',

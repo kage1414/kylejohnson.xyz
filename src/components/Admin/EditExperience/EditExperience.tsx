@@ -28,7 +28,7 @@ import { EditSection } from '../EditSection';
 export function EditExperience(): ReactElement {
   const [experience, setExperience] = useState<ExperienceData[]>([]);
   const [loading, setLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<GridRowModel | null>(null);
   const [editingDescriptions, setEditingDescriptions] = useState<
     DescriptionData[]
   >([]);
@@ -44,7 +44,7 @@ export function EditExperience(): ReactElement {
           <Button
             onClick={() => {
               setEditingDescriptions(params.value);
-              setIsOpen(true);
+              setIsOpen(params.row);
             }}
           >{`Descriptions`}</Button>
         );
@@ -92,7 +92,7 @@ export function EditExperience(): ReactElement {
   };
 
   const onClose = () => {
-    setIsOpen(false);
+    setIsOpen(null);
     getExperienceData();
   };
 

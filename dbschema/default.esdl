@@ -38,7 +38,7 @@ module default {
   }
 
   type Description {
-    required property description -> str;
+    property description -> str;
     property priority -> int32;
   }
 

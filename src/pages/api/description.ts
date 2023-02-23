@@ -108,11 +108,9 @@ export default function descriptionHandler(
           id: id.toString(),
         })
           .then((value) => {
-            console.log({ value });
             res.status(200).json(value);
           })
           .catch((error) => {
-            console.log('error', error);
             res.write(error);
             res.status(400);
           });

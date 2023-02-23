@@ -26,7 +26,7 @@ interface Props {
   onUpdateRowError: (error: any) => void;
   loading: boolean;
   onClose?: () => void;
-  isSecondaryOpen?: boolean;
+  isSecondaryOpen?: GridRowModel | null;
   isTertiaryOpen?: boolean;
 }
 
@@ -87,6 +87,7 @@ export function EditSection({
                   setRows={setSecondaryData}
                   columns={secondaryColumns}
                   crud={secondaryCrud}
+                  parentRow={isSecondaryOpen}
                 />
               </Box>
             </Dialog>

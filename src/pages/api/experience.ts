@@ -60,7 +60,6 @@ export default function educationHandler(
 
       break;
     case 'DELETE':
-      console.log({ body });
       deleteExperience(client, body)
         .then((value) => {
           res.status(200).json(value);
