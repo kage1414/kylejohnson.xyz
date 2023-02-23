@@ -23,7 +23,7 @@ export const onAddDescription = (link: Link) => {
     return axios({
       method: 'POST',
       url: '/api/description',
-      data: { link, experience_id: id },
+      data: { link, record_id: id },
     })
       .then((response) => {
         return response.data;

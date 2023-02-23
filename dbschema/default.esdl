@@ -14,7 +14,7 @@ module default {
   }
 
   type Application {
-    required property name -> str;
+    property name -> str;
     property url -> str;
     property active -> bool {
       default := true;

@@ -55,9 +55,9 @@ export interface Application extends std.$Object {
   "descriptions": Description[];
   "technologies": Technology[];
   "active"?: boolean | null;
-  "name": string;
   "priority"?: number | null;
   "url"?: string | null;
+  "name"?: string | null;
 }
 export interface Description extends std.$Object {
   "priority"?: number | null;

@@ -48,6 +48,13 @@ export function EditSection({
   isTertiaryOpen,
   secondaryCrud,
 }: Props): ReactElement {
+  console.log({
+    isSecondaryOpen,
+    setSecondaryData,
+    secondaryColumns,
+    secondaryData,
+    secondaryCrud,
+  });
   return (
     <Box height={'91vh'} width={'93vw'}>
       {loading ? (

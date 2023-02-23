@@ -1,9 +1,9 @@
 update Application
-filter .id = <uuid>$id
+filter .id = <uuid>$application_id
 set {
-  descriptions += ( 
-    insert Description {
-      description := <optional str>$description
-    }
+  descriptions += (
+    select Description
+    filter .id = <uuid>$description_id
+    limit 1
   )
 };

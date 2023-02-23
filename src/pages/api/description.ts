@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import {
+  addApplicationDescription,
   addDescription,
   addExperienceDescription,
   deleteDescription,
@@ -68,8 +69,8 @@ export default function descriptionHandler(
       }
       break;
     case 'POST':
-      const { link, experience_id } = body;
-      if (!experience_id || typeof experience_id !== 'string' || !link) {
+      const { link, record_id } = body;
+      if (!record_id || typeof record_id !== 'string' || !link) {
         res.status(400).end();
       } else {
         switch (link) {
@@ -78,7 +79,22 @@ export default function descriptionHandler(
               ({ id: description_id, description: inserted_description }) => {
                 addExperienceDescription(client, {
                   description_id,
-                  experience_id,
+                  experience_id: record_id,
+                }).then(() => {
+                  res.status(200).json({
+                    id: description_id,
+                    description: inserted_description,
+                  });
+                });
+              }
+            );
+            break;
+          case 'application':
+            addDescription(client, { description }).then(
+              ({ id: description_id, description: inserted_description }) => {
+                addApplicationDescription(client, {
+                  description_id,
+                  application_id: record_id,
                 }).then(() => {
                   res.status(200).json({
                     id: description_id,
