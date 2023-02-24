@@ -1,4 +1,4 @@
-import { Box, Grid } from '@mui/material';
+import { AppBar, Box, Grid, Typography } from '@mui/material';
 import { ReactElement } from 'react';
 
 import { Post } from '../Post';
@@ -40,24 +40,20 @@ export function TechnicalSkills({
 
 function TechnicalSkillsElement({ stack, technologies }: any): ReactElement {
   return (
-    <Box
-      style={{
-        margin: '10px 0',
-        flex: '1',
-      }}
-    >
+    <Box>
       <Box>
-        <h2
+        <Box
           style={{
-            height: '16px',
-            padding: '3px',
-            border: 'rgb(199, 199, 199) 1px solid',
-            margin: '6px',
             backgroundColor: 'rgb(240, 243, 252',
           }}
+          margin={1}
+          padding='0 1em'
+          border='rgb(199, 199, 199) 1px solid'
         >
-          {stack}
-        </h2>
+          <Typography variant='h6' margin={0}>
+            {stack}
+          </Typography>
+        </Box>
         <Box>
           {technologies.map((title: any, idx: number) => {
             return <Post key={title + idx} title={title.name} idx={idx} />;
