@@ -14,8 +14,6 @@ export default function educationHandler(
   const { id, name, technology_id } = body;
   switch (method) {
     case 'POST':
-      console.log({ method, name, id });
-
       addApplicationTechnology(client, { id, name })
         .then((value) => {
           res.status(200).json(value);

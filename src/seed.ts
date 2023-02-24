@@ -1,7 +1,8 @@
-import { client } from './edgedb';
-import mock from './mock-db';
 import e from 'dbschema/edgeql-js';
 import { addTechnology } from 'dbschema/queries';
+
+import { client } from './edgedb';
+import mock from './mock-db';
 
 const deleteAllRecords = async () => {
   console.info('Dropping tables');

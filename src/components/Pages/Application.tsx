@@ -1,7 +1,9 @@
-import { ReactElement, useEffect } from 'react';
 import { Box } from '@mui/material';
-import { FullPost } from '../FullPost';
+import { ReactElement, useEffect } from 'react';
+
 import { Application as ApplicationData } from 'dbschema/interfaces';
+
+import { FullPost } from '../FullPost';
 
 type Props = {
   data: ApplicationData;

@@ -1,11 +1,9 @@
-import { ReactElement } from 'react';
 import { Box, Button } from '@mui/material';
-import Link from 'next/link';
 import axios from 'axios';
+import Link from 'next/link';
+import { ReactElement } from 'react';
 
-interface Props {}
-
-export function Sidebar({}: Props): ReactElement {
+export function Sidebar(): ReactElement {
   const style = {
     minHeight: 50,
     display: 'flex',

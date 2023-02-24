@@ -149,10 +149,6 @@ export function EditApplication(): ReactElement {
     getTechnologyOptions();
   }, []);
 
-  useEffect(() => {
-    console.log({ editingTechnologies });
-  }, [editingTechnologies]);
-
   return (
     <EditSection
       loading={loading}

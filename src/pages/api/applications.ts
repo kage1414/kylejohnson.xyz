@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { getAllApplications, updateApplication } from 'dbschema/queries';
+import { getAllApplications } from 'dbschema/queries';
 
 import { client } from '../../edgedb';
 
@@ -8,7 +8,7 @@ export default function applicationHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { body, method } = req;
+  const { method } = req;
   switch (method) {
     case 'GET':
       getAllApplications(client)

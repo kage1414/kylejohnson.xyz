@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Checkbox,
   CircularProgress,
   Dialog,
   List,
@@ -30,7 +29,6 @@ function TechnologiesContainer({
   parentId,
   setTechnologyData,
 }: TechnologiesContainerProps): ReactElement {
-  console.log('render');
   const selectedTechnologyIds = technologies.map(({ id }) => id);
 
   return (

@@ -1,6 +1,6 @@
-import { ReactElement, useState } from 'react';
-import { BottomNavigation, BottomNavigationAction, Link } from '@mui/material';
 import { Email, GitHub, LinkedIn } from '@mui/icons-material';
+import { BottomNavigation, BottomNavigationAction, Link } from '@mui/material';
+import { ReactElement, useState } from 'react';
 
 export function BottomBar(): ReactElement {
   const [value, setValue] = useState<string | null>(null);
