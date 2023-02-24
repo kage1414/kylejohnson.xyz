@@ -24,7 +24,7 @@ export function FullPostFooterList() {
             height: '16px',
           }}
         >
-          <a
+          <span
             style={{
               textDecorationColor: 'rgb(136, 136, 136)',
               fontWeight: 700,
@@ -36,7 +36,7 @@ export function FullPostFooterList() {
             }}
           >
             {button}
-          </a>
+          </span>
         </li>
       ))}
     </ul>
