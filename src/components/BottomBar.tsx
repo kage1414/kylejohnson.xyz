@@ -6,9 +6,7 @@ export function BottomBar(): ReactElement {
   const [value, setValue] = useState<string | null>(null);
   let pinBottomBar;
   if (typeof window !== 'undefined') {
-    console.log(window.document.body.offsetHeight, window.innerHeight);
     pinBottomBar = window.document.body.offsetHeight > window.innerHeight;
-    console.log(pinBottomBar);
   }
   return (
     <BottomNavigation
