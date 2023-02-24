@@ -8,7 +8,6 @@ export function BottomBar(): ReactElement {
     <BottomNavigation
       showLabels
       value={value}
-      sx={{}}
       onChange={(event, newValue) => {
         setValue(newValue);
         setTimeout(() => {
