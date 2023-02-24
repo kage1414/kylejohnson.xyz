@@ -62,21 +62,21 @@ export function EditApplication(): ReactElement {
         );
       },
     },
-    // {
-    //   field: 'technologies',
-    //   headerName: 'Technologies',
-    //   width: 175,
-    //   renderCell: (params) => {
-    //     return (
-    //       <Button
-    //         onClick={() => {
-    //           setEditingTechnologies(params.value);
-    //           setIsTechnologyModalOpen(params.row);
-    //         }}
-    //       >{`Technologies`}</Button>
-    //     );
-    //   },
-    // },
+    {
+      field: 'technologies',
+      headerName: 'Technologies',
+      width: 175,
+      renderCell: (params) => {
+        return (
+          <Button
+            onClick={() => {
+              setEditingTechnologies(params.value);
+              setIsTechnologyModalOpen(params.row);
+            }}
+          >{`Technologies`}</Button>
+        );
+      },
+    },
     {
       field: 'priority',
       type: 'number',
@@ -102,18 +102,18 @@ export function EditApplication(): ReactElement {
       width: 500,
     },
   ];
-  // const technologyColumns: GridColDef[] = [
-  //   {
-  //     field: 'name',
-  //     headerName: 'Name',
-  //     editable: true,
-  //     width: 150,
-  //     type: 'singleSelect',
-  //     valueOptions: technologyOptions,
-  //   },
-  //   { field: 'url', headerName: 'Url', editable: false, width: 300 },
-  //   { field: 'priority', headerName: 'Priority', editable: true },
-  // ];
+  const technologyColumns: GridColDef[] = [
+    {
+      field: 'name',
+      headerName: 'Name',
+      editable: true,
+      width: 150,
+      type: 'singleSelect',
+      valueOptions: technologyOptions,
+    },
+    { field: 'url', headerName: 'Url', editable: false, width: 300 },
+    { field: 'priority', headerName: 'Priority', editable: true },
+  ];
   const getApplicationData = () => {
     setLoading(true);
     axios
@@ -132,7 +132,7 @@ export function EditApplication(): ReactElement {
       method: 'GET',
       url: '/api/technologies',
     }).then(({ data }) => {
-      setTechnologyOptions(data.map((tech: TechnologyData) => tech.name));
+      setTechnologyOptions(data);
     });
   };
   const onUpdateRowError = (error: any) => {
@@ -148,6 +148,10 @@ export function EditApplication(): ReactElement {
     getApplicationData();
     getTechnologyOptions();
   }, []);
+
+  useEffect(() => {
+    console.log({ editingTechnologies });
+  }, [editingTechnologies]);
 
   return (
     <EditSection
@@ -169,15 +173,16 @@ export function EditApplication(): ReactElement {
       }}
       isSecondaryOpen={isDescriptionModalOpen}
       setSecondaryData={setEditingDescriptions}
-      // tertiaryData={editingTechnologies}
-      // tertiaryColumns={technologyColumns}
-      // isTertiaryOpen={isTechnologyModalOpen}
-      // setTertiaryData={setEditingTechnologies}
-      // tertiaryCrud={{
-      //   c: onAddApplicationTechnology,
-      //   u: onUpdateApplicationTechnology,
-      //   d: onDeleteApplicationTechnology,
-      // }}
+      tertiaryData={editingTechnologies}
+      tertiaryColumns={technologyColumns}
+      isTertiaryOpen={isTechnologyModalOpen}
+      setTertiaryData={setEditingTechnologies}
+      tertiaryCrud={{
+        c: onAddApplicationTechnology,
+        u: onUpdateApplicationTechnology,
+        d: onDeleteApplicationTechnology,
+      }}
+      tertiaryOptions={technologyOptions}
       onUpdateRowError={onUpdateRowError}
       onClose={onClose}
     />

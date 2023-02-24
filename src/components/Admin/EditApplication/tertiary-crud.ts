@@ -2,7 +2,6 @@ import { GridRowId, GridRowModel } from '@mui/x-data-grid';
 import axios from 'axios';
 
 export const onAddApplicationTechnology = (id: string, name?: string) => {
-  console.log({ id });
   return axios({
     method: 'POST',
     url: '/api/application_technology',
