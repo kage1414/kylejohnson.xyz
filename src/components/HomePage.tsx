@@ -67,9 +67,9 @@ export default function HomePage({ Component }: Props) {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
-          <BottomBar />
-        </Grid>
+      </Grid>
+      <Grid container>
+        <BottomBar />
       </Grid>
     </ThemeProvider>
   );

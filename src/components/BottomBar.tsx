@@ -4,10 +4,20 @@ import { ReactElement, useState } from 'react';
 
 export function BottomBar(): ReactElement {
   const [value, setValue] = useState<string | null>(null);
+  let pinBottomBar;
+  if (typeof window !== 'undefined') {
+    console.log(window.document.body.offsetHeight, window.innerHeight);
+    pinBottomBar = window.document.body.offsetHeight > window.innerHeight;
+    console.log(pinBottomBar);
+  }
   return (
     <BottomNavigation
       showLabels
-      sx={{ bottom: 0, position: 'fixed', width: '100%' }}
+      sx={{
+        bottom: 0,
+        position: pinBottomBar ? 'fixed' : 'static',
+        width: '100%',
+      }}
       value={value}
       onChange={(event, newValue) => {
         setValue(newValue);
