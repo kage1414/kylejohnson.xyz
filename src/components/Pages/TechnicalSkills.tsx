@@ -1,4 +1,4 @@
-import { AppBar, Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { ReactElement } from 'react';
 
 import { Post } from '../Post';

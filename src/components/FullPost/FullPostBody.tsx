@@ -1,13 +1,4 @@
-import {
-  Box,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  ListSubheader,
-  Paper,
-  Typography,
-} from '@mui/material';
+import { Box, Divider, List, ListItemText, Paper } from '@mui/material';
 import { ReactElement } from 'react';
 
 import { Description, Technology } from 'dbschema/interfaces';

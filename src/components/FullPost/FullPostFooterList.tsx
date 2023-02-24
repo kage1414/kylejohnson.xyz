@@ -1,17 +1,5 @@
-import { Box, Grid, List, ListItem, Theme } from '@mui/material';
+import { Box, Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-
-const BUTTONS = [
-  `${Math.floor(Math.random() * 100)} comments`,
-  'source',
-  'share',
-  'save',
-  'hide',
-  'give award',
-  'report',
-  'crosspost',
-  'hide all child comments',
-];
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
