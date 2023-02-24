@@ -61,7 +61,7 @@ export function Feed({ selectedTab }: Props): ReactElement {
     fetchTechnicalSkillsData();
   }, []);
   return (
-    <Grid container wrap='nowrap'>
+    <Grid container wrap='nowrap' minHeight={'91vh'} minWidth={'93vw'}>
       <Grid item>
         <Experience data={experienceData} display={selectedTab === 0} />
         <TechnicalSkills

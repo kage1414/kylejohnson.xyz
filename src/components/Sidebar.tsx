@@ -1,9 +1,11 @@
 import { Box, Button } from '@mui/material';
 import axios from 'axios';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 
 export function Sidebar(): ReactElement {
+  const { route } = useRouter();
   const style = {
     minHeight: 50,
     display: 'flex',
@@ -68,7 +70,7 @@ export function Sidebar(): ReactElement {
           <li style={style}>
             <Link href={'/admin'}>Admin</Link>
           </li>
-          {process.env.NODE_ENV === 'development' && (
+          {process.env.NODE_ENV === 'development' && route === '/admin' && (
             <li style={style}>
               <Button
                 onClick={() => {
