@@ -1,13 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+
 import {
   addExperience,
+  deleteExperience,
   getAllExperiences,
   updateExperience,
-  deleteExperience,
 } from 'dbschema/queries';
+
 import { client } from '../../edgedb';
 
-export default function educationHandler(
+export default function experienceHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -58,7 +60,6 @@ export default function educationHandler(
 
       break;
     case 'DELETE':
-      console.log({ body });
       deleteExperience(client, body)
         .then((value) => {
           res.status(200).json(value);

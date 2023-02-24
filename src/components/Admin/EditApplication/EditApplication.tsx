@@ -1,29 +1,49 @@
-import { ReactElement, useState, useCallback, useEffect } from 'react';
+import { Button } from '@mui/material';
+import {
+  GridColDef,
+  GridRowModel,
+  GridValueGetterParams,
+} from '@mui/x-data-grid';
 import axios from 'axios';
+import { ReactElement, useEffect, useState } from 'react';
+
 import {
   Application as ApplicationData,
   Description as DescriptionData,
   Technology as TechnologyData,
 } from 'dbschema/interfaces';
-import { Button } from '@mui/material';
+
 import {
-  GridColDef,
-  GridValueGetterParams,
-  GridRowModel,
-} from '@mui/x-data-grid';
-import { EditSection } from './EditSection';
+  onAddApplication,
+  onDeleteApplication,
+  onUpdateApplication,
+} from './primary-crud';
+import {
+  onAddApplicationTechnology,
+  onDeleteApplicationTechnology,
+  onUpdateApplicationTechnology,
+} from './tertiary-crud';
+import { EditSection } from '../EditSection';
+import {
+  onAddDescription,
+  onDeleteDescription,
+  onUpdateDescription,
+} from '../description-crud';
 
 export function EditApplication(): ReactElement {
   const [application, setApplication] = useState<ApplicationData[]>([]);
   const [loading, setLoading] = useState(false);
-  const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
-  const [isTechnologyModalOpen, setIsTechnologyModalOpen] = useState(false);
+  const [isDescriptionModalOpen, setIsDescriptionModalOpen] =
+    useState<GridRowModel | null>(null);
+  const [isTechnologyModalOpen, setIsTechnologyModalOpen] =
+    useState<GridRowModel | null>(null);
   const [editingDescriptions, setEditingDescriptions] = useState<
     DescriptionData[]
   >([]);
   const [editingTechnologies, setEditingTechnologies] = useState<
     TechnologyData[]
   >([]);
+  const [technologyOptions, setTechnologyOptions] = useState([]);
   const columns: GridColDef[] = [
     { field: 'name', headerName: 'Name', editable: true, width: 200 },
     { field: 'url', headerName: 'Url', editable: true, width: 300 },
@@ -36,7 +56,7 @@ export function EditApplication(): ReactElement {
           <Button
             onClick={() => {
               setEditingDescriptions(params.value);
-              setIsDescriptionModalOpen(true);
+              setIsDescriptionModalOpen(params.row);
             }}
           >{`Descriptions`}</Button>
         );
@@ -51,7 +71,7 @@ export function EditApplication(): ReactElement {
           <Button
             onClick={() => {
               setEditingTechnologies(params.value);
-              setIsTechnologyModalOpen(true);
+              setIsTechnologyModalOpen(params.row);
             }}
           >{`Technologies`}</Button>
         );
@@ -74,17 +94,24 @@ export function EditApplication(): ReactElement {
     },
   ];
   const descriptionColumns: GridColDef[] = [
+    { field: 'id', headerName: 'ID', editable: false },
     {
       field: 'description',
       headerName: 'Description',
       editable: true,
       width: 500,
     },
-    { field: 'priority', headerName: 'Priority', editable: true },
   ];
   const technologyColumns: GridColDef[] = [
-    { field: 'name', headerName: 'Name', editable: true, width: 150 },
-    { field: 'url', headerName: 'Url', editable: true, width: 300 },
+    {
+      field: 'name',
+      headerName: 'Name',
+      editable: true,
+      width: 150,
+      type: 'singleSelect',
+      valueOptions: technologyOptions,
+    },
+    { field: 'url', headerName: 'Url', editable: false, width: 300 },
     { field: 'priority', headerName: 'Priority', editable: true },
   ];
   const getApplicationData = () => {
@@ -100,68 +127,26 @@ export function EditApplication(): ReactElement {
         setLoading(false);
       });
   };
+  const getTechnologyOptions = () => {
+    axios({
+      method: 'GET',
+      url: '/api/technologies',
+    }).then(({ data }) => {
+      setTechnologyOptions(data);
+    });
+  };
   const onUpdateRowError = (error: any) => {
     console.error(error);
   };
-  const onRowUpdate = useCallback(
-    (newRow: GridRowModel, oldRow: GridRowModel) => {
-      return axios({
-        method: 'PUT',
-        url: '/api/application',
-        data: newRow,
-      })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return oldRow;
-        });
-    },
-    []
-  );
-  const onDescriptionRowUpdate = useCallback(
-    (newRow: GridRowModel, oldRow: GridRowModel) => {
-      return axios({
-        method: 'PUT',
-        url: '/api/description',
-        data: newRow,
-      })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return oldRow;
-        });
-    },
-    []
-  );
-  const onTechnologyRowUpdate = useCallback(
-    (newRow: GridRowModel, oldRow: GridRowModel) => {
-      return axios({
-        method: 'PUT',
-        url: '/api/technology',
-        data: newRow,
-      })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return oldRow;
-        });
-    },
-    []
-  );
   const onClose = () => {
-    setIsDescriptionModalOpen(false);
-    setIsTechnologyModalOpen(false);
+    setIsDescriptionModalOpen(null);
+    setIsTechnologyModalOpen(null);
     getApplicationData();
   };
 
   useEffect(() => {
     getApplicationData();
+    getTechnologyOptions();
   }, []);
 
   return (
@@ -169,15 +154,31 @@ export function EditApplication(): ReactElement {
       loading={loading}
       primaryData={application}
       primaryColumns={columns}
-      onUpdateRowPrimary={onRowUpdate}
+      primaryCrud={{
+        c: onAddApplication,
+        u: onUpdateApplication,
+        d: onDeleteApplication,
+      }}
+      setPrimaryData={setApplication}
       secondaryData={editingDescriptions}
       secondaryColumns={descriptionColumns}
-      onUpdateRowSecondary={onDescriptionRowUpdate}
+      secondaryCrud={{
+        c: onAddDescription('application'),
+        u: onUpdateDescription,
+        d: onDeleteDescription,
+      }}
       isSecondaryOpen={isDescriptionModalOpen}
+      setSecondaryData={setEditingDescriptions}
       tertiaryData={editingTechnologies}
       tertiaryColumns={technologyColumns}
-      onUpdateRowTertiary={onTechnologyRowUpdate}
       isTertiaryOpen={isTechnologyModalOpen}
+      setTertiaryData={setEditingTechnologies}
+      tertiaryCrud={{
+        c: onAddApplicationTechnology,
+        u: onUpdateApplicationTechnology,
+        d: onDeleteApplicationTechnology,
+      }}
+      tertiaryOptions={technologyOptions}
       onUpdateRowError={onUpdateRowError}
       onClose={onClose}
     />

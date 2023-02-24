@@ -1,15 +1,16 @@
-import { ReactElement } from 'react';
 import { Grid } from '@mui/material';
+import { ReactElement } from 'react';
+
+import {
+  EditApplicationContainer,
+  EditEducationContainer,
+  EditExperienceContainer,
+  EditTechnicalSkillsContainer,
+} from '.';
+
 interface Props {
   selectedTab: number;
 }
-
-import {
-  EditExperienceContainer,
-  EditTechnicalSkillsContainer,
-  EditApplicationContainer,
-  EditEducationContainer,
-} from '.';
 
 export function AdminContainer({ selectedTab }: Props): ReactElement {
   return (

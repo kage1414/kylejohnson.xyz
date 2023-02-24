@@ -1,23 +1,29 @@
-import { ReactElement, useState, useCallback, useEffect } from 'react';
-import axios from 'axios';
-import {
-  Experience as ExperienceData,
-  Description as DescriptionData,
-} from 'dbschema/interfaces';
 import { Button } from '@mui/material';
+import { GridColDef, GridColumns, GridRowModel } from '@mui/x-data-grid';
+import axios from 'axios';
+import { ReactElement, useEffect, useState } from 'react';
+
 import {
-  GridColDef,
-  GridValueGetterParams,
-  GridRowModel,
-  GridColumns,
-  GridRowId,
-} from '@mui/x-data-grid';
-import { EditSection } from './EditSection';
+  Description as DescriptionData,
+  Experience as ExperienceData,
+} from 'dbschema/interfaces';
+
+import {
+  onAddExperience,
+  onDeleteExperience,
+  onUpdateExperience,
+} from './primary-crud';
+import { EditSection } from '../EditSection';
+import {
+  onAddDescription,
+  onDeleteDescription,
+  onUpdateDescription,
+} from '../description-crud';
 
 export function EditExperience(): ReactElement {
   const [experience, setExperience] = useState<ExperienceData[]>([]);
   const [loading, setLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<GridRowModel | null>(null);
   const [editingDescriptions, setEditingDescriptions] = useState<
     DescriptionData[]
   >([]);
@@ -27,13 +33,14 @@ export function EditExperience(): ReactElement {
     { field: 'time', editable: true, headerName: 'Time', width: 300 },
     {
       field: 'descriptions',
+      headerName: 'Description Items',
       width: 300,
       renderCell: (params) => {
         return (
           <Button
             onClick={() => {
               setEditingDescriptions(params.value);
-              setIsOpen(true);
+              setIsOpen(params.row);
             }}
           >{`Descriptions`}</Button>
         );
@@ -80,72 +87,8 @@ export function EditExperience(): ReactElement {
     console.error(error);
   };
 
-  const onAddExperience = () => {
-    return axios({
-      method: 'POST',
-      url: '/api/experience',
-      data: {},
-    })
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        console.error(error);
-        return;
-      });
-  };
-
-  const onUpdateExperience = useCallback(
-    (newRow: GridRowModel): Promise<GridRowModel> => {
-      return axios({
-        method: 'PUT',
-        url: '/api/experience',
-        data: newRow,
-      })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return;
-        });
-    },
-    []
-  );
-  const onDeleteExperience = useCallback((id: GridRowId) => {
-    return axios({
-      method: 'DELETE',
-      url: '/api/experience',
-      data: { id },
-    })
-      .then((response) => {
-        return response.data.id;
-      })
-      .catch((error) => {
-        console.error(error);
-        return;
-      });
-  }, []);
-  const onUpdateDescription = useCallback(
-    (newRow: GridRowModel, oldRow: GridRowModel) => {
-      return axios({
-        method: 'PUT',
-        url: '/api/description',
-        data: newRow,
-      })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          return;
-        });
-    },
-    []
-  );
-
   const onClose = () => {
-    setIsOpen(false);
+    setIsOpen(null);
     getExperienceData();
   };
 
@@ -156,15 +99,22 @@ export function EditExperience(): ReactElement {
   return (
     <EditSection
       loading={loading}
-      primaryData={experience}
-      secondaryData={editingDescriptions}
       primaryColumns={columns}
-      secondaryColumns={descriptionColumns}
       primaryCrud={{
         c: onAddExperience,
         u: onUpdateExperience,
         d: onDeleteExperience,
       }}
+      primaryData={experience}
+      setPrimaryData={setExperience}
+      secondaryColumns={descriptionColumns}
+      secondaryCrud={{
+        c: onAddDescription('experience'),
+        u: onUpdateDescription,
+        d: onDeleteDescription,
+      }}
+      secondaryData={editingDescriptions}
+      setSecondaryData={setEditingDescriptions}
       onUpdateRowError={onUpdateRowError}
       onClose={onClose}
       isSecondaryOpen={isOpen}

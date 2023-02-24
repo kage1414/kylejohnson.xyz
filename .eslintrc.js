@@ -61,22 +61,11 @@ module.exports = {
     'import/no-duplicates': 'error',
     'import/no-useless-path-segments': 'error',
     'import/no-anonymous-default-export': 'off',
-    'no-restricted-imports': [
-      'error',
-      {
-        patterns: ['..'],
-      },
-    ],
     // Using a custom glob pattern since the built in 'KEBAB_CASE'
     // doesn't allow numbers in the file/folder name
     'check-file/folder-naming-convention': [
       'error',
-      { 'src/**': '+([a-z0-9])*(-+([a-z0-9]))' },
-    ],
-    'check-file/filename-naming-convention': [
-      'error',
-      { 'src/**/*': '+([a-z0-9])*(-+([a-z0-9]))' },
-      { ignoreMiddleExtensions: true },
+      { 'src/*.tsx': 'PASCAL_CASE', 'src/*.ts': 'KEBAB_CASE' },
     ],
   },
   settings: {

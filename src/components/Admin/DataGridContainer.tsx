@@ -1,41 +1,42 @@
-import * as React from 'react';
+import AddIcon from '@mui/icons-material/Add';
+import CancelIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
 import {
-  GridRowsProp,
-  GridRowModesModel,
-  GridRowModes,
   DataGrid,
-  GridColumns,
-  GridRowParams,
-  MuiEvent,
-  GridToolbarContainer,
   GridActionsCellItem,
+  GridColumns,
   GridEventListener,
   GridRowId,
   GridRowModel,
+  GridRowModes,
+  GridRowModesModel,
+  GridRowParams,
+  GridRowsProp,
+  GridToolbarContainer,
+  GridValidRowModel,
+  MuiEvent,
 } from '@mui/x-data-grid';
-import { randomId } from '@mui/x-data-grid-generator';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
   setRowModesModel: (
     newModel: (oldModel: GridRowModesModel) => GridRowModesModel
   ) => void;
-  onRowAdd: () => Promise<GridRowModel>;
+  onRowAdd: CrudOperations['c'];
+  parentRow?: GridRowModel;
 }
 
 function EditToolbar(props: EditToolbarProps) {
-  const { setRows, setRowModesModel, onRowAdd } = props;
+  const { setRows, setRowModesModel, onRowAdd, parentRow } = props;
 
   const handleClick = async () => {
-    const newRow = await onRowAdd();
-    setRows((oldRows) => [...oldRows, { ...newRow, isNew: true }]);
+    const newRow = await onRowAdd(parentRow?.id);
+    setRows((oldRows) => [{ ...newRow, isNew: true }, ...oldRows]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [newRow.id]: { mode: GridRowModes.Edit },
@@ -52,26 +53,27 @@ function EditToolbar(props: EditToolbarProps) {
 }
 
 export interface CrudOperations {
-  c: () => Promise<GridRowModel>;
+  c: (id: string, technology_id?: string) => Promise<GridRowModel>;
   u: (newRow: GridRowModel) => Promise<GridRowModel>;
-  d: (id: GridRowId) => Promise<GridRowId>;
+  d: (id: GridRowId, technology_id?: string) => Promise<GridRowId>;
 }
 
 interface DataGridContainerProps {
-  initialRows: any[];
+  rows: GridValidRowModel[];
+  setRows: Dispatch<SetStateAction<any[]>>;
   columns: GridColumns;
   crud: CrudOperations;
+  parentRow?: GridRowModel | null;
 }
 
 export default function DataGridContainer({
-  initialRows,
+  rows,
+  setRows,
   columns,
   crud: { c, u, d },
+  parentRow,
 }: DataGridContainerProps) {
-  const [rows, setRows] = React.useState(initialRows);
-  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
-    {}
-  );
+  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
 
   const handleRowEditStart = (
     params: GridRowParams,
@@ -138,6 +140,7 @@ export default function DataGridContainer({
               icon={<SaveIcon />}
               label='Save'
               onClick={handleSaveClick(id)}
+              key={'grid-actions-cell-item-save'}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
@@ -145,6 +148,7 @@ export default function DataGridContainer({
               className='textPrimary'
               onClick={handleCancelClick(id)}
               color='inherit'
+              key={'grid-actions-cell-item-cancel'}
             />,
           ];
         }
@@ -156,12 +160,14 @@ export default function DataGridContainer({
             className='textPrimary'
             onClick={handleEditClick(id)}
             color='inherit'
+            key={'grid-actions-cell-item-edit'}
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label='Delete'
             onClick={handleDeleteClick(id)}
             color='inherit'
+            key={'grid-actions-cell-item-delete'}
           />,
         ];
       },
@@ -171,7 +177,7 @@ export default function DataGridContainer({
   return (
     <Box
       sx={{
-        height: 500,
+        height: '100%',
         width: '100%',
         '& .actions': {
           color: 'text.secondary',
@@ -197,7 +203,7 @@ export default function DataGridContainer({
           Toolbar: EditToolbar,
         }}
         componentsProps={{
-          toolbar: { setRows, setRowModesModel, onRowAdd: c },
+          toolbar: { setRows, setRowModesModel, onRowAdd: c, parentRow },
         }}
         experimentalFeatures={{ newEditingApi: true }}
       />

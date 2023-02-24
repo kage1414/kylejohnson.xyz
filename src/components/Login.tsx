@@ -1,16 +1,5 @@
-import {
-  Box,
-  Grid,
-  FormControl,
-  FormLabel,
-  Input,
-  InputLabel,
-  Container,
-  TextField,
-  Button,
-} from '@mui/material';
-import { ReactElement, useState, useEffect } from 'react';
-import axios from 'axios';
+import { Box, Button, Grid, TextField } from '@mui/material';
+import { ReactElement, useEffect, useState } from 'react';
 
 export function Login(): ReactElement {
   const [username, setUsername] = useState<string>('');

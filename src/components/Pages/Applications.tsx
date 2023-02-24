@@ -1,6 +1,8 @@
-import { ReactElement } from 'react';
 import { Box } from '@mui/material';
+import { ReactElement } from 'react';
+
 import { Application as ApplicationData } from 'dbschema/interfaces';
+
 import { Application } from './Application';
 
 type Props = {

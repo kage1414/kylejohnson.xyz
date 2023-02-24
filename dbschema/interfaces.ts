@@ -55,21 +55,21 @@ export interface Application extends std.$Object {
   "descriptions": Description[];
   "technologies": Technology[];
   "active"?: boolean | null;
-  "name": string;
   "priority"?: number | null;
   "url"?: string | null;
+  "name"?: string | null;
 }
 export interface Description extends std.$Object {
-  "description": string;
   "priority"?: number | null;
+  "description"?: string | null;
 }
 export interface Education extends std.$Object {
   "active"?: boolean | null;
   "certificate"?: string | null;
   "degree"?: string | null;
   "priority"?: number | null;
-  "school": string;
-  "time": string;
+  "school"?: string | null;
+  "time"?: string | null;
 }
 export interface Experience extends std.$Object {
   "descriptions": Description[];
@@ -84,9 +84,9 @@ export interface TechStack extends std.$Object {
 }
 export interface Technology extends std.$Object {
   "stack"?: TechStack | null;
-  "name": string;
   "priority"?: number | null;
   "url"?: string | null;
+  "name"?: string | null;
 }
 export interface User extends std.$Object {
   "password_hash": string;

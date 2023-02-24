@@ -1,8 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+
 import { getTechStacks } from 'dbschema/queries';
+
 import { client } from '../../edgedb';
 
-export default function educationHandler(
+export default function techStacksHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {

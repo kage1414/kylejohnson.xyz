@@ -7,13 +7,14 @@ module default {
       default := true;
     };
     multi link descriptions -> Description {
+      on target delete allow;
       constraint exclusive
     };
     property priority -> int32;
   }
 
   type Application {
-    required property name -> str;
+    property name -> str;
     property url -> str;
     property active -> bool {
       default := true;
@@ -21,13 +22,15 @@ module default {
     multi link descriptions -> Description {
       constraint exclusive
     };
-    multi link technologies -> Technology;
+    multi link technologies -> Technology {
+      on target delete allow;
+    };
     property priority -> int32;
   }
 
   type Education {
-    required property school -> str;
-    required property time -> str;
+    property school -> str;
+    property time -> str;
     property certificate -> str;
     property degree -> str;
     property active -> bool {
@@ -37,12 +40,12 @@ module default {
   }
 
   type Description {
-    required property description -> str;
+    property description -> str;
     property priority -> int32;
   }
 
   type Technology {
-    required property name -> str {
+    property name -> str {
       constraint exclusive;
     };
     property url -> str;

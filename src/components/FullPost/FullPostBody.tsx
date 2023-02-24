@@ -1,5 +1,6 @@
+import { Box, List, ListItemText, Paper } from '@mui/material';
 import { ReactElement } from 'react';
-import { Box, Paper, List, ListItemText } from '@mui/material';
+
 import { Description, Technology } from 'dbschema/interfaces';
 
 interface Props {

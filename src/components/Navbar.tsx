@@ -1,23 +1,11 @@
-import { ReactElement, SetStateAction, Dispatch } from 'react';
-import { Tabs, Tab, Typography, Toolbar, Grid } from '@mui/material';
+import { Grid, Tab, Tabs, Toolbar, Typography } from '@mui/material';
 import Link from 'next/link';
+import { Dispatch, ReactElement, SetStateAction } from 'react';
 
 interface Props {
   setSelectedTab: Dispatch<SetStateAction<number>>;
   selectedTab: number;
 }
-
-interface GetTabName {
-  tabNumber: number;
-  path: string;
-}
-
-const FEED_TAB_MAP = {
-  0: 'experience',
-  1: 'technical_skills',
-  2: 'applications',
-  3: 'education',
-};
 
 export function Navbar({ selectedTab, setSelectedTab }: Props): ReactElement {
   const getTabStyle = (tabNumber: number) => {

@@ -1,6 +1,7 @@
-import { ReactElement } from 'react';
-import { Post } from '../Post';
 import { Box, Grid } from '@mui/material';
+import { ReactElement } from 'react';
+
+import { Post } from '../Post';
 
 export type TechnicalSkillsData = Array<any>;
 

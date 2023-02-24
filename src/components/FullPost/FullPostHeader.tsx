@@ -1,12 +1,13 @@
+import { Box, Link, Typography } from '@mui/material';
 import { ReactElement } from 'react';
-import { Box, Typography, Link } from '@mui/material';
+
 import { FullPostHeaderSubmittedText } from '.';
 
 interface Props {
-  title: string;
+  title?: string | null | undefined;
   subtitles?: string | Array<string | null | undefined>;
-  time?: string;
-  url?: string;
+  time?: string | null | undefined;
+  url?: string | null | undefined;
 }
 
 export function FullPostHeader({
@@ -22,7 +23,7 @@ export function FullPostHeader({
   return (
     <Box>
       <Link
-        href={url}
+        href={url || ''}
         color='secondary'
         underline={url ? 'hover' : 'none'}
         component={Typography}

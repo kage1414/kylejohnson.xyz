@@ -1,8 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { updateTechnology } from 'dbschema/queries';
+
+import {
+  addTechnology,
+  deleteTechnology,
+  updateTechnology,
+} from 'dbschema/queries';
+
 import { client } from '../../edgedb';
 
-export default function educationHandler(
+export default function technologyHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -27,6 +33,30 @@ export default function educationHandler(
           res.write(error);
           res.status(400);
         });
+      break;
+    case 'POST':
+      addTechnology(client, body)
+        .then((value) => {
+          res.status(200).json(value);
+        })
+        .catch((error) => {
+          console.error(error);
+          res.write(error);
+          res.status(400);
+        });
+
+      break;
+    case 'DELETE':
+      deleteTechnology(client, body)
+        .then((value) => {
+          res.status(200).json(value);
+        })
+        .catch((error) => {
+          console.error(error);
+          res.write(error);
+          res.status(400);
+        });
+
       break;
   }
 }
