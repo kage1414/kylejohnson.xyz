@@ -9,7 +9,7 @@ import {
 
 import { client } from '../../edgedb';
 
-export default function educationHandler(
+export default function experienceHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {

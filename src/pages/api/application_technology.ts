@@ -6,7 +6,7 @@ import {
   removeApplicationTechnology,
 } from 'dbschema/queries';
 
-export default function educationHandler(
+export default function applicationTechnologyHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {

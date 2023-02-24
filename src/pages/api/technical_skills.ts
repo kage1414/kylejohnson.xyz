@@ -4,7 +4,7 @@ import { getAllTechnicalSkills } from 'dbschema/queries';
 
 import { client } from '../../edgedb';
 
-export default async function educationHandler(
+export default async function technicalSkillsHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {

@@ -4,7 +4,7 @@ import { getAllEducations } from 'dbschema/queries';
 
 import { client } from '../../edgedb';
 
-export default function educationHandler(
+export default function educationsHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {

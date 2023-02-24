@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import { seed } from '../../seed';
 
-export default async function educationHandler(
+export default async function seedHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {

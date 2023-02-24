@@ -8,7 +8,7 @@ import {
 
 import { client } from '../../edgedb';
 
-export default function educationHandler(
+export default function technologyHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {

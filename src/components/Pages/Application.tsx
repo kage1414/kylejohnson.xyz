@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { ReactElement, useEffect } from 'react';
+import { ReactElement } from 'react';
 
 import { Application as ApplicationData } from 'dbschema/interfaces';
 
@@ -12,11 +12,6 @@ type Props = {
 export function Application({
   data: { id, name, url, descriptions, technologies },
 }: Props): ReactElement {
-  const body = [
-    ...descriptions.map((item) => item.description as string),
-    'Technologies used:',
-    ...technologies.map((item) => item.name as string),
-  ];
   return (
     <Box key={id}>
       <FullPost
