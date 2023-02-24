@@ -114,7 +114,7 @@ export function EditSection({
   tertiaryOptions,
 }: Props): ReactElement {
   return (
-    <Box height={'91vh'} width={'93vw'}>
+    <Box height={'85vh'} width={'90vw'}>
       {loading ? (
         <CircularProgress />
       ) : (

@@ -7,6 +7,7 @@ export function BottomBar(): ReactElement {
   return (
     <BottomNavigation
       showLabels
+      sx={{ bottom: 0, position: 'fixed', width: '100%' }}
       value={value}
       onChange={(event, newValue) => {
         setValue(newValue);
