@@ -1,7 +1,9 @@
 select User
 {
   username,
-  password_hash,
+  hash,
+  salt,
+  name
 }
 filter .username = <str>$username
 limit 1
