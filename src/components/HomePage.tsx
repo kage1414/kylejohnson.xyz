@@ -46,16 +46,21 @@ interface ComponentProps {
 
 interface Props {
   Component: (props: ComponentProps) => ReactElement;
+  disableTabs?: boolean;
 }
 
-export default function HomePage({ Component }: Props) {
+export default function HomePage({ Component, disableTabs }: Props) {
   const [selectedTab, setSelectedTab] = useState(0);
 
   return (
     <ThemeProvider theme={theme}>
       <Grid container flexDirection={'column'}>
         <Grid item>
-          <Navbar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+          <Navbar
+            selectedTab={selectedTab}
+            setSelectedTab={setSelectedTab}
+            disableTabs={disableTabs}
+          />
         </Grid>
         <Grid item>
           <Grid container flexDirection='row' wrap='nowrap'>

@@ -35,7 +35,8 @@ export async function createUser(req, { username, password, name, email }) {
 
     await addUser(client, user);
   } else {
-    throw new Error('Invite not found');
+    const err = new Error('Invite not found');
+    throw err;
   }
 }
 
@@ -65,5 +66,3 @@ export function validatePassword(user, inputPassword) {
   const passwordsMatch = user.hash === inputHash;
   return passwordsMatch;
 }
-
-function hasInvite(username) {}

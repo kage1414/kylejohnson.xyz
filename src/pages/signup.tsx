@@ -1,25 +1,32 @@
 import Link from 'next/link';
 import Router from 'next/router';
-import { useEffect, useState } from 'react';
+import { FormEventHandler, useEffect, useState } from 'react';
 
-import { useUser } from '../lib/hooks';
+import { useUser } from '../components/hooks';
 
 export default function SignupPage() {
   const [user, { mutate }] = useUser();
   const [errorMsg, setErrorMsg] = useState('');
 
-  async function onSubmit(e) {
+  const onSubmit: FormEventHandler<HTMLFormElement> = async function (e) {
     e.preventDefault();
 
     const body = {
       username: e.currentTarget.username.value,
       password: e.currentTarget.password.value,
-      name: e.currentTarget.name.value,
+      fullname: e.currentTarget.fullname.value,
       email: e.currentTarget.email.value,
     };
 
     if (body.password !== e.currentTarget.rpassword.value) {
       setErrorMsg(`The passwords don't match`);
+      return;
+    }
+
+    if (body.password.length < Number(process.env.NEXT_PUBLIC_MIN_CHARS)) {
+      setErrorMsg(
+        `Password must be at least ${process.env.NEXT_PUBLIC_MIN_CHARS} characters long`
+      );
       return;
     }
 
@@ -36,7 +43,7 @@ export default function SignupPage() {
     } else {
       setErrorMsg(await res.text());
     }
-  }
+  };
 
   useEffect(() => {
     // redirect to home if user is authenticated
@@ -67,7 +74,7 @@ export default function SignupPage() {
           </label>
           <label>
             <span>Name</span>
-            <input type='text' name='name' required />
+            <input type='text' name='fullname' required />
           </label>
           <div className='submit'>
             <button type='submit'>Sign up</button>

@@ -5,9 +5,14 @@ import { Dispatch, ReactElement, SetStateAction } from 'react';
 interface Props {
   setSelectedTab: Dispatch<SetStateAction<number>>;
   selectedTab: number;
+  disableTabs?: boolean;
 }
 
-export function Navbar({ selectedTab, setSelectedTab }: Props): ReactElement {
+export function Navbar({
+  selectedTab,
+  setSelectedTab,
+  disableTabs,
+}: Props): ReactElement {
   const getTabStyle = (tabNumber: number) => {
     return selectedTab === tabNumber
       ? {
@@ -52,17 +57,21 @@ export function Navbar({ selectedTab, setSelectedTab }: Props): ReactElement {
             TabIndicatorProps={{ style: { display: 'none' } }}
           >
             <Tab
+              disabled={disableTabs}
               label={<Typography sx={getTabStyle(0)}>experience</Typography>}
             />
             <Tab
+              disabled={disableTabs}
               label={
                 <Typography sx={getTabStyle(1)}>technical_skills</Typography>
               }
             />
             <Tab
+              disabled={disableTabs}
               label={<Typography sx={getTabStyle(2)}>applications</Typography>}
             />
             <Tab
+              disabled={disableTabs}
               label={<Typography sx={getTabStyle(3)}>education</Typography>}
             />
           </Tabs>
