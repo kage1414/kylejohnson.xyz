@@ -599,6 +599,7 @@ export async function addUser(client: Executor, args: {
 }): Promise<{
   "id": string;
 }> {
+  console.log(args)
   return client.queryRequiredSingle(`insert User
 {
   username := <str>$username,

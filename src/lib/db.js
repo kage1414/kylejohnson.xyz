@@ -40,7 +40,7 @@ export async function createUser(req, { username, password, name, email }) {
   }
 }
 
-export async function findUserByUsername(req, username) {
+export async function findUserByUsername(username) {
   return await getUser(client, { username });
 }
 
