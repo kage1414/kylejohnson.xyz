@@ -34,7 +34,7 @@ export const LoginPage = function () {
       password: e.currentTarget.password.value,
     };
 
-    const res = await fetch('/api/login/password', {
+    const res = await fetch('/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
@@ -51,7 +51,7 @@ export const LoginPage = function () {
 
   useEffect(() => {
     // redirect to home if user is authenticated
-    if (user) Router.push('/');
+    // if (user) Router.push('/');
   }, [user]);
 
   return (

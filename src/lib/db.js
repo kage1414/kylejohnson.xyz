@@ -11,16 +11,20 @@ import {
 
 import { client } from '../edgedb';
 
-export function getAllUsers(req) {
+Error.stackTraceLimit = Infinity;
+
+export function getAllUsers() {
   return getAllUsersDb(client);
 }
 
-export async function createUser(req, { username, password, name, email }) {
-  const existingUser = await getUser(client, {
-    username,
-  });
+export async function createUser({ username, password, name, email }) {
+  const existingUser = await findUserByUsername(username);
+  if (existingUser) {
+    const err = new Error('The username has already been used');
+    throw err;
+  }
   const hasInvite = await getInvite(client, { email });
-  if (!existingUser && hasInvite) {
+  if (hasInvite) {
     const salt = crypto.randomBytes(16).toString('hex');
     const hash = crypto
       .pbkdf2Sync(password, salt, 1000, 64, 'sha512')
@@ -32,8 +36,8 @@ export async function createUser(req, { username, password, name, email }) {
       salt,
       email,
     };
-
-    await addUser(client, user);
+    const newUser = await addUser(client, user);
+    return newUser;
   } else {
     const err = new Error('Invite not found');
     throw err;
@@ -41,17 +45,18 @@ export async function createUser(req, { username, password, name, email }) {
 }
 
 export async function findUserByUsername(username) {
-  return await getUser(client, { username });
+  const result = await getUser(client, { username });
+  return result;
 }
 
-export async function updateUserByUsername(req, username, update) {
+export async function updateUserByUsername(username, update) {
   // Here you update the user based on id/username in the database
   // const user = await db.updateUserById(id, update)
   const user = await updateUser(client, update);
   return user;
 }
 
-export async function deleteUser(req, username) {
+export async function deleteUser(username) {
   // Here you should delete the user in the database
   // await db.deleteUser(req.user)
   await deleteUserDb(client, { username });
