@@ -20,6 +20,7 @@ export function AdminContainer({ selectedTab }: Props): ReactElement {
 
   useEffect(() => {
     // redirect user to login if not authenticated
+    console.log({ user });
     if (!loading && !user) Router.replace('/login');
   }, [user, loading]);
 

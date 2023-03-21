@@ -2,6 +2,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
   Box,
   Button,
+  CircularProgress,
   FormControl,
   IconButton,
   InputAdornment,
@@ -20,6 +21,8 @@ export function SignupPage() {
   const [user, { mutate }] = useUser();
   const [errorMsg, setErrorMsg] = useState('');
 
+  const [loading, setLoading] = useState(false);
+
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -29,6 +32,8 @@ export function SignupPage() {
 
   const onSubmit: FormEventHandler<HTMLFormElement> = async function (e) {
     e.preventDefault();
+    setLoading(true);
+    setErrorMsg('');
 
     const body = {
       username: e.currentTarget.username.value,
@@ -54,6 +59,7 @@ export function SignupPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
+    setLoading(false);
 
     if (res.status === 201) {
       const userObj = await res.json();
@@ -77,6 +83,7 @@ export function SignupPage() {
       {errorMsg && <Typography color='error'>{errorMsg || ''}</Typography>}
       <Box sx={{ m: 1, width: '25ch' }}>
         <form onSubmit={onSubmit}>
+          <TextField sx={{ marginBottom: 1 }} label='Name' id='fullname' />
           <TextField sx={{ marginBottom: 1 }} label='Username' id='username' />
           <TextField sx={{ marginBottom: 1 }} label='Email' id='email' />
           <FormControl variant='outlined' sx={{ marginBottom: 1 }}>
@@ -123,9 +130,10 @@ export function SignupPage() {
               label='Repeat Password'
             />
           </FormControl>
-          <TextField sx={{ marginBottom: 1 }} label='Name' id='fullname' />
           <Box>
-            <Button type='submit'>Sign Up</Button>
+            <Button type='submit'>
+              {loading ? <CircularProgress /> : 'Sign Up'}
+            </Button>
           </Box>
           <Link href='/login'>I already have an account</Link>
         </form>

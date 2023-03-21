@@ -5,4 +5,4 @@ insert User
   salt := <str>$salt,
   name := <optional str>$name,
   email := <str>$email
-}
+};

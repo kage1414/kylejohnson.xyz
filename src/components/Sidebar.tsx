@@ -6,9 +6,12 @@ import { ReactElement } from 'react';
 
 import { useUser } from '@/lib/hooks';
 
+import { useLogout } from './hooks';
+
 export function Sidebar(): ReactElement {
   const [user] = useUser();
-  const { route, push, reload } = useRouter();
+  const { route } = useRouter();
+  const { logout } = useLogout();
 
   const style = {
     minHeight: 50,
@@ -79,23 +82,7 @@ export function Sidebar(): ReactElement {
           {user && (
             <li style={style}>
               <span>
-                <Button
-                  onClick={() => {
-                    axios({
-                      url: '/api/logout',
-                      method: 'POST',
-                      timeout: 10000,
-                    }).then(() => {
-                      if (route !== '/') {
-                        push('/');
-                      } else {
-                        reload();
-                      }
-                    });
-                  }}
-                >
-                  Logout
-                </Button>
+                <Button onClick={logout}>Logout</Button>
               </span>
             </li>
           )}
