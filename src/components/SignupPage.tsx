@@ -10,12 +10,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import Link from 'next/link';
 import Router from 'next/router';
 import { FormEventHandler, MouseEvent, useEffect, useState } from 'react';
 
 import { useUser } from './hooks';
 
-export const LoginPage = function () {
+export function SignupPage() {
   const [user, { mutate }] = useUser();
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -32,20 +33,34 @@ export const LoginPage = function () {
     const body = {
       username: e.currentTarget.username.value,
       password: e.currentTarget.password.value,
+      fullname: e.currentTarget.fullname.value,
+      email: e.currentTarget.email.value,
     };
 
-    const res = await fetch('/api/login', {
+    if (body.password !== e.currentTarget.rpassword.value) {
+      setErrorMsg(`The passwords don't match`);
+      return;
+    }
+
+    if (body.password.length < Number(process.env.NEXT_PUBLIC_MIN_CHARS)) {
+      setErrorMsg(
+        `Password must be at least ${process.env.NEXT_PUBLIC_MIN_CHARS} characters long`
+      );
+      return;
+    }
+
+    const res = await fetch('/api/users', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
-    if (res.status === 200) {
+    if (res.status === 201) {
       const userObj = await res.json();
       // set user to useSWR state
       mutate(userObj);
     } else {
-      setErrorMsg('Incorrect username or password. Try better!');
+      setErrorMsg(await res.text());
     }
   };
 
@@ -57,13 +72,14 @@ export const LoginPage = function () {
   return (
     <Box padding={2}>
       <Box>
-        <Typography>Login to kylejohnson.xyz</Typography>
+        <Typography>Signup to kylejohnson.xyz</Typography>
       </Box>
       {errorMsg && <Typography color='error'>{errorMsg || ''}</Typography>}
       <Box sx={{ m: 1, width: '25ch' }}>
         <form onSubmit={onSubmit}>
           <TextField sx={{ marginBottom: 1 }} label='Username' id='username' />
-          <FormControl variant='outlined'>
+          <TextField sx={{ marginBottom: 1 }} label='Email' id='email' />
+          <FormControl variant='outlined' sx={{ marginBottom: 1 }}>
             <InputLabel htmlFor='outlined-adornment-password'>
               Password
             </InputLabel>
@@ -85,11 +101,35 @@ export const LoginPage = function () {
               label='Password'
             />
           </FormControl>
+          <FormControl variant='outlined' sx={{ marginBottom: 1 }}>
+            <InputLabel htmlFor='outlined-adornment-password'>
+              Repeat Password
+            </InputLabel>
+            <OutlinedInput
+              id='rpassword'
+              type={showPassword ? 'text' : 'password'}
+              endAdornment={
+                <InputAdornment position='end'>
+                  <IconButton
+                    aria-label='toggle password visibility'
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge='end'
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label='Repeat Password'
+            />
+          </FormControl>
+          <TextField sx={{ marginBottom: 1 }} label='Name' id='fullname' />
           <Box>
-            <Button type='submit'>Login</Button>
+            <Button type='submit'>Sign Up</Button>
           </Box>
+          <Link href='/login'>I already have an account</Link>
         </form>
       </Box>
     </Box>
   );
-};
+}

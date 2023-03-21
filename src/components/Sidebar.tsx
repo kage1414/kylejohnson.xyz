@@ -1,14 +1,15 @@
 import { Box, Button } from '@mui/material';
 import axios from 'axios';
 import Link from 'next/link';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 
 import { useUser } from '@/lib/hooks';
 
 export function Sidebar(): ReactElement {
   const [user] = useUser();
-  const { route } = useRouter();
+  const { route, push, reload } = useRouter();
+
   const style = {
     minHeight: 50,
     display: 'flex',
@@ -85,7 +86,11 @@ export function Sidebar(): ReactElement {
                       method: 'POST',
                       timeout: 10000,
                     }).then(() => {
-                      Router.push('/');
+                      if (route !== '/') {
+                        push('/');
+                      } else {
+                        reload();
+                      }
                     });
                   }}
                 >
