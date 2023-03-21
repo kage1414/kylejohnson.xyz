@@ -51,7 +51,7 @@ export const LoginPage = function () {
 
   useEffect(() => {
     // redirect to home if user is authenticated
-    // if (user) Router.push('/');
+    if (user) Router.push('/admin');
   }, [user]);
 
   return (

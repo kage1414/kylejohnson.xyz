@@ -1,10 +1,8 @@
-import { CookieSerializeOptions, parse, serialize } from 'cookie';
-import { NextApiRequest, NextApiResponse } from 'next';
-import { NextHandler } from 'next-connect';
+import { parse, serialize } from 'cookie';
 
 import { createLoginSession, getLoginSession } from './auth';
 
-function parseCookies(req: NextApiRequest) {
+function parseCookies(req) {
   // For API Routes we don't need to parse the cookies.
   if (req.cookies) return req.cookies;
 
@@ -13,23 +11,19 @@ function parseCookies(req: NextApiRequest) {
   return parse(cookie || '');
 }
 
-interface SessionProps {
-  name: string;
-  secret: string | undefined;
-  cookie: CookieSerializeOptions;
-}
+// interface SessionProps {
+//   name: string;
+//   secret: string | undefined;
+//   cookie: CookieSerializeOptions;
+// }
 
-type SessionReturn = (
-  req: NextApiRequest & { session: string },
-  res: NextApiResponse,
-  next: NextHandler
-) => Promise<void>;
+// type SessionReturn = (
+//   req: Express.Request,
+//   res: Express.Response,
+//   next: NextHandler
+// ) => Promise<void>;
 
-export default function session({
-  name,
-  secret,
-  cookie: cookieOpts,
-}: SessionProps): SessionReturn {
+export default function session({ name, secret, cookie: cookieOpts }) {
   return async (req, res, next) => {
     const cookies = parseCookies(req);
     const token = cookies[name];

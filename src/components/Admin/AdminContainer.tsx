@@ -1,5 +1,8 @@
 import { Grid } from '@mui/material';
-import { ReactElement } from 'react';
+import Router from 'next/router';
+import { ReactElement, useEffect } from 'react';
+
+import { useUser } from '@/lib/hooks';
 
 import {
   EditApplicationContainer,
@@ -13,12 +16,23 @@ interface Props {
 }
 
 export function AdminContainer({ selectedTab }: Props): ReactElement {
+  const [user, { loading }] = useUser();
+
+  useEffect(() => {
+    // redirect user to login if not authenticated
+    if (!loading && !user) Router.replace('/login');
+  }, [user, loading]);
+
   return (
     <Grid container wrap='nowrap'>
-      <EditExperienceContainer display={selectedTab === 0} />
-      <EditTechnicalSkillsContainer display={selectedTab === 1} />
-      <EditApplicationContainer display={selectedTab === 2} />
-      <EditEducationContainer display={selectedTab === 3} />
+      {user && (
+        <>
+          <EditExperienceContainer display={selectedTab === 0} />
+          <EditTechnicalSkillsContainer display={selectedTab === 1} />
+          <EditApplicationContainer display={selectedTab === 2} />
+          <EditEducationContainer display={selectedTab === 3} />
+        </>
+      )}
     </Grid>
   );
 }

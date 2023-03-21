@@ -1,10 +1,9 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import nextConnect from 'next-connect';
 
 import passport from '../lib/passport';
 import session from '../lib/session';
 
-const auth = nextConnect<NextApiRequest, NextApiResponse>()
+const auth = nextConnect()
   .use(
     session({
       name: 'sess',

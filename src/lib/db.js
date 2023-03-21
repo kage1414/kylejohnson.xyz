@@ -6,6 +6,7 @@ import {
   getAllUsers as getAllUsersDb,
   getInvite,
   getUser,
+  getUserById,
   updateUser,
 } from 'dbschema/queries';
 
@@ -46,6 +47,11 @@ export async function createUser({ username, password, name, email }) {
 
 export async function findUserByUsername(username) {
   const result = await getUser(client, { username });
+  return result;
+}
+
+export async function findUserById(id) {
+  const result = await getUserById(client, { id });
   return result;
 }
 

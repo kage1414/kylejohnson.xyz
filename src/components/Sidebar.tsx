@@ -1,10 +1,13 @@
 import { Box, Button } from '@mui/material';
 import axios from 'axios';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 
+import { useUser } from '@/lib/hooks';
+
 export function Sidebar(): ReactElement {
+  const [user] = useUser();
   const { route } = useRouter();
   const style = {
     minHeight: 50,
@@ -68,8 +71,29 @@ export function Sidebar(): ReactElement {
             <a href={'https://www.linkedin.com/in/kylejohnson922/'}>linkedin</a>
           </li>
           <li style={style}>
-            <Link href={'/admin'}>Admin</Link>
+            <div>
+              <Link href={'/admin'}>Admin</Link>
+            </div>
           </li>
+          {user && (
+            <li style={style}>
+              <span>
+                <Button
+                  onClick={() => {
+                    axios({
+                      url: '/api/logout',
+                      method: 'POST',
+                      timeout: 10000,
+                    }).then(() => {
+                      Router.push('/');
+                    });
+                  }}
+                >
+                  Logout
+                </Button>
+              </span>
+            </li>
+          )}
           {process.env.NODE_ENV === 'development' && route === '/admin' && (
             <li style={style}>
               <Button
