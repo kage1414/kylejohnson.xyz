@@ -98,6 +98,7 @@ export interface User extends std.$Object {
   "name"?: string | null;
   "salt": string;
   "username": string;
+  "invite"?: Invite | null;
 }
 export namespace schema {
   export type AccessKind = "Select" | "UpdateRead" | "UpdateWrite" | "Delete" | "Insert";

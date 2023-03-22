@@ -7,6 +7,7 @@ import {
   getInvite,
   getUser,
   getUserById,
+  setRegisteredInvite,
   updateUser,
 } from 'dbschema/queries';
 
@@ -24,8 +25,8 @@ export async function createUser({ username, password, name, email }) {
     const err = new Error('The username has already been used');
     throw err;
   }
-  const hasInvite = await getInvite(client, { email });
-  if (hasInvite) {
+  const invite = await getInvite(client, { email });
+  if (invite && !invite.registered) {
     const salt = crypto.randomBytes(16).toString('hex');
     const hash = crypto
       .pbkdf2Sync(password, salt, 1000, 64, 'sha512')
@@ -36,8 +37,10 @@ export async function createUser({ username, password, name, email }) {
       hash,
       salt,
       email,
+      invite_id: invite.id,
     };
     const newUser = await addUser(client, user);
+    await setRegisteredInvite(client, { email });
     return newUser;
   } else {
     const err = new Error('Invite not found');
