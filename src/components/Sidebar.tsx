@@ -1,8 +1,15 @@
-import { Box, Button, Dialog, Paper, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  Dialog,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { MouseEventHandler, ReactElement, useState } from 'react';
+import { ReactElement, useState } from 'react';
 
 import { useLogout } from './hooks';
 
@@ -16,12 +23,11 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
   const [logout] = useLogout();
   const [inviteOpen, setInviteOpen] = useState(false);
 
-  const onInviteOpen = (e: MouseEventHandler<HTMLButtonElement>) => {
-    e.preventDe;
+  const onInviteOpen = () => {
     setInviteOpen(true);
   };
 
-  const onInviteSubmit = (e: MouseEventHandler<HTMLButtonElement>) => {
+  const onInviteSubmit = () => {
     setInviteOpen(false);
   };
 
@@ -104,44 +110,75 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
                   <Button onClick={onLogout}>{'Logout'}</Button>
                 </span>
               </li>
-              <li style={style}>
-                <span>
-                  <Button onClick={onLogout}>{'Invite'}</Button>
-                </span>
-              </li>
-              {process.env.NODE_ENV === 'development' && route === '/admin' && (
-                <li style={style}>
-                  <Button
-                    onClick={() => {
-                      axios({
-                        url: '/api/seed',
-                        method: 'post',
-                        timeout: 10000,
-                      });
-                    }}
-                  >
-                    Seed
-                  </Button>
-                </li>
+              {route === '/admin' && (
+                <>
+                  <li style={style}>
+                    <Button
+                      onClick={() => {
+                        axios({
+                          url: '/api/snapshot',
+                          method: 'post',
+                          timeout: 10000,
+                        });
+                      }}
+                    >
+                      Snapshot
+                    </Button>
+                  </li>
+                  <li style={style}>
+                    <span>
+                      <Button onClick={onInviteOpen}>{'Invite'}</Button>
+                    </span>
+                  </li>
+                  {process.env.NODE_ENV === 'development' && (
+                    <li style={style}>
+                      <Button
+                        onClick={() => {
+                          axios({
+                            url: '/api/seed',
+                            method: 'post',
+                            timeout: 10000,
+                          });
+                        }}
+                      >
+                        Seed
+                      </Button>
+                    </li>
+                  )}
+                </>
               )}
             </>
           )}
         </ul>
       </Box>
       <Dialog open={inviteOpen}>
-        <Box width={16} height={16}>
-          <Paper>
-            <TextField />
-            <Button
-              onClick={(e) => {
-                e.preventDefault();
-                setInviteOpen(true);
-              }}
-            >
-              Submit
-            </Button>
-          </Paper>
-        </Box>
+        <Paper>
+          <Box
+            width={'30vw'}
+            height={'20vh'}
+            display='flex'
+            alignItems={'center'}
+            flexDirection='column'
+            justifyContent={'space-around'}
+          >
+            <Box>
+              <Typography>Send invite</Typography>
+            </Box>
+            <Box>
+              <TextField />
+            </Box>
+            <Box>
+              <Button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setInviteOpen(true);
+                }}
+              >
+                Submit
+              </Button>
+            </Box>
+          </Box>
+        </Paper>
       </Dialog>
     </Box>
   );
