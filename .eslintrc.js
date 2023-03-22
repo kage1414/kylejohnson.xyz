@@ -31,6 +31,7 @@ module.exports = {
       'error',
       { allowShortCircuit: true, allowTernary: true },
     ],
+    '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-unused-vars': ['warn', { args: 'none' }],
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/no-use-before-define': 'off',

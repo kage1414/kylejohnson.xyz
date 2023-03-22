@@ -1,21 +1,19 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 
-import { Application, Education, Experience, TechStack } from 'dbTypes';
-import { snapshotTechnologies } from 'queries';
+import {
+  snapshotApplications,
+  snapshotEducation,
+  snapshotExperience,
+  snapshotTechnologies,
+} from 'queries';
 
 import { client } from './edgedb';
+import mockDb from './mock-db';
 import manifestTemplate from './snapshots/manifest-template.json';
 
 const tmpDir = path.resolve('tmp');
 const manifestFilePath = path.join(tmpDir, 'manifest.json');
-
-interface Snapshot {
-  technical_skills?: TechStack[];
-  applications?: Application[];
-  experience?: Experience[];
-  education?: Education[];
-}
 
 const getJsonFilePath = () => {
   return path.join(tmpDir, `snapshot-${Date.now()}.json`);
@@ -34,9 +32,11 @@ const getManifest = () => {
 };
 
 export const takeSnapshot = async () => {
-  const snapshot: Snapshot = {};
-  const technologies: TechStack[] = await snapshotTechnologies(client);
-  snapshot.technical_skills = technologies;
+  const snapshot: any = {};
+  snapshot.technical_skills = await snapshotTechnologies(client);
+  snapshot.applications = await snapshotApplications(client);
+  snapshot.experience = await snapshotExperience(client);
+  snapshot.education = await snapshotEducation(client);
 
   const jsonFilePath = getJsonFilePath();
 
@@ -47,4 +47,11 @@ export const takeSnapshot = async () => {
   writeFileSync(manifestFilePath, JSON.stringify(manifest, null, '\t'));
 };
 
-export const getMostRecentSnapshot = async () => {};
+export const getMostRecentSnapshot = () => {
+  if (existsSync(manifestFilePath)) {
+    const manifest = JSON.parse(readFileSync(manifestFilePath).toString());
+    return JSON.parse(readFileSync(manifest['most-recent']).toString());
+  } else {
+    return mockDb;
+  }
+};
