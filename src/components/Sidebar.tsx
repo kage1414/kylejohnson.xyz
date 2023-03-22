@@ -94,20 +94,37 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
                   <Button onClick={onLogout}>{'Logout'}</Button>
                 </span>
               </li>
-              {process.env.NODE_ENV === 'development' && route === '/admin' && (
-                <li style={style}>
-                  <Button
-                    onClick={() => {
-                      axios({
-                        url: '/api/seed',
-                        method: 'post',
-                        timeout: 10000,
-                      });
-                    }}
-                  >
-                    Seed
-                  </Button>
-                </li>
+              {route === '/admin' && (
+                <>
+                  <li style={style}>
+                    <Button
+                      onClick={() => {
+                        axios({
+                          url: '/api/snapshot',
+                          method: 'post',
+                          timeout: 10000,
+                        });
+                      }}
+                    >
+                      Snapshot
+                    </Button>
+                  </li>
+                  {process.env.NODE_ENV === 'development' && (
+                    <li style={style}>
+                      <Button
+                        onClick={() => {
+                          axios({
+                            url: '/api/seed',
+                            method: 'post',
+                            timeout: 10000,
+                          });
+                        }}
+                      >
+                        Seed
+                      </Button>
+                    </li>
+                  )}
+                </>
               )}
             </>
           )}

@@ -6,7 +6,7 @@ import {
   updateApplication,
 } from 'dbschema/queries';
 
-import { client } from '../../edgedb';
+import { client } from '../../lib/edgedb';
 
 export default function applicationHandler(
   req: NextApiRequest,

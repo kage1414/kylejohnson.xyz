@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import { getAllTechnologies } from 'dbschema/queries';
 
-import { client } from '../../edgedb';
+import { client } from '../../lib/edgedb';
 
 export default function technologiesHandler(
   req: NextApiRequest,

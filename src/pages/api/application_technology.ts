@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { client } from '@/edgedb';
+import { client } from '@/lib/edgedb';
 import {
   addApplicationTechnology,
   removeApplicationTechnology,

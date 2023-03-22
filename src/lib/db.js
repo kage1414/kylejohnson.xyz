@@ -10,7 +10,7 @@ import {
   updateUser,
 } from 'dbschema/queries';
 
-import { client } from '../edgedb';
+import { client } from './edgedb';
 
 Error.stackTraceLimit = Infinity;
 
