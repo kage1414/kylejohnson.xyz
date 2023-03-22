@@ -1,8 +1,8 @@
-import { Box, Button } from '@mui/material';
+import { Box, Button, Dialog, Paper, TextField } from '@mui/material';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactElement } from 'react';
+import { MouseEventHandler, ReactElement, useState } from 'react';
 
 import { useLogout } from './hooks';
 
@@ -14,6 +14,16 @@ interface Props {
 export function Sidebar({ mutateUser, user }: Props): ReactElement {
   const { route } = useRouter();
   const [logout] = useLogout();
+  const [inviteOpen, setInviteOpen] = useState(false);
+
+  const onInviteOpen = (e: MouseEventHandler<HTMLButtonElement>) => {
+    e.preventDe;
+    setInviteOpen(true);
+  };
+
+  const onInviteSubmit = (e: MouseEventHandler<HTMLButtonElement>) => {
+    setInviteOpen(false);
+  };
 
   const onLogout = () => {
     mutateUser('/api/logout', undefined);
@@ -94,6 +104,11 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
                   <Button onClick={onLogout}>{'Logout'}</Button>
                 </span>
               </li>
+              <li style={style}>
+                <span>
+                  <Button onClick={onLogout}>{'Invite'}</Button>
+                </span>
+              </li>
               {process.env.NODE_ENV === 'development' && route === '/admin' && (
                 <li style={style}>
                   <Button
@@ -113,6 +128,21 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
           )}
         </ul>
       </Box>
+      <Dialog open={inviteOpen}>
+        <Box width={16} height={16}>
+          <Paper>
+            <TextField />
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                setInviteOpen(true);
+              }}
+            >
+              Submit
+            </Button>
+          </Paper>
+        </Box>
+      </Dialog>
     </Box>
   );
 }
