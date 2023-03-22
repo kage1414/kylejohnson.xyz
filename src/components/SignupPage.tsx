@@ -15,10 +15,9 @@ import Link from 'next/link';
 import Router from 'next/router';
 import { FormEventHandler, MouseEvent, useEffect, useState } from 'react';
 
-import { useUser } from './hooks';
+import { ComponentProps } from './HomePage';
 
-export function SignupPage() {
-  const [user, { mutate }] = useUser();
+export function SignupPage({ user, mutateUser }: ComponentProps) {
   const [errorMsg, setErrorMsg] = useState('');
 
   const [loading, setLoading] = useState(false);
@@ -64,7 +63,7 @@ export function SignupPage() {
     if (res.status === 201) {
       const userObj = await res.json();
       // set user to useSWR state
-      mutate(userObj);
+      mutateUser(userObj);
     } else {
       setErrorMsg(await res.text());
     }

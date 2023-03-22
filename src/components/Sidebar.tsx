@@ -1,18 +1,24 @@
-import { Box, Button, CircularProgress } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactElement, useState } from 'react';
-
-import { useUser } from '@/lib/hooks';
+import { ReactElement } from 'react';
 
 import { useLogout } from './hooks';
 
-export function Sidebar(): ReactElement {
-  const [user] = useUser();
+interface Props {
+  mutateUser: any;
+  user: any;
+}
+
+export function Sidebar({ mutateUser, user }: Props): ReactElement {
   const { route } = useRouter();
   const [logout] = useLogout();
-  const [loggingOut, setLoggingOut] = useState(false);
+
+  const onLogout = () => {
+    mutateUser('/api/logout', undefined);
+    logout();
+  };
 
   const style = {
     minHeight: 50,
@@ -30,6 +36,7 @@ export function Sidebar(): ReactElement {
     fontSize: '12px',
     fontFamily: 'verdana, arial, helvetica, sans-serif',
   };
+
   return (
     <Box
       style={{
@@ -84,14 +91,7 @@ export function Sidebar(): ReactElement {
             <>
               <li style={style}>
                 <span>
-                  <Button
-                    onClick={() => {
-                      setLoggingOut(true);
-                      logout();
-                    }}
-                  >
-                    {loggingOut ? <CircularProgress /> : 'Logout'}
-                  </Button>
+                  <Button onClick={onLogout}>{'Logout'}</Button>
                 </span>
               </li>
               {process.env.NODE_ENV === 'development' && route === '/admin' && (

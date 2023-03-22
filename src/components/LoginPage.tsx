@@ -13,10 +13,9 @@ import {
 import Router from 'next/router';
 import { FormEventHandler, MouseEvent, useEffect, useState } from 'react';
 
-import { useUser } from './hooks';
+import { ComponentProps } from './HomePage';
 
-export const LoginPage = function () {
-  const [user, { mutate }] = useUser();
+export const LoginPage = function ({ mutateUser, user }: ComponentProps) {
   const [errorMsg, setErrorMsg] = useState('');
 
   const [showPassword, setShowPassword] = useState(false);
@@ -42,15 +41,13 @@ export const LoginPage = function () {
 
     if (res.status === 200) {
       const userObj = await res.json();
-      // set user to useSWR state
-      mutate(userObj);
+      mutateUser(userObj);
     } else {
       setErrorMsg('Incorrect username or password. Try better!');
     }
   };
 
   useEffect(() => {
-    // redirect to home if user is authenticated
     if (user) Router.push('/admin');
   }, [user]);
 

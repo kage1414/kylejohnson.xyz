@@ -2,26 +2,22 @@ import { Grid } from '@mui/material';
 import Router from 'next/router';
 import { ReactElement, useEffect } from 'react';
 
-import { useUser } from '@/lib/hooks';
-
 import {
   EditApplicationContainer,
   EditEducationContainer,
   EditExperienceContainer,
   EditTechnicalSkillsContainer,
 } from '.';
+import { ComponentProps } from '../HomePage';
 
-interface Props {
-  selectedTab: number;
-}
-
-export function AdminContainer({ selectedTab }: Props): ReactElement {
-  const [user, { loading }] = useUser();
-
+export function AdminContainer({
+  selectedTab,
+  user,
+  loadingUser,
+}: ComponentProps): ReactElement {
   useEffect(() => {
-    // redirect user to login if not authenticated
-    if (!loading && !user) Router.replace('/login');
-  }, [user, loading]);
+    if (!loadingUser && !user) Router.replace('/login');
+  }, [user, loadingUser]);
 
   return (
     <Grid container wrap='nowrap'>

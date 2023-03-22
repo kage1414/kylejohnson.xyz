@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useState } from 'react';
 
 import { useUser } from '@/lib/hooks';
 
@@ -42,8 +42,11 @@ const theme = createTheme({
   },
 });
 
-interface ComponentProps {
+export interface ComponentProps {
   selectedTab: number;
+  mutateUser: any;
+  user: any;
+  loadingUser: boolean;
 }
 
 interface Props {
@@ -53,7 +56,8 @@ interface Props {
 
 export default function HomePage({ Component, disableTabs }: Props) {
   const [selectedTab, setSelectedTab] = useState(0);
-  const [user] = useUser();
+
+  const [user, { mutate, loading }] = useUser();
 
   return (
     <ThemeProvider theme={theme}>
@@ -68,10 +72,15 @@ export default function HomePage({ Component, disableTabs }: Props) {
         <Grid item>
           <Grid container flexDirection='row' wrap='nowrap'>
             <Grid item>
-              <Sidebar />
+              <Sidebar user={user} mutateUser={mutate} />
             </Grid>
             <Grid>
-              <Component selectedTab={selectedTab} />
+              <Component
+                selectedTab={selectedTab}
+                mutateUser={mutate}
+                user={user}
+                loadingUser={loading}
+              />
             </Grid>
           </Grid>
         </Grid>
