@@ -58,7 +58,7 @@ export async function findUserById(id) {
 export async function updateUserByUsername(username, update) {
   // Here you update the user based on id/username in the database
   // const user = await db.updateUserById(id, update)
-  const user = await updateUser(client, update);
+  const user = await updateUser(client, { username, ...update });
   return user;
 }
 

@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material';
+import { Box, Button, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -11,7 +11,7 @@ import { useLogout } from './hooks';
 export function Sidebar(): ReactElement {
   const [user] = useUser();
   const { route } = useRouter();
-  const { logout } = useLogout();
+  const [logout, { loading }] = useLogout();
 
   const style = {
     minHeight: 50,
@@ -76,26 +76,34 @@ export function Sidebar(): ReactElement {
           </li>
           <li style={style}>
             <div>
-              <Link href={'/admin'}>Admin</Link>
+              <Link href={'/admin'}>admin</Link>
             </div>
           </li>
-          {user && (
-            <li style={style}>
-              <span>
-                <Button onClick={logout}>Logout</Button>
-              </span>
-            </li>
-          )}
-          {process.env.NODE_ENV === 'development' && route === '/admin' && (
-            <li style={style}>
-              <Button
-                onClick={() => {
-                  axios({ url: '/api/seed', method: 'post', timeout: 10000 });
-                }}
-              >
-                Seed
-              </Button>
-            </li>
+          {user?.username && (
+            <>
+              <li style={style}>
+                <span>
+                  <Button onClick={logout}>
+                    {loading ? <CircularProgress /> : 'Logout'}
+                  </Button>
+                </span>
+              </li>
+              {process.env.NODE_ENV === 'development' && route === '/admin' && (
+                <li style={style}>
+                  <Button
+                    onClick={() => {
+                      axios({
+                        url: '/api/seed',
+                        method: 'post',
+                        timeout: 10000,
+                      });
+                    }}
+                  >
+                    Seed
+                  </Button>
+                </li>
+              )}
+            </>
           )}
         </ul>
       </Box>

@@ -1,18 +1,27 @@
 import nextConnect from 'next-connect';
 
-import { createUser, deleteUser, updateUserByUsername } from '../../lib/db';
+import {
+  createUser,
+  deleteUser,
+  findUserByUsername,
+  updateUserByUsername,
+} from '../../lib/db';
 import auth from '../../middleware/auth';
 
 const handler = nextConnect();
 
 handler
   .use(auth)
-  .get((req, res) => {
-    // You do not generally want to return the whole user object
-    // because it may contain sensitive field such as !!password!! Only return what needed
-    // const { name, username } = await findUserByUsername(req.body);
-    // res.json({ user: { name, username, favoriteColor } })
-    res.json({ user: req.user });
+  .get(async (req, res) => {
+    const user = req?.session?.passport?.user
+      ? await findUserByUsername(req.session.passport.user).then((user) => {
+          delete user.hash;
+          delete user.salt;
+          return user;
+        })
+      : undefined;
+
+    res.json({ user });
   })
   .post((req, res) => {
     const { username, password, name } = req.body;
@@ -28,9 +37,9 @@ handler
       next();
     }
   })
-  .put((req, res) => {
+  .put(async (req, res) => {
     const { name } = req.body;
-    const user = updateUserByUsername(req, req.user.username, { name });
+    const user = await updateUserByUsername(req, req.user.username, { name });
     res.json({ user });
   })
   .delete((req, res) => {
