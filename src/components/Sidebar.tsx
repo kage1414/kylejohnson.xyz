@@ -2,7 +2,7 @@ import { Box, Button, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 
 import { useUser } from '@/lib/hooks';
 
@@ -11,7 +11,8 @@ import { useLogout } from './hooks';
 export function Sidebar(): ReactElement {
   const [user] = useUser();
   const { route } = useRouter();
-  const [logout, { loading }] = useLogout();
+  const [logout] = useLogout();
+  const [loggingOut, setLoggingOut] = useState(false);
 
   const style = {
     minHeight: 50,
@@ -83,8 +84,13 @@ export function Sidebar(): ReactElement {
             <>
               <li style={style}>
                 <span>
-                  <Button onClick={logout}>
-                    {loading ? <CircularProgress /> : 'Logout'}
+                  <Button
+                    onClick={() => {
+                      setLoggingOut(true);
+                      logout();
+                    }}
+                  >
+                    {loggingOut ? <CircularProgress /> : 'Logout'}
                   </Button>
                 </span>
               </li>

@@ -4,7 +4,7 @@ import auth from '../../middleware/auth';
 
 const handler = nextConnect();
 
-handler.use(auth).post((req, res, next) => {
+handler.use(auth).post((req, res) => {
   req.logOut();
   res.status(204).end();
 });

@@ -1,6 +1,8 @@
 import { Grid } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { ReactElement, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
+
+import { useUser } from '@/lib/hooks';
 
 import { BottomBar } from './BottomBar';
 import { Navbar } from './Navbar';
@@ -51,6 +53,7 @@ interface Props {
 
 export default function HomePage({ Component, disableTabs }: Props) {
   const [selectedTab, setSelectedTab] = useState(0);
+  const [user] = useUser();
 
   return (
     <ThemeProvider theme={theme}>
