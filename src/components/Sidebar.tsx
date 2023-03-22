@@ -4,8 +4,22 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 
-export function Sidebar(): ReactElement {
+import { useLogout } from './hooks';
+
+interface Props {
+  mutateUser: any;
+  user: any;
+}
+
+export function Sidebar({ mutateUser, user }: Props): ReactElement {
   const { route } = useRouter();
+  const [logout] = useLogout();
+
+  const onLogout = () => {
+    mutateUser('/api/logout', undefined);
+    logout();
+  };
+
   const style = {
     minHeight: 50,
     display: 'flex',
@@ -22,6 +36,7 @@ export function Sidebar(): ReactElement {
     fontSize: '12px',
     fontFamily: 'verdana, arial, helvetica, sans-serif',
   };
+
   return (
     <Box
       style={{
@@ -68,18 +83,33 @@ export function Sidebar(): ReactElement {
             <a href={'https://www.linkedin.com/in/kylejohnson922/'}>linkedin</a>
           </li>
           <li style={style}>
-            <Link href={'/admin'}>Admin</Link>
+            <div>
+              <Link href={'/admin'}>admin</Link>
+            </div>
           </li>
-          {process.env.NODE_ENV === 'development' && route === '/admin' && (
-            <li style={style}>
-              <Button
-                onClick={() => {
-                  axios({ url: '/api/seed', method: 'post', timeout: 10000 });
-                }}
-              >
-                Seed
-              </Button>
-            </li>
+          {user?.username && (
+            <>
+              <li style={style}>
+                <span>
+                  <Button onClick={onLogout}>{'Logout'}</Button>
+                </span>
+              </li>
+              {process.env.NODE_ENV === 'development' && route === '/admin' && (
+                <li style={style}>
+                  <Button
+                    onClick={() => {
+                      axios({
+                        url: '/api/seed',
+                        method: 'post',
+                        timeout: 10000,
+                      });
+                    }}
+                  >
+                    Seed
+                  </Button>
+                </li>
+              )}
+            </>
           )}
         </ul>
       </Box>

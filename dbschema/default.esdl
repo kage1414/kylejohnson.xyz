@@ -60,7 +60,23 @@ module default {
   }
 
   type User {
-    required property username -> str;
-    required property password_hash -> str;
+    required property username -> str {
+      constraint exclusive;
+    };
+    required property email -> str {
+      constraint exclusive;
+    };
+    required property hash -> str;
+    required property salt -> str;
+    property name -> str;
+  }
+
+  type Invite {
+    required property email -> str {
+      constraint exclusive;
+    };
+    required property registered -> bool {
+      default := false;
+    };
   }
 }
