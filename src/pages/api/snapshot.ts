@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { seed } from '../../lib/seed';
+import { takeSnapshot } from '@/lib/take-snapshot';
 
 export default async function seedHandler(
   req: NextApiRequest,
@@ -9,7 +9,7 @@ export default async function seedHandler(
   const { method } = req;
   switch (method) {
     case 'POST':
-      await seed();
+      await takeSnapshot();
       res.status(200).end();
       break;
   }

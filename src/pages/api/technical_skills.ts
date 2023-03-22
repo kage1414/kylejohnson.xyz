@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import { getAllTechnicalSkills } from 'dbschema/queries';
 
-import { client } from '../../edgedb';
+import { client } from '../../lib/edgedb';
 
 export default async function technicalSkillsHandler(
   req: NextApiRequest,

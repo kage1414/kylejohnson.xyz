@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import { getAllEducations } from 'dbschema/queries';
 
-import { client } from '../../edgedb';
+import { client } from '../../lib/edgedb';
 
 export default function educationsHandler(
   req: NextApiRequest,
