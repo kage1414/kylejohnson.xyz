@@ -5,14 +5,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "yarn gen:all && next build",
     "start": "next start",
     "lint": "next lint",
     "migrate": "edgedb migration create && edgedb migrate",
-    "gen:queries": "npx @edgedb/generate queries --file",
-    "gen:interfaces": "npx @edgedb/generate interfaces --file",
+    "gen:queries": "npx @edgedb/generate queries --file dbschema/queries/index",
+    "gen:interfaces": "npx @edgedb/generate interfaces --file dbschema/interfaces/index.ts",
     "gen:eqljs": "npx @edgedb/generate edgeql-js --force-overwrite",
-    "gen:all": "npx @edgedb/generate edgeql-js --force-overwrite && npx @edgedb/generate interfaces && npx @edgedb/generate queries --file",
+    "gen:all": "yarn gen:eqljs && yarn gen:interfaces && yarn gen:queries",
     "seed": "ts-node src/seed.ts"
   },
   "dependencies": {
