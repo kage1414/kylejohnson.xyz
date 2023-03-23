@@ -1,8 +1,17 @@
-import { Box, Button } from '@mui/material';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  Paper,
+  Snackbar,
+  TextField,
+  Typography,
+} from '@mui/material';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 
 import { useLogout } from './hooks';
 
@@ -14,6 +23,33 @@ interface Props {
 export function Sidebar({ mutateUser, user }: Props): ReactElement {
   const { route } = useRouter();
   const [logout] = useLogout();
+  const [inviteOpen, setInviteOpen] = useState(false);
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+
+  const onInviteOpen = () => {
+    setInviteOpen(true);
+  };
+
+  const onInviteSubmit = () => {
+    setLoading(true);
+    axios({
+      method: 'POST',
+      url: '/api/invite',
+      data: { email },
+    })
+      .then(({ data }) => {
+        setLoading(false);
+        setInviteOpen(false);
+        setToastMessage(data);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setToastMessage(err.response.data);
+        console.error(err);
+      });
+  };
 
   const onLogout = () => {
     mutateUser('/api/logout', undefined);
@@ -109,6 +145,11 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
                       Snapshot
                     </Button>
                   </li>
+                  <li style={style}>
+                    <span>
+                      <Button onClick={onInviteOpen}>{'Invite'}</Button>
+                    </span>
+                  </li>
                   {process.env.NODE_ENV === 'development' && (
                     <li style={style}>
                       <Button
@@ -130,6 +171,43 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
           )}
         </ul>
       </Box>
+      <Dialog open={inviteOpen}>
+        <Paper>
+          <Box
+            width={'30vw'}
+            height={'20vh'}
+            display='flex'
+            alignItems={'center'}
+            flexDirection='column'
+            justifyContent={'space-around'}
+            padding={4}
+          >
+            <Box>
+              <Typography>Send invite</Typography>
+            </Box>
+            <Box>
+              <TextField
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+              />
+            </Box>
+            <Box>
+              <Button onClick={onInviteSubmit}>
+                {loading ? <CircularProgress /> : 'Send'}
+              </Button>
+            </Box>
+          </Box>
+        </Paper>
+      </Dialog>
+      <Snackbar
+        open={!!toastMessage}
+        autoHideDuration={6000}
+        onClose={() => {
+          setToastMessage('');
+        }}
+        message={toastMessage}
+      />
     </Box>
   );
 }

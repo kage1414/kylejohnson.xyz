@@ -6,7 +6,7 @@ import auth from '../../middleware/auth';
 const handler = nextConnect();
 
 handler.use(auth).post(async (req, res, next) => {
-  const { username, password, fullname, email } = req.body;
+  const { username, password, fullname, email, key } = req.body;
   if (!username || !password || !fullname || !email) {
     return res.status(400).send('Missing fields');
   }
@@ -15,6 +15,7 @@ handler.use(auth).post(async (req, res, next) => {
     name: fullname,
     email,
     password,
+    key,
   };
   createUser(user)
     .then((newUser) => {

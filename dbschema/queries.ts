@@ -31,13 +31,29 @@ select Technology
 filter .name = <str>$name`, args);
 }
 
-export async function deleteDescription(client: Executor, args: {
+export async function getAllExperiences(client: Executor): Promise<{
   "id": string;
-}): Promise<{
-  "id": string;
-} | null> {
-  return client.querySingle(`delete Description
-filter Description.id = <uuid>$id;`, args);
+  "employer": string | null;
+  "position": string | null;
+  "time": string | null;
+  "active": boolean | null;
+  "descriptions": {
+    "description": string | null;
+    "id": string;
+  }[];
+  "priority": number | null;
+}[]> {
+  return client.query(`select Experience 
+{
+  id,
+  employer, 
+  position, 
+  time, 
+  active, 
+  descriptions: {description, id},
+  priority
+}
+order by .priority asc;`);
 }
 
 export async function deleteApplication(client: Executor, args: {

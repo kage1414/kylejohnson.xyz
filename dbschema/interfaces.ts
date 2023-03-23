@@ -82,6 +82,7 @@ export interface Experience extends std.$Object {
 export interface Invite extends std.$Object {
   "email": string;
   "registered": boolean;
+  "key": string;
 }
 export interface TechStack extends std.$Object {
   "stack": string;
@@ -98,6 +99,7 @@ export interface User extends std.$Object {
   "name"?: string | null;
   "salt": string;
   "username": string;
+  "invite"?: Invite | null;
 }
 export namespace schema {
   export type AccessKind = "Select" | "UpdateRead" | "UpdateWrite" | "Delete" | "Insert";

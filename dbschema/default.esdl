@@ -69,14 +69,14 @@ module default {
     required property hash -> str;
     required property salt -> str;
     property name -> str;
+    link invite -> Invite;
   }
 
   type Invite {
-    required property email -> str {
-      constraint exclusive;
-    };
+    required property email -> str;
     required property registered -> bool {
       default := false;
     };
+    required property key -> str;
   }
 }

@@ -1,3 +1,3 @@
-select Invite
-filter .email = <str>$email
+select Invite { id, registered, email }
+filter .key = <str>$key
 limit 1

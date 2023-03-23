@@ -12,13 +12,14 @@ import {
   Typography,
 } from '@mui/material';
 import Link from 'next/link';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { FormEventHandler, MouseEvent, useEffect, useState } from 'react';
 
 import { ComponentProps } from './HomePage';
 
 export function SignupPage({ user, mutateUser }: ComponentProps) {
   const [errorMsg, setErrorMsg] = useState('');
+  const router = useRouter();
 
   const [loading, setLoading] = useState(false);
 
@@ -39,6 +40,7 @@ export function SignupPage({ user, mutateUser }: ComponentProps) {
       password: e.currentTarget.password.value,
       fullname: e.currentTarget.fullname.value,
       email: e.currentTarget.email.value,
+      key: router.query.key,
     };
 
     if (body.password !== e.currentTarget.rpassword.value) {

@@ -4,5 +4,9 @@ insert User
   hash := <str>$hash,
   salt := <str>$salt,
   name := <optional str>$name,
-  email := <str>$email
+  email := <str>$email,
+  invite := (
+    select Invite
+    filter .id = <uuid>$invite_id
+  )
 };
