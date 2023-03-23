@@ -27,8 +27,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "dbTypes": ["dbschema/interfaces.ts"],
-      "queries": ["dbschema/queries.ts"]
+      "dbTypes": ["dbschema/interfaces"],
+      "queries": ["dbschema/queries"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

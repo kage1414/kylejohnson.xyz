@@ -9,7 +9,7 @@ import {
 } from 'queries';
 
 import { client } from './edgedb';
-import mockDb from './mock-db';
+import mockDb from './mock-db.json';
 import manifestTemplate from './snapshots/manifest-template.json';
 
 const tmpDir = path.resolve('tmp');

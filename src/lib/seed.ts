@@ -6,6 +6,7 @@ import {
   TechStack,
   Technology,
 } from 'dbTypes';
+
 import e from 'dbschema/edgeql-js';
 import { addTechnology } from 'dbschema/queries';
 

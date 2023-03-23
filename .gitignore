@@ -34,7 +34,8 @@ dist
 config.js
 
 dbschema/edgeql-js
-dbschema/interfaces.ts
+dbschema/interfaces/*
+dbschema/queries/*
 *.pem
 
 # debug
