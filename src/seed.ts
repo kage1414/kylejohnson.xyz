@@ -1,7 +1,7 @@
 import e from 'dbschema/edgeql-js';
 import { addTechnology } from 'dbschema/queries';
 
-import { client } from './edgedb';
+import { client } from './lib/edgedb';
 import mock from './mock-db';
 
 const deleteAllRecords = async () => {

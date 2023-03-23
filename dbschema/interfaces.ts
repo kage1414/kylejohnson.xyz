@@ -82,6 +82,7 @@ export interface Experience extends std.$Object {
 export interface Invite extends std.$Object {
   "email": string;
   "registered": boolean;
+  "key": string;
 }
 export interface TechStack extends std.$Object {
   "stack": string;

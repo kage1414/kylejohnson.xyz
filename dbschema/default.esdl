@@ -77,5 +77,6 @@ module default {
     required property registered -> bool {
       default := false;
     };
+    required property key -> str;
   }
 }

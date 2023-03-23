@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import { getTechStacks } from 'dbschema/queries';
 
-import { client } from '../../edgedb';
+import { client } from '../../lib/edgedb';
 
 export default function techStacksHandler(
   req: NextApiRequest,

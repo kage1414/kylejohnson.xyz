@@ -11,7 +11,7 @@ import {
   updateUser,
 } from 'dbschema/queries';
 
-import { client } from '../edgedb';
+import { client } from './edgedb';
 
 Error.stackTraceLimit = Infinity;
 
@@ -19,14 +19,14 @@ export function getAllUsers() {
   return getAllUsersDb(client);
 }
 
-export async function createUser({ username, password, name, email }) {
+export async function createUser({ username, password, name, email, key }) {
   const existingUser = await findUserByUsername(username);
   if (existingUser) {
     const err = new Error('The username has already been used');
     throw err;
   }
-  const invite = await getInvite(client, { email });
-  if (invite && !invite.registered) {
+  const invite = await getInvite(client, { key });
+  if (invite && !invite.registered && invite.email === email) {
     const salt = crypto.randomBytes(16).toString('hex');
     const hash = crypto
       .pbkdf2Sync(password, salt, 1000, 64, 'sha512')
@@ -40,10 +40,12 @@ export async function createUser({ username, password, name, email }) {
       invite_id: invite.id,
     };
     const newUser = await addUser(client, user);
-    await setRegisteredInvite(client, { email });
+    await setRegisteredInvite(client, { key });
     return newUser;
   } else {
-    const err = new Error('Invite not found');
+    const err = new Error(
+      'Invite not found. Please use the email your invite was sent to.'
+    );
     throw err;
   }
 }

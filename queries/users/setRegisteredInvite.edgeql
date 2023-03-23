@@ -1,5 +1,5 @@
 update Invite
-filter .email = <str>$email
+filter .key = <str>$key
 set {
   registered := true
 }

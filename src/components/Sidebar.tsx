@@ -1,8 +1,10 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   Paper,
+  Snackbar,
   TextField,
   Typography,
 } from '@mui/material';
@@ -22,13 +24,31 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
   const { route } = useRouter();
   const [logout] = useLogout();
   const [inviteOpen, setInviteOpen] = useState(false);
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
 
   const onInviteOpen = () => {
     setInviteOpen(true);
   };
 
   const onInviteSubmit = () => {
-    setInviteOpen(false);
+    setLoading(true);
+    axios({
+      method: 'POST',
+      url: '/api/invite',
+      data: { email },
+    })
+      .then(({ data }) => {
+        setLoading(false);
+        setInviteOpen(false);
+        setToastMessage(data);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setToastMessage(err.response.data);
+        console.error(err);
+      });
   };
 
   const onLogout = () => {
@@ -160,26 +180,34 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
             alignItems={'center'}
             flexDirection='column'
             justifyContent={'space-around'}
+            padding={4}
           >
             <Box>
               <Typography>Send invite</Typography>
             </Box>
             <Box>
-              <TextField />
+              <TextField
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+              />
             </Box>
             <Box>
-              <Button
-                onClick={(e) => {
-                  e.preventDefault();
-                  setInviteOpen(true);
-                }}
-              >
-                Submit
+              <Button onClick={onInviteSubmit}>
+                {loading ? <CircularProgress /> : 'Send'}
               </Button>
             </Box>
           </Box>
         </Paper>
       </Dialog>
+      <Snackbar
+        open={!!toastMessage}
+        autoHideDuration={6000}
+        onClose={() => {
+          setToastMessage('');
+        }}
+        message={toastMessage}
+      />
     </Box>
   );
 }

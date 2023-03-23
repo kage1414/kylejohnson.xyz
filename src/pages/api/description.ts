@@ -9,7 +9,7 @@ import {
   updateDescription,
 } from 'dbschema/queries';
 
-import { client } from '../../edgedb';
+import { client } from '../../lib/edgedb';
 
 type Body = NextApiRequest['body'];
 type Query = NextApiRequest['query'];
