@@ -1,10 +1,44 @@
+import {
+  Application,
+  Description,
+  Education,
+  Experience,
+  TechStack,
+  Technology,
+} from 'dbTypes';
 import e from 'dbschema/edgeql-js';
 import { addTechnology } from 'dbschema/queries';
 
-import { client } from './lib/edgedb';
-import mock from './mock-db';
+import { client } from './edgedb';
+import { getMostRecentSnapshot } from './take-snapshot';
+
+type DescriptionArray = Omit<Description, 'id'>[];
+type TechnologyArray = Omit<Technology, 'id'>[];
+
+type TechStackArray = ({ technologies: TechnologyArray } & Omit<
+  TechStack,
+  'id'
+>)[];
+type ExperienceArray = ({
+  descriptions: DescriptionArray;
+} & Omit<Experience, 'id'>)[];
+type EducationArray = Omit<Education, 'id'>[];
+type ApplicationArray = ({
+  descriptions: DescriptionArray;
+  technologies: TechnologyArray;
+} & Omit<Application, 'id'>)[];
+
+interface Snapshot {
+  technical_skills: TechStackArray;
+  experience: ExperienceArray;
+  education: EducationArray;
+  applications: ApplicationArray;
+}
+
+const snap: Snapshot = getMostRecentSnapshot();
 
 const deleteAllRecords = async () => {
+  // eslint-disable-next-line
   console.info('Dropping tables');
   const queryApplication = e.delete(e.Application);
   await queryApplication.run(client);
@@ -18,22 +52,27 @@ const deleteAllRecords = async () => {
   await queryDescription.run(client);
   const queryEducation = e.delete(e.Education);
   await queryEducation.run(client);
+  // eslint-disable-next-line
   console.info('Tables dropped');
   return;
 };
 
 const seedExperience = async () => {
+  // eslint-disable-next-line
   console.info('Experience starting...');
-  await mock.experience.forEach(async (exp) => {
+  await snap.experience.forEach(async (exp) => {
     const createExperience = e.insert(e.Experience, {
       employer: exp.employer,
       position: exp.position,
       time: exp.time,
+      active: exp.active,
+      priority: exp.priority,
     });
     const experienceResult = await createExperience.run(client);
     await exp.descriptions.forEach(async (desc) => {
       const createDescription = e.insert(e.Description, {
         description: desc.description,
+        priority: desc.priority,
       });
       const updateExperience = e.update(e.Experience, () => ({
         filter_single: { id: experienceResult.id },
@@ -44,20 +83,26 @@ const seedExperience = async () => {
       await updateExperience.run(client);
     });
   });
+  // eslint-disable-next-line
   console.info('Experience complete');
   return;
 };
 
 const seedApplication = async () => {
+  // eslint-disable-next-line
   console.info('Application starting...');
-  await mock.applications.forEach(async (app) => {
+  await snap.applications.forEach(async (app) => {
     const createApplication = e.insert(e.Application, {
       name: app.name,
+      url: app.url,
+      active: app.active,
+      priority: app.priority,
     });
     const applicationResult = await createApplication.run(client);
     await app.descriptions.forEach(async (desc) => {
       const createDescription = e.insert(e.Description, {
         description: desc.description,
+        priority: desc.priority,
       });
       const updateApplication = e.update(e.Application, () => ({
         filter_single: { id: applicationResult.id },
@@ -70,13 +115,16 @@ const seedApplication = async () => {
     await app.technologies.forEach(async (technology) => {
       const createTechnology = e
         .insert(e.Technology, {
-          name: technology,
+          name: technology.name,
+          url: technology.url,
+          priority: technology.priority,
         })
         .unlessConflict((tech) => {
           return {
             on: tech.name,
             else: e.select(tech, () => ({
-              filter: e.op(tech.name, '=', technology),
+              // @ts-expect-error
+              filter: e.op(tech.name, '=', technology.name),
             })),
           };
         });
@@ -89,46 +137,60 @@ const seedApplication = async () => {
       await updateApplication.run(client);
     });
   });
+  // eslint-disable-next-line
   console.info('Application complete');
   return;
 };
 
 const seedTechStacks = async () => {
+  // eslint-disable-next-line
   console.info('TechStacks starting...');
-  await mock.technical_skills.forEach(async (app) => {
+  await snap.technical_skills.forEach(async (skill) => {
     const createTechStack = e
       .insert(e.TechStack, {
-        stack: app.stack,
+        stack: skill.stack,
       })
       .unlessConflict();
     await createTechStack.run(client);
   });
+  // eslint-disable-next-line
   console.info('TechStacks complete');
   return;
 };
 
 const seedTechnology = async () => {
+  // eslint-disable-next-line
   console.info('Technology starting...');
-  await mock.technical_skills.forEach(async (app) => {
-    await app.technologies.forEach(async (tech) => {
-      await addTechnology(client, { name: tech, stack: app.stack });
+  await snap.technical_skills.forEach(async (stack) => {
+    await stack.technologies.forEach(async (tech) => {
+      await addTechnology(client, {
+        name: tech.name,
+        stack: stack.stack,
+        url: tech?.url,
+        priority: tech.priority,
+      });
     });
   });
+  // eslint-disable-next-line
   console.info('Technology complete');
   return;
 };
 
 const seedEducation = async () => {
+  // eslint-disable-next-line
   console.info('Education starting...');
-  await mock.education.forEach(async (edu) => {
+  await snap.education.forEach(async (edu) => {
     const createEducation = e.insert(e.Education, {
       school: edu.school,
       time: edu.time,
       certificate: edu.certificate,
       degree: edu.degree,
+      active: edu.active,
+      priority: edu.priority,
     });
     await createEducation.run(client);
   });
+  // eslint-disable-next-line
   console.info('Education complete');
   return;
 };
@@ -141,6 +203,8 @@ export const seed = async (): Promise<void> => {
     await seedExperience();
     await seedEducation();
     await seedApplication();
+    // eslint-disable-next-line
+    console.log('done');
     return;
   }, 2500);
   return;
