@@ -4,7 +4,7 @@
   "description": "Personal website",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "yarn gen:all && next dev",
     "build": "yarn gen:all && next build",
     "start": "next start",
     "lint": "next lint",
