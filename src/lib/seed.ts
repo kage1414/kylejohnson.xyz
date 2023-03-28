@@ -6,7 +6,6 @@ import {
   TechStack,
   Technology,
 } from 'dbTypes';
-
 import e from 'dbschema/edgeql-js';
 import { addTechnology } from 'dbschema/queries';
 
@@ -205,7 +204,7 @@ export const seed = async (): Promise<void> => {
     await seedEducation();
     await seedApplication();
     // eslint-disable-next-line
-    console.log('done');
+    console.info('done');
     return;
   }, 2500);
   return;
