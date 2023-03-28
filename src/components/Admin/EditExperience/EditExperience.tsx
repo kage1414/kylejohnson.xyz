@@ -34,7 +34,7 @@ export function EditExperience(): ReactElement {
     {
       field: 'descriptions',
       headerName: 'Description Items',
-      width: 300,
+      width: 150,
       renderCell: (params) => {
         return (
           <Button
@@ -57,7 +57,7 @@ export function EditExperience(): ReactElement {
       field: 'active',
       headerName: 'Active',
       editable: true,
-      width: 150,
+      width: 75,
       type: 'boolean',
     },
   ];

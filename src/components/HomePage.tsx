@@ -12,15 +12,12 @@ const theme = createTheme({
   palette: {
     primary: {
       main: '#fb4620',
-      light: '#ffffff',
-      dark: '#9eb1c4',
-      contrastText: '#000000',
     },
     secondary: {
       main: '#0000ff',
-      light: '#ffffff',
-      dark: '#9eb1c4',
-      contrastText: '#000000',
+    },
+    warning: {
+      main: '#ff0000',
     },
   },
   typography: {

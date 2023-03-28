@@ -1,7 +1,9 @@
 import { GridRowId, GridRowModel } from '@mui/x-data-grid';
 import axios from 'axios';
 
-export const onAddApplicationTechnology = (id: string, name?: string) => {
+import { CrudOperations } from '../DataGridContainer';
+
+export const onAddApplicationTechnology: CrudOperations['c'] = (id, name) => {
   return axios({
     method: 'POST',
     url: '/api/application_technology',
@@ -16,9 +18,7 @@ export const onAddApplicationTechnology = (id: string, name?: string) => {
     });
 };
 
-export const onUpdateApplicationTechnology = (
-  newRow: GridRowModel
-): Promise<GridRowModel> => {
+export const onUpdateApplicationTechnology: CrudOperations['u'] = (newRow) => {
   return axios({
     method: 'PUT',
     url: '/api/technology',
@@ -33,10 +33,11 @@ export const onUpdateApplicationTechnology = (
     });
 };
 
-export const onDeleteApplicationTechnology = (
-  id: GridRowId,
-  technology_id?: GridRowId
+export const onDeleteApplicationTechnology: CrudOperations['d'] = (
+  id,
+  options = {}
 ) => {
+  const { technology_id } = options;
   return axios({
     method: 'DELETE',
     url: '/api/application_technology',

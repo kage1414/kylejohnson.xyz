@@ -35,7 +35,7 @@ export function EditEducation(): ReactElement {
       field: 'active',
       headerName: 'Active',
       editable: true,
-      width: 150,
+      width: 75,
       type: 'boolean',
     },
   ];

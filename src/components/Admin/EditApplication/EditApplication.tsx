@@ -50,7 +50,7 @@ export function EditApplication(): ReactElement {
     {
       field: 'descriptions',
       headerName: 'Descriptions',
-      width: 175,
+      width: 150,
       renderCell: (params) => {
         return (
           <Button
@@ -65,7 +65,7 @@ export function EditApplication(): ReactElement {
     {
       field: 'technologies',
       headerName: 'Technologies',
-      width: 175,
+      width: 150,
       renderCell: (params) => {
         return (
           <Button
@@ -91,6 +91,7 @@ export function EditApplication(): ReactElement {
       editable: true,
       valueGetter: (params: GridValueGetterParams) =>
         params.row.active === null ? true : params.row.active,
+      width: 75,
     },
   ];
   const descriptionColumns: GridColDef[] = [

@@ -3,6 +3,7 @@ import CancelIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
+import { Dialog, DialogContent, DialogTitle, Paper } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import {
@@ -52,10 +53,14 @@ function EditToolbar(props: EditToolbarProps) {
   );
 }
 
+interface DeleteOptions {
+  technology_id?: string;
+}
+
 export interface CrudOperations {
   c: (id: string, technology_id?: string) => Promise<GridRowModel>;
   u: (newRow: GridRowModel) => Promise<GridRowModel>;
-  d: (id: GridRowId, technology_id?: string) => Promise<GridRowId>;
+  d: (id: GridRowId, options?: DeleteOptions) => Promise<GridRowId>;
 }
 
 interface DataGridContainerProps {
@@ -74,6 +79,8 @@ export default function DataGridContainer({
   parentRow,
 }: DataGridContainerProps) {
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
+  const [toDeleteId, setToDeleteId] = useState<GridRowId | null>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const handleRowEditStart = (
     params: GridRowParams,
@@ -88,6 +95,18 @@ export default function DataGridContainer({
   ) => {
     event.defaultMuiPrevented = true;
   };
+  const getTitleFromId = (id: GridRowId | null): string => {
+    const row = rows.find((row) => row.id === id);
+    if (row && row.hasOwnProperty('employer')) {
+      return row.employer ?? 'row';
+    } else if (row && row.hasOwnProperty('name')) {
+      return row.name ?? 'row';
+    } else if (row && row.hasOwnProperty('school')) {
+      return row.school ?? 'row';
+    } else {
+      return 'row';
+    }
+  };
 
   const handleEditClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
@@ -97,9 +116,11 @@ export default function DataGridContainer({
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id: GridRowId) => () => {
-    d(id);
-    setRows(rows.filter((row) => row.id !== id));
+  const handleDeleteClick = async () => {
+    if (toDeleteId) {
+      d(toDeleteId);
+      setRows(rows.filter((row) => row.id !== toDeleteId));
+    }
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -121,6 +142,17 @@ export default function DataGridContainer({
       setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
       return updatedRow;
     });
+  };
+
+  const onYes = () => {
+    setDeleteModalOpen(false);
+    setToDeleteId(null);
+    handleDeleteClick();
+  };
+
+  const onNo = () => {
+    setDeleteModalOpen(false);
+    setToDeleteId(null);
   };
 
   const actionColumns: GridColumns = [
@@ -165,7 +197,10 @@ export default function DataGridContainer({
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label='Delete'
-            onClick={handleDeleteClick(id)}
+            onClick={() => {
+              setToDeleteId(id);
+              setDeleteModalOpen(true);
+            }}
             color='inherit'
             key={'grid-actions-cell-item-delete'}
           />,
@@ -207,6 +242,35 @@ export default function DataGridContainer({
         }}
         experimentalFeatures={{ newEditingApi: true }}
       />
+      <Dialog
+        open={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+          setToDeleteId(null);
+        }}
+      >
+        <Paper>
+          <Box>
+            <DialogTitle>
+              {toDeleteId
+                ? `Are you sure you want to delete ${getTitleFromId(
+                    toDeleteId
+                  )}?`
+                : ''}
+            </DialogTitle>
+            <DialogContent>
+              <Box display={'flex'} justifyContent={'center'}>
+                <Button color='secondary' onClick={onNo}>
+                  No
+                </Button>
+                <Button color='warning' onClick={onYes}>
+                  Yes
+                </Button>
+              </Box>
+            </DialogContent>
+          </Box>
+        </Paper>
+      </Dialog>
     </Box>
   );
 }
