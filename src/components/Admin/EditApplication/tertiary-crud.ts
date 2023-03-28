@@ -1,4 +1,3 @@
-import { GridRowId, GridRowModel } from '@mui/x-data-grid';
 import axios from 'axios';
 
 import { CrudOperations } from '../DataGridContainer';
