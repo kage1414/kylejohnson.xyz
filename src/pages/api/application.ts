@@ -1,4 +1,6 @@
+import { auth, isAuthenticated } from 'middleware';
 import { NextApiRequest, NextApiResponse } from 'next';
+import nextConnect from 'next-connect';
 
 import {
   addApplication,
@@ -8,10 +10,9 @@ import {
 
 import { client } from '../../lib/edgedb';
 
-export default function applicationHandler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+const handler = nextConnect();
+
+async function applicationHandler(req: NextApiRequest, res: NextApiResponse) {
   const { body, method } = req;
   const { id, name, url, active, priority } = body;
   switch (method) {
@@ -19,7 +20,7 @@ export default function applicationHandler(
       if (!id) {
         res.status(400);
       } else {
-        updateApplication(client, {
+        await updateApplication(client, {
           id,
           name,
           url,
@@ -36,7 +37,7 @@ export default function applicationHandler(
       }
       break;
     case 'POST':
-      addApplication(client, body)
+      await addApplication(client, body)
         .then((value) => {
           res.status(200).json(value);
         })
@@ -48,7 +49,7 @@ export default function applicationHandler(
 
       break;
     case 'DELETE':
-      deleteApplication(client, body)
+      await deleteApplication(client, body)
         .then((value) => {
           res.status(200).json(value);
         })
@@ -61,3 +62,5 @@ export default function applicationHandler(
       break;
   }
 }
+
+export default handler.use(auth).use(isAuthenticated).all(applicationHandler);

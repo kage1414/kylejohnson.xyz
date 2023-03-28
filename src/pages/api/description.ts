@@ -1,4 +1,6 @@
+import { auth, isAuthenticated } from 'middleware';
 import { NextApiRequest, NextApiResponse } from 'next';
+import nextConnect from 'next-connect';
 
 import {
   addApplicationDescription,
@@ -21,6 +23,8 @@ interface GetRecordIdParams {
 
 type GetRecordId = (params: GetRecordIdParams) => string | null;
 
+const handler = nextConnect();
+
 const getRecordId: GetRecordId = ({ query, body }) => {
   const queryId = query.id;
   const bodyId = body.id;
@@ -28,19 +32,15 @@ const getRecordId: GetRecordId = ({ query, body }) => {
   return id;
 };
 
-export default function descriptionHandler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function descriptionGetter(req: NextApiRequest, res: NextApiResponse) {
   const { body, method, query } = req;
-  const { description, priority } = body;
   const id = getRecordId({ body, query });
   switch (method) {
     case 'GET':
       if (!id) {
         res.status(400);
       } else {
-        getDescription(client, { id: id.toString() })
+        await getDescription(client, { id: id.toString() })
           .then((value) => {
             res.status(200).json(value);
           })
@@ -50,11 +50,19 @@ export default function descriptionHandler(
           });
       }
       break;
+  }
+}
+
+async function descriptionModifier(req: NextApiRequest, res: NextApiResponse) {
+  const { body, method, query } = req;
+  const { description, priority } = body;
+  const id = getRecordId({ body, query });
+  switch (method) {
     case 'PUT':
       if (!id || !description) {
         res.status(400);
       } else {
-        updateDescription(client, {
+        await updateDescription(client, {
           id: id.toString(),
           description: description.toString(),
           priority,
@@ -75,7 +83,7 @@ export default function descriptionHandler(
       } else {
         switch (link) {
           case 'experience':
-            addDescription(client, { description }).then(
+            await addDescription(client, { description }).then(
               ({ id: description_id, description: inserted_description }) => {
                 addExperienceDescription(client, {
                   description_id,
@@ -90,7 +98,7 @@ export default function descriptionHandler(
             );
             break;
           case 'application':
-            addDescription(client, { description }).then(
+            await addDescription(client, { description }).then(
               ({ id: description_id, description: inserted_description }) => {
                 addApplicationDescription(client, {
                   description_id,
@@ -105,7 +113,7 @@ export default function descriptionHandler(
             );
             break;
           default:
-            addDescription(client, { description }).then(
+            await addDescription(client, { description }).then(
               ({ id: description_id, description: inserted_description }) => {
                 res.status(200).json({
                   id: description_id,
@@ -120,7 +128,7 @@ export default function descriptionHandler(
       if (!id) {
         res.status(400);
       } else {
-        deleteDescription(client, {
+        await deleteDescription(client, {
           id: id.toString(),
         })
           .then((value) => {
@@ -134,3 +142,9 @@ export default function descriptionHandler(
       break;
   }
 }
+
+export default handler
+  .use(auth)
+  .get(descriptionGetter)
+  .use(isAuthenticated)
+  .all(descriptionModifier);

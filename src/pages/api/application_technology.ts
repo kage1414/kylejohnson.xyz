@@ -1,4 +1,6 @@
+import { auth, isAuthenticated } from 'middleware';
 import { NextApiRequest, NextApiResponse } from 'next';
+import nextConnect from 'next-connect';
 
 import { client } from '@/lib/edgedb';
 import {
@@ -6,7 +8,9 @@ import {
   removeApplicationTechnology,
 } from 'dbschema/queries';
 
-export default function applicationTechnologyHandler(
+const handler = nextConnect();
+
+async function applicationTechnologyHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -14,7 +18,7 @@ export default function applicationTechnologyHandler(
   const { id, name, technology_id } = body;
   switch (method) {
     case 'POST':
-      addApplicationTechnology(client, { id, name })
+      await addApplicationTechnology(client, { id, name })
         .then((value) => {
           res.status(200).json(value);
         })
@@ -29,7 +33,7 @@ export default function applicationTechnologyHandler(
         res.status(400);
         return;
       }
-      removeApplicationTechnology(client, { id, technology_id })
+      await removeApplicationTechnology(client, { id, technology_id })
         .then((value) => {
           res.status(200).json(value);
         })
@@ -40,3 +44,8 @@ export default function applicationTechnologyHandler(
       break;
   }
 }
+
+export default handler
+  .use(auth)
+  .use(isAuthenticated)
+  .all(applicationTechnologyHandler);

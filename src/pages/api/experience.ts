@@ -1,4 +1,6 @@
+import { auth, isAuthenticated } from 'middleware';
 import { NextApiRequest, NextApiResponse } from 'next';
+import nextConnect from 'next-connect';
 
 import {
   addExperience,
@@ -9,15 +11,30 @@ import {
 
 import { client } from '../../lib/edgedb';
 
-export default function experienceHandler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+const handler = nextConnect();
+
+async function experienceGetter(req: NextApiRequest, res: NextApiResponse) {
+  const { method } = req;
+  switch (method) {
+    case 'GET':
+      await getAllExperiences(client)
+        .then((value) => {
+          res.status(200).json(value);
+        })
+        .catch((error) => {
+          res.write(JSON.stringify(error));
+          res.status(400);
+        });
+      break;
+  }
+}
+
+async function experienceModifier(req: NextApiRequest, res: NextApiResponse) {
   const { body, method } = req;
   const { id, employer, position, time, active, priority } = body;
   switch (method) {
     case 'GET':
-      getAllExperiences(client)
+      await getAllExperiences(client)
         .then((value) => {
           res.status(200).json(value);
         })
@@ -30,7 +47,7 @@ export default function experienceHandler(
       if (!id) {
         res.status(400);
       } else {
-        updateExperience(client, {
+        await updateExperience(client, {
           id,
           employer,
           position,
@@ -48,7 +65,7 @@ export default function experienceHandler(
       }
       break;
     case 'POST':
-      addExperience(client, body)
+      await addExperience(client, body)
         .then((value) => {
           res.status(200).json(value);
         })
@@ -60,7 +77,7 @@ export default function experienceHandler(
 
       break;
     case 'DELETE':
-      deleteExperience(client, body)
+      await deleteExperience(client, body)
         .then((value) => {
           res.status(200).json(value);
         })
@@ -73,3 +90,9 @@ export default function experienceHandler(
       break;
   }
 }
+
+export default handler
+  .use(auth)
+  .get(experienceGetter)
+  .use(isAuthenticated)
+  .all(experienceModifier);

@@ -28,7 +28,8 @@
     "paths": {
       "@/*": ["src/*"],
       "dbTypes": ["dbschema/interfaces"],
-      "queries": ["dbschema/queries"]
+      "queries": ["dbschema/queries"],
+      "middleware": ["src/middleware"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

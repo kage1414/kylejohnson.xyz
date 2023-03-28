@@ -1,3 +1,4 @@
+import { auth } from 'middleware';
 import nextConnect from 'next-connect';
 
 import {
@@ -6,7 +7,6 @@ import {
   findUserByUsername,
   updateUserByUsername,
 } from '../../lib/db';
-import auth from '../../middleware/auth';
 
 const handler = nextConnect();
 

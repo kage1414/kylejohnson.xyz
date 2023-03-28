@@ -11,13 +11,13 @@ ironConfig.integrity.minPasswordlength = Number(
 export async function createLoginSession(session, secret) {
   const createdAt = Date.now();
   const obj = { ...session, createdAt };
-  const token = await seal(obj, secret, defaults);
+  const token = await seal(obj, secret, ironConfig);
 
   return token;
 }
 
 export async function getLoginSession(token, secret) {
-  const session = await unseal(token, secret, defaults);
+  const session = await unseal(token, secret, ironConfig);
   const expiresAt = session.createdAt + session.maxAge * 1000;
 
   // Validate the expiration date of the session

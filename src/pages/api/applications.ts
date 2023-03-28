@@ -4,14 +4,14 @@ import { getAllApplications } from 'dbschema/queries';
 
 import { client } from '../../lib/edgedb';
 
-export default function applicationHandler(
+export default async function applicationHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const { method } = req;
   switch (method) {
     case 'GET':
-      getAllApplications(client)
+      await getAllApplications(client)
         .then((value) => {
           res.status(200).json(value);
         })

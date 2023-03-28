@@ -1,4 +1,6 @@
+import { auth, isAuthenticated } from 'middleware';
 import { NextApiRequest, NextApiResponse } from 'next';
+import nextConnect from 'next-connect';
 
 import {
   addEducation,
@@ -8,10 +10,9 @@ import {
 
 import { client } from '../../lib/edgedb';
 
-export default function educationHandler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+const handler = nextConnect();
+
+async function educationHandler(req: NextApiRequest, res: NextApiResponse) {
   const { body, method } = req;
   switch (method) {
     case 'PUT':
@@ -20,7 +21,7 @@ export default function educationHandler(
         res.status(400);
         return;
       }
-      updateEducation(client, body)
+      await updateEducation(client, body)
         .then((value) => {
           res.send(value);
         })
@@ -30,7 +31,7 @@ export default function educationHandler(
         });
       break;
     case 'POST':
-      addEducation(client, body)
+      await addEducation(client, body)
         .then((value) => {
           res.status(200).json(value);
         })
@@ -42,7 +43,7 @@ export default function educationHandler(
 
       break;
     case 'DELETE':
-      deleteEducation(client, body)
+      await deleteEducation(client, body)
         .then((value) => {
           res.status(200).json(value);
         })
@@ -55,3 +56,5 @@ export default function educationHandler(
       break;
   }
 }
+
+export default handler.use(auth).use(isAuthenticated).all(educationHandler);

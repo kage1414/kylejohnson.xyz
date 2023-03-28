@@ -4,14 +4,14 @@ import { getAllEducations } from 'dbschema/queries';
 
 import { client } from '../../lib/edgedb';
 
-export default function educationsHandler(
+export default async function educationsHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const { method } = req;
   switch (method) {
     case 'GET':
-      getAllEducations(client)
+      await getAllEducations(client)
         .then((value) => {
           res.status(200).json(value);
         })
