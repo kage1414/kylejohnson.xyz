@@ -1,4 +1,4 @@
-import { Box, Grid, Theme } from '@mui/material';
+import { Box, Grid, Link, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -36,7 +36,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export function FullPostFooterList() {
+interface Props {
+  url?: string | null;
+}
+
+export function FullPostFooterList({ url }: Props) {
   const randomCommentnumber = Math.floor(Math.random() * 100);
   const classes = useStyles();
   return (
@@ -47,9 +51,15 @@ export function FullPostFooterList() {
         </Box>
       </Grid>
       <Grid item className={classes.item}>
-        <Box component='span' className={classes.span}>
-          {'source'}
-        </Box>
+        <Link
+          href={url || ''}
+          sx={{ cursor: url ? 'pointer' : 'auto' }}
+          underline='none'
+        >
+          <Box component='span' className={classes.span}>
+            {'source'}
+          </Box>
+        </Link>
       </Grid>
       <Grid item className={classes.item}>
         <Box component='span' className={classes.span}>

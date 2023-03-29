@@ -24,11 +24,11 @@ export function FullPostHeader({
     <Box>
       <Link
         href={url || ''}
+        sx={{ cursor: url ? 'pointer' : 'auto' }}
         color='secondary'
         underline={url ? 'hover' : 'none'}
-        component={Typography}
       >
-        {title}
+        <Typography>{title}</Typography>
       </Link>
       {subtitles &&
         subtitles
