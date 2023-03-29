@@ -2,23 +2,23 @@ import axios from 'axios';
 
 import { CrudOperations } from '../Admin/DataGridContainer';
 
-export const createAdd: (url: string) => CrudOperations['c'] = (url) => () => {
-  return axios({
-    method: 'POST',
-    url,
-    data: {},
-  })
-    .then((response) => {
-      return response.data;
+export default (url: string, resourceName: string): CrudOperations => ({
+  c: (id, options = {}) => {
+    const { technology_id } = options;
+    return axios({
+      method: 'POST',
+      url,
+      data: { id, technology_id },
     })
-    .catch((error) => {
-      console.error(error);
-      return;
-    });
-};
-
-export const createUpdate: (url: string) => CrudOperations['u'] =
-  (url) => (newRow) => {
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        console.error(error);
+        return;
+      });
+  },
+  u: (newRow) => {
     return axios({
       method: 'PUT',
       url,
@@ -31,11 +31,8 @@ export const createUpdate: (url: string) => CrudOperations['u'] =
         console.error(error);
         return;
       });
-  };
-
-export const createDelete: (url: string) => CrudOperations['d'] =
-  (url: string) =>
-  (id, options = {}) => {
+  },
+  d: (id, options = {}) => {
     const { technology_id } = options;
     return axios({
       method: 'DELETE',
@@ -49,4 +46,5 @@ export const createDelete: (url: string) => CrudOperations['d'] =
         console.error(error);
         return;
       });
-  };
+  },
+});
