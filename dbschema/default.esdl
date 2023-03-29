@@ -79,4 +79,11 @@ module default {
     };
     required property key -> str;
   }
+
+  type Snapshot {
+    required property data -> json;
+    required property createdAt -> datetime {
+      default := datetime_current();
+    };
+  }
 }

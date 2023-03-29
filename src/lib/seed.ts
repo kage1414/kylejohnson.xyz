@@ -10,7 +10,7 @@ import e from 'dbschema/edgeql-js';
 import { addTechnology } from 'dbschema/queries';
 
 import { client } from './edgedb';
-import { getMostRecentSnapshot } from './take-snapshot';
+import { getMostRecentDatabaseSnapshot } from './take-snapshot';
 
 type DescriptionArray = Omit<Description, 'id'>[];
 type TechnologyArray = Omit<Technology, 'id'>[];
@@ -21,21 +21,21 @@ type TechStackArray = ({ technologies: TechnologyArray } & Omit<
 >)[];
 type ExperienceArray = ({
   descriptions: DescriptionArray;
-} & Omit<Experience, 'id'>)[];
+} & Omit<Experience, 'id' | 'descriptions'>)[];
 type EducationArray = Omit<Education, 'id'>[];
 type ApplicationArray = ({
   descriptions: DescriptionArray;
   technologies: TechnologyArray;
-} & Omit<Application, 'id'>)[];
+} & Omit<Application, 'id' | 'descriptions' | 'technologies'>)[];
 
-interface Snapshot {
+export interface Snapshot {
   technical_skills: TechStackArray;
   experience: ExperienceArray;
   education: EducationArray;
   applications: ApplicationArray;
 }
 
-const snap: Snapshot = getMostRecentSnapshot();
+let snap: Snapshot;
 
 const deleteAllRecords = async () => {
   // eslint-disable-next-line
@@ -59,7 +59,6 @@ const deleteAllRecords = async () => {
 
 const seedExperience = async () => {
   // eslint-disable-next-line
-  console.info('Experience starting...');
   await snap.experience.forEach(async (exp) => {
     const createExperience = e.insert(e.Experience, {
       employer: exp.employer,
@@ -197,6 +196,7 @@ const seedEducation = async () => {
 
 export const seed = async (): Promise<void> => {
   await deleteAllRecords();
+  snap = await getMostRecentDatabaseSnapshot();
   await seedTechStacks();
   await setTimeout(async () => {
     await seedTechnology();
