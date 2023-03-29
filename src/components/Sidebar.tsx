@@ -171,7 +171,12 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
           )}
         </ul>
       </Box>
-      <Dialog open={inviteOpen}>
+      <Dialog
+        open={inviteOpen}
+        onClose={() => {
+          setInviteOpen(false);
+        }}
+      >
         <Paper>
           <Box
             width={'30vw'}
