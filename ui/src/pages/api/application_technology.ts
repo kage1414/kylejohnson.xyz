@@ -6,7 +6,7 @@ import { client } from '@/lib/edgedb';
 import {
   addApplicationTechnology,
   removeApplicationTechnology,
-} from 'dbschema/queries';
+} from 'ui/dbschema/queries';
 
 const handler = nextConnect();
 
