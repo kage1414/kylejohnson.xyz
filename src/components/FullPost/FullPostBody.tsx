@@ -17,7 +17,6 @@ const TechnologiesList = ({
 }: TechnologiesListProps): ReactElement => {
   return (
     <>
-      <Divider />
       <ListItemText>{'Technologies Used:'}</ListItemText>
       {technologies.map(({ id, name }) => (
         <ListItemText key={id}>{name}</ListItemText>
@@ -38,6 +37,7 @@ export function FullPostBody({
             descriptions.map(({ description, id }) => (
               <ListItemText key={id}>{description}</ListItemText>
             ))}
+          {!!descriptions?.length && !!technologies?.length && <Divider />}
           {technologies && <TechnologiesList technologies={technologies} />}
         </List>
       </Paper>

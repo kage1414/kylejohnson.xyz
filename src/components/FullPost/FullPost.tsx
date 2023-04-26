@@ -41,13 +41,13 @@ export function FullPost({
           time={time}
           url={url}
         />
-        {(descriptions || technologies) && (
+        {(!!descriptions?.length || !!technologies?.length) && (
           <FullPostBody
             descriptions={descriptions}
             technologies={technologies}
           />
         )}
-        <FullPostFooterList />
+        <FullPostFooterList url={url} />
       </Paper>
     </Box>
   );

@@ -31,6 +31,31 @@ function TechnologiesContainer({
 }: TechnologiesContainerProps): ReactElement {
   const selectedTechnologyIds = technologies.map(({ id }) => id);
 
+  const handleAdd = (name?: string | null) => {
+    if (parentId && name && setTechnologyData) {
+      c(parentId.id, name).then((response) => {
+        setTechnologyData((oldState) => {
+          const newState = oldState;
+          delete response.stack;
+          newState.push(response);
+          return newState;
+        });
+      });
+    }
+  };
+
+  const handleDelete = (technology_id: string, name?: string | null) => {
+    if (parentId && name && setTechnologyData) {
+      d(parentId.id, { technology_id }).then((response) => {
+        setTechnologyData((oldState) => {
+          const newState = oldState;
+          newState.push(response);
+          return newState;
+        });
+      });
+    }
+  };
+
   return (
     <List>
       {technologyOptions.map(({ name, id }) => (
@@ -39,18 +64,8 @@ function TechnologiesContainer({
             variant='outlined'
             color='secondary'
             disabled={selectedTechnologyIds.includes(id)}
-            onClick={(e) => {
-              e.preventDefault();
-              if (parentId && name && setTechnologyData) {
-                c(parentId.id, name).then((response) => {
-                  setTechnologyData((oldState) => {
-                    const newState = oldState;
-                    delete response.stack;
-                    newState.push(response);
-                    return newState;
-                  });
-                });
-              }
+            onClick={() => {
+              handleAdd(name);
             }}
           >
             Add
@@ -58,6 +73,9 @@ function TechnologiesContainer({
           <Button
             color='primary'
             disabled={!selectedTechnologyIds.includes(id)}
+            onClick={() => {
+              handleDelete(id, name);
+            }}
           >
             Remove
           </Button>

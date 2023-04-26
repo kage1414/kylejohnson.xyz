@@ -3,7 +3,7 @@ select Application {
   name, 
   url,
   active, 
-  descriptions: {description, id}, 
+  descriptions: {description, id} order by .priority asc, 
   technologies: {name, url, id} order by .priority asc,
   priority
 }
