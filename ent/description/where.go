@@ -64,6 +64,11 @@ func Active(v bool) predicate.Description {
 	return predicate.Description(sql.FieldEQ(FieldActive, v))
 }
 
+// Priority applies equality check predicate on the "priority" field. It's identical to PriorityEQ.
+func Priority(v int32) predicate.Description {
+	return predicate.Description(sql.FieldEQ(FieldPriority, v))
+}
+
 // DescriptionEQ applies the EQ predicate on the "description" field.
 func DescriptionEQ(v string) predicate.Description {
 	return predicate.Description(sql.FieldEQ(FieldDescription, v))
@@ -137,6 +142,46 @@ func ActiveEQ(v bool) predicate.Description {
 // ActiveNEQ applies the NEQ predicate on the "active" field.
 func ActiveNEQ(v bool) predicate.Description {
 	return predicate.Description(sql.FieldNEQ(FieldActive, v))
+}
+
+// PriorityEQ applies the EQ predicate on the "priority" field.
+func PriorityEQ(v int32) predicate.Description {
+	return predicate.Description(sql.FieldEQ(FieldPriority, v))
+}
+
+// PriorityNEQ applies the NEQ predicate on the "priority" field.
+func PriorityNEQ(v int32) predicate.Description {
+	return predicate.Description(sql.FieldNEQ(FieldPriority, v))
+}
+
+// PriorityIn applies the In predicate on the "priority" field.
+func PriorityIn(vs ...int32) predicate.Description {
+	return predicate.Description(sql.FieldIn(FieldPriority, vs...))
+}
+
+// PriorityNotIn applies the NotIn predicate on the "priority" field.
+func PriorityNotIn(vs ...int32) predicate.Description {
+	return predicate.Description(sql.FieldNotIn(FieldPriority, vs...))
+}
+
+// PriorityGT applies the GT predicate on the "priority" field.
+func PriorityGT(v int32) predicate.Description {
+	return predicate.Description(sql.FieldGT(FieldPriority, v))
+}
+
+// PriorityGTE applies the GTE predicate on the "priority" field.
+func PriorityGTE(v int32) predicate.Description {
+	return predicate.Description(sql.FieldGTE(FieldPriority, v))
+}
+
+// PriorityLT applies the LT predicate on the "priority" field.
+func PriorityLT(v int32) predicate.Description {
+	return predicate.Description(sql.FieldLT(FieldPriority, v))
+}
+
+// PriorityLTE applies the LTE predicate on the "priority" field.
+func PriorityLTE(v int32) predicate.Description {
+	return predicate.Description(sql.FieldLTE(FieldPriority, v))
 }
 
 // HasExperience applies the HasEdge predicate on the "experience" edge.

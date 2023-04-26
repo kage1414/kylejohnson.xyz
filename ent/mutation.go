@@ -37,7 +37,6 @@ const (
 	TypeInvite      = "Invite"
 	TypeTechStack   = "TechStack"
 	TypeTechnology  = "Technology"
-	TypeTest        = "Test"
 	TypeUser        = "User"
 )
 
@@ -810,6 +809,8 @@ type DescriptionMutation struct {
 	id                 *int
 	description        *string
 	active             *bool
+	priority           *int32
+	addpriority        *int32
 	clearedFields      map[string]struct{}
 	experience         *int
 	clearedexperience  bool
@@ -990,6 +991,62 @@ func (m *DescriptionMutation) ResetActive() {
 	m.active = nil
 }
 
+// SetPriority sets the "priority" field.
+func (m *DescriptionMutation) SetPriority(i int32) {
+	m.priority = &i
+	m.addpriority = nil
+}
+
+// Priority returns the value of the "priority" field in the mutation.
+func (m *DescriptionMutation) Priority() (r int32, exists bool) {
+	v := m.priority
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPriority returns the old "priority" field's value of the Description entity.
+// If the Description object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DescriptionMutation) OldPriority(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPriority is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPriority requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPriority: %w", err)
+	}
+	return oldValue.Priority, nil
+}
+
+// AddPriority adds i to the "priority" field.
+func (m *DescriptionMutation) AddPriority(i int32) {
+	if m.addpriority != nil {
+		*m.addpriority += i
+	} else {
+		m.addpriority = &i
+	}
+}
+
+// AddedPriority returns the value that was added to the "priority" field in this mutation.
+func (m *DescriptionMutation) AddedPriority() (r int32, exists bool) {
+	v := m.addpriority
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPriority resets all changes to the "priority" field.
+func (m *DescriptionMutation) ResetPriority() {
+	m.priority = nil
+	m.addpriority = nil
+}
+
 // SetExperienceID sets the "experience" edge to the Experience entity by id.
 func (m *DescriptionMutation) SetExperienceID(id int) {
 	m.experience = &id
@@ -1102,12 +1159,15 @@ func (m *DescriptionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DescriptionMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 3)
 	if m.description != nil {
 		fields = append(fields, description.FieldDescription)
 	}
 	if m.active != nil {
 		fields = append(fields, description.FieldActive)
+	}
+	if m.priority != nil {
+		fields = append(fields, description.FieldPriority)
 	}
 	return fields
 }
@@ -1121,6 +1181,8 @@ func (m *DescriptionMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case description.FieldActive:
 		return m.Active()
+	case description.FieldPriority:
+		return m.Priority()
 	}
 	return nil, false
 }
@@ -1134,6 +1196,8 @@ func (m *DescriptionMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldDescription(ctx)
 	case description.FieldActive:
 		return m.OldActive(ctx)
+	case description.FieldPriority:
+		return m.OldPriority(ctx)
 	}
 	return nil, fmt.Errorf("unknown Description field %s", name)
 }
@@ -1157,6 +1221,13 @@ func (m *DescriptionMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetActive(v)
 		return nil
+	case description.FieldPriority:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPriority(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Description field %s", name)
 }
@@ -1164,13 +1235,21 @@ func (m *DescriptionMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *DescriptionMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addpriority != nil {
+		fields = append(fields, description.FieldPriority)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *DescriptionMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case description.FieldPriority:
+		return m.AddedPriority()
+	}
 	return nil, false
 }
 
@@ -1179,6 +1258,13 @@ func (m *DescriptionMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *DescriptionMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case description.FieldPriority:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPriority(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Description numeric field %s", name)
 }
@@ -1211,6 +1297,9 @@ func (m *DescriptionMutation) ResetField(name string) error {
 		return nil
 	case description.FieldActive:
 		m.ResetActive()
+		return nil
+	case description.FieldPriority:
+		m.ResetPriority()
 		return nil
 	}
 	return fmt.Errorf("unknown Description field %s", name)
@@ -2030,6 +2119,8 @@ type ExperienceMutation struct {
 	position            *string
 	time                *string
 	active              *bool
+	priority            *int32
+	addpriority         *int32
 	clearedFields       map[string]struct{}
 	descriptions        map[int]struct{}
 	removeddescriptions map[int]struct{}
@@ -2294,6 +2385,62 @@ func (m *ExperienceMutation) ResetActive() {
 	m.active = nil
 }
 
+// SetPriority sets the "priority" field.
+func (m *ExperienceMutation) SetPriority(i int32) {
+	m.priority = &i
+	m.addpriority = nil
+}
+
+// Priority returns the value of the "priority" field in the mutation.
+func (m *ExperienceMutation) Priority() (r int32, exists bool) {
+	v := m.priority
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPriority returns the old "priority" field's value of the Experience entity.
+// If the Experience object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ExperienceMutation) OldPriority(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPriority is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPriority requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPriority: %w", err)
+	}
+	return oldValue.Priority, nil
+}
+
+// AddPriority adds i to the "priority" field.
+func (m *ExperienceMutation) AddPriority(i int32) {
+	if m.addpriority != nil {
+		*m.addpriority += i
+	} else {
+		m.addpriority = &i
+	}
+}
+
+// AddedPriority returns the value that was added to the "priority" field in this mutation.
+func (m *ExperienceMutation) AddedPriority() (r int32, exists bool) {
+	v := m.addpriority
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPriority resets all changes to the "priority" field.
+func (m *ExperienceMutation) ResetPriority() {
+	m.priority = nil
+	m.addpriority = nil
+}
+
 // AddDescriptionIDs adds the "descriptions" edge to the Description entity by ids.
 func (m *ExperienceMutation) AddDescriptionIDs(ids ...int) {
 	if m.descriptions == nil {
@@ -2382,7 +2529,7 @@ func (m *ExperienceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ExperienceMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 5)
 	if m.employer != nil {
 		fields = append(fields, experience.FieldEmployer)
 	}
@@ -2394,6 +2541,9 @@ func (m *ExperienceMutation) Fields() []string {
 	}
 	if m.active != nil {
 		fields = append(fields, experience.FieldActive)
+	}
+	if m.priority != nil {
+		fields = append(fields, experience.FieldPriority)
 	}
 	return fields
 }
@@ -2411,6 +2561,8 @@ func (m *ExperienceMutation) Field(name string) (ent.Value, bool) {
 		return m.Time()
 	case experience.FieldActive:
 		return m.Active()
+	case experience.FieldPriority:
+		return m.Priority()
 	}
 	return nil, false
 }
@@ -2428,6 +2580,8 @@ func (m *ExperienceMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldTime(ctx)
 	case experience.FieldActive:
 		return m.OldActive(ctx)
+	case experience.FieldPriority:
+		return m.OldPriority(ctx)
 	}
 	return nil, fmt.Errorf("unknown Experience field %s", name)
 }
@@ -2465,6 +2619,13 @@ func (m *ExperienceMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetActive(v)
 		return nil
+	case experience.FieldPriority:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPriority(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Experience field %s", name)
 }
@@ -2472,13 +2633,21 @@ func (m *ExperienceMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *ExperienceMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addpriority != nil {
+		fields = append(fields, experience.FieldPriority)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *ExperienceMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case experience.FieldPriority:
+		return m.AddedPriority()
+	}
 	return nil, false
 }
 
@@ -2487,6 +2656,13 @@ func (m *ExperienceMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ExperienceMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case experience.FieldPriority:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPriority(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Experience numeric field %s", name)
 }
@@ -2534,6 +2710,9 @@ func (m *ExperienceMutation) ResetField(name string) error {
 		return nil
 	case experience.FieldActive:
 		m.ResetActive()
+		return nil
+	case experience.FieldPriority:
+		m.ResetPriority()
 		return nil
 	}
 	return fmt.Errorf("unknown Experience field %s", name)
@@ -4070,270 +4249,6 @@ func (m *TechnologyMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown Technology edge %s", name)
-}
-
-// TestMutation represents an operation that mutates the Test nodes in the graph.
-type TestMutation struct {
-	config
-	op            Op
-	typ           string
-	id            *int
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*Test, error)
-	predicates    []predicate.Test
-}
-
-var _ ent.Mutation = (*TestMutation)(nil)
-
-// testOption allows management of the mutation configuration using functional options.
-type testOption func(*TestMutation)
-
-// newTestMutation creates new mutation for the Test entity.
-func newTestMutation(c config, op Op, opts ...testOption) *TestMutation {
-	m := &TestMutation{
-		config:        c,
-		op:            op,
-		typ:           TypeTest,
-		clearedFields: make(map[string]struct{}),
-	}
-	for _, opt := range opts {
-		opt(m)
-	}
-	return m
-}
-
-// withTestID sets the ID field of the mutation.
-func withTestID(id int) testOption {
-	return func(m *TestMutation) {
-		var (
-			err   error
-			once  sync.Once
-			value *Test
-		)
-		m.oldValue = func(ctx context.Context) (*Test, error) {
-			once.Do(func() {
-				if m.done {
-					err = errors.New("querying old values post mutation is not allowed")
-				} else {
-					value, err = m.Client().Test.Get(ctx, id)
-				}
-			})
-			return value, err
-		}
-		m.id = &id
-	}
-}
-
-// withTest sets the old Test of the mutation.
-func withTest(node *Test) testOption {
-	return func(m *TestMutation) {
-		m.oldValue = func(context.Context) (*Test, error) {
-			return node, nil
-		}
-		m.id = &node.ID
-	}
-}
-
-// Client returns a new `ent.Client` from the mutation. If the mutation was
-// executed in a transaction (ent.Tx), a transactional client is returned.
-func (m TestMutation) Client() *Client {
-	client := &Client{config: m.config}
-	client.init()
-	return client
-}
-
-// Tx returns an `ent.Tx` for mutations that were executed in transactions;
-// it returns an error otherwise.
-func (m TestMutation) Tx() (*Tx, error) {
-	if _, ok := m.driver.(*txDriver); !ok {
-		return nil, errors.New("ent: mutation is not running in a transaction")
-	}
-	tx := &Tx{config: m.config}
-	tx.init()
-	return tx, nil
-}
-
-// ID returns the ID value in the mutation. Note that the ID is only available
-// if it was provided to the builder or after it was returned from the database.
-func (m *TestMutation) ID() (id int, exists bool) {
-	if m.id == nil {
-		return
-	}
-	return *m.id, true
-}
-
-// IDs queries the database and returns the entity ids that match the mutation's predicate.
-// That means, if the mutation is applied within a transaction with an isolation level such
-// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
-// or updated by the mutation.
-func (m *TestMutation) IDs(ctx context.Context) ([]int, error) {
-	switch {
-	case m.op.Is(OpUpdateOne | OpDeleteOne):
-		id, exists := m.ID()
-		if exists {
-			return []int{id}, nil
-		}
-		fallthrough
-	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().Test.Query().Where(m.predicates...).IDs(ctx)
-	default:
-		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
-	}
-}
-
-// Where appends a list predicates to the TestMutation builder.
-func (m *TestMutation) Where(ps ...predicate.Test) {
-	m.predicates = append(m.predicates, ps...)
-}
-
-// WhereP appends storage-level predicates to the TestMutation builder. Using this method,
-// users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *TestMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.Test, len(ps))
-	for i := range ps {
-		p[i] = ps[i]
-	}
-	m.Where(p...)
-}
-
-// Op returns the operation name.
-func (m *TestMutation) Op() Op {
-	return m.op
-}
-
-// SetOp allows setting the mutation operation.
-func (m *TestMutation) SetOp(op Op) {
-	m.op = op
-}
-
-// Type returns the node type of this mutation (Test).
-func (m *TestMutation) Type() string {
-	return m.typ
-}
-
-// Fields returns all fields that were changed during this mutation. Note that in
-// order to get all numeric fields that were incremented/decremented, call
-// AddedFields().
-func (m *TestMutation) Fields() []string {
-	fields := make([]string, 0, 0)
-	return fields
-}
-
-// Field returns the value of a field with the given name. The second boolean
-// return value indicates that this field was not set, or was not defined in the
-// schema.
-func (m *TestMutation) Field(name string) (ent.Value, bool) {
-	return nil, false
-}
-
-// OldField returns the old value of the field from the database. An error is
-// returned if the mutation operation is not UpdateOne, or the query to the
-// database failed.
-func (m *TestMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
-	return nil, fmt.Errorf("unknown Test field %s", name)
-}
-
-// SetField sets the value of a field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *TestMutation) SetField(name string, value ent.Value) error {
-	switch name {
-	}
-	return fmt.Errorf("unknown Test field %s", name)
-}
-
-// AddedFields returns all numeric fields that were incremented/decremented during
-// this mutation.
-func (m *TestMutation) AddedFields() []string {
-	return nil
-}
-
-// AddedField returns the numeric value that was incremented/decremented on a field
-// with the given name. The second boolean return value indicates that this field
-// was not set, or was not defined in the schema.
-func (m *TestMutation) AddedField(name string) (ent.Value, bool) {
-	return nil, false
-}
-
-// AddField adds the value to the field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *TestMutation) AddField(name string, value ent.Value) error {
-	return fmt.Errorf("unknown Test numeric field %s", name)
-}
-
-// ClearedFields returns all nullable fields that were cleared during this
-// mutation.
-func (m *TestMutation) ClearedFields() []string {
-	return nil
-}
-
-// FieldCleared returns a boolean indicating if a field with the given name was
-// cleared in this mutation.
-func (m *TestMutation) FieldCleared(name string) bool {
-	_, ok := m.clearedFields[name]
-	return ok
-}
-
-// ClearField clears the value of the field with the given name. It returns an
-// error if the field is not defined in the schema.
-func (m *TestMutation) ClearField(name string) error {
-	return fmt.Errorf("unknown Test nullable field %s", name)
-}
-
-// ResetField resets all changes in the mutation for the field with the given name.
-// It returns an error if the field is not defined in the schema.
-func (m *TestMutation) ResetField(name string) error {
-	return fmt.Errorf("unknown Test field %s", name)
-}
-
-// AddedEdges returns all edge names that were set/added in this mutation.
-func (m *TestMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
-	return edges
-}
-
-// AddedIDs returns all IDs (to other nodes) that were added for the given edge
-// name in this mutation.
-func (m *TestMutation) AddedIDs(name string) []ent.Value {
-	return nil
-}
-
-// RemovedEdges returns all edge names that were removed in this mutation.
-func (m *TestMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
-	return edges
-}
-
-// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
-// the given name in this mutation.
-func (m *TestMutation) RemovedIDs(name string) []ent.Value {
-	return nil
-}
-
-// ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *TestMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
-	return edges
-}
-
-// EdgeCleared returns a boolean which indicates if the edge with the given name
-// was cleared in this mutation.
-func (m *TestMutation) EdgeCleared(name string) bool {
-	return false
-}
-
-// ClearEdge clears the value of the edge with the given name. It returns an error
-// if that edge is not defined in the schema.
-func (m *TestMutation) ClearEdge(name string) error {
-	return fmt.Errorf("unknown Test unique edge %s", name)
-}
-
-// ResetEdge resets all changes to the edge with the given name in this mutation.
-// It returns an error if the edge is not defined in the schema.
-func (m *TestMutation) ResetEdge(name string) error {
-	return fmt.Errorf("unknown Test edge %s", name)
 }
 
 // UserMutation represents an operation that mutates the User nodes in the graph.

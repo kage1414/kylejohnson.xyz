@@ -306,6 +306,7 @@ func (eq *ExperienceQuery) WithDescriptions(opts ...func(*DescriptionQuery)) *Ex
 //		GroupBy(experience.FieldEmployer).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
+//
 func (eq *ExperienceQuery) GroupBy(field string, fields ...string) *ExperienceGroupBy {
 	eq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &ExperienceGroupBy{build: eq}
@@ -327,6 +328,7 @@ func (eq *ExperienceQuery) GroupBy(field string, fields ...string) *ExperienceGr
 //	client.Experience.Query().
 //		Select(experience.FieldEmployer).
 //		Scan(ctx, &v)
+//
 func (eq *ExperienceQuery) Select(fields ...string) *ExperienceSelect {
 	eq.ctx.Fields = append(eq.ctx.Fields, fields...)
 	sbuild := &ExperienceSelect{ExperienceQuery: eq}

@@ -342,6 +342,7 @@ func (aq *ApplicationQuery) WithTechnologies(opts ...func(*TechnologyQuery)) *Ap
 //		GroupBy(application.FieldName).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
+//
 func (aq *ApplicationQuery) GroupBy(field string, fields ...string) *ApplicationGroupBy {
 	aq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &ApplicationGroupBy{build: aq}
@@ -363,6 +364,7 @@ func (aq *ApplicationQuery) GroupBy(field string, fields ...string) *Application
 //	client.Application.Query().
 //		Select(application.FieldName).
 //		Scan(ctx, &v)
+//
 func (aq *ApplicationQuery) Select(fields ...string) *ApplicationSelect {
 	aq.ctx.Fields = append(aq.ctx.Fields, fields...)
 	sbuild := &ApplicationSelect{ApplicationQuery: aq}

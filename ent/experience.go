@@ -24,6 +24,8 @@ type Experience struct {
 	Time string `json:"time,omitempty"`
 	// Active holds the value of the "active" field.
 	Active bool `json:"active,omitempty"`
+	// Priority holds the value of the "priority" field.
+	Priority int32 `json:"priority,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ExperienceQuery when eager-loading is set.
 	Edges        ExperienceEdges `json:"edges"`
@@ -55,7 +57,7 @@ func (*Experience) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case experience.FieldActive:
 			values[i] = new(sql.NullBool)
-		case experience.FieldID:
+		case experience.FieldID, experience.FieldPriority:
 			values[i] = new(sql.NullInt64)
 		case experience.FieldEmployer, experience.FieldPosition, experience.FieldTime:
 			values[i] = new(sql.NullString)
@@ -103,6 +105,12 @@ func (e *Experience) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field active", values[i])
 			} else if value.Valid {
 				e.Active = value.Bool
+			}
+		case experience.FieldPriority:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field priority", values[i])
+			} else if value.Valid {
+				e.Priority = int32(value.Int64)
 			}
 		default:
 			e.selectValues.Set(columns[i], values[i])
@@ -156,6 +164,9 @@ func (e *Experience) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("active=")
 	builder.WriteString(fmt.Sprintf("%v", e.Active))
+	builder.WriteString(", ")
+	builder.WriteString("priority=")
+	builder.WriteString(fmt.Sprintf("%v", e.Priority))
 	builder.WriteByte(')')
 	return builder.String()
 }

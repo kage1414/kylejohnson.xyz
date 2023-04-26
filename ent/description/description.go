@@ -16,6 +16,8 @@ const (
 	FieldDescription = "description"
 	// FieldActive holds the string denoting the active field in the database.
 	FieldActive = "active"
+	// FieldPriority holds the string denoting the priority field in the database.
+	FieldPriority = "priority"
 	// EdgeExperience holds the string denoting the experience edge name in mutations.
 	EdgeExperience = "experience"
 	// EdgeApplication holds the string denoting the application edge name in mutations.
@@ -43,6 +45,7 @@ var Columns = []string{
 	FieldID,
 	FieldDescription,
 	FieldActive,
+	FieldPriority,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "descriptions"
@@ -88,6 +91,11 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByActive orders the results by the active field.
 func ByActive(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldActive, opts...).ToFunc()
+}
+
+// ByPriority orders the results by the priority field.
+func ByPriority(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPriority, opts...).ToFunc()
 }
 
 // ByExperienceField orders the results by experience field.

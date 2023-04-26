@@ -49,6 +49,19 @@ func (du *DescriptionUpdate) SetNillableActive(b *bool) *DescriptionUpdate {
 	return du
 }
 
+// SetPriority sets the "priority" field.
+func (du *DescriptionUpdate) SetPriority(i int32) *DescriptionUpdate {
+	du.mutation.ResetPriority()
+	du.mutation.SetPriority(i)
+	return du
+}
+
+// AddPriority adds i to the "priority" field.
+func (du *DescriptionUpdate) AddPriority(i int32) *DescriptionUpdate {
+	du.mutation.AddPriority(i)
+	return du
+}
+
 // SetExperienceID sets the "experience" edge to the Experience entity by ID.
 func (du *DescriptionUpdate) SetExperienceID(id int) *DescriptionUpdate {
 	du.mutation.SetExperienceID(id)
@@ -146,6 +159,12 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := du.mutation.Active(); ok {
 		_spec.SetField(description.FieldActive, field.TypeBool, value)
 	}
+	if value, ok := du.mutation.Priority(); ok {
+		_spec.SetField(description.FieldPriority, field.TypeInt32, value)
+	}
+	if value, ok := du.mutation.AddedPriority(); ok {
+		_spec.AddField(description.FieldPriority, field.TypeInt32, value)
+	}
 	if du.mutation.ExperienceCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -241,6 +260,19 @@ func (duo *DescriptionUpdateOne) SetNillableActive(b *bool) *DescriptionUpdateOn
 	if b != nil {
 		duo.SetActive(*b)
 	}
+	return duo
+}
+
+// SetPriority sets the "priority" field.
+func (duo *DescriptionUpdateOne) SetPriority(i int32) *DescriptionUpdateOne {
+	duo.mutation.ResetPriority()
+	duo.mutation.SetPriority(i)
+	return duo
+}
+
+// AddPriority adds i to the "priority" field.
+func (duo *DescriptionUpdateOne) AddPriority(i int32) *DescriptionUpdateOne {
+	duo.mutation.AddPriority(i)
 	return duo
 }
 
@@ -370,6 +402,12 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 	}
 	if value, ok := duo.mutation.Active(); ok {
 		_spec.SetField(description.FieldActive, field.TypeBool, value)
+	}
+	if value, ok := duo.mutation.Priority(); ok {
+		_spec.SetField(description.FieldPriority, field.TypeInt32, value)
+	}
+	if value, ok := duo.mutation.AddedPriority(); ok {
+		_spec.AddField(description.FieldPriority, field.TypeInt32, value)
 	}
 	if duo.mutation.ExperienceCleared() {
 		edge := &sqlgraph.EdgeSpec{

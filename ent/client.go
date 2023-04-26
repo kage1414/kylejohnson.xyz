@@ -17,7 +17,6 @@ import (
 	"kylejohnson-xyz/ent/invite"
 	"kylejohnson-xyz/ent/technology"
 	"kylejohnson-xyz/ent/techstack"
-	"kylejohnson-xyz/ent/test"
 	"kylejohnson-xyz/ent/user"
 
 	"entgo.io/ent"
@@ -45,8 +44,6 @@ type Client struct {
 	TechStack *TechStackClient
 	// Technology is the client for interacting with the Technology builders.
 	Technology *TechnologyClient
-	// Test is the client for interacting with the Test builders.
-	Test *TestClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 }
@@ -69,7 +66,6 @@ func (c *Client) init() {
 	c.Invite = NewInviteClient(c.config)
 	c.TechStack = NewTechStackClient(c.config)
 	c.Technology = NewTechnologyClient(c.config)
-	c.Test = NewTestClient(c.config)
 	c.User = NewUserClient(c.config)
 }
 
@@ -160,7 +156,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Invite:      NewInviteClient(cfg),
 		TechStack:   NewTechStackClient(cfg),
 		Technology:  NewTechnologyClient(cfg),
-		Test:        NewTestClient(cfg),
 		User:        NewUserClient(cfg),
 	}, nil
 }
@@ -188,7 +183,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Invite:      NewInviteClient(cfg),
 		TechStack:   NewTechStackClient(cfg),
 		Technology:  NewTechnologyClient(cfg),
-		Test:        NewTestClient(cfg),
 		User:        NewUserClient(cfg),
 	}, nil
 }
@@ -199,6 +193,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 //		Application.
 //		Query().
 //		Count(ctx)
+//
 func (c *Client) Debug() *Client {
 	if c.debug {
 		return c
@@ -220,7 +215,7 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Application, c.Description, c.Education, c.Experience, c.Invite, c.TechStack,
-		c.Technology, c.Test, c.User,
+		c.Technology, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -231,7 +226,7 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Application, c.Description, c.Education, c.Experience, c.Invite, c.TechStack,
-		c.Technology, c.Test, c.User,
+		c.Technology, c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -254,8 +249,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.TechStack.mutate(ctx, m)
 	case *TechnologyMutation:
 		return c.Technology.mutate(ctx, m)
-	case *TestMutation:
-		return c.Test.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
 	default:
@@ -1217,124 +1210,6 @@ func (c *TechnologyClient) mutate(ctx context.Context, m *TechnologyMutation) (V
 	}
 }
 
-// TestClient is a client for the Test schema.
-type TestClient struct {
-	config
-}
-
-// NewTestClient returns a client for the Test from the given config.
-func NewTestClient(c config) *TestClient {
-	return &TestClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `test.Hooks(f(g(h())))`.
-func (c *TestClient) Use(hooks ...Hook) {
-	c.hooks.Test = append(c.hooks.Test, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `test.Intercept(f(g(h())))`.
-func (c *TestClient) Intercept(interceptors ...Interceptor) {
-	c.inters.Test = append(c.inters.Test, interceptors...)
-}
-
-// Create returns a builder for creating a Test entity.
-func (c *TestClient) Create() *TestCreate {
-	mutation := newTestMutation(c.config, OpCreate)
-	return &TestCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of Test entities.
-func (c *TestClient) CreateBulk(builders ...*TestCreate) *TestCreateBulk {
-	return &TestCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for Test.
-func (c *TestClient) Update() *TestUpdate {
-	mutation := newTestMutation(c.config, OpUpdate)
-	return &TestUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *TestClient) UpdateOne(t *Test) *TestUpdateOne {
-	mutation := newTestMutation(c.config, OpUpdateOne, withTest(t))
-	return &TestUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *TestClient) UpdateOneID(id int) *TestUpdateOne {
-	mutation := newTestMutation(c.config, OpUpdateOne, withTestID(id))
-	return &TestUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for Test.
-func (c *TestClient) Delete() *TestDelete {
-	mutation := newTestMutation(c.config, OpDelete)
-	return &TestDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *TestClient) DeleteOne(t *Test) *TestDeleteOne {
-	return c.DeleteOneID(t.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *TestClient) DeleteOneID(id int) *TestDeleteOne {
-	builder := c.Delete().Where(test.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &TestDeleteOne{builder}
-}
-
-// Query returns a query builder for Test.
-func (c *TestClient) Query() *TestQuery {
-	return &TestQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeTest},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a Test entity by its id.
-func (c *TestClient) Get(ctx context.Context, id int) (*Test, error) {
-	return c.Query().Where(test.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *TestClient) GetX(ctx context.Context, id int) *Test {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// Hooks returns the client hooks.
-func (c *TestClient) Hooks() []Hook {
-	return c.hooks.Test
-}
-
-// Interceptors returns the client interceptors.
-func (c *TestClient) Interceptors() []Interceptor {
-	return c.inters.Test
-}
-
-func (c *TestClient) mutate(ctx context.Context, m *TestMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&TestCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&TestUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&TestUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&TestDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown Test mutation op: %q", m.Op())
-	}
-}
-
 // UserClient is a client for the User schema.
 type UserClient struct {
 	config
@@ -1473,10 +1348,10 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 type (
 	hooks struct {
 		Application, Description, Education, Experience, Invite, TechStack, Technology,
-		Test, User []ent.Hook
+		User []ent.Hook
 	}
 	inters struct {
 		Application, Description, Education, Experience, Invite, TechStack, Technology,
-		Test, User []ent.Interceptor
+		User []ent.Interceptor
 	}
 )

@@ -270,6 +270,7 @@ func (iq *InviteQuery) Clone() *InviteQuery {
 //		GroupBy(invite.FieldEmail).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
+//
 func (iq *InviteQuery) GroupBy(field string, fields ...string) *InviteGroupBy {
 	iq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &InviteGroupBy{build: iq}
@@ -291,6 +292,7 @@ func (iq *InviteQuery) GroupBy(field string, fields ...string) *InviteGroupBy {
 //	client.Invite.Query().
 //		Select(invite.FieldEmail).
 //		Scan(ctx, &v)
+//
 func (iq *InviteQuery) Select(fields ...string) *InviteSelect {
 	iq.ctx.Fields = append(iq.ctx.Fields, fields...)
 	sbuild := &InviteSelect{InviteQuery: iq}

@@ -16,6 +16,7 @@ func (Experience) Fields() []ent.Field {
 		field.String("position"),
 		field.String("time").Optional(),
 		field.Bool("active").Default(true),
+		field.Int32("priority"),
 	}
 }
 

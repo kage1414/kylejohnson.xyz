@@ -342,6 +342,7 @@ func (dq *DescriptionQuery) WithApplication(opts ...func(*ApplicationQuery)) *De
 //		GroupBy(description.FieldDescription).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
+//
 func (dq *DescriptionQuery) GroupBy(field string, fields ...string) *DescriptionGroupBy {
 	dq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &DescriptionGroupBy{build: dq}
@@ -363,6 +364,7 @@ func (dq *DescriptionQuery) GroupBy(field string, fields ...string) *Description
 //	client.Description.Query().
 //		Select(description.FieldDescription).
 //		Scan(ctx, &v)
+//
 func (dq *DescriptionQuery) Select(fields ...string) *DescriptionSelect {
 	dq.ctx.Fields = append(dq.ctx.Fields, fields...)
 	sbuild := &DescriptionSelect{DescriptionQuery: dq}

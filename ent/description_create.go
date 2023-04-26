@@ -41,6 +41,12 @@ func (dc *DescriptionCreate) SetNillableActive(b *bool) *DescriptionCreate {
 	return dc
 }
 
+// SetPriority sets the "priority" field.
+func (dc *DescriptionCreate) SetPriority(i int32) *DescriptionCreate {
+	dc.mutation.SetPriority(i)
+	return dc
+}
+
 // SetExperienceID sets the "experience" edge to the Experience entity by ID.
 func (dc *DescriptionCreate) SetExperienceID(id int) *DescriptionCreate {
 	dc.mutation.SetExperienceID(id)
@@ -128,6 +134,9 @@ func (dc *DescriptionCreate) check() error {
 	if _, ok := dc.mutation.Active(); !ok {
 		return &ValidationError{Name: "active", err: errors.New(`ent: missing required field "Description.active"`)}
 	}
+	if _, ok := dc.mutation.Priority(); !ok {
+		return &ValidationError{Name: "priority", err: errors.New(`ent: missing required field "Description.priority"`)}
+	}
 	return nil
 }
 
@@ -161,6 +170,10 @@ func (dc *DescriptionCreate) createSpec() (*Description, *sqlgraph.CreateSpec) {
 	if value, ok := dc.mutation.Active(); ok {
 		_spec.SetField(description.FieldActive, field.TypeBool, value)
 		_node.Active = value
+	}
+	if value, ok := dc.mutation.Priority(); ok {
+		_spec.SetField(description.FieldPriority, field.TypeInt32, value)
+		_node.Priority = value
 	}
 	if nodes := dc.mutation.ExperienceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

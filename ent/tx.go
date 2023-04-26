@@ -26,8 +26,6 @@ type Tx struct {
 	TechStack *TechStackClient
 	// Technology is the client for interacting with the Technology builders.
 	Technology *TechnologyClient
-	// Test is the client for interacting with the Test builders.
-	Test *TestClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 
@@ -168,7 +166,6 @@ func (tx *Tx) init() {
 	tx.Invite = NewInviteClient(tx.config)
 	tx.TechStack = NewTechStackClient(tx.config)
 	tx.Technology = NewTechnologyClient(tx.config)
-	tx.Test = NewTestClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 }
 

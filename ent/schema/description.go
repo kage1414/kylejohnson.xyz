@@ -14,6 +14,7 @@ func (Description) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("description"),
 		field.Bool("active").Default(true),
+		field.Int32("priority"),
 	}
 }
 

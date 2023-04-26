@@ -27,8 +27,5 @@ type TechStack func(*sql.Selector)
 // Technology is the predicate function for technology builders.
 type Technology func(*sql.Selector)
 
-// Test is the predicate function for test builders.
-type Test func(*sql.Selector)
-
 // User is the predicate function for user builders.
 type User func(*sql.Selector)

@@ -22,6 +22,8 @@ type Description struct {
 	Description string `json:"description,omitempty"`
 	// Active holds the value of the "active" field.
 	Active bool `json:"active,omitempty"`
+	// Priority holds the value of the "priority" field.
+	Priority int32 `json:"priority,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DescriptionQuery when eager-loading is set.
 	Edges                    DescriptionEdges `json:"edges"`
@@ -74,7 +76,7 @@ func (*Description) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case description.FieldActive:
 			values[i] = new(sql.NullBool)
-		case description.FieldID:
+		case description.FieldID, description.FieldPriority:
 			values[i] = new(sql.NullInt64)
 		case description.FieldDescription:
 			values[i] = new(sql.NullString)
@@ -114,6 +116,12 @@ func (d *Description) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field active", values[i])
 			} else if value.Valid {
 				d.Active = value.Bool
+			}
+		case description.FieldPriority:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field priority", values[i])
+			} else if value.Valid {
+				d.Priority = int32(value.Int64)
 			}
 		case description.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -180,6 +188,9 @@ func (d *Description) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("active=")
 	builder.WriteString(fmt.Sprintf("%v", d.Active))
+	builder.WriteString(", ")
+	builder.WriteString("priority=")
+	builder.WriteString(fmt.Sprintf("%v", d.Priority))
 	builder.WriteByte(')')
 	return builder.String()
 }

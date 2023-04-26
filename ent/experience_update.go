@@ -74,6 +74,19 @@ func (eu *ExperienceUpdate) SetNillableActive(b *bool) *ExperienceUpdate {
 	return eu
 }
 
+// SetPriority sets the "priority" field.
+func (eu *ExperienceUpdate) SetPriority(i int32) *ExperienceUpdate {
+	eu.mutation.ResetPriority()
+	eu.mutation.SetPriority(i)
+	return eu
+}
+
+// AddPriority adds i to the "priority" field.
+func (eu *ExperienceUpdate) AddPriority(i int32) *ExperienceUpdate {
+	eu.mutation.AddPriority(i)
+	return eu
+}
+
 // AddDescriptionIDs adds the "descriptions" edge to the Description entity by IDs.
 func (eu *ExperienceUpdate) AddDescriptionIDs(ids ...int) *ExperienceUpdate {
 	eu.mutation.AddDescriptionIDs(ids...)
@@ -165,6 +178,12 @@ func (eu *ExperienceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := eu.mutation.Active(); ok {
 		_spec.SetField(experience.FieldActive, field.TypeBool, value)
+	}
+	if value, ok := eu.mutation.Priority(); ok {
+		_spec.SetField(experience.FieldPriority, field.TypeInt32, value)
+	}
+	if value, ok := eu.mutation.AddedPriority(); ok {
+		_spec.AddField(experience.FieldPriority, field.TypeInt32, value)
 	}
 	if eu.mutation.DescriptionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -274,6 +293,19 @@ func (euo *ExperienceUpdateOne) SetNillableActive(b *bool) *ExperienceUpdateOne 
 	if b != nil {
 		euo.SetActive(*b)
 	}
+	return euo
+}
+
+// SetPriority sets the "priority" field.
+func (euo *ExperienceUpdateOne) SetPriority(i int32) *ExperienceUpdateOne {
+	euo.mutation.ResetPriority()
+	euo.mutation.SetPriority(i)
+	return euo
+}
+
+// AddPriority adds i to the "priority" field.
+func (euo *ExperienceUpdateOne) AddPriority(i int32) *ExperienceUpdateOne {
+	euo.mutation.AddPriority(i)
 	return euo
 }
 
@@ -398,6 +430,12 @@ func (euo *ExperienceUpdateOne) sqlSave(ctx context.Context) (_node *Experience,
 	}
 	if value, ok := euo.mutation.Active(); ok {
 		_spec.SetField(experience.FieldActive, field.TypeBool, value)
+	}
+	if value, ok := euo.mutation.Priority(); ok {
+		_spec.SetField(experience.FieldPriority, field.TypeInt32, value)
+	}
+	if value, ok := euo.mutation.AddedPriority(); ok {
+		_spec.AddField(experience.FieldPriority, field.TypeInt32, value)
 	}
 	if euo.mutation.DescriptionsCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -27,6 +27,7 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "description", Type: field.TypeString},
 		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "priority", Type: field.TypeInt32},
 		{Name: "application_descriptions", Type: field.TypeInt, Nullable: true},
 		{Name: "experience_descriptions", Type: field.TypeInt, Nullable: true},
 	}
@@ -38,13 +39,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "descriptions_applications_descriptions",
-				Columns:    []*schema.Column{DescriptionsColumns[3]},
+				Columns:    []*schema.Column{DescriptionsColumns[4]},
 				RefColumns: []*schema.Column{ApplicationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "descriptions_experiences_descriptions",
-				Columns:    []*schema.Column{DescriptionsColumns[4]},
+				Columns:    []*schema.Column{DescriptionsColumns[5]},
 				RefColumns: []*schema.Column{ExperiencesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -73,6 +74,7 @@ var (
 		{Name: "position", Type: field.TypeString},
 		{Name: "time", Type: field.TypeString, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "priority", Type: field.TypeInt32},
 	}
 	// ExperiencesTable holds the schema information for the "experiences" table.
 	ExperiencesTable = &schema.Table{
@@ -142,16 +144,6 @@ var (
 			},
 		},
 	}
-	// TestsColumns holds the columns for the "tests" table.
-	TestsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-	}
-	// TestsTable holds the schema information for the "tests" table.
-	TestsTable = &schema.Table{
-		Name:       "tests",
-		Columns:    TestsColumns,
-		PrimaryKey: []*schema.Column{TestsColumns[0]},
-	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -176,7 +168,6 @@ var (
 		InvitesTable,
 		TechStacksTable,
 		TechnologiesTable,
-		TestsTable,
 		UsersTable,
 	}
 )

@@ -56,7 +56,7 @@ type TRemoveApplicationTechnology struct {
 }
 
 func RemoveApplicationTechnology(ctx context.Context, client *ent.Client, p TRemoveApplicationTechnology) *ent.Application {
-	a := client.Application.UpdateOneID(p.id).AddTechnologyIDs(p.technology_id).SaveX(ctx)
+	a := client.Application.UpdateOneID(p.id).RemoveTechnologyIDs(p.technology_id).SaveX(ctx)
 	return a;
 }
 
@@ -71,4 +71,41 @@ type TUpdateApplication struct {
 func UpdateTechnology(ctx context.Context, client *ent.Client, p TUpdateApplication) *ent.Application {
 	a := client.Application.UpdateOneID(p.id).SetName(p.name).SetURL(p.url).SetPriority(p.priority).SetActive(p.active).SaveX(ctx)
 	return a
+}
+
+type TAddDescription struct {
+	description string
+}
+
+func AddDescription(ctx context.Context, client *ent.Client, p TAddDescription) *ent.Description {
+	d := client.Description.Create().SetDescription(p.description).SaveX(ctx)
+	return d
+}
+
+type TDeleteDescription struct {
+	id int
+}
+
+func DeleteDescription(ctx context.Context, client *ent.Client, p TDeleteDescription) {
+	client.Description.DeleteOneID(p.id).ExecX(ctx)
+}
+
+type TGetDescription struct {
+	id int
+}
+
+func GetDescription(ctx context.Context, client *ent.Client, p TGetDescription) *ent.Description {
+	d, _ := client.Description.Get(ctx, p.id)
+	return d
+}
+
+type TUpdateDescription struct {
+	id int
+	description string
+	priority int32
+}
+
+func UpdateDescription(ctx context.Context, client *ent.Client, p TUpdateDescription) *ent.Description {
+	d := client.Description.UpdateOneID(p.id).SetDescription(p.description).SetPriority(p.priority).SaveX(ctx)
+	return d
 }

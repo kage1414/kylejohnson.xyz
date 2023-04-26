@@ -342,6 +342,7 @@ func (tq *TechnologyQuery) WithStack(opts ...func(*TechStackQuery)) *TechnologyQ
 //		GroupBy(technology.FieldName).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
+//
 func (tq *TechnologyQuery) GroupBy(field string, fields ...string) *TechnologyGroupBy {
 	tq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &TechnologyGroupBy{build: tq}
@@ -363,6 +364,7 @@ func (tq *TechnologyQuery) GroupBy(field string, fields ...string) *TechnologyGr
 //	client.Technology.Query().
 //		Select(technology.FieldName).
 //		Scan(ctx, &v)
+//
 func (tq *TechnologyQuery) Select(fields ...string) *TechnologySelect {
 	tq.ctx.Fields = append(tq.ctx.Fields, fields...)
 	sbuild := &TechnologySelect{TechnologyQuery: tq}
