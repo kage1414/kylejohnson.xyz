@@ -16,6 +16,16 @@ func AddApplication(ctx context.Context, client *ent.Client, p TAddApplication) 
 	return a
 }
 
+type TAddApplicationDescription struct {
+	application_id int
+	description_id int
+}
+
+func AddApplicationDescription(ctx context.Context, client *ent.Client, p TAddApplicationDescription) *ent.Application {
+	t := client.Application.UpdateOneID(p.application_id).AddDescriptionIDs(p.description_id).SaveX(ctx)
+	return t
+}
+
 type TAddApplicationTechnology struct {
 	id int
 	name string
