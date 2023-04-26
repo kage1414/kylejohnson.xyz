@@ -1,10 +1,18 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"context"
+	"kylejohnson-xyz/api"
+	"kylejohnson-xyz/db"
+
+	"github.com/gin-gonic/gin"
+)
 
 
 func setupRoutes(r *gin.Engine) {
-	
+	client := db.GetClient()
+	ctx := context.Background()
+	api.Setup(r, ctx, client)
 }
 
 func main() {
