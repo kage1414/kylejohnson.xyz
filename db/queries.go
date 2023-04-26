@@ -109,3 +109,45 @@ func UpdateDescription(ctx context.Context, client *ent.Client, p TUpdateDescrip
 	d := client.Description.UpdateOneID(p.id).SetDescription(p.description).SetPriority(p.priority).SaveX(ctx)
 	return d
 }
+
+type TAddEducation struct {
+	school string
+	time string
+	certificate string
+	degree string
+	active bool
+	priority int32
+}
+
+func AddEducation(ctx context.Context, client *ent.Client, p TAddEducation) *ent.Education {
+	e := client.Education.Create().SetSchool(p.school).SetNillableTime(&p.time).SetNillableCertificate(&p.certificate).SetNillableDegree(&p.degree).SetNillableActive(&p.active).SetNillablePriority(&p.priority).SaveX(ctx)
+	return e
+}
+
+type TDeleteEducation struct {
+	id int
+}
+
+func DeleteEducation(ctx context.Context, client *ent.Client, p TDeleteEducation) {
+	client.Education.DeleteOneID(p.id).ExecX(ctx)
+}
+
+func GetAllEducations(ctx context.Context, client *ent.Client) []*ent.Education {
+	items, _ := client.Education.Query().All(ctx)
+	return items
+}
+
+type TUpdateEducation struct {
+	id int
+	school string
+	time string
+	certificate string
+	degree string
+	active bool
+	priority int32
+}
+
+func UpdateEducation(ctx context.Context, client *ent.Client, p TUpdateEducation) *ent.Education {
+	e := client.Education.UpdateOneID(p.id).SetSchool(p.school).SetNillableTime(&p.time).SetNillableCertificate(&p.certificate).SetNillableDegree(&p.degree).SetNillableActive(&p.active).SetNillablePriority(&p.priority).SaveX(ctx)
+	return e
+}
