@@ -3,6 +3,9 @@ package db
 import (
 	"context"
 	"kylejohnson-xyz/ent"
+	"kylejohnson-xyz/ent/techstack"
+
+	"entgo.io/ent/dialect/sql"
 )
 
 type TAddApplication struct {
@@ -68,7 +71,7 @@ type TUpdateApplication struct {
 	active bool
 }
 
-func UpdateTechnology(ctx context.Context, client *ent.Client, p TUpdateApplication) *ent.Application {
+func UpdateApplication(ctx context.Context, client *ent.Client, p TUpdateApplication) *ent.Application {
 	a := client.Application.UpdateOneID(p.id).SetName(p.name).SetURL(p.url).SetPriority(p.priority).SetActive(p.active).SaveX(ctx)
 	return a
 }
@@ -220,4 +223,58 @@ func SnapshotExperience(ctx context.Context, client *ent.Client) []*ent.Experien
 func SnapshotTechnologies(ctx context.Context, client *ent.Client) []*ent.Technology {
 	items, _ := client.Technology.Query().All(ctx)
 	return items
+}
+
+type TAddTechnology struct {
+	name string
+	url string
+	priority int32
+	stack string
+}
+
+func AddTechnology(ctx context.Context, client *ent.Client, p TAddTechnology) *ent.Technology {
+	s := client.TechStack.Query().Where(func(s *sql.Selector) {
+		s.Where(sql.InValues(techstack.FieldStack, p.stack))
+	}).FirstX(ctx)
+	t := client.Technology.Create().SetName(p.name).SetURL(p.url).SetPriority(p.priority).SetStack(s).SaveX(ctx)
+	return t
+}
+
+type TDeleteTechnology struct {
+	id int
+}
+
+func DeleteTechnology(ctx context.Context, client *ent.Client, p TDeleteTechnology) {
+	client.Technology.DeleteOneID(p.id).ExecX(ctx)
+}
+
+func GetAllTechnicalSkills(ctx context.Context, client *ent.Client) []*ent.TechStack {
+	t := client.TechStack.Query().AllX(ctx)
+	return t
+}
+
+func GetAllTechnologies(ctx context.Context, client *ent.Client) []*ent.Technology {
+	t := client.Technology.Query().AllX(ctx)
+	return t
+}
+
+func GetTechStacks(ctx context.Context, client *ent.Client) []*ent.TechStack {
+	t := client.TechStack.Query().AllX(ctx)
+	return t
+}
+
+type TUpdateTechnology struct {
+	id int
+	name string
+	priority int32
+	stack string
+	url string
+}
+
+func UpdateTechnology(ctx context.Context, client *ent.Client, p TUpdateTechnology) *ent.Technology {
+	s := client.TechStack.Query().Where(func(s *sql.Selector) {
+		s.Where(sql.InValues(techstack.FieldStack, p.stack))
+	}).FirstX(ctx)
+	t := client.Technology.UpdateOneID(p.id).SetName(p.name).SetURL(p.url).SetPriority(p.priority).SetStack(s).SaveX(ctx)
+	return t
 }
