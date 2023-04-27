@@ -151,3 +151,53 @@ func UpdateEducation(ctx context.Context, client *ent.Client, p TUpdateEducation
 	e := client.Education.UpdateOneID(p.id).SetSchool(p.school).SetNillableTime(&p.time).SetNillableCertificate(&p.certificate).SetNillableDegree(&p.degree).SetNillableActive(&p.active).SetNillablePriority(&p.priority).SaveX(ctx)
 	return e
 }
+
+type TAddExperience struct {
+	employer string
+	time string
+	position string
+	active bool
+	priority int32
+}
+
+func AddExperience(ctx context.Context, client *ent.Client, p TAddExperience) *ent.Experience {
+	e := client.Experience.Create().SetEmployer(p.employer).SetNillableTime(&p.time).SetPosition(p.position).SetNillableActive(&p.active).SetPriority(p.priority).SaveX(ctx)
+	return e
+}
+
+type TAddExperienceDescription struct {
+	experience_id int
+	description_id int
+}
+
+func AddExperienceDescription(ctx context.Context, client *ent.Client, p TAddExperienceDescription) *ent.Experience {
+	e := client.Experience.UpdateOneID(p.experience_id).AddDescriptionIDs(p.description_id).SaveX(ctx)
+	return e
+}
+
+type TDeleteExperience struct {
+	id int
+}
+
+func DeleteExperience(ctx context.Context, client *ent.Client, p TDeleteExperience) {
+	client.Experience.DeleteOneID(p.id).ExecX(ctx)
+}
+
+func GetAllExperiences(ctx context.Context, client *ent.Client) []*ent.Experience {
+	items, _ := client.Experience.Query().All(ctx)
+	return items
+}
+
+type TUpdateExperience struct {
+	id int
+	employer string
+	time string
+	position string
+	active bool
+	priority int32
+}
+
+func UpdateExperience(ctx context.Context, client *ent.Client, p TUpdateExperience) *ent.Experience {
+	e := client.Experience.UpdateOneID(p.id).SetEmployer(p.employer).SetNillableTime(&p.time).SetPosition(p.position).SetNillableActive(&p.active).SetPriority(p.priority).SaveX(ctx)
+	return e
+}
