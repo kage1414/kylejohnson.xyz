@@ -159,8 +159,8 @@ type TAddApplicationDescription struct {
 }
 
 type TAddApplication struct {
-	name     string
-	url      string
-	priority int32
-	active   bool
+	Name     string `json:"name"`
+	Url      string `json:"url"`
+	Priority int32 `json:"priority"`
+	Active   bool `json:"active"`
 }

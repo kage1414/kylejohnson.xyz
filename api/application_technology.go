@@ -12,7 +12,7 @@ import (
 
 var ROUTE string = "/api/application_technology"
 
-func Setup(r *gin.Engine, ctx context.Context, client *ent.Client) {
+func ApplicationTechnology(r *gin.Engine, ctx context.Context, client *ent.Client) {
 	r.POST(ROUTE, func(c *gin.Context) {
 		var p db.TAddApplicationTechnology
 		err := json.NewDecoder(c.Request.Body).Decode(&p)

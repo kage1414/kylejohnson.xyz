@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"kylejohnson-xyz/ent"
+	"kylejohnson-xyz/ent/application"
 	"kylejohnson-xyz/ent/invite"
 	"kylejohnson-xyz/ent/techstack"
 	"kylejohnson-xyz/ent/user"
@@ -11,7 +12,7 @@ import (
 )
 
 func AddApplication(ctx context.Context, client *ent.Client, p TAddApplication) *ent.Application {
-	a := client.Application.Create().SetName(p.name).SetURL(p.url).SetPriority(p.priority).SetActive(p.active).SaveX(ctx)
+	a := client.Application.Create().SetName(p.Name).SetURL(p.Url).SetPriority(p.Priority).SetActive(p.Active).SaveX(ctx)
 	return a
 }
 
@@ -31,7 +32,7 @@ func DeleteApplication(ctx context.Context, client *ent.Client, p TDeleteApplica
 }
 
 func GetAllApplications(ctx context.Context, client *ent.Client) []*ent.Application {
-	items, _ := client.Application.Query().All(ctx)
+	items, _ := client.Application.Query().Order(ent.Asc(application.FieldPriority)).All(ctx)
 	return items
 }
 
