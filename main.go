@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
 func setupRoutes(r *gin.Engine) {
 	client := db.GetClient()
 	ctx := context.Background()
