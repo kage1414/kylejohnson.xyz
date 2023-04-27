@@ -4,6 +4,7 @@ package invite
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -17,8 +18,17 @@ const (
 	FieldKey = "key"
 	// FieldRegistered holds the string denoting the registered field in the database.
 	FieldRegistered = "registered"
+	// EdgeUser holds the string denoting the user edge name in mutations.
+	EdgeUser = "user"
 	// Table holds the table name of the invite in the database.
 	Table = "invites"
+	// UserTable is the table that holds the user relation/edge.
+	UserTable = "invites"
+	// UserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	UserInverseTable = "users"
+	// UserColumn is the table column denoting the user relation/edge.
+	UserColumn = "user_invite"
 )
 
 // Columns holds all SQL columns for invite fields.
@@ -76,4 +86,18 @@ func ByKey(opts ...sql.OrderTermOption) OrderOption {
 // ByRegistered orders the results by the registered field.
 func ByRegistered(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRegistered, opts...).ToFunc()
+}
+
+// ByUserField orders the results by user field.
+func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
+	)
 }

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"kylejohnson-xyz/ent/invite"
 	"kylejohnson-xyz/ent/predicate"
+	"kylejohnson-xyz/ent/user"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
@@ -21,6 +22,7 @@ type InviteQuery struct {
 	order      []invite.OrderOption
 	inters     []Interceptor
 	predicates []predicate.Invite
+	withUser   *UserQuery
 	withFKs    bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -56,6 +58,28 @@ func (iq *InviteQuery) Unique(unique bool) *InviteQuery {
 func (iq *InviteQuery) Order(o ...invite.OrderOption) *InviteQuery {
 	iq.order = append(iq.order, o...)
 	return iq
+}
+
+// QueryUser chains the current query on the "user" edge.
+func (iq *InviteQuery) QueryUser() *UserQuery {
+	query := (&UserClient{config: iq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := iq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := iq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(invite.Table, invite.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, invite.UserTable, invite.UserColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(iq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Invite entity from the query.
@@ -250,10 +274,22 @@ func (iq *InviteQuery) Clone() *InviteQuery {
 		order:      append([]invite.OrderOption{}, iq.order...),
 		inters:     append([]Interceptor{}, iq.inters...),
 		predicates: append([]predicate.Invite{}, iq.predicates...),
+		withUser:   iq.withUser.Clone(),
 		// clone intermediate query.
 		sql:  iq.sql.Clone(),
 		path: iq.path,
 	}
+}
+
+// WithUser tells the query-builder to eager-load the nodes that are connected to
+// the "user" edge. The optional arguments are used to configure the query builder of the edge.
+func (iq *InviteQuery) WithUser(opts ...func(*UserQuery)) *InviteQuery {
+	query := (&UserClient{config: iq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	iq.withUser = query
+	return iq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -270,7 +306,6 @@ func (iq *InviteQuery) Clone() *InviteQuery {
 //		GroupBy(invite.FieldEmail).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-//
 func (iq *InviteQuery) GroupBy(field string, fields ...string) *InviteGroupBy {
 	iq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &InviteGroupBy{build: iq}
@@ -292,7 +327,6 @@ func (iq *InviteQuery) GroupBy(field string, fields ...string) *InviteGroupBy {
 //	client.Invite.Query().
 //		Select(invite.FieldEmail).
 //		Scan(ctx, &v)
-//
 func (iq *InviteQuery) Select(fields ...string) *InviteSelect {
 	iq.ctx.Fields = append(iq.ctx.Fields, fields...)
 	sbuild := &InviteSelect{InviteQuery: iq}
@@ -334,10 +368,16 @@ func (iq *InviteQuery) prepareQuery(ctx context.Context) error {
 
 func (iq *InviteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Invite, error) {
 	var (
-		nodes   = []*Invite{}
-		withFKs = iq.withFKs
-		_spec   = iq.querySpec()
+		nodes       = []*Invite{}
+		withFKs     = iq.withFKs
+		_spec       = iq.querySpec()
+		loadedTypes = [1]bool{
+			iq.withUser != nil,
+		}
 	)
+	if iq.withUser != nil {
+		withFKs = true
+	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, invite.ForeignKeys...)
 	}
@@ -347,6 +387,7 @@ func (iq *InviteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Invit
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Invite{config: iq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -358,7 +399,46 @@ func (iq *InviteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Invit
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := iq.withUser; query != nil {
+		if err := iq.loadUser(ctx, query, nodes, nil,
+			func(n *Invite, e *User) { n.Edges.User = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (iq *InviteQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*Invite, init func(*Invite), assign func(*Invite, *User)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Invite)
+	for i := range nodes {
+		if nodes[i].user_invite == nil {
+			continue
+		}
+		fk := *nodes[i].user_invite
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "user_invite" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (iq *InviteQuery) sqlCount(ctx context.Context) (int, error) {

@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"kylejohnson-xyz/ent/invite"
+	"kylejohnson-xyz/ent/user"
 	"strings"
 
 	"entgo.io/ent"
@@ -21,9 +22,34 @@ type Invite struct {
 	// Key holds the value of the "key" field.
 	Key string `json:"key,omitempty"`
 	// Registered holds the value of the "registered" field.
-	Registered   bool `json:"registered,omitempty"`
+	Registered bool `json:"registered,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the InviteQuery when eager-loading is set.
+	Edges        InviteEdges `json:"edges"`
 	user_invite  *int
 	selectValues sql.SelectValues
+}
+
+// InviteEdges holds the relations/edges for other nodes in the graph.
+type InviteEdges struct {
+	// User holds the value of the user edge.
+	User *User `json:"user,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// UserOrErr returns the User value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e InviteEdges) UserOrErr() (*User, error) {
+	if e.loadedTypes[0] {
+		if e.User == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: user.Label}
+		}
+		return e.User, nil
+	}
+	return nil, &NotLoadedError{edge: "user"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -96,6 +122,11 @@ func (i *Invite) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (i *Invite) Value(name string) (ent.Value, error) {
 	return i.selectValues.Get(name)
+}
+
+// QueryUser queries the "user" edge of the Invite entity.
+func (i *Invite) QueryUser() *UserQuery {
+	return NewInviteClient(i.config).QueryUser(i)
 }
 
 // Update returns a builder for updating this Invite.

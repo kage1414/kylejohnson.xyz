@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"kylejohnson-xyz/ent/invite"
 	"kylejohnson-xyz/ent/predicate"
+	"kylejohnson-xyz/ent/user"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -53,9 +54,26 @@ func (iu *InviteUpdate) SetNillableRegistered(b *bool) *InviteUpdate {
 	return iu
 }
 
+// SetUserID sets the "user" edge to the User entity by ID.
+func (iu *InviteUpdate) SetUserID(id int) *InviteUpdate {
+	iu.mutation.SetUserID(id)
+	return iu
+}
+
+// SetUser sets the "user" edge to the User entity.
+func (iu *InviteUpdate) SetUser(u *User) *InviteUpdate {
+	return iu.SetUserID(u.ID)
+}
+
 // Mutation returns the InviteMutation object of the builder.
 func (iu *InviteUpdate) Mutation() *InviteMutation {
 	return iu.mutation
+}
+
+// ClearUser clears the "user" edge to the User entity.
+func (iu *InviteUpdate) ClearUser() *InviteUpdate {
+	iu.mutation.ClearUser()
+	return iu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -85,7 +103,18 @@ func (iu *InviteUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (iu *InviteUpdate) check() error {
+	if _, ok := iu.mutation.UserID(); iu.mutation.UserCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Invite.user"`)
+	}
+	return nil
+}
+
 func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := iu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(invite.Table, invite.Columns, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeInt))
 	if ps := iu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -102,6 +131,35 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := iu.mutation.Registered(); ok {
 		_spec.SetField(invite.FieldRegistered, field.TypeBool, value)
+	}
+	if iu.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   invite.UserTable,
+			Columns: []string{invite.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iu.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   invite.UserTable,
+			Columns: []string{invite.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, iu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -149,9 +207,26 @@ func (iuo *InviteUpdateOne) SetNillableRegistered(b *bool) *InviteUpdateOne {
 	return iuo
 }
 
+// SetUserID sets the "user" edge to the User entity by ID.
+func (iuo *InviteUpdateOne) SetUserID(id int) *InviteUpdateOne {
+	iuo.mutation.SetUserID(id)
+	return iuo
+}
+
+// SetUser sets the "user" edge to the User entity.
+func (iuo *InviteUpdateOne) SetUser(u *User) *InviteUpdateOne {
+	return iuo.SetUserID(u.ID)
+}
+
 // Mutation returns the InviteMutation object of the builder.
 func (iuo *InviteUpdateOne) Mutation() *InviteMutation {
 	return iuo.mutation
+}
+
+// ClearUser clears the "user" edge to the User entity.
+func (iuo *InviteUpdateOne) ClearUser() *InviteUpdateOne {
+	iuo.mutation.ClearUser()
+	return iuo
 }
 
 // Where appends a list predicates to the InviteUpdate builder.
@@ -194,7 +269,18 @@ func (iuo *InviteUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (iuo *InviteUpdateOne) check() error {
+	if _, ok := iuo.mutation.UserID(); iuo.mutation.UserCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Invite.user"`)
+	}
+	return nil
+}
+
 func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err error) {
+	if err := iuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(invite.Table, invite.Columns, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeInt))
 	id, ok := iuo.mutation.ID()
 	if !ok {
@@ -228,6 +314,35 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 	}
 	if value, ok := iuo.mutation.Registered(); ok {
 		_spec.SetField(invite.FieldRegistered, field.TypeBool, value)
+	}
+	if iuo.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   invite.UserTable,
+			Columns: []string{invite.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iuo.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   invite.UserTable,
+			Columns: []string{invite.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Invite{config: iuo.config}
 	_spec.Assign = _node.assignValues

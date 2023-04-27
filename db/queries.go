@@ -3,7 +3,9 @@ package db
 import (
 	"context"
 	"kylejohnson-xyz/ent"
+	"kylejohnson-xyz/ent/invite"
 	"kylejohnson-xyz/ent/techstack"
+	"kylejohnson-xyz/ent/user"
 
 	"entgo.io/ent/dialect/sql"
 )
@@ -277,4 +279,110 @@ func UpdateTechnology(ctx context.Context, client *ent.Client, p TUpdateTechnolo
 	}).FirstX(ctx)
 	t := client.Technology.UpdateOneID(p.id).SetName(p.name).SetURL(p.url).SetPriority(p.priority).SetStack(s).SaveX(ctx)
 	return t
+}
+
+type TAddUser struct {
+	username string
+	hash string
+	salt string
+	name string
+	email string
+	invite_id int
+}
+
+func AddUser(ctx context.Context, client *ent.Client, p TAddUser) *ent.User {
+	i := client.Invite.Query().Where(func(s *sql.Selector) {
+		s.Where(sql.InValues(invite.FieldID, p.invite_id))
+	}).FirstX(ctx)
+	u := client.User.Create().SetUsername(p.username).SetHash(p.hash).SetSalt(p.salt).SetName(p.name).SetEmail(p.email).AddInvite(i).SaveX(ctx)
+	return u
+}
+
+type TCreateInvite struct {
+	email string
+	key string
+}
+
+func CreateInvite(ctx context.Context, client *ent.Client, p TCreateInvite) *ent.Invite {
+	i := client.Invite.Create().SetEmail(p.email).SetKey(p.key).SaveX(ctx)
+	return i
+}
+
+type TDeleteInvite struct {
+	key string
+}
+
+func DeleteInvite(ctx context.Context, client *ent.Client, p TDeleteInvite) {
+	i := client.Invite.Query().Where(func(s *sql.Selector) {
+		s.Where(sql.InValues(invite.FieldKey, p.key))
+	}).FirstX(ctx)
+	client.Invite.DeleteOne(i).ExecX(ctx)
+}
+
+type TDeleteUser struct {
+	username string
+}
+
+func DeleteUser(ctx context.Context, client *ent.Client, p TDeleteUser) {
+	u := GetUser(ctx, client, TGetUser(p))
+	client.User.DeleteOne(u).ExecX(ctx)
+}
+
+func GetAllUsers(ctx context.Context, client *ent.Client) []*ent.User {
+	items, _ := client.User.Query().All(ctx)
+	return items
+}
+
+type TGetInvite struct {
+	key string
+}
+
+func GetInvite(ctx context.Context, client *ent.Client, p TGetInvite) *ent.Invite {
+	i := client.Invite.Query().Where(func(s *sql.Selector) {
+		s.Where(sql.InValues(invite.FieldKey, p.key))
+	}).FirstX(ctx)
+	return i
+}
+
+type TGetUser struct {
+	username string
+}
+
+func GetUser(ctx context.Context, client *ent.Client, p TGetUser) *ent.User {
+	u := client.User.Query().Where(func(s *sql.Selector) {
+		s.Where(sql.InValues(user.FieldUsername, p.username))
+	}).FirstX(ctx)
+	return u
+}
+
+type TGetUserById struct {
+	id int
+}
+
+func GetUserById(ctx context.Context, client *ent.Client, p TGetUserById) *ent.User {
+	u := client.User.Query().Where(func(s *sql.Selector) {
+		s.Where(sql.InValues(user.FieldID, p.id))
+	}).FirstX(ctx)
+	return u
+}
+
+type TSetRegisteredInvite struct {
+	key string
+}
+
+func SetRegisteredInvite(ctx context.Context, client *ent.Client, p TSetRegisteredInvite) {
+	i := GetInvite(ctx, client, TGetInvite(p))
+	i.Update().SetRegistered(true).SaveX(ctx)
+}
+
+type TUpdateUser struct {
+	username string
+	hash string
+	salt string
+	name string
+}
+
+func UpdateUser(ctx context.Context, client *ent.Client, p TUpdateUser) {
+	u := GetUser(ctx, client, TGetUser{username: p.username})
+	u.Update().SetHash(p.hash).SetSalt(p.salt).SetName(p.name).SaveX(ctx)
 }

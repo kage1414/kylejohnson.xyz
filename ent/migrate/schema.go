@@ -88,7 +88,7 @@ var (
 		{Name: "email", Type: field.TypeString},
 		{Name: "key", Type: field.TypeString},
 		{Name: "registered", Type: field.TypeBool, Default: false},
-		{Name: "user_invite", Type: field.TypeInt, Nullable: true},
+		{Name: "user_invite", Type: field.TypeInt},
 	}
 	// InvitesTable holds the schema information for the "invites" table.
 	InvitesTable = &schema.Table{
@@ -100,7 +100,7 @@ var (
 				Symbol:     "invites_users_invite",
 				Columns:    []*schema.Column{InvitesColumns[4]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
-				OnDelete:   schema.SetNull,
+				OnDelete:   schema.NoAction,
 			},
 		},
 	}

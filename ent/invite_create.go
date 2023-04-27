@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"kylejohnson-xyz/ent/invite"
+	"kylejohnson-xyz/ent/user"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -43,6 +44,17 @@ func (ic *InviteCreate) SetNillableRegistered(b *bool) *InviteCreate {
 		ic.SetRegistered(*b)
 	}
 	return ic
+}
+
+// SetUserID sets the "user" edge to the User entity by ID.
+func (ic *InviteCreate) SetUserID(id int) *InviteCreate {
+	ic.mutation.SetUserID(id)
+	return ic
+}
+
+// SetUser sets the "user" edge to the User entity.
+func (ic *InviteCreate) SetUser(u *User) *InviteCreate {
+	return ic.SetUserID(u.ID)
 }
 
 // Mutation returns the InviteMutation object of the builder.
@@ -97,6 +109,9 @@ func (ic *InviteCreate) check() error {
 	if _, ok := ic.mutation.Registered(); !ok {
 		return &ValidationError{Name: "registered", err: errors.New(`ent: missing required field "Invite.registered"`)}
 	}
+	if _, ok := ic.mutation.UserID(); !ok {
+		return &ValidationError{Name: "user", err: errors.New(`ent: missing required edge "Invite.user"`)}
+	}
 	return nil
 }
 
@@ -134,6 +149,23 @@ func (ic *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 	if value, ok := ic.mutation.Registered(); ok {
 		_spec.SetField(invite.FieldRegistered, field.TypeBool, value)
 		_node.Registered = value
+	}
+	if nodes := ic.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   invite.UserTable,
+			Columns: []string{invite.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.user_invite = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

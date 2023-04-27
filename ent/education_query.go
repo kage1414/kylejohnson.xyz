@@ -269,7 +269,6 @@ func (eq *EducationQuery) Clone() *EducationQuery {
 //		GroupBy(education.FieldSchool).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-//
 func (eq *EducationQuery) GroupBy(field string, fields ...string) *EducationGroupBy {
 	eq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &EducationGroupBy{build: eq}
@@ -291,7 +290,6 @@ func (eq *EducationQuery) GroupBy(field string, fields ...string) *EducationGrou
 //	client.Education.Query().
 //		Select(education.FieldSchool).
 //		Scan(ctx, &v)
-//
 func (eq *EducationQuery) Select(fields ...string) *EducationSelect {
 	eq.ctx.Fields = append(eq.ctx.Fields, fields...)
 	sbuild := &EducationSelect{EducationQuery: eq}
