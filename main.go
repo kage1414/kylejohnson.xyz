@@ -16,6 +16,7 @@ func setupRoutes(r *gin.Engine) {
 }
 
 func main() {
+	script();
 	r := gin.Default()
 	setupRoutes(r)
 	r.Run()
