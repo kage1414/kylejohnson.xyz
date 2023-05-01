@@ -74,6 +74,12 @@ func (eu *ExperienceUpdate) SetNillableActive(b *bool) *ExperienceUpdate {
 	return eu
 }
 
+// ClearActive clears the value of the "active" field.
+func (eu *ExperienceUpdate) ClearActive() *ExperienceUpdate {
+	eu.mutation.ClearActive()
+	return eu
+}
+
 // SetPriority sets the "priority" field.
 func (eu *ExperienceUpdate) SetPriority(i int32) *ExperienceUpdate {
 	eu.mutation.ResetPriority()
@@ -81,9 +87,23 @@ func (eu *ExperienceUpdate) SetPriority(i int32) *ExperienceUpdate {
 	return eu
 }
 
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (eu *ExperienceUpdate) SetNillablePriority(i *int32) *ExperienceUpdate {
+	if i != nil {
+		eu.SetPriority(*i)
+	}
+	return eu
+}
+
 // AddPriority adds i to the "priority" field.
 func (eu *ExperienceUpdate) AddPriority(i int32) *ExperienceUpdate {
 	eu.mutation.AddPriority(i)
+	return eu
+}
+
+// ClearPriority clears the value of the "priority" field.
+func (eu *ExperienceUpdate) ClearPriority() *ExperienceUpdate {
+	eu.mutation.ClearPriority()
 	return eu
 }
 
@@ -179,11 +199,17 @@ func (eu *ExperienceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := eu.mutation.Active(); ok {
 		_spec.SetField(experience.FieldActive, field.TypeBool, value)
 	}
+	if eu.mutation.ActiveCleared() {
+		_spec.ClearField(experience.FieldActive, field.TypeBool)
+	}
 	if value, ok := eu.mutation.Priority(); ok {
 		_spec.SetField(experience.FieldPriority, field.TypeInt32, value)
 	}
 	if value, ok := eu.mutation.AddedPriority(); ok {
 		_spec.AddField(experience.FieldPriority, field.TypeInt32, value)
+	}
+	if eu.mutation.PriorityCleared() {
+		_spec.ClearField(experience.FieldPriority, field.TypeInt32)
 	}
 	if eu.mutation.DescriptionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -296,6 +322,12 @@ func (euo *ExperienceUpdateOne) SetNillableActive(b *bool) *ExperienceUpdateOne 
 	return euo
 }
 
+// ClearActive clears the value of the "active" field.
+func (euo *ExperienceUpdateOne) ClearActive() *ExperienceUpdateOne {
+	euo.mutation.ClearActive()
+	return euo
+}
+
 // SetPriority sets the "priority" field.
 func (euo *ExperienceUpdateOne) SetPriority(i int32) *ExperienceUpdateOne {
 	euo.mutation.ResetPriority()
@@ -303,9 +335,23 @@ func (euo *ExperienceUpdateOne) SetPriority(i int32) *ExperienceUpdateOne {
 	return euo
 }
 
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (euo *ExperienceUpdateOne) SetNillablePriority(i *int32) *ExperienceUpdateOne {
+	if i != nil {
+		euo.SetPriority(*i)
+	}
+	return euo
+}
+
 // AddPriority adds i to the "priority" field.
 func (euo *ExperienceUpdateOne) AddPriority(i int32) *ExperienceUpdateOne {
 	euo.mutation.AddPriority(i)
+	return euo
+}
+
+// ClearPriority clears the value of the "priority" field.
+func (euo *ExperienceUpdateOne) ClearPriority() *ExperienceUpdateOne {
+	euo.mutation.ClearPriority()
 	return euo
 }
 
@@ -431,11 +477,17 @@ func (euo *ExperienceUpdateOne) sqlSave(ctx context.Context) (_node *Experience,
 	if value, ok := euo.mutation.Active(); ok {
 		_spec.SetField(experience.FieldActive, field.TypeBool, value)
 	}
+	if euo.mutation.ActiveCleared() {
+		_spec.ClearField(experience.FieldActive, field.TypeBool)
+	}
 	if value, ok := euo.mutation.Priority(); ok {
 		_spec.SetField(experience.FieldPriority, field.TypeInt32, value)
 	}
 	if value, ok := euo.mutation.AddedPriority(); ok {
 		_spec.AddField(experience.FieldPriority, field.TypeInt32, value)
+	}
+	if euo.mutation.PriorityCleared() {
+		_spec.ClearField(experience.FieldPriority, field.TypeInt32)
 	}
 	if euo.mutation.DescriptionsCleared() {
 		edge := &sqlgraph.EdgeSpec{

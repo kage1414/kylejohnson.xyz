@@ -48,9 +48,23 @@ func (tu *TechnologyUpdate) SetPriority(i int32) *TechnologyUpdate {
 	return tu
 }
 
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (tu *TechnologyUpdate) SetNillablePriority(i *int32) *TechnologyUpdate {
+	if i != nil {
+		tu.SetPriority(*i)
+	}
+	return tu
+}
+
 // AddPriority adds i to the "priority" field.
 func (tu *TechnologyUpdate) AddPriority(i int32) *TechnologyUpdate {
 	tu.mutation.AddPriority(i)
+	return tu
+}
+
+// ClearPriority clears the value of the "priority" field.
+func (tu *TechnologyUpdate) ClearPriority() *TechnologyUpdate {
+	tu.mutation.ClearPriority()
 	return tu
 }
 
@@ -157,6 +171,9 @@ func (tu *TechnologyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := tu.mutation.AddedPriority(); ok {
 		_spec.AddField(technology.FieldPriority, field.TypeInt32, value)
 	}
+	if tu.mutation.PriorityCleared() {
+		_spec.ClearField(technology.FieldPriority, field.TypeInt32)
+	}
 	if tu.mutation.ApplicationCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -254,9 +271,23 @@ func (tuo *TechnologyUpdateOne) SetPriority(i int32) *TechnologyUpdateOne {
 	return tuo
 }
 
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (tuo *TechnologyUpdateOne) SetNillablePriority(i *int32) *TechnologyUpdateOne {
+	if i != nil {
+		tuo.SetPriority(*i)
+	}
+	return tuo
+}
+
 // AddPriority adds i to the "priority" field.
 func (tuo *TechnologyUpdateOne) AddPriority(i int32) *TechnologyUpdateOne {
 	tuo.mutation.AddPriority(i)
+	return tuo
+}
+
+// ClearPriority clears the value of the "priority" field.
+func (tuo *TechnologyUpdateOne) ClearPriority() *TechnologyUpdateOne {
+	tuo.mutation.ClearPriority()
 	return tuo
 }
 
@@ -392,6 +423,9 @@ func (tuo *TechnologyUpdateOne) sqlSave(ctx context.Context) (_node *Technology,
 	}
 	if value, ok := tuo.mutation.AddedPriority(); ok {
 		_spec.AddField(technology.FieldPriority, field.TypeInt32, value)
+	}
+	if tuo.mutation.PriorityCleared() {
+		_spec.ClearField(technology.FieldPriority, field.TypeInt32)
 	}
 	if tuo.mutation.ApplicationCleared() {
 		edge := &sqlgraph.EdgeSpec{

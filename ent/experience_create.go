@@ -66,6 +66,14 @@ func (ec *ExperienceCreate) SetPriority(i int32) *ExperienceCreate {
 	return ec
 }
 
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (ec *ExperienceCreate) SetNillablePriority(i *int32) *ExperienceCreate {
+	if i != nil {
+		ec.SetPriority(*i)
+	}
+	return ec
+}
+
 // AddDescriptionIDs adds the "descriptions" edge to the Description entity by IDs.
 func (ec *ExperienceCreate) AddDescriptionIDs(ids ...int) *ExperienceCreate {
 	ec.mutation.AddDescriptionIDs(ids...)
@@ -129,12 +137,6 @@ func (ec *ExperienceCreate) check() error {
 	}
 	if _, ok := ec.mutation.Position(); !ok {
 		return &ValidationError{Name: "position", err: errors.New(`ent: missing required field "Experience.position"`)}
-	}
-	if _, ok := ec.mutation.Active(); !ok {
-		return &ValidationError{Name: "active", err: errors.New(`ent: missing required field "Experience.active"`)}
-	}
-	if _, ok := ec.mutation.Priority(); !ok {
-		return &ValidationError{Name: "priority", err: errors.New(`ent: missing required field "Experience.priority"`)}
 	}
 	return nil
 }

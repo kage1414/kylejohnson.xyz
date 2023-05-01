@@ -383,6 +383,16 @@ func ActiveNEQ(v bool) predicate.Education {
 	return predicate.Education(sql.FieldNEQ(FieldActive, v))
 }
 
+// ActiveIsNil applies the IsNil predicate on the "active" field.
+func ActiveIsNil() predicate.Education {
+	return predicate.Education(sql.FieldIsNull(FieldActive))
+}
+
+// ActiveNotNil applies the NotNil predicate on the "active" field.
+func ActiveNotNil() predicate.Education {
+	return predicate.Education(sql.FieldNotNull(FieldActive))
+}
+
 // PriorityEQ applies the EQ predicate on the "priority" field.
 func PriorityEQ(v int32) predicate.Education {
 	return predicate.Education(sql.FieldEQ(FieldPriority, v))

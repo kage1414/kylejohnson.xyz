@@ -141,9 +141,6 @@ func (ec *EducationCreate) check() error {
 	if _, ok := ec.mutation.School(); !ok {
 		return &ValidationError{Name: "school", err: errors.New(`ent: missing required field "Education.school"`)}
 	}
-	if _, ok := ec.mutation.Active(); !ok {
-		return &ValidationError{Name: "active", err: errors.New(`ent: missing required field "Education.active"`)}
-	}
 	return nil
 }
 

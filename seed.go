@@ -94,7 +94,13 @@ func seedExperience(client *ent.Client, ctx context.Context) {
 	fmt.Println("Experience complete")
 }
 
-func seedApplication(client *ent.Client, ctx context.Context) {}
+func seedApplication(client *ent.Client, ctx context.Context) {
+	fmt.Println("Seeding applications...")
+	for _, a := range mockDb.Applications {
+		a_record := client.Application.Create().SetName(a.Name).SetURL(a.Url).SetNillableActive(&a.Active).SetNillablePriority(&a.Priority).SaveX(ctx)
+	}
+	fmt.Println("Applications complete")
+}
 
 func seedTechStacks(client *ent.Client, ctx context.Context) {}
 

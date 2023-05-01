@@ -49,6 +49,12 @@ func (du *DescriptionUpdate) SetNillableActive(b *bool) *DescriptionUpdate {
 	return du
 }
 
+// ClearActive clears the value of the "active" field.
+func (du *DescriptionUpdate) ClearActive() *DescriptionUpdate {
+	du.mutation.ClearActive()
+	return du
+}
+
 // SetPriority sets the "priority" field.
 func (du *DescriptionUpdate) SetPriority(i int32) *DescriptionUpdate {
 	du.mutation.ResetPriority()
@@ -56,9 +62,23 @@ func (du *DescriptionUpdate) SetPriority(i int32) *DescriptionUpdate {
 	return du
 }
 
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (du *DescriptionUpdate) SetNillablePriority(i *int32) *DescriptionUpdate {
+	if i != nil {
+		du.SetPriority(*i)
+	}
+	return du
+}
+
 // AddPriority adds i to the "priority" field.
 func (du *DescriptionUpdate) AddPriority(i int32) *DescriptionUpdate {
 	du.mutation.AddPriority(i)
+	return du
+}
+
+// ClearPriority clears the value of the "priority" field.
+func (du *DescriptionUpdate) ClearPriority() *DescriptionUpdate {
+	du.mutation.ClearPriority()
 	return du
 }
 
@@ -159,11 +179,17 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := du.mutation.Active(); ok {
 		_spec.SetField(description.FieldActive, field.TypeBool, value)
 	}
+	if du.mutation.ActiveCleared() {
+		_spec.ClearField(description.FieldActive, field.TypeBool)
+	}
 	if value, ok := du.mutation.Priority(); ok {
 		_spec.SetField(description.FieldPriority, field.TypeInt32, value)
 	}
 	if value, ok := du.mutation.AddedPriority(); ok {
 		_spec.AddField(description.FieldPriority, field.TypeInt32, value)
+	}
+	if du.mutation.PriorityCleared() {
+		_spec.ClearField(description.FieldPriority, field.TypeInt32)
 	}
 	if du.mutation.ExperienceCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -263,6 +289,12 @@ func (duo *DescriptionUpdateOne) SetNillableActive(b *bool) *DescriptionUpdateOn
 	return duo
 }
 
+// ClearActive clears the value of the "active" field.
+func (duo *DescriptionUpdateOne) ClearActive() *DescriptionUpdateOne {
+	duo.mutation.ClearActive()
+	return duo
+}
+
 // SetPriority sets the "priority" field.
 func (duo *DescriptionUpdateOne) SetPriority(i int32) *DescriptionUpdateOne {
 	duo.mutation.ResetPriority()
@@ -270,9 +302,23 @@ func (duo *DescriptionUpdateOne) SetPriority(i int32) *DescriptionUpdateOne {
 	return duo
 }
 
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (duo *DescriptionUpdateOne) SetNillablePriority(i *int32) *DescriptionUpdateOne {
+	if i != nil {
+		duo.SetPriority(*i)
+	}
+	return duo
+}
+
 // AddPriority adds i to the "priority" field.
 func (duo *DescriptionUpdateOne) AddPriority(i int32) *DescriptionUpdateOne {
 	duo.mutation.AddPriority(i)
+	return duo
+}
+
+// ClearPriority clears the value of the "priority" field.
+func (duo *DescriptionUpdateOne) ClearPriority() *DescriptionUpdateOne {
+	duo.mutation.ClearPriority()
 	return duo
 }
 
@@ -403,11 +449,17 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 	if value, ok := duo.mutation.Active(); ok {
 		_spec.SetField(description.FieldActive, field.TypeBool, value)
 	}
+	if duo.mutation.ActiveCleared() {
+		_spec.ClearField(description.FieldActive, field.TypeBool)
+	}
 	if value, ok := duo.mutation.Priority(); ok {
 		_spec.SetField(description.FieldPriority, field.TypeInt32, value)
 	}
 	if value, ok := duo.mutation.AddedPriority(); ok {
 		_spec.AddField(description.FieldPriority, field.TypeInt32, value)
+	}
+	if duo.mutation.PriorityCleared() {
+		_spec.ClearField(description.FieldPriority, field.TypeInt32)
 	}
 	if duo.mutation.ExperienceCleared() {
 		edge := &sqlgraph.EdgeSpec{

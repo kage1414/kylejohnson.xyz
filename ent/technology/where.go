@@ -239,6 +239,16 @@ func PriorityLTE(v int32) predicate.Technology {
 	return predicate.Technology(sql.FieldLTE(FieldPriority, v))
 }
 
+// PriorityIsNil applies the IsNil predicate on the "priority" field.
+func PriorityIsNil() predicate.Technology {
+	return predicate.Technology(sql.FieldIsNull(FieldPriority))
+}
+
+// PriorityNotNil applies the NotNil predicate on the "priority" field.
+func PriorityNotNil() predicate.Technology {
+	return predicate.Technology(sql.FieldNotNull(FieldPriority))
+}
+
 // HasApplication applies the HasEdge predicate on the "application" edge.
 func HasApplication() predicate.Technology {
 	return predicate.Technology(func(s *sql.Selector) {

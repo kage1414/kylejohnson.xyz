@@ -986,9 +986,22 @@ func (m *DescriptionMutation) OldActive(ctx context.Context) (v bool, err error)
 	return oldValue.Active, nil
 }
 
+// ClearActive clears the value of the "active" field.
+func (m *DescriptionMutation) ClearActive() {
+	m.active = nil
+	m.clearedFields[description.FieldActive] = struct{}{}
+}
+
+// ActiveCleared returns if the "active" field was cleared in this mutation.
+func (m *DescriptionMutation) ActiveCleared() bool {
+	_, ok := m.clearedFields[description.FieldActive]
+	return ok
+}
+
 // ResetActive resets all changes to the "active" field.
 func (m *DescriptionMutation) ResetActive() {
 	m.active = nil
+	delete(m.clearedFields, description.FieldActive)
 }
 
 // SetPriority sets the "priority" field.
@@ -1041,10 +1054,24 @@ func (m *DescriptionMutation) AddedPriority() (r int32, exists bool) {
 	return *v, true
 }
 
+// ClearPriority clears the value of the "priority" field.
+func (m *DescriptionMutation) ClearPriority() {
+	m.priority = nil
+	m.addpriority = nil
+	m.clearedFields[description.FieldPriority] = struct{}{}
+}
+
+// PriorityCleared returns if the "priority" field was cleared in this mutation.
+func (m *DescriptionMutation) PriorityCleared() bool {
+	_, ok := m.clearedFields[description.FieldPriority]
+	return ok
+}
+
 // ResetPriority resets all changes to the "priority" field.
 func (m *DescriptionMutation) ResetPriority() {
 	m.priority = nil
 	m.addpriority = nil
+	delete(m.clearedFields, description.FieldPriority)
 }
 
 // SetExperienceID sets the "experience" edge to the Experience entity by id.
@@ -1272,7 +1299,14 @@ func (m *DescriptionMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *DescriptionMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(description.FieldActive) {
+		fields = append(fields, description.FieldActive)
+	}
+	if m.FieldCleared(description.FieldPriority) {
+		fields = append(fields, description.FieldPriority)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -1285,6 +1319,14 @@ func (m *DescriptionMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *DescriptionMutation) ClearField(name string) error {
+	switch name {
+	case description.FieldActive:
+		m.ClearActive()
+		return nil
+	case description.FieldPriority:
+		m.ClearPriority()
+		return nil
+	}
 	return fmt.Errorf("unknown Description nullable field %s", name)
 }
 
@@ -1728,9 +1770,22 @@ func (m *EducationMutation) OldActive(ctx context.Context) (v bool, err error) {
 	return oldValue.Active, nil
 }
 
+// ClearActive clears the value of the "active" field.
+func (m *EducationMutation) ClearActive() {
+	m.active = nil
+	m.clearedFields[education.FieldActive] = struct{}{}
+}
+
+// ActiveCleared returns if the "active" field was cleared in this mutation.
+func (m *EducationMutation) ActiveCleared() bool {
+	_, ok := m.clearedFields[education.FieldActive]
+	return ok
+}
+
 // ResetActive resets all changes to the "active" field.
 func (m *EducationMutation) ResetActive() {
 	m.active = nil
+	delete(m.clearedFields, education.FieldActive)
 }
 
 // SetPriority sets the "priority" field.
@@ -2002,6 +2057,9 @@ func (m *EducationMutation) ClearedFields() []string {
 	if m.FieldCleared(education.FieldDegree) {
 		fields = append(fields, education.FieldDegree)
 	}
+	if m.FieldCleared(education.FieldActive) {
+		fields = append(fields, education.FieldActive)
+	}
 	if m.FieldCleared(education.FieldPriority) {
 		fields = append(fields, education.FieldPriority)
 	}
@@ -2027,6 +2085,9 @@ func (m *EducationMutation) ClearField(name string) error {
 		return nil
 	case education.FieldDegree:
 		m.ClearDegree()
+		return nil
+	case education.FieldActive:
+		m.ClearActive()
 		return nil
 	case education.FieldPriority:
 		m.ClearPriority()
@@ -2380,9 +2441,22 @@ func (m *ExperienceMutation) OldActive(ctx context.Context) (v bool, err error) 
 	return oldValue.Active, nil
 }
 
+// ClearActive clears the value of the "active" field.
+func (m *ExperienceMutation) ClearActive() {
+	m.active = nil
+	m.clearedFields[experience.FieldActive] = struct{}{}
+}
+
+// ActiveCleared returns if the "active" field was cleared in this mutation.
+func (m *ExperienceMutation) ActiveCleared() bool {
+	_, ok := m.clearedFields[experience.FieldActive]
+	return ok
+}
+
 // ResetActive resets all changes to the "active" field.
 func (m *ExperienceMutation) ResetActive() {
 	m.active = nil
+	delete(m.clearedFields, experience.FieldActive)
 }
 
 // SetPriority sets the "priority" field.
@@ -2435,10 +2509,24 @@ func (m *ExperienceMutation) AddedPriority() (r int32, exists bool) {
 	return *v, true
 }
 
+// ClearPriority clears the value of the "priority" field.
+func (m *ExperienceMutation) ClearPriority() {
+	m.priority = nil
+	m.addpriority = nil
+	m.clearedFields[experience.FieldPriority] = struct{}{}
+}
+
+// PriorityCleared returns if the "priority" field was cleared in this mutation.
+func (m *ExperienceMutation) PriorityCleared() bool {
+	_, ok := m.clearedFields[experience.FieldPriority]
+	return ok
+}
+
 // ResetPriority resets all changes to the "priority" field.
 func (m *ExperienceMutation) ResetPriority() {
 	m.priority = nil
 	m.addpriority = nil
+	delete(m.clearedFields, experience.FieldPriority)
 }
 
 // AddDescriptionIDs adds the "descriptions" edge to the Description entity by ids.
@@ -2674,6 +2762,12 @@ func (m *ExperienceMutation) ClearedFields() []string {
 	if m.FieldCleared(experience.FieldTime) {
 		fields = append(fields, experience.FieldTime)
 	}
+	if m.FieldCleared(experience.FieldActive) {
+		fields = append(fields, experience.FieldActive)
+	}
+	if m.FieldCleared(experience.FieldPriority) {
+		fields = append(fields, experience.FieldPriority)
+	}
 	return fields
 }
 
@@ -2690,6 +2784,12 @@ func (m *ExperienceMutation) ClearField(name string) error {
 	switch name {
 	case experience.FieldTime:
 		m.ClearTime()
+		return nil
+	case experience.FieldActive:
+		m.ClearActive()
+		return nil
+	case experience.FieldPriority:
+		m.ClearPriority()
 		return nil
 	}
 	return fmt.Errorf("unknown Experience nullable field %s", name)
@@ -3962,10 +4062,24 @@ func (m *TechnologyMutation) AddedPriority() (r int32, exists bool) {
 	return *v, true
 }
 
+// ClearPriority clears the value of the "priority" field.
+func (m *TechnologyMutation) ClearPriority() {
+	m.priority = nil
+	m.addpriority = nil
+	m.clearedFields[technology.FieldPriority] = struct{}{}
+}
+
+// PriorityCleared returns if the "priority" field was cleared in this mutation.
+func (m *TechnologyMutation) PriorityCleared() bool {
+	_, ok := m.clearedFields[technology.FieldPriority]
+	return ok
+}
+
 // ResetPriority resets all changes to the "priority" field.
 func (m *TechnologyMutation) ResetPriority() {
 	m.priority = nil
 	m.addpriority = nil
+	delete(m.clearedFields, technology.FieldPriority)
 }
 
 // SetApplicationID sets the "application" edge to the Application entity by id.
@@ -4193,7 +4307,11 @@ func (m *TechnologyMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *TechnologyMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(technology.FieldPriority) {
+		fields = append(fields, technology.FieldPriority)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -4206,6 +4324,11 @@ func (m *TechnologyMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *TechnologyMutation) ClearField(name string) error {
+	switch name {
+	case technology.FieldPriority:
+		m.ClearPriority()
+		return nil
+	}
 	return fmt.Errorf("unknown Technology nullable field %s", name)
 }
 

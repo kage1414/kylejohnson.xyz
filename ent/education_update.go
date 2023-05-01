@@ -107,6 +107,12 @@ func (eu *EducationUpdate) SetNillableActive(b *bool) *EducationUpdate {
 	return eu
 }
 
+// ClearActive clears the value of the "active" field.
+func (eu *EducationUpdate) ClearActive() *EducationUpdate {
+	eu.mutation.ClearActive()
+	return eu
+}
+
 // SetPriority sets the "priority" field.
 func (eu *EducationUpdate) SetPriority(i int32) *EducationUpdate {
 	eu.mutation.ResetPriority()
@@ -198,6 +204,9 @@ func (eu *EducationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := eu.mutation.Active(); ok {
 		_spec.SetField(education.FieldActive, field.TypeBool, value)
+	}
+	if eu.mutation.ActiveCleared() {
+		_spec.ClearField(education.FieldActive, field.TypeBool)
 	}
 	if value, ok := eu.mutation.Priority(); ok {
 		_spec.SetField(education.FieldPriority, field.TypeInt32, value)
@@ -305,6 +314,12 @@ func (euo *EducationUpdateOne) SetNillableActive(b *bool) *EducationUpdateOne {
 	if b != nil {
 		euo.SetActive(*b)
 	}
+	return euo
+}
+
+// ClearActive clears the value of the "active" field.
+func (euo *EducationUpdateOne) ClearActive() *EducationUpdateOne {
+	euo.mutation.ClearActive()
 	return euo
 }
 
@@ -429,6 +444,9 @@ func (euo *EducationUpdateOne) sqlSave(ctx context.Context) (_node *Education, e
 	}
 	if value, ok := euo.mutation.Active(); ok {
 		_spec.SetField(education.FieldActive, field.TypeBool, value)
+	}
+	if euo.mutation.ActiveCleared() {
+		_spec.ClearField(education.FieldActive, field.TypeBool)
 	}
 	if value, ok := euo.mutation.Priority(); ok {
 		_spec.SetField(education.FieldPriority, field.TypeInt32, value)

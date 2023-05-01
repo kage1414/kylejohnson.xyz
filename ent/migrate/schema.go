@@ -26,8 +26,8 @@ var (
 	DescriptionsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "description", Type: field.TypeString},
-		{Name: "active", Type: field.TypeBool, Default: true},
-		{Name: "priority", Type: field.TypeInt32},
+		{Name: "active", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "priority", Type: field.TypeInt32, Nullable: true},
 		{Name: "application_descriptions", Type: field.TypeInt, Nullable: true},
 		{Name: "experience_descriptions", Type: field.TypeInt, Nullable: true},
 	}
@@ -58,7 +58,7 @@ var (
 		{Name: "time", Type: field.TypeString, Nullable: true},
 		{Name: "certificate", Type: field.TypeString, Nullable: true},
 		{Name: "degree", Type: field.TypeString, Nullable: true},
-		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "active", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "priority", Type: field.TypeInt32, Nullable: true},
 	}
 	// EducationsTable holds the schema information for the "educations" table.
@@ -73,8 +73,8 @@ var (
 		{Name: "employer", Type: field.TypeString},
 		{Name: "position", Type: field.TypeString},
 		{Name: "time", Type: field.TypeString, Nullable: true},
-		{Name: "active", Type: field.TypeBool, Default: true},
-		{Name: "priority", Type: field.TypeInt32},
+		{Name: "active", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "priority", Type: field.TypeInt32, Nullable: true},
 	}
 	// ExperiencesTable holds the schema information for the "experiences" table.
 	ExperiencesTable = &schema.Table{
@@ -120,7 +120,7 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "url", Type: field.TypeString},
-		{Name: "priority", Type: field.TypeInt32},
+		{Name: "priority", Type: field.TypeInt32, Nullable: true},
 		{Name: "application_technologies", Type: field.TypeInt, Nullable: true},
 		{Name: "tech_stack_technology", Type: field.TypeInt, Nullable: true},
 	}

@@ -144,6 +144,16 @@ func ActiveNEQ(v bool) predicate.Description {
 	return predicate.Description(sql.FieldNEQ(FieldActive, v))
 }
 
+// ActiveIsNil applies the IsNil predicate on the "active" field.
+func ActiveIsNil() predicate.Description {
+	return predicate.Description(sql.FieldIsNull(FieldActive))
+}
+
+// ActiveNotNil applies the NotNil predicate on the "active" field.
+func ActiveNotNil() predicate.Description {
+	return predicate.Description(sql.FieldNotNull(FieldActive))
+}
+
 // PriorityEQ applies the EQ predicate on the "priority" field.
 func PriorityEQ(v int32) predicate.Description {
 	return predicate.Description(sql.FieldEQ(FieldPriority, v))
@@ -182,6 +192,16 @@ func PriorityLT(v int32) predicate.Description {
 // PriorityLTE applies the LTE predicate on the "priority" field.
 func PriorityLTE(v int32) predicate.Description {
 	return predicate.Description(sql.FieldLTE(FieldPriority, v))
+}
+
+// PriorityIsNil applies the IsNil predicate on the "priority" field.
+func PriorityIsNil() predicate.Description {
+	return predicate.Description(sql.FieldIsNull(FieldPriority))
+}
+
+// PriorityNotNil applies the NotNil predicate on the "priority" field.
+func PriorityNotNil() predicate.Description {
+	return predicate.Description(sql.FieldNotNull(FieldPriority))
 }
 
 // HasExperience applies the HasEdge predicate on the "experience" edge.

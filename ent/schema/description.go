@@ -13,8 +13,8 @@ type Description struct {
 func (Description) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("description"),
-		field.Bool("active").Default(true),
-		field.Int32("priority"),
+		field.Bool("active").Optional().Default(true),
+		field.Int32("priority").Optional(),
 	}
 }
 

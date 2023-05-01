@@ -39,6 +39,14 @@ func (tc *TechnologyCreate) SetPriority(i int32) *TechnologyCreate {
 	return tc
 }
 
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (tc *TechnologyCreate) SetNillablePriority(i *int32) *TechnologyCreate {
+	if i != nil {
+		tc.SetPriority(*i)
+	}
+	return tc
+}
+
 // SetApplicationID sets the "application" edge to the Application entity by ID.
 func (tc *TechnologyCreate) SetApplicationID(id int) *TechnologyCreate {
 	tc.mutation.SetApplicationID(id)
@@ -116,9 +124,6 @@ func (tc *TechnologyCreate) check() error {
 	}
 	if _, ok := tc.mutation.URL(); !ok {
 		return &ValidationError{Name: "url", err: errors.New(`ent: missing required field "Technology.url"`)}
-	}
-	if _, ok := tc.mutation.Priority(); !ok {
-		return &ValidationError{Name: "priority", err: errors.New(`ent: missing required field "Technology.priority"`)}
 	}
 	return nil
 }
