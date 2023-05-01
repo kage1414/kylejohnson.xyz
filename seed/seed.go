@@ -13,64 +13,63 @@ import (
 )
 
 type ttechnology struct {
-	Name string `json:"name"`
-	Url string `json:"url"`
-	Priority int32 `json:"priority"`
+	Name     string `json:"name"`
+	Url      string `json:"url"`
+	Priority int32  `json:"priority"`
 }
 
 type technicalSkill struct {
-	Id string `json:"id"`
-	Stack string `json:"stack"`
+	Id           string        `json:"id"`
+	Stack        string        `json:"stack"`
 	Technologies []ttechnology `json:"technologies"`
 }
 
 type description struct {
 	Description string `json:"description"`
-	Priority int32 `json:"priority"`
+	Priority    int32  `json:"priority"`
 }
 
 type application struct {
-	Name string `json:"name"`
-	Url string `json:"url"`
-	Active bool `json:"active"`
-	Priority int32 `json:"priority"`
+	Name         string        `json:"name"`
+	Url          string        `json:"url"`
+	Active       bool          `json:"active"`
+	Priority     int32         `json:"priority"`
 	Technologies []ttechnology `json:"technologies"`
 	Descriptions []description `json:"descriptions"`
 }
 
 type experience struct {
-	Employer string `json:"employer"`
-	Position string `json:"position"`
-	Active bool `json:"active"`
-	Time string `json:"time"`
-	Priority int32 `json:"priority"`
+	Employer     string        `json:"employer"`
+	Position     string        `json:"position"`
+	Active       bool          `json:"active"`
+	Time         string        `json:"time"`
+	Priority     int32         `json:"priority"`
 	Descriptions []description `json:"descriptions"`
 }
 
 type education struct {
-	School string `json:"school"`
-	Time string `json:"time"`
+	School      string `json:"school"`
+	Time        string `json:"time"`
 	Certificate string `json:"certificate"`
-	Degree string `json:"degree"`
-	Active bool `json:"active"`
-	Priority int32 `json:"priority"`
+	Degree      string `json:"degree"`
+	Active      bool   `json:"active"`
+	Priority    int32  `json:"priority"`
 }
 
 type TMockDb struct {
 	TechnicalSkills []technicalSkill `json:"technical_skills"`
-	Applications []application `json:"applications"`
-	Experience []experience `json:"experience"`
-	Education []education `json:"education"`
+	Applications    []application    `json:"applications"`
+	Experience      []experience     `json:"experience"`
+	Education       []education      `json:"education"`
 }
 
 var mockDb TMockDb
 
-
 func getMockDb() {
 	content, err := ioutil.ReadFile("./mock-db.json")
 	if err != nil {
-      log.Fatal("Error when opening file: ", err)
-    }
+		log.Fatal("Error when opening file: ", err)
+	}
 	json.Unmarshal(content, &mockDb)
 }
 
@@ -112,7 +111,7 @@ func seedApplication(client *ent.Client, ctx context.Context) {
 					s.Where(sql.InValues(technology.FieldName, t.Name))
 				}).FirstX(ctx)
 				a_record.Update().AddTechnologies(existing_record).SaveX(ctx)
-				} else {
+			} else {
 				a_record.Update().AddTechnologies(t_record).SaveX(ctx)
 
 			}

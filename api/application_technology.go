@@ -10,7 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
 func ApplicationTechnology(r *gin.Engine, ctx context.Context, client *ent.Client) {
 	var ROUTE string = "/api/application_technology"
 	r.POST(ROUTE, func(c *gin.Context) {

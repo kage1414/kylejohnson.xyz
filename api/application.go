@@ -10,7 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
 func Application(r *gin.Engine, ctx context.Context, client *ent.Client) {
 	ROUTE := "/api/application"
 

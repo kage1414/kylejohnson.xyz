@@ -9,7 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
 func Seed(r *gin.Engine, ctx context.Context, client *ent.Client) {
 	var ROUTE string = "/api/seed"
 	r.POST(ROUTE, func(c *gin.Context) {

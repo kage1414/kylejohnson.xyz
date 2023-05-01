@@ -11,24 +11,24 @@ import (
 
 type DescriptionItem struct {
 	Description string `json:"descriptions"`
-	Id int `json:"id"`
+	Id          int    `json:"id"`
 }
 
 type TechnologyItem struct {
-	Name string `json:"name"`
-	Id int `json:"id"`
-	Url string `json:"url"`
-	Priority int32 `json:"priority"`
+	Name     string `json:"name"`
+	Id       int    `json:"id"`
+	Url      string `json:"url"`
+	Priority int32  `json:"priority"`
 }
 
 type ApplicationItem struct {
-	Id int `json:"id"`
-	Name string `json:"name"`
-	Url string `json:"url"`
-	Active bool `json:"active"`
+	Id           int               `json:"id"`
+	Name         string            `json:"name"`
+	Url          string            `json:"url"`
+	Active       bool              `json:"active"`
 	Descriptions []DescriptionItem `json:"descriptions"`
-	Technologies []TechnologyItem `json:"technologies"`
-	Priority int32 `json:"priority"`
+	Technologies []TechnologyItem  `json:"technologies"`
+	Priority     int32             `json:"priority"`
 }
 
 func Applications(r *gin.Engine, ctx context.Context, client *ent.Client) {
@@ -50,7 +50,7 @@ func mapToStruct(a []*ent.Application, ctx context.Context) []ApplicationItem {
 		for _, y := range d {
 			i := DescriptionItem{
 				Description: y.Description,
-				Id: y.ID,
+				Id:          y.ID,
 			}
 			descriptions = append(descriptions, i)
 		}
@@ -58,19 +58,19 @@ func mapToStruct(a []*ent.Application, ctx context.Context) []ApplicationItem {
 		technologies := []TechnologyItem{}
 		for _, z := range t {
 			i := TechnologyItem{
-				Name: z.Name,
-				Url: z.URL,
+				Name:     z.Name,
+				Url:      z.URL,
 				Priority: z.Priority,
-				Id: z.ID,
+				Id:       z.ID,
 			}
 			technologies = append(technologies, i)
 		}
 		s := ApplicationItem{
-			Id: x.ID,
-			Name: x.Name,
-			Url: x.URL,
-			Active: x.Active,
-			Priority: x.Priority,
+			Id:           x.ID,
+			Name:         x.Name,
+			Url:          x.URL,
+			Active:       x.Active,
+			Priority:     x.Priority,
 			Descriptions: descriptions,
 			Technologies: technologies,
 		}
