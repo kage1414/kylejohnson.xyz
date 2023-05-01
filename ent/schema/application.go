@@ -14,7 +14,7 @@ func (Application) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").Optional(),
 		field.String("url").Optional(),
-		field.Bool("active").Default(true),
+		field.Bool("active").Optional().Default(true),
 		field.Int32("priority").Optional(),
 	}
 }

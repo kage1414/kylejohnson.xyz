@@ -290,9 +290,22 @@ func (m *ApplicationMutation) OldActive(ctx context.Context) (v bool, err error)
 	return oldValue.Active, nil
 }
 
+// ClearActive clears the value of the "active" field.
+func (m *ApplicationMutation) ClearActive() {
+	m.active = nil
+	m.clearedFields[application.FieldActive] = struct{}{}
+}
+
+// ActiveCleared returns if the "active" field was cleared in this mutation.
+func (m *ApplicationMutation) ActiveCleared() bool {
+	_, ok := m.clearedFields[application.FieldActive]
+	return ok
+}
+
 // ResetActive resets all changes to the "active" field.
 func (m *ApplicationMutation) ResetActive() {
 	m.active = nil
+	delete(m.clearedFields, application.FieldActive)
 }
 
 // SetPriority sets the "priority" field.
@@ -641,6 +654,9 @@ func (m *ApplicationMutation) ClearedFields() []string {
 	if m.FieldCleared(application.FieldURL) {
 		fields = append(fields, application.FieldURL)
 	}
+	if m.FieldCleared(application.FieldActive) {
+		fields = append(fields, application.FieldActive)
+	}
 	if m.FieldCleared(application.FieldPriority) {
 		fields = append(fields, application.FieldPriority)
 	}
@@ -663,6 +679,9 @@ func (m *ApplicationMutation) ClearField(name string) error {
 		return nil
 	case application.FieldURL:
 		m.ClearURL()
+		return nil
+	case application.FieldActive:
+		m.ClearActive()
 		return nil
 	case application.FieldPriority:
 		m.ClearPriority()
@@ -3120,9 +3139,22 @@ func (m *InviteMutation) OldRegistered(ctx context.Context) (v bool, err error) 
 	return oldValue.Registered, nil
 }
 
+// ClearRegistered clears the value of the "registered" field.
+func (m *InviteMutation) ClearRegistered() {
+	m.registered = nil
+	m.clearedFields[invite.FieldRegistered] = struct{}{}
+}
+
+// RegisteredCleared returns if the "registered" field was cleared in this mutation.
+func (m *InviteMutation) RegisteredCleared() bool {
+	_, ok := m.clearedFields[invite.FieldRegistered]
+	return ok
+}
+
 // ResetRegistered resets all changes to the "registered" field.
 func (m *InviteMutation) ResetRegistered() {
 	m.registered = nil
+	delete(m.clearedFields, invite.FieldRegistered)
 }
 
 // SetUserID sets the "user" edge to the User entity by id.
@@ -3296,7 +3328,11 @@ func (m *InviteMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *InviteMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(invite.FieldRegistered) {
+		fields = append(fields, invite.FieldRegistered)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -3309,6 +3345,11 @@ func (m *InviteMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *InviteMutation) ClearField(name string) error {
+	switch name {
+	case invite.FieldRegistered:
+		m.ClearRegistered()
+		return nil
+	}
 	return fmt.Errorf("unknown Invite nullable field %s", name)
 }
 
@@ -4007,9 +4048,22 @@ func (m *TechnologyMutation) OldURL(ctx context.Context) (v string, err error) {
 	return oldValue.URL, nil
 }
 
+// ClearURL clears the value of the "url" field.
+func (m *TechnologyMutation) ClearURL() {
+	m.url = nil
+	m.clearedFields[technology.FieldURL] = struct{}{}
+}
+
+// URLCleared returns if the "url" field was cleared in this mutation.
+func (m *TechnologyMutation) URLCleared() bool {
+	_, ok := m.clearedFields[technology.FieldURL]
+	return ok
+}
+
 // ResetURL resets all changes to the "url" field.
 func (m *TechnologyMutation) ResetURL() {
 	m.url = nil
+	delete(m.clearedFields, technology.FieldURL)
 }
 
 // SetPriority sets the "priority" field.
@@ -4308,6 +4362,9 @@ func (m *TechnologyMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *TechnologyMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(technology.FieldURL) {
+		fields = append(fields, technology.FieldURL)
+	}
 	if m.FieldCleared(technology.FieldPriority) {
 		fields = append(fields, technology.FieldPriority)
 	}
@@ -4325,6 +4382,9 @@ func (m *TechnologyMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *TechnologyMutation) ClearField(name string) error {
 	switch name {
+	case technology.FieldURL:
+		m.ClearURL()
+		return nil
 	case technology.FieldPriority:
 		m.ClearPriority()
 		return nil

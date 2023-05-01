@@ -13,7 +13,7 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString, Nullable: true},
 		{Name: "url", Type: field.TypeString, Nullable: true},
-		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "active", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "priority", Type: field.TypeInt32, Nullable: true},
 	}
 	// ApplicationsTable holds the schema information for the "applications" table.
@@ -87,7 +87,7 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "email", Type: field.TypeString},
 		{Name: "key", Type: field.TypeString},
-		{Name: "registered", Type: field.TypeBool, Default: false},
+		{Name: "registered", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "user_invite", Type: field.TypeInt},
 	}
 	// InvitesTable holds the schema information for the "invites" table.
@@ -119,7 +119,7 @@ var (
 	TechnologiesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString, Unique: true},
-		{Name: "url", Type: field.TypeString},
+		{Name: "url", Type: field.TypeString, Nullable: true},
 		{Name: "priority", Type: field.TypeInt32, Nullable: true},
 		{Name: "application_technologies", Type: field.TypeInt, Nullable: true},
 		{Name: "tech_stack_technology", Type: field.TypeInt, Nullable: true},

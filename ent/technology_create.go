@@ -33,6 +33,14 @@ func (tc *TechnologyCreate) SetURL(s string) *TechnologyCreate {
 	return tc
 }
 
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (tc *TechnologyCreate) SetNillableURL(s *string) *TechnologyCreate {
+	if s != nil {
+		tc.SetURL(*s)
+	}
+	return tc
+}
+
 // SetPriority sets the "priority" field.
 func (tc *TechnologyCreate) SetPriority(i int32) *TechnologyCreate {
 	tc.mutation.SetPriority(i)
@@ -121,9 +129,6 @@ func (tc *TechnologyCreate) ExecX(ctx context.Context) {
 func (tc *TechnologyCreate) check() error {
 	if _, ok := tc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Technology.name"`)}
-	}
-	if _, ok := tc.mutation.URL(); !ok {
-		return &ValidationError{Name: "url", err: errors.New(`ent: missing required field "Technology.url"`)}
 	}
 	return nil
 }

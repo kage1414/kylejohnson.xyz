@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"kylejohnson-xyz/ent/application"
 	"kylejohnson-xyz/ent/description"
@@ -150,9 +149,6 @@ func (ac *ApplicationCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (ac *ApplicationCreate) check() error {
-	if _, ok := ac.mutation.Active(); !ok {
-		return &ValidationError{Name: "active", err: errors.New(`ent: missing required field "Application.active"`)}
-	}
 	return nil
 }
 

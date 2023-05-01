@@ -41,6 +41,20 @@ func (tu *TechnologyUpdate) SetURL(s string) *TechnologyUpdate {
 	return tu
 }
 
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (tu *TechnologyUpdate) SetNillableURL(s *string) *TechnologyUpdate {
+	if s != nil {
+		tu.SetURL(*s)
+	}
+	return tu
+}
+
+// ClearURL clears the value of the "url" field.
+func (tu *TechnologyUpdate) ClearURL() *TechnologyUpdate {
+	tu.mutation.ClearURL()
+	return tu
+}
+
 // SetPriority sets the "priority" field.
 func (tu *TechnologyUpdate) SetPriority(i int32) *TechnologyUpdate {
 	tu.mutation.ResetPriority()
@@ -165,6 +179,9 @@ func (tu *TechnologyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := tu.mutation.URL(); ok {
 		_spec.SetField(technology.FieldURL, field.TypeString, value)
 	}
+	if tu.mutation.URLCleared() {
+		_spec.ClearField(technology.FieldURL, field.TypeString)
+	}
 	if value, ok := tu.mutation.Priority(); ok {
 		_spec.SetField(technology.FieldPriority, field.TypeInt32, value)
 	}
@@ -261,6 +278,20 @@ func (tuo *TechnologyUpdateOne) SetName(s string) *TechnologyUpdateOne {
 // SetURL sets the "url" field.
 func (tuo *TechnologyUpdateOne) SetURL(s string) *TechnologyUpdateOne {
 	tuo.mutation.SetURL(s)
+	return tuo
+}
+
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (tuo *TechnologyUpdateOne) SetNillableURL(s *string) *TechnologyUpdateOne {
+	if s != nil {
+		tuo.SetURL(*s)
+	}
+	return tuo
+}
+
+// ClearURL clears the value of the "url" field.
+func (tuo *TechnologyUpdateOne) ClearURL() *TechnologyUpdateOne {
+	tuo.mutation.ClearURL()
 	return tuo
 }
 
@@ -417,6 +448,9 @@ func (tuo *TechnologyUpdateOne) sqlSave(ctx context.Context) (_node *Technology,
 	}
 	if value, ok := tuo.mutation.URL(); ok {
 		_spec.SetField(technology.FieldURL, field.TypeString, value)
+	}
+	if tuo.mutation.URLCleared() {
+		_spec.ClearField(technology.FieldURL, field.TypeString)
 	}
 	if value, ok := tuo.mutation.Priority(); ok {
 		_spec.SetField(technology.FieldPriority, field.TypeInt32, value)

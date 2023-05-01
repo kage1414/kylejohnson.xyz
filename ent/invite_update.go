@@ -54,6 +54,12 @@ func (iu *InviteUpdate) SetNillableRegistered(b *bool) *InviteUpdate {
 	return iu
 }
 
+// ClearRegistered clears the value of the "registered" field.
+func (iu *InviteUpdate) ClearRegistered() *InviteUpdate {
+	iu.mutation.ClearRegistered()
+	return iu
+}
+
 // SetUserID sets the "user" edge to the User entity by ID.
 func (iu *InviteUpdate) SetUserID(id int) *InviteUpdate {
 	iu.mutation.SetUserID(id)
@@ -132,6 +138,9 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := iu.mutation.Registered(); ok {
 		_spec.SetField(invite.FieldRegistered, field.TypeBool, value)
 	}
+	if iu.mutation.RegisteredCleared() {
+		_spec.ClearField(invite.FieldRegistered, field.TypeBool)
+	}
 	if iu.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -204,6 +213,12 @@ func (iuo *InviteUpdateOne) SetNillableRegistered(b *bool) *InviteUpdateOne {
 	if b != nil {
 		iuo.SetRegistered(*b)
 	}
+	return iuo
+}
+
+// ClearRegistered clears the value of the "registered" field.
+func (iuo *InviteUpdateOne) ClearRegistered() *InviteUpdateOne {
+	iuo.mutation.ClearRegistered()
 	return iuo
 }
 
@@ -314,6 +329,9 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 	}
 	if value, ok := iuo.mutation.Registered(); ok {
 		_spec.SetField(invite.FieldRegistered, field.TypeBool, value)
+	}
+	if iuo.mutation.RegisteredCleared() {
+		_spec.ClearField(invite.FieldRegistered, field.TypeBool)
 	}
 	if iuo.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{

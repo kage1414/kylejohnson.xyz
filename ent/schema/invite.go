@@ -14,7 +14,7 @@ func (Invite) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("email"),
 		field.String("key"),
-		field.Bool("registered").Default(false),
+		field.Bool("registered").Optional().Default(false),
 	}
 }
 

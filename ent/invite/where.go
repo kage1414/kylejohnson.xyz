@@ -209,6 +209,16 @@ func RegisteredNEQ(v bool) predicate.Invite {
 	return predicate.Invite(sql.FieldNEQ(FieldRegistered, v))
 }
 
+// RegisteredIsNil applies the IsNil predicate on the "registered" field.
+func RegisteredIsNil() predicate.Invite {
+	return predicate.Invite(sql.FieldIsNull(FieldRegistered))
+}
+
+// RegisteredNotNil applies the NotNil predicate on the "registered" field.
+func RegisteredNotNil() predicate.Invite {
+	return predicate.Invite(sql.FieldNotNull(FieldRegistered))
+}
+
 // HasUser applies the HasEdge predicate on the "user" edge.
 func HasUser() predicate.Invite {
 	return predicate.Invite(func(s *sql.Selector) {

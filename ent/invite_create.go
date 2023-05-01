@@ -106,9 +106,6 @@ func (ic *InviteCreate) check() error {
 	if _, ok := ic.mutation.Key(); !ok {
 		return &ValidationError{Name: "key", err: errors.New(`ent: missing required field "Invite.key"`)}
 	}
-	if _, ok := ic.mutation.Registered(); !ok {
-		return &ValidationError{Name: "registered", err: errors.New(`ent: missing required field "Invite.registered"`)}
-	}
 	if _, ok := ic.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user", err: errors.New(`ent: missing required edge "Invite.user"`)}
 	}

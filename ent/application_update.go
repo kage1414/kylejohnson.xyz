@@ -83,6 +83,12 @@ func (au *ApplicationUpdate) SetNillableActive(b *bool) *ApplicationUpdate {
 	return au
 }
 
+// ClearActive clears the value of the "active" field.
+func (au *ApplicationUpdate) ClearActive() *ApplicationUpdate {
+	au.mutation.ClearActive()
+	return au
+}
+
 // SetPriority sets the "priority" field.
 func (au *ApplicationUpdate) SetPriority(i int32) *ApplicationUpdate {
 	au.mutation.ResetPriority()
@@ -237,6 +243,9 @@ func (au *ApplicationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := au.mutation.Active(); ok {
 		_spec.SetField(application.FieldActive, field.TypeBool, value)
+	}
+	if au.mutation.ActiveCleared() {
+		_spec.ClearField(application.FieldActive, field.TypeBool)
 	}
 	if value, ok := au.mutation.Priority(); ok {
 		_spec.SetField(application.FieldPriority, field.TypeInt32, value)
@@ -408,6 +417,12 @@ func (auo *ApplicationUpdateOne) SetNillableActive(b *bool) *ApplicationUpdateOn
 	if b != nil {
 		auo.SetActive(*b)
 	}
+	return auo
+}
+
+// ClearActive clears the value of the "active" field.
+func (auo *ApplicationUpdateOne) ClearActive() *ApplicationUpdateOne {
+	auo.mutation.ClearActive()
 	return auo
 }
 
@@ -595,6 +610,9 @@ func (auo *ApplicationUpdateOne) sqlSave(ctx context.Context) (_node *Applicatio
 	}
 	if value, ok := auo.mutation.Active(); ok {
 		_spec.SetField(application.FieldActive, field.TypeBool, value)
+	}
+	if auo.mutation.ActiveCleared() {
+		_spec.ClearField(application.FieldActive, field.TypeBool)
 	}
 	if value, ok := auo.mutation.Priority(); ok {
 		_spec.SetField(application.FieldPriority, field.TypeInt32, value)
