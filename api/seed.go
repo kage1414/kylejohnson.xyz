@@ -2,9 +2,10 @@ package api
 
 import (
 	"context"
+	"net/http"
+
 	"kylejohnson-xyz/ent"
 	"kylejohnson-xyz/seed"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )

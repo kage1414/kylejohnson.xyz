@@ -1,10 +1,10 @@
 package db
 
 type TUpdateUser struct {
-	Username string `json:"username"`
-	Hash     string `json:"hash"`
-	Salt     string `json:"salt"`
-	Name     string `json:"name"`
+	Username string  `json:"username"`
+	Hash     string  `json:"hash"`
+	Salt     string  `json:"salt"`
+	Name     *string `json:"name,omitempty"`
 }
 
 type TSetRegisteredInvite struct {
@@ -37,20 +37,20 @@ type TCreateInvite struct {
 }
 
 type TAddUser struct {
-	Username string `json:"username"`
-	Hash     string `json:"hash"`
-	Salt     string `json:"salt"`
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	InviteId int    `json:"invite_id"`
+	Username string  `json:"username"`
+	Hash     string  `json:"hash"`
+	Salt     string  `json:"salt"`
+	Name     *string `json:"name,omitempty"`
+	Email    string  `json:"email"`
+	InviteId int     `json:"invite_id"`
 }
 
 type TUpdateTechnology struct {
-	Id       int    `json:"id"`
-	Name     string `json:"name"`
-	Priority int32  `json:"priority"`
-	Stack    string `json:"stack"`
-	Url      string `json:"url"`
+	Id       int     `json:"id"`
+	Name     string  `json:"name"`
+	Priority *int32  `json:"priority,omitempty"`
+	Stack    *string `json:"stack,omitempty"`
+	Url      *string `json:"url,omitempty"`
 }
 
 type TDeleteTechnology struct {
@@ -58,19 +58,19 @@ type TDeleteTechnology struct {
 }
 
 type TAddTechnology struct {
-	Name     string `json:"name"`
-	Url      string `json:"url"`
-	Priority int32  `json:"priority"`
-	Stack    string `json:"stack"`
+	Name     string  `json:"name"`
+	Url      *string `json:"url,omitempty"`
+	Priority *int32  `json:"priority,omitempty"`
+	Stack    *string `json:"stack,omitempty"`
 }
 
 type TUpdateExperience struct {
-	Id       int    `json:"id"`
-	Employer string `json:"employer"`
-	Time     string `json:"time"`
-	Position string `json:"position"`
-	Active   bool   `json:"active"`
-	Priority int32  `json:"priority"`
+	Id       int     `json:"id"`
+	Employer string  `json:"employer"`
+	Time     *string `json:"time,omitempty"`
+	Position string  `json:"position"`
+	Active   *bool   `json:"active,omitempty"`
+	Priority *int32  `json:"priority,omitempty"`
 }
 
 type TDeleteExperience struct {
@@ -83,21 +83,21 @@ type TAddExperienceDescription struct {
 }
 
 type TAddExperience struct {
-	Employer string `json:"employer"`
-	Time     string `json:"time"`
-	Position string `json:"position"`
-	Active   bool   `json:"active"`
-	Priority int32  `json:"priority"`
+	Employer string  `json:"employer"`
+	Time     *string `json:"time,omitempty"`
+	Position string  `json:"position"`
+	Active   *bool   `json:"active,omitempty"`
+	Priority *int32  `json:"priority,omitempty"`
 }
 
 type TUpdateEducation struct {
-	Id          int    `json:"id"`
-	School      string `json:"school"`
-	Time        string `json:"time"`
-	Certificate string `json:"certificate"`
-	Degree      string `json:"degree"`
-	Active      bool   `json:"active"`
-	Priority    int32  `json:"priority"`
+	Id          int     `json:"id"`
+	School      string  `json:"school"`
+	Time        *string `json:"time,omitempty"`
+	Certificate *string `json:"certificate,omitempty"`
+	Degree      *string `json:"degree,omitempty"`
+	Active      *bool   `json:"active,omitempty"`
+	Priority    *int32  `json:"priority,omitempty"`
 }
 
 type TDeleteEducation struct {
@@ -105,18 +105,18 @@ type TDeleteEducation struct {
 }
 
 type TAddEducation struct {
-	School      string `json:"school"`
-	Time        string `json:"time"`
-	Certificate string `json:"certificate"`
-	Degree      string `json:"degree"`
-	Active      bool   `json:"active"`
-	Priority    int32  `json:"priority"`
+	School      string  `json:"school"`
+	Time        *string `json:"time,omitempty"`
+	Certificate *string `json:"certificate,omitempty"`
+	Degree      *string `json:"degree,omitempty"`
+	Active      *bool   `json:"active,omitempty"`
+	Priority    *int32  `json:"priority,omitempty"`
 }
 
 type TUpdateDescription struct {
 	Id          int    `json:"id"`
 	Description string `json:"description"`
-	Priority    int32  `json:"priority"`
+	Priority    *int32 `json:"priority,omitempty"`
 }
 
 type TGetDescription struct {
@@ -132,11 +132,11 @@ type TAddDescription struct {
 }
 
 type TUpdateApplication struct {
-	Id       int    `json:"id"`
-	Name     string `json:"name"`
-	Url      string `json:"url"`
-	Priority int32  `json:"priority"`
-	Active   bool   `json:"active"`
+	Id       int     `json:"id"`
+	Name     *string `json:"name,omitempty"`
+	Url      *string `json:"url,omitempty"`
+	Priority *int32  `json:"priority,omitempty"`
+	Active   *bool   `json:"active,omitempty"`
 }
 
 type TRemoveApplicationTechnology struct {
@@ -159,8 +159,8 @@ type TAddApplicationDescription struct {
 }
 
 type TAddApplication struct {
-	Name     string `json:"name"`
-	Url      string `json:"url"`
-	Priority int32  `json:"priority"`
-	Active   bool   `json:"active"`
+	Name     *string `json:"name,omitempty"`
+	Url      *string `json:"url,omitempty"`
+	Priority *int32  `json:"priority,omitempty"`
+	Active   *bool   `json:"active,omitempty"`
 }

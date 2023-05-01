@@ -1,12 +1,11 @@
-import { auth, isAuthenticated } from 'middleware';
-import { NextApiRequest, NextApiResponse } from 'next';
-import nextConnect from 'next-connect';
-
 import {
   addApplication,
   deleteApplication,
   updateApplication,
 } from 'dbschema/queries';
+import { auth, isAuthenticated } from 'middleware';
+import { NextApiRequest, NextApiResponse } from 'next';
+import nextConnect from 'next-connect';
 
 import { client } from '../../lib/edgedb';
 

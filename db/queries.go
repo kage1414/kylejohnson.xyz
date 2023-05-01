@@ -14,10 +14,10 @@ import (
 
 func AddApplication(ctx context.Context, client *ent.Client, p TAddApplication) *ent.Application {
 	a := client.Application.Create().
-		SetName(p.Name).
-		SetURL(p.Url).
-		SetPriority(p.Priority).
-		SetActive(p.Active).
+		SetNillableName(p.Name).
+		SetNillableURL(p.Url).
+		SetNillablePriority(p.Priority).
+		SetNillableActive(p.Active).
 		SaveX(ctx)
 	return a
 }
@@ -43,8 +43,9 @@ func AddApplicationTechnology(
 	return t
 }
 
-func DeleteApplication(ctx context.Context, client *ent.Client, p TDeleteApplication) {
-	client.Application.DeleteOneID(p.Id).ExecX(ctx)
+func DeleteApplication(ctx context.Context, client *ent.Client, p TDeleteApplication) error {
+	err := client.Application.DeleteOneID(p.Id).Exec(ctx)
+	return err
 }
 
 func GetAllApplications(ctx context.Context, client *ent.Client) []*ent.Application {
@@ -66,12 +67,12 @@ func UpdateApplication(
 	client *ent.Client,
 	p TUpdateApplication,
 ) *ent.Application {
-	a := client.Application.UpdateOneID(p.Id).
-		SetName(p.Name).
-		SetURL(p.Url).
-		SetPriority(p.Priority).
-		SetActive(p.Active).
-		SaveX(ctx)
+	a, _ := client.Application.UpdateOneID(p.Id).
+		SetNillableName(p.Name).
+		SetNillableURL(p.Url).
+		SetNillablePriority(p.Priority).
+		SetNillableActive(p.Active).
+		Save(ctx)
 	return a
 }
 
@@ -96,7 +97,7 @@ func UpdateDescription(
 ) *ent.Description {
 	d := client.Description.UpdateOneID(p.Id).
 		SetDescription(p.Description).
-		SetPriority(p.Priority).
+		SetNillablePriority(p.Priority).
 		SaveX(ctx)
 	return d
 }
@@ -104,11 +105,11 @@ func UpdateDescription(
 func AddEducation(ctx context.Context, client *ent.Client, p TAddEducation) *ent.Education {
 	e := client.Education.Create().
 		SetSchool(p.School).
-		SetNillableTime(&p.Time).
-		SetNillableCertificate(&p.Certificate).
-		SetNillableDegree(&p.Degree).
-		SetNillableActive(&p.Active).
-		SetNillablePriority(&p.Priority).
+		SetNillableTime(p.Time).
+		SetNillableCertificate(p.Certificate).
+		SetNillableDegree(p.Degree).
+		SetNillableActive(p.Active).
+		SetNillablePriority(p.Priority).
 		SaveX(ctx)
 	return e
 }
@@ -125,11 +126,11 @@ func GetAllEducations(ctx context.Context, client *ent.Client) []*ent.Education 
 func UpdateEducation(ctx context.Context, client *ent.Client, p TUpdateEducation) *ent.Education {
 	e := client.Education.UpdateOneID(p.Id).
 		SetSchool(p.School).
-		SetNillableTime(&p.Time).
-		SetNillableCertificate(&p.Certificate).
-		SetNillableDegree(&p.Degree).
-		SetNillableActive(&p.Active).
-		SetNillablePriority(&p.Priority).
+		SetNillableTime(p.Time).
+		SetNillableCertificate(p.Certificate).
+		SetNillableDegree(p.Degree).
+		SetNillableActive(p.Active).
+		SetNillablePriority(p.Priority).
 		SaveX(ctx)
 	return e
 }
@@ -137,10 +138,10 @@ func UpdateEducation(ctx context.Context, client *ent.Client, p TUpdateEducation
 func AddExperience(ctx context.Context, client *ent.Client, p TAddExperience) *ent.Experience {
 	e := client.Experience.Create().
 		SetEmployer(p.Employer).
-		SetNillableTime(&p.Time).
+		SetNillableTime(p.Time).
 		SetPosition(p.Position).
-		SetNillableActive(&p.Active).
-		SetPriority(p.Priority).
+		SetNillableActive(p.Active).
+		SetNillablePriority(p.Priority).
 		SaveX(ctx)
 	return e
 }
@@ -172,10 +173,10 @@ func UpdateExperience(
 ) *ent.Experience {
 	e := client.Experience.UpdateOneID(p.Id).
 		SetEmployer(p.Employer).
-		SetNillableTime(&p.Time).
+		SetNillableTime(p.Time).
 		SetPosition(p.Position).
-		SetNillableActive(&p.Active).
-		SetPriority(p.Priority).
+		SetNillableActive(p.Active).
+		SetNillablePriority(p.Priority).
 		SaveX(ctx)
 	return e
 }
@@ -206,8 +207,8 @@ func AddTechnology(ctx context.Context, client *ent.Client, p TAddTechnology) *e
 	}).FirstX(ctx)
 	t := client.Technology.Create().
 		SetName(p.Name).
-		SetURL(p.Url).
-		SetPriority(p.Priority).
+		SetNillableURL(p.Url).
+		SetNillablePriority(p.Priority).
 		SetStack(s).
 		SaveX(ctx)
 	return t
@@ -242,8 +243,8 @@ func UpdateTechnology(
 	}).FirstX(ctx)
 	t := client.Technology.UpdateOneID(p.Id).
 		SetName(p.Name).
-		SetURL(p.Url).
-		SetPriority(p.Priority).
+		SetNillableURL(p.Url).
+		SetNillablePriority(p.Priority).
 		SetStack(s).
 		SaveX(ctx)
 	return t
@@ -257,7 +258,7 @@ func AddUser(ctx context.Context, client *ent.Client, p TAddUser) *ent.User {
 		SetUsername(p.Username).
 		SetHash(p.Hash).
 		SetSalt(p.Salt).
-		SetName(p.Name).
+		SetNillableName(p.Name).
 		SetEmail(p.Email).
 		AddInvite(i).
 		SaveX(ctx)
@@ -314,5 +315,5 @@ func SetRegisteredInvite(ctx context.Context, client *ent.Client, p TSetRegister
 
 func UpdateUser(ctx context.Context, client *ent.Client, p TUpdateUser) {
 	u := GetUser(ctx, client, TGetUser{Username: p.Username})
-	u.Update().SetHash(p.Hash).SetSalt(p.Salt).SetName(p.Name).SaveX(ctx)
+	u.Update().SetHash(p.Hash).SetSalt(p.Salt).SetNillableName(p.Name).SaveX(ctx)
 }
