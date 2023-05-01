@@ -94,6 +94,14 @@ func seedExperience(client *ent.Client, ctx context.Context) {
 	fmt.Println("Experience complete")
 }
 
+func seedApplication(client *ent.Client, ctx context.Context) {}
+
+func seedTechStacks(client *ent.Client, ctx context.Context) {}
+
+func seedTechnology(client *ent.Client, ctx context.Context) {}
+
+func seedEducation(client *ent.Client, ctx context.Context) {}
+
 func Seed(client *ent.Client, ctx context.Context) {
 	fmt.Println(mockDb)
 	getMockDb()
