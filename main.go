@@ -19,5 +19,5 @@ func main() {
 	script();
 	r := gin.Default()
 	setupRoutes(r)
-	r.Run()
+	r.Run("localhost:8080")
 }
