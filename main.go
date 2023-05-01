@@ -11,9 +11,9 @@ import (
 func setupRoutes(r *gin.Engine) {
 	client := db.GetClient()
 	ctx := context.Background()
-	Seed(client, ctx)
 	api.Application(r, ctx, client)
 	api.Applications(r, ctx, client)
+	api.Seed(r, ctx, client)
 }
 
 func main() {
