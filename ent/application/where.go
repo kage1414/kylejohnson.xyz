@@ -322,7 +322,7 @@ func HasTechnologies() predicate.Application {
 	return predicate.Application(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, TechnologiesTable, TechnologiesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, TechnologiesTable, TechnologiesPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})

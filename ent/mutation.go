@@ -3874,7 +3874,8 @@ type TechnologyMutation struct {
 	priority           *int32
 	addpriority        *int32
 	clearedFields      map[string]struct{}
-	application        *int
+	application        map[int]struct{}
+	removedapplication map[int]struct{}
 	clearedapplication bool
 	stack              *int
 	clearedstack       bool
@@ -4136,9 +4137,14 @@ func (m *TechnologyMutation) ResetPriority() {
 	delete(m.clearedFields, technology.FieldPriority)
 }
 
-// SetApplicationID sets the "application" edge to the Application entity by id.
-func (m *TechnologyMutation) SetApplicationID(id int) {
-	m.application = &id
+// AddApplicationIDs adds the "application" edge to the Application entity by ids.
+func (m *TechnologyMutation) AddApplicationIDs(ids ...int) {
+	if m.application == nil {
+		m.application = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.application[ids[i]] = struct{}{}
+	}
 }
 
 // ClearApplication clears the "application" edge to the Application entity.
@@ -4151,20 +4157,29 @@ func (m *TechnologyMutation) ApplicationCleared() bool {
 	return m.clearedapplication
 }
 
-// ApplicationID returns the "application" edge ID in the mutation.
-func (m *TechnologyMutation) ApplicationID() (id int, exists bool) {
-	if m.application != nil {
-		return *m.application, true
+// RemoveApplicationIDs removes the "application" edge to the Application entity by IDs.
+func (m *TechnologyMutation) RemoveApplicationIDs(ids ...int) {
+	if m.removedapplication == nil {
+		m.removedapplication = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.application, ids[i])
+		m.removedapplication[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedApplication returns the removed IDs of the "application" edge to the Application entity.
+func (m *TechnologyMutation) RemovedApplicationIDs() (ids []int) {
+	for id := range m.removedapplication {
+		ids = append(ids, id)
 	}
 	return
 }
 
 // ApplicationIDs returns the "application" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// ApplicationID instead. It exists only for internal usage by the builders.
 func (m *TechnologyMutation) ApplicationIDs() (ids []int) {
-	if id := m.application; id != nil {
-		ids = append(ids, *id)
+	for id := range m.application {
+		ids = append(ids, id)
 	}
 	return
 }
@@ -4173,6 +4188,7 @@ func (m *TechnologyMutation) ApplicationIDs() (ids []int) {
 func (m *TechnologyMutation) ResetApplication() {
 	m.application = nil
 	m.clearedapplication = false
+	m.removedapplication = nil
 }
 
 // SetStackID sets the "stack" edge to the TechStack entity by id.
@@ -4426,9 +4442,11 @@ func (m *TechnologyMutation) AddedEdges() []string {
 func (m *TechnologyMutation) AddedIDs(name string) []ent.Value {
 	switch name {
 	case technology.EdgeApplication:
-		if id := m.application; id != nil {
-			return []ent.Value{*id}
+		ids := make([]ent.Value, 0, len(m.application))
+		for id := range m.application {
+			ids = append(ids, id)
 		}
+		return ids
 	case technology.EdgeStack:
 		if id := m.stack; id != nil {
 			return []ent.Value{*id}
@@ -4440,12 +4458,23 @@ func (m *TechnologyMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *TechnologyMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 2)
+	if m.removedapplication != nil {
+		edges = append(edges, technology.EdgeApplication)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *TechnologyMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case technology.EdgeApplication:
+		ids := make([]ent.Value, 0, len(m.removedapplication))
+		for id := range m.removedapplication {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
@@ -4477,9 +4506,6 @@ func (m *TechnologyMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *TechnologyMutation) ClearEdge(name string) error {
 	switch name {
-	case technology.EdgeApplication:
-		m.ClearApplication()
-		return nil
 	case technology.EdgeStack:
 		m.ClearStack()
 		return nil

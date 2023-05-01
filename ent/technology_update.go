@@ -82,23 +82,19 @@ func (tu *TechnologyUpdate) ClearPriority() *TechnologyUpdate {
 	return tu
 }
 
-// SetApplicationID sets the "application" edge to the Application entity by ID.
-func (tu *TechnologyUpdate) SetApplicationID(id int) *TechnologyUpdate {
-	tu.mutation.SetApplicationID(id)
+// AddApplicationIDs adds the "application" edge to the Application entity by IDs.
+func (tu *TechnologyUpdate) AddApplicationIDs(ids ...int) *TechnologyUpdate {
+	tu.mutation.AddApplicationIDs(ids...)
 	return tu
 }
 
-// SetNillableApplicationID sets the "application" edge to the Application entity by ID if the given value is not nil.
-func (tu *TechnologyUpdate) SetNillableApplicationID(id *int) *TechnologyUpdate {
-	if id != nil {
-		tu = tu.SetApplicationID(*id)
+// AddApplication adds the "application" edges to the Application entity.
+func (tu *TechnologyUpdate) AddApplication(a ...*Application) *TechnologyUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
 	}
-	return tu
-}
-
-// SetApplication sets the "application" edge to the Application entity.
-func (tu *TechnologyUpdate) SetApplication(a *Application) *TechnologyUpdate {
-	return tu.SetApplicationID(a.ID)
+	return tu.AddApplicationIDs(ids...)
 }
 
 // SetStackID sets the "stack" edge to the TechStack entity by ID.
@@ -125,10 +121,25 @@ func (tu *TechnologyUpdate) Mutation() *TechnologyMutation {
 	return tu.mutation
 }
 
-// ClearApplication clears the "application" edge to the Application entity.
+// ClearApplication clears all "application" edges to the Application entity.
 func (tu *TechnologyUpdate) ClearApplication() *TechnologyUpdate {
 	tu.mutation.ClearApplication()
 	return tu
+}
+
+// RemoveApplicationIDs removes the "application" edge to Application entities by IDs.
+func (tu *TechnologyUpdate) RemoveApplicationIDs(ids ...int) *TechnologyUpdate {
+	tu.mutation.RemoveApplicationIDs(ids...)
+	return tu
+}
+
+// RemoveApplication removes "application" edges to Application entities.
+func (tu *TechnologyUpdate) RemoveApplication(a ...*Application) *TechnologyUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return tu.RemoveApplicationIDs(ids...)
 }
 
 // ClearStack clears the "stack" edge to the TechStack entity.
@@ -193,10 +204,10 @@ func (tu *TechnologyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.ApplicationCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   technology.ApplicationTable,
-			Columns: []string{technology.ApplicationColumn},
+			Columns: technology.ApplicationPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeInt),
@@ -204,12 +215,28 @@ func (tu *TechnologyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.ApplicationIDs(); len(nodes) > 0 {
+	if nodes := tu.mutation.RemovedApplicationIDs(); len(nodes) > 0 && !tu.mutation.ApplicationCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   technology.ApplicationTable,
-			Columns: []string{technology.ApplicationColumn},
+			Columns: technology.ApplicationPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.ApplicationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   technology.ApplicationTable,
+			Columns: technology.ApplicationPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeInt),
@@ -322,23 +349,19 @@ func (tuo *TechnologyUpdateOne) ClearPriority() *TechnologyUpdateOne {
 	return tuo
 }
 
-// SetApplicationID sets the "application" edge to the Application entity by ID.
-func (tuo *TechnologyUpdateOne) SetApplicationID(id int) *TechnologyUpdateOne {
-	tuo.mutation.SetApplicationID(id)
+// AddApplicationIDs adds the "application" edge to the Application entity by IDs.
+func (tuo *TechnologyUpdateOne) AddApplicationIDs(ids ...int) *TechnologyUpdateOne {
+	tuo.mutation.AddApplicationIDs(ids...)
 	return tuo
 }
 
-// SetNillableApplicationID sets the "application" edge to the Application entity by ID if the given value is not nil.
-func (tuo *TechnologyUpdateOne) SetNillableApplicationID(id *int) *TechnologyUpdateOne {
-	if id != nil {
-		tuo = tuo.SetApplicationID(*id)
+// AddApplication adds the "application" edges to the Application entity.
+func (tuo *TechnologyUpdateOne) AddApplication(a ...*Application) *TechnologyUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
 	}
-	return tuo
-}
-
-// SetApplication sets the "application" edge to the Application entity.
-func (tuo *TechnologyUpdateOne) SetApplication(a *Application) *TechnologyUpdateOne {
-	return tuo.SetApplicationID(a.ID)
+	return tuo.AddApplicationIDs(ids...)
 }
 
 // SetStackID sets the "stack" edge to the TechStack entity by ID.
@@ -365,10 +388,25 @@ func (tuo *TechnologyUpdateOne) Mutation() *TechnologyMutation {
 	return tuo.mutation
 }
 
-// ClearApplication clears the "application" edge to the Application entity.
+// ClearApplication clears all "application" edges to the Application entity.
 func (tuo *TechnologyUpdateOne) ClearApplication() *TechnologyUpdateOne {
 	tuo.mutation.ClearApplication()
 	return tuo
+}
+
+// RemoveApplicationIDs removes the "application" edge to Application entities by IDs.
+func (tuo *TechnologyUpdateOne) RemoveApplicationIDs(ids ...int) *TechnologyUpdateOne {
+	tuo.mutation.RemoveApplicationIDs(ids...)
+	return tuo
+}
+
+// RemoveApplication removes "application" edges to Application entities.
+func (tuo *TechnologyUpdateOne) RemoveApplication(a ...*Application) *TechnologyUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return tuo.RemoveApplicationIDs(ids...)
 }
 
 // ClearStack clears the "stack" edge to the TechStack entity.
@@ -463,10 +501,10 @@ func (tuo *TechnologyUpdateOne) sqlSave(ctx context.Context) (_node *Technology,
 	}
 	if tuo.mutation.ApplicationCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   technology.ApplicationTable,
-			Columns: []string{technology.ApplicationColumn},
+			Columns: technology.ApplicationPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeInt),
@@ -474,12 +512,28 @@ func (tuo *TechnologyUpdateOne) sqlSave(ctx context.Context) (_node *Technology,
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.ApplicationIDs(); len(nodes) > 0 {
+	if nodes := tuo.mutation.RemovedApplicationIDs(); len(nodes) > 0 && !tuo.mutation.ApplicationCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   technology.ApplicationTable,
-			Columns: []string{technology.ApplicationColumn},
+			Columns: technology.ApplicationPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.ApplicationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   technology.ApplicationTable,
+			Columns: technology.ApplicationPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeInt),

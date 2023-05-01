@@ -209,10 +209,10 @@ func (ac *ApplicationCreate) createSpec() (*Application, *sqlgraph.CreateSpec) {
 	}
 	if nodes := ac.mutation.TechnologiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   application.TechnologiesTable,
-			Columns: []string{application.TechnologiesColumn},
+			Columns: application.TechnologiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(technology.FieldID, field.TypeInt),

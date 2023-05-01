@@ -6,10 +6,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"kylejohnson-xyz/ent"
+	"kylejohnson-xyz/ent/technology"
 	"log"
+
+	"entgo.io/ent/dialect/sql"
 )
 
-type technology struct {
+type ttechnology struct {
 	Name string `json:"name"`
 	Url string `json:"url"`
 	Priority int32 `json:"priority"`
@@ -18,7 +21,7 @@ type technology struct {
 type technicalSkill struct {
 	Id string `json:"id"`
 	Stack string `json:"stack"`
-	Technologies []technology `json:"technologies"`
+	Technologies []ttechnology `json:"technologies"`
 }
 
 type description struct {
@@ -31,7 +34,7 @@ type application struct {
 	Url string `json:"url"`
 	Active bool `json:"active"`
 	Priority int32 `json:"priority"`
-	Technologies []technology `json:"technologies"`
+	Technologies []ttechnology `json:"technologies"`
 	Descriptions []description `json:"descriptions"`
 }
 
@@ -103,8 +106,16 @@ func seedApplication(client *ent.Client, ctx context.Context) {
 			a_record.Update().AddDescriptions(d_record).SaveX(ctx)
 		}
 		for _, t := range a.Technologies {
-			t_record := client.Technology.Create().SetName(t.Name).SetURL(t.Url).SetNillablePriority(&t.Priority).SaveX(ctx)
-			a_record.Update().AddTechnologies(t_record).SaveX(ctx)
+			t_record, err := client.Technology.Create().SetName(t.Name).SetURL(t.Url).SetNillablePriority(&t.Priority).Save(ctx)
+			if err != nil {
+				existing_record := client.Technology.Query().Where(func(s *sql.Selector) {
+					s.Where(sql.InValues(technology.FieldName, t.Name))
+				}).FirstX(ctx)
+				a_record.Update().AddTechnologies(existing_record).SaveX(ctx)
+				} else {
+				a_record.Update().AddTechnologies(t_record).SaveX(ctx)
+
+			}
 		}
 	}
 	fmt.Println("Applications complete")
@@ -138,8 +149,11 @@ func seedEducation(client *ent.Client, ctx context.Context) {
 }
 
 func Seed(client *ent.Client, ctx context.Context) {
-	fmt.Println(mockDb)
-	getMockDb()
-	fmt.Println(mockDb)
 	deleteAllRecords(client, ctx)
+	getMockDb()
+	seedTechnology(client, ctx)
+	seedExperience(client, ctx)
+	seedEducation(client, ctx)
+	seedApplication(client, ctx)
+	fmt.Println("Seed complete")
 }

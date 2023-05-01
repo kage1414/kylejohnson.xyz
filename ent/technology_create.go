@@ -55,23 +55,19 @@ func (tc *TechnologyCreate) SetNillablePriority(i *int32) *TechnologyCreate {
 	return tc
 }
 
-// SetApplicationID sets the "application" edge to the Application entity by ID.
-func (tc *TechnologyCreate) SetApplicationID(id int) *TechnologyCreate {
-	tc.mutation.SetApplicationID(id)
+// AddApplicationIDs adds the "application" edge to the Application entity by IDs.
+func (tc *TechnologyCreate) AddApplicationIDs(ids ...int) *TechnologyCreate {
+	tc.mutation.AddApplicationIDs(ids...)
 	return tc
 }
 
-// SetNillableApplicationID sets the "application" edge to the Application entity by ID if the given value is not nil.
-func (tc *TechnologyCreate) SetNillableApplicationID(id *int) *TechnologyCreate {
-	if id != nil {
-		tc = tc.SetApplicationID(*id)
+// AddApplication adds the "application" edges to the Application entity.
+func (tc *TechnologyCreate) AddApplication(a ...*Application) *TechnologyCreate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
 	}
-	return tc
-}
-
-// SetApplication sets the "application" edge to the Application entity.
-func (tc *TechnologyCreate) SetApplication(a *Application) *TechnologyCreate {
-	return tc.SetApplicationID(a.ID)
+	return tc.AddApplicationIDs(ids...)
 }
 
 // SetStackID sets the "stack" edge to the TechStack entity by ID.
@@ -170,10 +166,10 @@ func (tc *TechnologyCreate) createSpec() (*Technology, *sqlgraph.CreateSpec) {
 	}
 	if nodes := tc.mutation.ApplicationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   technology.ApplicationTable,
-			Columns: []string{technology.ApplicationColumn},
+			Columns: technology.ApplicationPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeInt),
@@ -182,7 +178,6 @@ func (tc *TechnologyCreate) createSpec() (*Technology, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.application_technologies = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := tc.mutation.StackIDs(); len(nodes) > 0 {

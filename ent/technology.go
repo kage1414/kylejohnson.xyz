@@ -4,7 +4,6 @@ package ent
 
 import (
 	"fmt"
-	"kylejohnson-xyz/ent/application"
 	"kylejohnson-xyz/ent/technology"
 	"kylejohnson-xyz/ent/techstack"
 	"strings"
@@ -26,16 +25,15 @@ type Technology struct {
 	Priority int32 `json:"priority,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TechnologyQuery when eager-loading is set.
-	Edges                    TechnologyEdges `json:"edges"`
-	application_technologies *int
-	tech_stack_technology    *int
-	selectValues             sql.SelectValues
+	Edges                 TechnologyEdges `json:"edges"`
+	tech_stack_technology *int
+	selectValues          sql.SelectValues
 }
 
 // TechnologyEdges holds the relations/edges for other nodes in the graph.
 type TechnologyEdges struct {
 	// Application holds the value of the application edge.
-	Application *Application `json:"application,omitempty"`
+	Application []*Application `json:"application,omitempty"`
 	// Stack holds the value of the stack edge.
 	Stack *TechStack `json:"stack,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -44,13 +42,9 @@ type TechnologyEdges struct {
 }
 
 // ApplicationOrErr returns the Application value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e TechnologyEdges) ApplicationOrErr() (*Application, error) {
+// was not loaded in eager-loading.
+func (e TechnologyEdges) ApplicationOrErr() ([]*Application, error) {
 	if e.loadedTypes[0] {
-		if e.Application == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: application.Label}
-		}
 		return e.Application, nil
 	}
 	return nil, &NotLoadedError{edge: "application"}
@@ -78,9 +72,7 @@ func (*Technology) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case technology.FieldName, technology.FieldURL:
 			values[i] = new(sql.NullString)
-		case technology.ForeignKeys[0]: // application_technologies
-			values[i] = new(sql.NullInt64)
-		case technology.ForeignKeys[1]: // tech_stack_technology
+		case technology.ForeignKeys[0]: // tech_stack_technology
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -122,13 +114,6 @@ func (t *Technology) assignValues(columns []string, values []any) error {
 				t.Priority = int32(value.Int64)
 			}
 		case technology.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field application_technologies", value)
-			} else if value.Valid {
-				t.application_technologies = new(int)
-				*t.application_technologies = int(value.Int64)
-			}
-		case technology.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field tech_stack_technology", value)
 			} else if value.Valid {

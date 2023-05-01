@@ -98,7 +98,7 @@ func (aq *ApplicationQuery) QueryTechnologies() *TechnologyQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(application.Table, application.FieldID, selector),
 			sqlgraph.To(technology.Table, technology.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, application.TechnologiesTable, application.TechnologiesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, application.TechnologiesTable, application.TechnologiesPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
 		return fromU, nil
@@ -478,33 +478,63 @@ func (aq *ApplicationQuery) loadDescriptions(ctx context.Context, query *Descrip
 	return nil
 }
 func (aq *ApplicationQuery) loadTechnologies(ctx context.Context, query *TechnologyQuery, nodes []*Application, init func(*Application), assign func(*Application, *Technology)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Application)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Application)
+	nids := make(map[int]map[*Application]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Technology(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(application.TechnologiesColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(application.TechnologiesTable)
+		s.Join(joinT).On(s.C(technology.FieldID), joinT.C(application.TechnologiesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(application.TechnologiesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(application.TechnologiesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Application]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Technology](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.application_technologies
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "application_technologies" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "application_technologies" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "technologies" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }

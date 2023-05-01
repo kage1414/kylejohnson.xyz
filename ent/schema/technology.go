@@ -20,7 +20,7 @@ func (Technology) Fields() []ent.Field {
 
 func (Technology) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("application", Application.Type).Ref("technologies").Unique(),
+		edge.From("application", Application.Type).Ref("technologies"),
 		edge.From("stack", TechStack.Type).Ref("technology").Unique(),
 	}
 }

@@ -303,10 +303,10 @@ func (au *ApplicationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.TechnologiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   application.TechnologiesTable,
-			Columns: []string{application.TechnologiesColumn},
+			Columns: application.TechnologiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(technology.FieldID, field.TypeInt),
@@ -316,10 +316,10 @@ func (au *ApplicationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := au.mutation.RemovedTechnologiesIDs(); len(nodes) > 0 && !au.mutation.TechnologiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   application.TechnologiesTable,
-			Columns: []string{application.TechnologiesColumn},
+			Columns: application.TechnologiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(technology.FieldID, field.TypeInt),
@@ -332,10 +332,10 @@ func (au *ApplicationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := au.mutation.TechnologiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   application.TechnologiesTable,
-			Columns: []string{application.TechnologiesColumn},
+			Columns: application.TechnologiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(technology.FieldID, field.TypeInt),
@@ -670,10 +670,10 @@ func (auo *ApplicationUpdateOne) sqlSave(ctx context.Context) (_node *Applicatio
 	}
 	if auo.mutation.TechnologiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   application.TechnologiesTable,
-			Columns: []string{application.TechnologiesColumn},
+			Columns: application.TechnologiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(technology.FieldID, field.TypeInt),
@@ -683,10 +683,10 @@ func (auo *ApplicationUpdateOne) sqlSave(ctx context.Context) (_node *Applicatio
 	}
 	if nodes := auo.mutation.RemovedTechnologiesIDs(); len(nodes) > 0 && !auo.mutation.TechnologiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   application.TechnologiesTable,
-			Columns: []string{application.TechnologiesColumn},
+			Columns: application.TechnologiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(technology.FieldID, field.TypeInt),
@@ -699,10 +699,10 @@ func (auo *ApplicationUpdateOne) sqlSave(ctx context.Context) (_node *Applicatio
 	}
 	if nodes := auo.mutation.TechnologiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   application.TechnologiesTable,
-			Columns: []string{application.TechnologiesColumn},
+			Columns: application.TechnologiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(technology.FieldID, field.TypeInt),

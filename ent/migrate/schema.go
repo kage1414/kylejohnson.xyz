@@ -121,7 +121,6 @@ var (
 		{Name: "name", Type: field.TypeString, Unique: true},
 		{Name: "url", Type: field.TypeString, Nullable: true},
 		{Name: "priority", Type: field.TypeInt32, Nullable: true},
-		{Name: "application_technologies", Type: field.TypeInt, Nullable: true},
 		{Name: "tech_stack_technology", Type: field.TypeInt, Nullable: true},
 	}
 	// TechnologiesTable holds the schema information for the "technologies" table.
@@ -131,14 +130,8 @@ var (
 		PrimaryKey: []*schema.Column{TechnologiesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "technologies_applications_technologies",
-				Columns:    []*schema.Column{TechnologiesColumns[4]},
-				RefColumns: []*schema.Column{ApplicationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "technologies_tech_stacks_technology",
-				Columns:    []*schema.Column{TechnologiesColumns[5]},
+				Columns:    []*schema.Column{TechnologiesColumns[4]},
 				RefColumns: []*schema.Column{TechStacksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -159,6 +152,31 @@ var (
 		Columns:    UsersColumns,
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
 	}
+	// ApplicationTechnologiesColumns holds the columns for the "application_technologies" table.
+	ApplicationTechnologiesColumns = []*schema.Column{
+		{Name: "application_id", Type: field.TypeInt},
+		{Name: "technology_id", Type: field.TypeInt},
+	}
+	// ApplicationTechnologiesTable holds the schema information for the "application_technologies" table.
+	ApplicationTechnologiesTable = &schema.Table{
+		Name:       "application_technologies",
+		Columns:    ApplicationTechnologiesColumns,
+		PrimaryKey: []*schema.Column{ApplicationTechnologiesColumns[0], ApplicationTechnologiesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "application_technologies_application_id",
+				Columns:    []*schema.Column{ApplicationTechnologiesColumns[0]},
+				RefColumns: []*schema.Column{ApplicationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "application_technologies_technology_id",
+				Columns:    []*schema.Column{ApplicationTechnologiesColumns[1]},
+				RefColumns: []*schema.Column{TechnologiesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		ApplicationsTable,
@@ -169,6 +187,7 @@ var (
 		TechStacksTable,
 		TechnologiesTable,
 		UsersTable,
+		ApplicationTechnologiesTable,
 	}
 )
 
@@ -176,6 +195,7 @@ func init() {
 	DescriptionsTable.ForeignKeys[0].RefTable = ApplicationsTable
 	DescriptionsTable.ForeignKeys[1].RefTable = ExperiencesTable
 	InvitesTable.ForeignKeys[0].RefTable = UsersTable
-	TechnologiesTable.ForeignKeys[0].RefTable = ApplicationsTable
-	TechnologiesTable.ForeignKeys[1].RefTable = TechStacksTable
+	TechnologiesTable.ForeignKeys[0].RefTable = TechStacksTable
+	ApplicationTechnologiesTable.ForeignKeys[0].RefTable = ApplicationsTable
+	ApplicationTechnologiesTable.ForeignKeys[1].RefTable = TechnologiesTable
 }

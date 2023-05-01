@@ -372,7 +372,7 @@ func (c *ApplicationClient) QueryTechnologies(a *Application) *TechnologyQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(application.Table, application.FieldID, id),
 			sqlgraph.To(technology.Table, technology.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, application.TechnologiesTable, application.TechnologiesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, application.TechnologiesTable, application.TechnologiesPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -1176,7 +1176,7 @@ func (c *TechnologyClient) QueryApplication(t *Technology) *ApplicationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(technology.Table, technology.FieldID, id),
 			sqlgraph.To(application.Table, application.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, technology.ApplicationTable, technology.ApplicationColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, technology.ApplicationTable, technology.ApplicationPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
 		return fromV, nil

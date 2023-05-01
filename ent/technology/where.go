@@ -264,7 +264,7 @@ func HasApplication() predicate.Technology {
 	return predicate.Technology(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, ApplicationTable, ApplicationColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, ApplicationTable, ApplicationPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})

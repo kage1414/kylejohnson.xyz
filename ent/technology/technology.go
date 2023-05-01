@@ -24,13 +24,11 @@ const (
 	EdgeStack = "stack"
 	// Table holds the table name of the technology in the database.
 	Table = "technologies"
-	// ApplicationTable is the table that holds the application relation/edge.
-	ApplicationTable = "technologies"
+	// ApplicationTable is the table that holds the application relation/edge. The primary key declared below.
+	ApplicationTable = "application_technologies"
 	// ApplicationInverseTable is the table name for the Application entity.
 	// It exists in this package in order to avoid circular dependency with the "application" package.
 	ApplicationInverseTable = "applications"
-	// ApplicationColumn is the table column denoting the application relation/edge.
-	ApplicationColumn = "application_technologies"
 	// StackTable is the table that holds the stack relation/edge.
 	StackTable = "technologies"
 	// StackInverseTable is the table name for the TechStack entity.
@@ -51,9 +49,14 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "technologies"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"application_technologies",
 	"tech_stack_technology",
 }
+
+var (
+	// ApplicationPrimaryKey and ApplicationColumn2 are the table columns denoting the
+	// primary key for the application relation (M2M).
+	ApplicationPrimaryKey = []string{"application_id", "technology_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -93,10 +96,17 @@ func ByPriority(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPriority, opts...).ToFunc()
 }
 
-// ByApplicationField orders the results by application field.
-func ByApplicationField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByApplicationCount orders the results by application count.
+func ByApplicationCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newApplicationStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborsCount(s, newApplicationStep(), opts...)
+	}
+}
+
+// ByApplication orders the results by application terms.
+func ByApplication(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newApplicationStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -110,7 +120,7 @@ func newApplicationStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ApplicationInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, ApplicationTable, ApplicationColumn),
+		sqlgraph.Edge(sqlgraph.M2M, true, ApplicationTable, ApplicationPrimaryKey...),
 	)
 }
 func newStackStep() *sqlgraph.Step {
