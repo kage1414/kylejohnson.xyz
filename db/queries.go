@@ -37,8 +37,8 @@ func AddApplicationTechnology(
 	client *ent.Client,
 	p TAddApplicationTechnology,
 ) *ent.Technology {
-	t := client.Technology.Create().SetName(p.name).SaveX(ctx)
-	client.Application.UpdateOneID(p.id).AddTechnologies(t).SaveX(ctx)
+	t := client.Technology.Create().SetName(p.Name).SaveX(ctx)
+	client.Application.UpdateOneID(p.Id).AddTechnologies(t).SaveX(ctx)
 	return t
 }
 

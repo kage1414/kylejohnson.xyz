@@ -149,8 +149,8 @@ type TDeleteApplication struct {
 }
 
 type TAddApplicationTechnology struct {
-	id   int
-	name string
+	Id   int        `json:"id"`
+	Name string `json:"name"`
 }
 
 type TAddApplicationDescription struct {
