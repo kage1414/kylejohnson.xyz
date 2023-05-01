@@ -33,9 +33,9 @@ privkey.pem
 dist
 config.js
 
-dbschema/edgeql-js
-dbschema/interfaces/*
-dbschema/queries/*
+ui/dbschema/edgeql-js
+ui/dbschema/interfaces/*
+ui/dbschema/queries/*
 *.pem
 
 # debug
