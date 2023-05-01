@@ -12,16 +12,31 @@ import (
 )
 
 func AddApplication(ctx context.Context, client *ent.Client, p TAddApplication) *ent.Application {
-	a := client.Application.Create().SetName(p.Name).SetURL(p.Url).SetPriority(p.Priority).SetActive(p.Active).SaveX(ctx)
+	a := client.Application.Create().
+		SetName(p.Name).
+		SetURL(p.Url).
+		SetPriority(p.Priority).
+		SetActive(p.Active).
+		SaveX(ctx)
 	return a
 }
 
-func AddApplicationDescription(ctx context.Context, client *ent.Client, p TAddApplicationDescription) *ent.Application {
-	t := client.Application.UpdateOneID(p.application_id).AddDescriptionIDs(p.description_id).SaveX(ctx)
+func AddApplicationDescription(
+	ctx context.Context,
+	client *ent.Client,
+	p TAddApplicationDescription,
+) *ent.Application {
+	t := client.Application.UpdateOneID(p.application_id).
+		AddDescriptionIDs(p.description_id).
+		SaveX(ctx)
 	return t
 }
 
-func AddApplicationTechnology(ctx context.Context, client *ent.Client, p TAddApplicationTechnology) *ent.Technology {
+func AddApplicationTechnology(
+	ctx context.Context,
+	client *ent.Client,
+	p TAddApplicationTechnology,
+) *ent.Technology {
 	t := client.Technology.Create().SetName(p.name).SaveX(ctx)
 	client.Application.UpdateOneID(p.id).AddTechnologies(t).SaveX(ctx)
 	return t
@@ -36,13 +51,26 @@ func GetAllApplications(ctx context.Context, client *ent.Client) []*ent.Applicat
 	return items
 }
 
-func RemoveApplicationTechnology(ctx context.Context, client *ent.Client, p TRemoveApplicationTechnology) *ent.Application {
+func RemoveApplicationTechnology(
+	ctx context.Context,
+	client *ent.Client,
+	p TRemoveApplicationTechnology,
+) *ent.Application {
 	a := client.Application.UpdateOneID(p.id).RemoveTechnologyIDs(p.technology_id).SaveX(ctx)
 	return a
 }
 
-func UpdateApplication(ctx context.Context, client *ent.Client, p TUpdateApplication) *ent.Application {
-	a := client.Application.UpdateOneID(p.id).SetName(p.name).SetURL(p.url).SetPriority(p.priority).SetActive(p.active).SaveX(ctx)
+func UpdateApplication(
+	ctx context.Context,
+	client *ent.Client,
+	p TUpdateApplication,
+) *ent.Application {
+	a := client.Application.UpdateOneID(p.id).
+		SetName(p.name).
+		SetURL(p.url).
+		SetPriority(p.priority).
+		SetActive(p.active).
+		SaveX(ctx)
 	return a
 }
 
@@ -60,13 +88,27 @@ func GetDescription(ctx context.Context, client *ent.Client, p TGetDescription) 
 	return d
 }
 
-func UpdateDescription(ctx context.Context, client *ent.Client, p TUpdateDescription) *ent.Description {
-	d := client.Description.UpdateOneID(p.id).SetDescription(p.description).SetPriority(p.priority).SaveX(ctx)
+func UpdateDescription(
+	ctx context.Context,
+	client *ent.Client,
+	p TUpdateDescription,
+) *ent.Description {
+	d := client.Description.UpdateOneID(p.id).
+		SetDescription(p.description).
+		SetPriority(p.priority).
+		SaveX(ctx)
 	return d
 }
 
 func AddEducation(ctx context.Context, client *ent.Client, p TAddEducation) *ent.Education {
-	e := client.Education.Create().SetSchool(p.school).SetNillableTime(&p.time).SetNillableCertificate(&p.certificate).SetNillableDegree(&p.degree).SetNillableActive(&p.active).SetNillablePriority(&p.priority).SaveX(ctx)
+	e := client.Education.Create().
+		SetSchool(p.school).
+		SetNillableTime(&p.time).
+		SetNillableCertificate(&p.certificate).
+		SetNillableDegree(&p.degree).
+		SetNillableActive(&p.active).
+		SetNillablePriority(&p.priority).
+		SaveX(ctx)
 	return e
 }
 
@@ -80,17 +122,36 @@ func GetAllEducations(ctx context.Context, client *ent.Client) []*ent.Education 
 }
 
 func UpdateEducation(ctx context.Context, client *ent.Client, p TUpdateEducation) *ent.Education {
-	e := client.Education.UpdateOneID(p.id).SetSchool(p.school).SetNillableTime(&p.time).SetNillableCertificate(&p.certificate).SetNillableDegree(&p.degree).SetNillableActive(&p.active).SetNillablePriority(&p.priority).SaveX(ctx)
+	e := client.Education.UpdateOneID(p.id).
+		SetSchool(p.school).
+		SetNillableTime(&p.time).
+		SetNillableCertificate(&p.certificate).
+		SetNillableDegree(&p.degree).
+		SetNillableActive(&p.active).
+		SetNillablePriority(&p.priority).
+		SaveX(ctx)
 	return e
 }
 
 func AddExperience(ctx context.Context, client *ent.Client, p TAddExperience) *ent.Experience {
-	e := client.Experience.Create().SetEmployer(p.employer).SetNillableTime(&p.time).SetPosition(p.position).SetNillableActive(&p.active).SetPriority(p.priority).SaveX(ctx)
+	e := client.Experience.Create().
+		SetEmployer(p.employer).
+		SetNillableTime(&p.time).
+		SetPosition(p.position).
+		SetNillableActive(&p.active).
+		SetPriority(p.priority).
+		SaveX(ctx)
 	return e
 }
 
-func AddExperienceDescription(ctx context.Context, client *ent.Client, p TAddExperienceDescription) *ent.Experience {
-	e := client.Experience.UpdateOneID(p.experience_id).AddDescriptionIDs(p.description_id).SaveX(ctx)
+func AddExperienceDescription(
+	ctx context.Context,
+	client *ent.Client,
+	p TAddExperienceDescription,
+) *ent.Experience {
+	e := client.Experience.UpdateOneID(p.experience_id).
+		AddDescriptionIDs(p.description_id).
+		SaveX(ctx)
 	return e
 }
 
@@ -103,8 +164,18 @@ func GetAllExperiences(ctx context.Context, client *ent.Client) []*ent.Experienc
 	return items
 }
 
-func UpdateExperience(ctx context.Context, client *ent.Client, p TUpdateExperience) *ent.Experience {
-	e := client.Experience.UpdateOneID(p.id).SetEmployer(p.employer).SetNillableTime(&p.time).SetPosition(p.position).SetNillableActive(&p.active).SetPriority(p.priority).SaveX(ctx)
+func UpdateExperience(
+	ctx context.Context,
+	client *ent.Client,
+	p TUpdateExperience,
+) *ent.Experience {
+	e := client.Experience.UpdateOneID(p.id).
+		SetEmployer(p.employer).
+		SetNillableTime(&p.time).
+		SetPosition(p.position).
+		SetNillableActive(&p.active).
+		SetPriority(p.priority).
+		SaveX(ctx)
 	return e
 }
 
@@ -132,7 +203,12 @@ func AddTechnology(ctx context.Context, client *ent.Client, p TAddTechnology) *e
 	s := client.TechStack.Query().Where(func(s *sql.Selector) {
 		s.Where(sql.InValues(techstack.FieldStack, p.stack))
 	}).FirstX(ctx)
-	t := client.Technology.Create().SetName(p.name).SetURL(p.url).SetPriority(p.priority).SetStack(s).SaveX(ctx)
+	t := client.Technology.Create().
+		SetName(p.name).
+		SetURL(p.url).
+		SetPriority(p.priority).
+		SetStack(s).
+		SaveX(ctx)
 	return t
 }
 
@@ -155,11 +231,20 @@ func GetTechStacks(ctx context.Context, client *ent.Client) []*ent.TechStack {
 	return t
 }
 
-func UpdateTechnology(ctx context.Context, client *ent.Client, p TUpdateTechnology) *ent.Technology {
+func UpdateTechnology(
+	ctx context.Context,
+	client *ent.Client,
+	p TUpdateTechnology,
+) *ent.Technology {
 	s := client.TechStack.Query().Where(func(s *sql.Selector) {
 		s.Where(sql.InValues(techstack.FieldStack, p.stack))
 	}).FirstX(ctx)
-	t := client.Technology.UpdateOneID(p.id).SetName(p.name).SetURL(p.url).SetPriority(p.priority).SetStack(s).SaveX(ctx)
+	t := client.Technology.UpdateOneID(p.id).
+		SetName(p.name).
+		SetURL(p.url).
+		SetPriority(p.priority).
+		SetStack(s).
+		SaveX(ctx)
 	return t
 }
 
@@ -167,7 +252,14 @@ func AddUser(ctx context.Context, client *ent.Client, p TAddUser) *ent.User {
 	i := client.Invite.Query().Where(func(s *sql.Selector) {
 		s.Where(sql.InValues(invite.FieldID, p.invite_id))
 	}).FirstX(ctx)
-	u := client.User.Create().SetUsername(p.username).SetHash(p.hash).SetSalt(p.salt).SetName(p.name).SetEmail(p.email).AddInvite(i).SaveX(ctx)
+	u := client.User.Create().
+		SetUsername(p.username).
+		SetHash(p.hash).
+		SetSalt(p.salt).
+		SetName(p.name).
+		SetEmail(p.email).
+		AddInvite(i).
+		SaveX(ctx)
 	return u
 }
 

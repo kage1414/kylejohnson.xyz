@@ -87,9 +87,18 @@ func deleteAllRecords(client *ent.Client, ctx context.Context) {
 func seedExperience(client *ent.Client, ctx context.Context) {
 	fmt.Println("Seeding experience...")
 	for _, e := range mockDb.Experience {
-		e_record := client.Experience.Create().SetEmployer(e.Employer).SetPosition(e.Position).SetTime(e.Time).SetNillableActive(&e.Active).SetNillablePriority(&e.Priority).SaveX(ctx)
+		e_record := client.Experience.Create().
+			SetEmployer(e.Employer).
+			SetPosition(e.Position).
+			SetTime(e.Time).
+			SetNillableActive(&e.Active).
+			SetNillablePriority(&e.Priority).
+			SaveX(ctx)
 		for _, d := range e.Descriptions {
-			d_record := client.Description.Create().SetDescription(d.Description).SetNillablePriority(&d.Priority).SaveX(ctx)
+			d_record := client.Description.Create().
+				SetDescription(d.Description).
+				SetNillablePriority(&d.Priority).
+				SaveX(ctx)
 			e_record.Update().AddDescriptions(d_record).SaveX(ctx)
 		}
 	}
@@ -99,13 +108,25 @@ func seedExperience(client *ent.Client, ctx context.Context) {
 func seedApplication(client *ent.Client, ctx context.Context) {
 	fmt.Println("Seeding applications...")
 	for _, a := range mockDb.Applications {
-		a_record := client.Application.Create().SetName(a.Name).SetURL(a.Url).SetNillableActive(&a.Active).SetNillablePriority(&a.Priority).SaveX(ctx)
+		a_record := client.Application.Create().
+			SetName(a.Name).
+			SetURL(a.Url).
+			SetNillableActive(&a.Active).
+			SetNillablePriority(&a.Priority).
+			SaveX(ctx)
 		for _, d := range a.Descriptions {
-			d_record := client.Description.Create().SetDescription(d.Description).SetNillablePriority(&d.Priority).SaveX(ctx)
+			d_record := client.Description.Create().
+				SetDescription(d.Description).
+				SetNillablePriority(&d.Priority).
+				SaveX(ctx)
 			a_record.Update().AddDescriptions(d_record).SaveX(ctx)
 		}
 		for _, t := range a.Technologies {
-			t_record, err := client.Technology.Create().SetName(t.Name).SetURL(t.Url).SetNillablePriority(&t.Priority).Save(ctx)
+			t_record, err := client.Technology.Create().
+				SetName(t.Name).
+				SetURL(t.Url).
+				SetNillablePriority(&t.Priority).
+				Save(ctx)
 			if err != nil {
 				existing_record := client.Technology.Query().Where(func(s *sql.Selector) {
 					s.Where(sql.InValues(technology.FieldName, t.Name))
@@ -133,7 +154,12 @@ func seedTechnology(client *ent.Client, ctx context.Context) {
 	for _, s := range mockDb.TechnicalSkills {
 		s_record := client.TechStack.Create().SetStack(s.Stack).SaveX(ctx)
 		for _, t := range s.Technologies {
-			client.Technology.Create().SetName(t.Name).SetStack(s_record).SetNillableURL(&t.Url).SetNillablePriority(&t.Priority).SaveX(ctx)
+			client.Technology.Create().
+				SetName(t.Name).
+				SetStack(s_record).
+				SetNillableURL(&t.Url).
+				SetNillablePriority(&t.Priority).
+				SaveX(ctx)
 		}
 	}
 	fmt.Println("Technologies complete")
@@ -142,7 +168,14 @@ func seedTechnology(client *ent.Client, ctx context.Context) {
 func seedEducation(client *ent.Client, ctx context.Context) {
 	fmt.Println("Seeding education...")
 	for _, e := range mockDb.Education {
-		client.Education.Create().SetSchool(e.School).SetNillableTime(&e.Time).SetNillableCertificate(&e.Certificate).SetNillableDegree(&e.Degree).SetNillableActive(&e.Active).SetNillablePriority(&e.Priority).SaveX(ctx)
+		client.Education.Create().
+			SetSchool(e.School).
+			SetNillableTime(&e.Time).
+			SetNillableCertificate(&e.Certificate).
+			SetNillableDegree(&e.Degree).
+			SetNillableActive(&e.Active).
+			SetNillablePriority(&e.Priority).
+			SaveX(ctx)
 	}
 	fmt.Println("Education complete")
 }
