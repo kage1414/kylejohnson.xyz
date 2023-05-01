@@ -12,7 +12,7 @@ type Technology struct {
 
 func (Technology) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("name"),
+		field.String("name").Unique(),
 		field.String("url"),
 		field.Int32("priority").Optional(),
 	}

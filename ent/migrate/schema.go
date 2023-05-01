@@ -107,7 +107,7 @@ var (
 	// TechStacksColumns holds the columns for the "tech_stacks" table.
 	TechStacksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "stack", Type: field.TypeString},
+		{Name: "stack", Type: field.TypeString, Unique: true},
 	}
 	// TechStacksTable holds the schema information for the "tech_stacks" table.
 	TechStacksTable = &schema.Table{
@@ -118,7 +118,7 @@ var (
 	// TechnologiesColumns holds the columns for the "technologies" table.
 	TechnologiesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString, Unique: true},
 		{Name: "url", Type: field.TypeString},
 		{Name: "priority", Type: field.TypeInt32, Nullable: true},
 		{Name: "application_technologies", Type: field.TypeInt, Nullable: true},

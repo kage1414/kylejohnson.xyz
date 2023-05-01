@@ -85,9 +85,9 @@ func deleteAllRecords(client *ent.Client, ctx context.Context) {
 func seedExperience(client *ent.Client, ctx context.Context) {
 	fmt.Println("Seeding experience...")
 	for _, e := range mockDb.Experience {
-		e_record := client.Experience.Create().SetEmployer(e.Employer).SetPosition(e.Position).SetTime(e.Time).SetActive(e.Active).SetPriority(e.Priority).SaveX(ctx)
+		e_record := client.Experience.Create().SetEmployer(e.Employer).SetPosition(e.Position).SetTime(e.Time).SetNillableActive(&e.Active).SetNillablePriority(&e.Priority).SaveX(ctx)
 		for _, d := range e.Descriptions {
-			d_record := client.Description.Create().SetDescription(d.Description).SetPriority(d.Priority).SaveX(ctx)
+			d_record := client.Description.Create().SetDescription(d.Description).SetNillablePriority(&d.Priority).SaveX(ctx)
 			e_record.Update().AddDescriptions(d_record).SaveX(ctx)
 		}
 	}
@@ -98,15 +98,40 @@ func seedApplication(client *ent.Client, ctx context.Context) {
 	fmt.Println("Seeding applications...")
 	for _, a := range mockDb.Applications {
 		a_record := client.Application.Create().SetName(a.Name).SetURL(a.Url).SetNillableActive(&a.Active).SetNillablePriority(&a.Priority).SaveX(ctx)
+		for _, d := range a.Descriptions {
+			d_record := client.Description.Create().SetDescription(d.Description).SetNillablePriority(&d.Priority).SaveX(ctx)
+			a_record.Update().AddDescriptions(d_record).SaveX(ctx)
+		}
+		for _, t := range a.Technologies {
+			t_record := client.Technology.Create().SetName(t.Name).SetURL(t.Url).SetNillablePriority(&t.Priority).SaveX(ctx)
+			a_record.Update().AddTechnologies(t_record).SaveX(ctx)
+		}
 	}
 	fmt.Println("Applications complete")
 }
 
-func seedTechStacks(client *ent.Client, ctx context.Context) {}
+func seedTechStacks(client *ent.Client, ctx context.Context) {
+	fmt.Println("Seeding tech stacks...")
+	for _, t := range mockDb.TechnicalSkills {
+		client.TechStack.Create().SetStack(t.Stack).Save(ctx)
+	}
+	fmt.Println("Tech stacks complete")
+}
 
-func seedTechnology(client *ent.Client, ctx context.Context) {}
+func seedTechnology(client *ent.Client, ctx context.Context) {
+	fmt.Println("Seeding technologies...")
+	for _, s := range mockDb.TechnicalSkills {
+		for _, t := range s.Technologies {
+			// t_record, err := client.Technology.Create().S
+		}
+	}
+	fmt.Println("Technologies complete")
+}
 
-func seedEducation(client *ent.Client, ctx context.Context) {}
+func seedEducation(client *ent.Client, ctx context.Context) {
+	fmt.Println("Seeding education...")
+	fmt.Println("Education complete")
+}
 
 func Seed(client *ent.Client, ctx context.Context) {
 	fmt.Println(mockDb)

@@ -12,7 +12,7 @@ type TechStack struct {
 
 func (TechStack) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("stack"),
+		field.String("stack").Unique(),
 	}
 }
 
