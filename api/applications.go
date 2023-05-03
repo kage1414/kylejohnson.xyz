@@ -9,22 +9,23 @@ import (
 	"kylejohnson-xyz/ent"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type DescriptionItem struct {
-	Description string `json:"descriptions"`
-	Id          int    `json:"id"`
+	Description string    `json:"descriptions"`
+	Id          uuid.UUID `json:"id"`
 }
 
 type TechnologyItem struct {
-	Name     string `json:"name"`
-	Id       int    `json:"id"`
-	Url      string `json:"url"`
-	Priority int32  `json:"priority"`
+	Name     string    `json:"name"`
+	Id       uuid.UUID `json:"id"`
+	Url      string    `json:"url"`
+	Priority int32     `json:"priority"`
 }
 
 type ApplicationItem struct {
-	Id           int               `json:"id"`
+	Id           uuid.UUID         `json:"id"`
 	Name         string            `json:"name"`
 	Url          string            `json:"url"`
 	Active       bool              `json:"active"`
