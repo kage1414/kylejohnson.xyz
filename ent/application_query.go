@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // ApplicationQuery is the builder for querying Application entities.
@@ -130,8 +131,8 @@ func (aq *ApplicationQuery) FirstX(ctx context.Context) *Application {
 
 // FirstID returns the first Application ID from the query.
 // Returns a *NotFoundError when no Application ID was found.
-func (aq *ApplicationQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (aq *ApplicationQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = aq.Limit(1).IDs(setContextOp(ctx, aq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -143,7 +144,7 @@ func (aq *ApplicationQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (aq *ApplicationQuery) FirstIDX(ctx context.Context) int {
+func (aq *ApplicationQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := aq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -181,8 +182,8 @@ func (aq *ApplicationQuery) OnlyX(ctx context.Context) *Application {
 // OnlyID is like Only, but returns the only Application ID in the query.
 // Returns a *NotSingularError when more than one Application ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (aq *ApplicationQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (aq *ApplicationQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = aq.Limit(2).IDs(setContextOp(ctx, aq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -198,7 +199,7 @@ func (aq *ApplicationQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (aq *ApplicationQuery) OnlyIDX(ctx context.Context) int {
+func (aq *ApplicationQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := aq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -226,7 +227,7 @@ func (aq *ApplicationQuery) AllX(ctx context.Context) []*Application {
 }
 
 // IDs executes the query and returns a list of Application IDs.
-func (aq *ApplicationQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (aq *ApplicationQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if aq.ctx.Unique == nil && aq.path != nil {
 		aq.Unique(true)
 	}
@@ -238,7 +239,7 @@ func (aq *ApplicationQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (aq *ApplicationQuery) IDsX(ctx context.Context) []int {
+func (aq *ApplicationQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := aq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -448,7 +449,7 @@ func (aq *ApplicationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 
 func (aq *ApplicationQuery) loadDescriptions(ctx context.Context, query *DescriptionQuery, nodes []*Application, init func(*Application), assign func(*Application, *Description)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Application)
+	nodeids := make(map[uuid.UUID]*Application)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -479,8 +480,8 @@ func (aq *ApplicationQuery) loadDescriptions(ctx context.Context, query *Descrip
 }
 func (aq *ApplicationQuery) loadTechnologies(ctx context.Context, query *TechnologyQuery, nodes []*Application, init func(*Application), assign func(*Application, *Technology)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[int]*Application)
-	nids := make(map[int]map[*Application]struct{})
+	byID := make(map[uuid.UUID]*Application)
+	nids := make(map[uuid.UUID]map[*Application]struct{})
 	for i, node := range nodes {
 		edgeIDs[i] = node.ID
 		byID[node.ID] = node
@@ -509,11 +510,11 @@ func (aq *ApplicationQuery) loadTechnologies(ctx context.Context, query *Technol
 				if err != nil {
 					return nil, err
 				}
-				return append([]any{new(sql.NullInt64)}, values...), nil
+				return append([]any{new(uuid.UUID)}, values...), nil
 			}
 			spec.Assign = func(columns []string, values []any) error {
-				outValue := int(values[0].(*sql.NullInt64).Int64)
-				inValue := int(values[1].(*sql.NullInt64).Int64)
+				outValue := *values[0].(*uuid.UUID)
+				inValue := *values[1].(*uuid.UUID)
 				if nids[inValue] == nil {
 					nids[inValue] = map[*Application]struct{}{byID[outValue]: {}}
 					return assign(columns[1:], values[1:])
@@ -549,7 +550,7 @@ func (aq *ApplicationQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (aq *ApplicationQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(application.Table, application.Columns, sqlgraph.NewFieldSpec(application.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(application.Table, application.Columns, sqlgraph.NewFieldSpec(application.FieldID, field.TypeUUID))
 	_spec.From = aq.sql
 	if unique := aq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

@@ -11,6 +11,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // UserCreate is the builder for creating a User entity.
@@ -59,14 +60,14 @@ func (uc *UserCreate) SetNillableName(s *string) *UserCreate {
 }
 
 // AddInviteIDs adds the "invite" edge to the Invite entity by IDs.
-func (uc *UserCreate) AddInviteIDs(ids ...int) *UserCreate {
+func (uc *UserCreate) AddInviteIDs(ids ...uuid.UUID) *UserCreate {
 	uc.mutation.AddInviteIDs(ids...)
 	return uc
 }
 
 // AddInvite adds the "invite" edges to the Invite entity.
 func (uc *UserCreate) AddInvite(i ...*Invite) *UserCreate {
-	ids := make([]int, len(i))
+	ids := make([]uuid.UUID, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
@@ -173,7 +174,7 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Columns: []string{user.InviteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

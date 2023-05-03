@@ -5,6 +5,7 @@ package application
 import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 const (
@@ -68,6 +69,8 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultActive holds the default value on creation for the "active" field.
 	DefaultActive bool
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
 )
 
 // OrderOption defines the ordering options for the Application queries.

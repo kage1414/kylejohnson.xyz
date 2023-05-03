@@ -7,50 +7,51 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Experience {
+func ID(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Experience {
+func IDEQ(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Experience {
+func IDNEQ(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Experience {
+func IDIn(ids ...uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Experience {
+func IDNotIn(ids ...uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Experience {
+func IDGT(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Experience {
+func IDGTE(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Experience {
+func IDLT(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Experience {
+func IDLTE(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldLTE(FieldID, id))
 }
 

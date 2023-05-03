@@ -9,6 +9,10 @@ import (
 	"kylejohnson-xyz/ent/experience"
 	"kylejohnson-xyz/ent/invite"
 	"kylejohnson-xyz/ent/schema"
+	"kylejohnson-xyz/ent/technology"
+	"kylejohnson-xyz/ent/techstack"
+
+	"github.com/google/uuid"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -18,31 +22,63 @@ func init() {
 	applicationFields := schema.Application{}.Fields()
 	_ = applicationFields
 	// applicationDescActive is the schema descriptor for active field.
-	applicationDescActive := applicationFields[2].Descriptor()
+	applicationDescActive := applicationFields[3].Descriptor()
 	// application.DefaultActive holds the default value on creation for the active field.
 	application.DefaultActive = applicationDescActive.Default.(bool)
+	// applicationDescID is the schema descriptor for id field.
+	applicationDescID := applicationFields[0].Descriptor()
+	// application.DefaultID holds the default value on creation for the id field.
+	application.DefaultID = applicationDescID.Default.(func() uuid.UUID)
 	descriptionFields := schema.Description{}.Fields()
 	_ = descriptionFields
 	// descriptionDescActive is the schema descriptor for active field.
-	descriptionDescActive := descriptionFields[1].Descriptor()
+	descriptionDescActive := descriptionFields[2].Descriptor()
 	// description.DefaultActive holds the default value on creation for the active field.
 	description.DefaultActive = descriptionDescActive.Default.(bool)
+	// descriptionDescID is the schema descriptor for id field.
+	descriptionDescID := descriptionFields[0].Descriptor()
+	// description.DefaultID holds the default value on creation for the id field.
+	description.DefaultID = descriptionDescID.Default.(func() uuid.UUID)
 	educationFields := schema.Education{}.Fields()
 	_ = educationFields
 	// educationDescActive is the schema descriptor for active field.
-	educationDescActive := educationFields[4].Descriptor()
+	educationDescActive := educationFields[5].Descriptor()
 	// education.DefaultActive holds the default value on creation for the active field.
 	education.DefaultActive = educationDescActive.Default.(bool)
+	// educationDescID is the schema descriptor for id field.
+	educationDescID := educationFields[0].Descriptor()
+	// education.DefaultID holds the default value on creation for the id field.
+	education.DefaultID = educationDescID.Default.(func() uuid.UUID)
 	experienceFields := schema.Experience{}.Fields()
 	_ = experienceFields
 	// experienceDescActive is the schema descriptor for active field.
-	experienceDescActive := experienceFields[3].Descriptor()
+	experienceDescActive := experienceFields[4].Descriptor()
 	// experience.DefaultActive holds the default value on creation for the active field.
 	experience.DefaultActive = experienceDescActive.Default.(bool)
+	// experienceDescID is the schema descriptor for id field.
+	experienceDescID := experienceFields[0].Descriptor()
+	// experience.DefaultID holds the default value on creation for the id field.
+	experience.DefaultID = experienceDescID.Default.(func() uuid.UUID)
 	inviteFields := schema.Invite{}.Fields()
 	_ = inviteFields
 	// inviteDescRegistered is the schema descriptor for registered field.
-	inviteDescRegistered := inviteFields[2].Descriptor()
+	inviteDescRegistered := inviteFields[3].Descriptor()
 	// invite.DefaultRegistered holds the default value on creation for the registered field.
 	invite.DefaultRegistered = inviteDescRegistered.Default.(bool)
+	// inviteDescID is the schema descriptor for id field.
+	inviteDescID := inviteFields[0].Descriptor()
+	// invite.DefaultID holds the default value on creation for the id field.
+	invite.DefaultID = inviteDescID.Default.(func() uuid.UUID)
+	techstackFields := schema.TechStack{}.Fields()
+	_ = techstackFields
+	// techstackDescID is the schema descriptor for id field.
+	techstackDescID := techstackFields[0].Descriptor()
+	// techstack.DefaultID holds the default value on creation for the id field.
+	techstack.DefaultID = techstackDescID.Default.(func() uuid.UUID)
+	technologyFields := schema.Technology{}.Fields()
+	_ = technologyFields
+	// technologyDescID is the schema descriptor for id field.
+	technologyDescID := technologyFields[0].Descriptor()
+	// technology.DefaultID holds the default value on creation for the id field.
+	technology.DefaultID = technologyDescID.Default.(func() uuid.UUID)
 }

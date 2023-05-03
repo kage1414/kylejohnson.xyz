@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // EducationCreate is the builder for creating a Education entity.
@@ -95,6 +96,20 @@ func (ec *EducationCreate) SetNillablePriority(i *int32) *EducationCreate {
 	return ec
 }
 
+// SetID sets the "id" field.
+func (ec *EducationCreate) SetID(u uuid.UUID) *EducationCreate {
+	ec.mutation.SetID(u)
+	return ec
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (ec *EducationCreate) SetNillableID(u *uuid.UUID) *EducationCreate {
+	if u != nil {
+		ec.SetID(*u)
+	}
+	return ec
+}
+
 // Mutation returns the EducationMutation object of the builder.
 func (ec *EducationCreate) Mutation() *EducationMutation {
 	return ec.mutation
@@ -134,6 +149,10 @@ func (ec *EducationCreate) defaults() {
 		v := education.DefaultActive
 		ec.mutation.SetActive(v)
 	}
+	if _, ok := ec.mutation.ID(); !ok {
+		v := education.DefaultID()
+		ec.mutation.SetID(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -155,8 +174,13 @@ func (ec *EducationCreate) sqlSave(ctx context.Context) (*Education, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	ec.mutation.id = &_node.ID
 	ec.mutation.done = true
 	return _node, nil
@@ -165,8 +189,12 @@ func (ec *EducationCreate) sqlSave(ctx context.Context) (*Education, error) {
 func (ec *EducationCreate) createSpec() (*Education, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Education{config: ec.config}
-		_spec = sqlgraph.NewCreateSpec(education.Table, sqlgraph.NewFieldSpec(education.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(education.Table, sqlgraph.NewFieldSpec(education.FieldID, field.TypeUUID))
 	)
+	if id, ok := ec.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
 	if value, ok := ec.mutation.School(); ok {
 		_spec.SetField(education.FieldSchool, field.TypeString, value)
 		_node.School = value
@@ -235,10 +263,6 @@ func (ecb *EducationCreateBulk) Save(ctx context.Context) ([]*Education, error) 
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

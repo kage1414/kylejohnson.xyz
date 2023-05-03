@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // InviteQuery is the builder for querying Invite entities.
@@ -106,8 +107,8 @@ func (iq *InviteQuery) FirstX(ctx context.Context) *Invite {
 
 // FirstID returns the first Invite ID from the query.
 // Returns a *NotFoundError when no Invite ID was found.
-func (iq *InviteQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (iq *InviteQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = iq.Limit(1).IDs(setContextOp(ctx, iq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -119,7 +120,7 @@ func (iq *InviteQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (iq *InviteQuery) FirstIDX(ctx context.Context) int {
+func (iq *InviteQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := iq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -157,8 +158,8 @@ func (iq *InviteQuery) OnlyX(ctx context.Context) *Invite {
 // OnlyID is like Only, but returns the only Invite ID in the query.
 // Returns a *NotSingularError when more than one Invite ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (iq *InviteQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (iq *InviteQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = iq.Limit(2).IDs(setContextOp(ctx, iq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -174,7 +175,7 @@ func (iq *InviteQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (iq *InviteQuery) OnlyIDX(ctx context.Context) int {
+func (iq *InviteQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := iq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -202,7 +203,7 @@ func (iq *InviteQuery) AllX(ctx context.Context) []*Invite {
 }
 
 // IDs executes the query and returns a list of Invite IDs.
-func (iq *InviteQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (iq *InviteQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if iq.ctx.Unique == nil && iq.path != nil {
 		iq.Unique(true)
 	}
@@ -214,7 +215,7 @@ func (iq *InviteQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (iq *InviteQuery) IDsX(ctx context.Context) []int {
+func (iq *InviteQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := iq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -451,7 +452,7 @@ func (iq *InviteQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (iq *InviteQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(invite.Table, invite.Columns, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(invite.Table, invite.Columns, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeUUID))
 	_spec.From = iq.sql
 	if unique := iq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

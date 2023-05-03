@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // UserUpdate is the builder for updating User entities.
@@ -73,14 +74,14 @@ func (uu *UserUpdate) ClearName() *UserUpdate {
 }
 
 // AddInviteIDs adds the "invite" edge to the Invite entity by IDs.
-func (uu *UserUpdate) AddInviteIDs(ids ...int) *UserUpdate {
+func (uu *UserUpdate) AddInviteIDs(ids ...uuid.UUID) *UserUpdate {
 	uu.mutation.AddInviteIDs(ids...)
 	return uu
 }
 
 // AddInvite adds the "invite" edges to the Invite entity.
 func (uu *UserUpdate) AddInvite(i ...*Invite) *UserUpdate {
-	ids := make([]int, len(i))
+	ids := make([]uuid.UUID, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
@@ -99,14 +100,14 @@ func (uu *UserUpdate) ClearInvite() *UserUpdate {
 }
 
 // RemoveInviteIDs removes the "invite" edge to Invite entities by IDs.
-func (uu *UserUpdate) RemoveInviteIDs(ids ...int) *UserUpdate {
+func (uu *UserUpdate) RemoveInviteIDs(ids ...uuid.UUID) *UserUpdate {
 	uu.mutation.RemoveInviteIDs(ids...)
 	return uu
 }
 
 // RemoveInvite removes "invite" edges to Invite entities.
 func (uu *UserUpdate) RemoveInvite(i ...*Invite) *UserUpdate {
-	ids := make([]int, len(i))
+	ids := make([]uuid.UUID, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
@@ -175,7 +176,7 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{user.InviteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -188,7 +189,7 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{user.InviteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -204,7 +205,7 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{user.InviteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -277,14 +278,14 @@ func (uuo *UserUpdateOne) ClearName() *UserUpdateOne {
 }
 
 // AddInviteIDs adds the "invite" edge to the Invite entity by IDs.
-func (uuo *UserUpdateOne) AddInviteIDs(ids ...int) *UserUpdateOne {
+func (uuo *UserUpdateOne) AddInviteIDs(ids ...uuid.UUID) *UserUpdateOne {
 	uuo.mutation.AddInviteIDs(ids...)
 	return uuo
 }
 
 // AddInvite adds the "invite" edges to the Invite entity.
 func (uuo *UserUpdateOne) AddInvite(i ...*Invite) *UserUpdateOne {
-	ids := make([]int, len(i))
+	ids := make([]uuid.UUID, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
@@ -303,14 +304,14 @@ func (uuo *UserUpdateOne) ClearInvite() *UserUpdateOne {
 }
 
 // RemoveInviteIDs removes the "invite" edge to Invite entities by IDs.
-func (uuo *UserUpdateOne) RemoveInviteIDs(ids ...int) *UserUpdateOne {
+func (uuo *UserUpdateOne) RemoveInviteIDs(ids ...uuid.UUID) *UserUpdateOne {
 	uuo.mutation.RemoveInviteIDs(ids...)
 	return uuo
 }
 
 // RemoveInvite removes "invite" edges to Invite entities.
 func (uuo *UserUpdateOne) RemoveInvite(i ...*Invite) *UserUpdateOne {
-	ids := make([]int, len(i))
+	ids := make([]uuid.UUID, len(i))
 	for j := range i {
 		ids[j] = i[j].ID
 	}
@@ -409,7 +410,7 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Columns: []string{user.InviteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -422,7 +423,7 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Columns: []string{user.InviteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -438,7 +439,7 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Columns: []string{user.InviteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

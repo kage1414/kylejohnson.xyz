@@ -10,13 +10,14 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // Invite is the model entity for the Invite schema.
 type Invite struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
 	// Email holds the value of the "email" field.
 	Email string `json:"email,omitempty"`
 	// Key holds the value of the "key" field.
@@ -59,10 +60,10 @@ func (*Invite) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case invite.FieldRegistered:
 			values[i] = new(sql.NullBool)
-		case invite.FieldID:
-			values[i] = new(sql.NullInt64)
 		case invite.FieldEmail, invite.FieldKey:
 			values[i] = new(sql.NullString)
+		case invite.FieldID:
+			values[i] = new(uuid.UUID)
 		case invite.ForeignKeys[0]: // user_invite
 			values[i] = new(sql.NullInt64)
 		default:
@@ -81,11 +82,11 @@ func (i *Invite) assignValues(columns []string, values []any) error {
 	for j := range columns {
 		switch columns[j] {
 		case invite.FieldID:
-			value, ok := values[j].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[j].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[j])
+			} else if value != nil {
+				i.ID = *value
 			}
-			i.ID = int(value.Int64)
 		case invite.FieldEmail:
 			if value, ok := values[j].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field email", values[j])

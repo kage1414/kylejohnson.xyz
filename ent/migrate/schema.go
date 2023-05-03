@@ -10,7 +10,7 @@ import (
 var (
 	// ApplicationsColumns holds the columns for the "applications" table.
 	ApplicationsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID},
 		{Name: "name", Type: field.TypeString, Nullable: true},
 		{Name: "url", Type: field.TypeString, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Nullable: true, Default: true},
@@ -24,12 +24,12 @@ var (
 	}
 	// DescriptionsColumns holds the columns for the "descriptions" table.
 	DescriptionsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID},
 		{Name: "description", Type: field.TypeString},
 		{Name: "active", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "priority", Type: field.TypeInt32, Nullable: true},
-		{Name: "application_descriptions", Type: field.TypeInt, Nullable: true},
-		{Name: "experience_descriptions", Type: field.TypeInt, Nullable: true},
+		{Name: "application_descriptions", Type: field.TypeUUID, Nullable: true},
+		{Name: "experience_descriptions", Type: field.TypeUUID, Nullable: true},
 	}
 	// DescriptionsTable holds the schema information for the "descriptions" table.
 	DescriptionsTable = &schema.Table{
@@ -53,7 +53,7 @@ var (
 	}
 	// EducationsColumns holds the columns for the "educations" table.
 	EducationsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID},
 		{Name: "school", Type: field.TypeString},
 		{Name: "time", Type: field.TypeString, Nullable: true},
 		{Name: "certificate", Type: field.TypeString, Nullable: true},
@@ -69,7 +69,7 @@ var (
 	}
 	// ExperiencesColumns holds the columns for the "experiences" table.
 	ExperiencesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID},
 		{Name: "employer", Type: field.TypeString},
 		{Name: "position", Type: field.TypeString},
 		{Name: "time", Type: field.TypeString, Nullable: true},
@@ -84,7 +84,7 @@ var (
 	}
 	// InvitesColumns holds the columns for the "invites" table.
 	InvitesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID},
 		{Name: "email", Type: field.TypeString},
 		{Name: "key", Type: field.TypeString},
 		{Name: "registered", Type: field.TypeBool, Nullable: true, Default: false},
@@ -106,7 +106,7 @@ var (
 	}
 	// TechStacksColumns holds the columns for the "tech_stacks" table.
 	TechStacksColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID},
 		{Name: "stack", Type: field.TypeString, Unique: true},
 	}
 	// TechStacksTable holds the schema information for the "tech_stacks" table.
@@ -117,11 +117,11 @@ var (
 	}
 	// TechnologiesColumns holds the columns for the "technologies" table.
 	TechnologiesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID},
 		{Name: "name", Type: field.TypeString, Unique: true},
 		{Name: "url", Type: field.TypeString, Nullable: true},
 		{Name: "priority", Type: field.TypeInt32, Nullable: true},
-		{Name: "tech_stack_technology", Type: field.TypeInt, Nullable: true},
+		{Name: "tech_stack_technology", Type: field.TypeUUID, Nullable: true},
 	}
 	// TechnologiesTable holds the schema information for the "technologies" table.
 	TechnologiesTable = &schema.Table{
@@ -154,8 +154,8 @@ var (
 	}
 	// ApplicationTechnologiesColumns holds the columns for the "application_technologies" table.
 	ApplicationTechnologiesColumns = []*schema.Column{
-		{Name: "application_id", Type: field.TypeInt},
-		{Name: "technology_id", Type: field.TypeInt},
+		{Name: "application_id", Type: field.TypeUUID},
+		{Name: "technology_id", Type: field.TypeUUID},
 	}
 	// ApplicationTechnologiesTable holds the schema information for the "application_technologies" table.
 	ApplicationTechnologiesTable = &schema.Table{

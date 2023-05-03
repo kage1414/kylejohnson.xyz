@@ -9,13 +9,14 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // Education is the model entity for the Education schema.
 type Education struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
 	// School holds the value of the "school" field.
 	School string `json:"school,omitempty"`
 	// Time holds the value of the "time" field.
@@ -38,10 +39,12 @@ func (*Education) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case education.FieldActive:
 			values[i] = new(sql.NullBool)
-		case education.FieldID, education.FieldPriority:
+		case education.FieldPriority:
 			values[i] = new(sql.NullInt64)
 		case education.FieldSchool, education.FieldTime, education.FieldCertificate, education.FieldDegree:
 			values[i] = new(sql.NullString)
+		case education.FieldID:
+			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -58,11 +61,11 @@ func (e *Education) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case education.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				e.ID = *value
 			}
-			e.ID = int(value.Int64)
 		case education.FieldSchool:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field school", values[i])

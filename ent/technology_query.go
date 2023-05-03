@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // TechnologyQuery is the builder for querying Technology entities.
@@ -131,8 +132,8 @@ func (tq *TechnologyQuery) FirstX(ctx context.Context) *Technology {
 
 // FirstID returns the first Technology ID from the query.
 // Returns a *NotFoundError when no Technology ID was found.
-func (tq *TechnologyQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (tq *TechnologyQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = tq.Limit(1).IDs(setContextOp(ctx, tq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -144,7 +145,7 @@ func (tq *TechnologyQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (tq *TechnologyQuery) FirstIDX(ctx context.Context) int {
+func (tq *TechnologyQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := tq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -182,8 +183,8 @@ func (tq *TechnologyQuery) OnlyX(ctx context.Context) *Technology {
 // OnlyID is like Only, but returns the only Technology ID in the query.
 // Returns a *NotSingularError when more than one Technology ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (tq *TechnologyQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (tq *TechnologyQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = tq.Limit(2).IDs(setContextOp(ctx, tq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -199,7 +200,7 @@ func (tq *TechnologyQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (tq *TechnologyQuery) OnlyIDX(ctx context.Context) int {
+func (tq *TechnologyQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := tq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -227,7 +228,7 @@ func (tq *TechnologyQuery) AllX(ctx context.Context) []*Technology {
 }
 
 // IDs executes the query and returns a list of Technology IDs.
-func (tq *TechnologyQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (tq *TechnologyQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if tq.ctx.Unique == nil && tq.path != nil {
 		tq.Unique(true)
 	}
@@ -239,7 +240,7 @@ func (tq *TechnologyQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (tq *TechnologyQuery) IDsX(ctx context.Context) []int {
+func (tq *TechnologyQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := tq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -455,8 +456,8 @@ func (tq *TechnologyQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*T
 
 func (tq *TechnologyQuery) loadApplication(ctx context.Context, query *ApplicationQuery, nodes []*Technology, init func(*Technology), assign func(*Technology, *Application)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[int]*Technology)
-	nids := make(map[int]map[*Technology]struct{})
+	byID := make(map[uuid.UUID]*Technology)
+	nids := make(map[uuid.UUID]map[*Technology]struct{})
 	for i, node := range nodes {
 		edgeIDs[i] = node.ID
 		byID[node.ID] = node
@@ -485,11 +486,11 @@ func (tq *TechnologyQuery) loadApplication(ctx context.Context, query *Applicati
 				if err != nil {
 					return nil, err
 				}
-				return append([]any{new(sql.NullInt64)}, values...), nil
+				return append([]any{new(uuid.UUID)}, values...), nil
 			}
 			spec.Assign = func(columns []string, values []any) error {
-				outValue := int(values[0].(*sql.NullInt64).Int64)
-				inValue := int(values[1].(*sql.NullInt64).Int64)
+				outValue := *values[0].(*uuid.UUID)
+				inValue := *values[1].(*uuid.UUID)
 				if nids[inValue] == nil {
 					nids[inValue] = map[*Technology]struct{}{byID[outValue]: {}}
 					return assign(columns[1:], values[1:])
@@ -515,8 +516,8 @@ func (tq *TechnologyQuery) loadApplication(ctx context.Context, query *Applicati
 	return nil
 }
 func (tq *TechnologyQuery) loadStack(ctx context.Context, query *TechStackQuery, nodes []*Technology, init func(*Technology), assign func(*Technology, *TechStack)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Technology)
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*Technology)
 	for i := range nodes {
 		if nodes[i].tech_stack_technology == nil {
 			continue
@@ -557,7 +558,7 @@ func (tq *TechnologyQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (tq *TechnologyQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(technology.Table, technology.Columns, sqlgraph.NewFieldSpec(technology.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(technology.Table, technology.Columns, sqlgraph.NewFieldSpec(technology.FieldID, field.TypeUUID))
 	_spec.From = tq.sql
 	if unique := tq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

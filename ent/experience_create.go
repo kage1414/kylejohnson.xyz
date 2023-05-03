@@ -11,6 +11,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // ExperienceCreate is the builder for creating a Experience entity.
@@ -74,15 +75,29 @@ func (ec *ExperienceCreate) SetNillablePriority(i *int32) *ExperienceCreate {
 	return ec
 }
 
+// SetID sets the "id" field.
+func (ec *ExperienceCreate) SetID(u uuid.UUID) *ExperienceCreate {
+	ec.mutation.SetID(u)
+	return ec
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (ec *ExperienceCreate) SetNillableID(u *uuid.UUID) *ExperienceCreate {
+	if u != nil {
+		ec.SetID(*u)
+	}
+	return ec
+}
+
 // AddDescriptionIDs adds the "descriptions" edge to the Description entity by IDs.
-func (ec *ExperienceCreate) AddDescriptionIDs(ids ...int) *ExperienceCreate {
+func (ec *ExperienceCreate) AddDescriptionIDs(ids ...uuid.UUID) *ExperienceCreate {
 	ec.mutation.AddDescriptionIDs(ids...)
 	return ec
 }
 
 // AddDescriptions adds the "descriptions" edges to the Description entity.
 func (ec *ExperienceCreate) AddDescriptions(d ...*Description) *ExperienceCreate {
-	ids := make([]int, len(d))
+	ids := make([]uuid.UUID, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
@@ -128,6 +143,10 @@ func (ec *ExperienceCreate) defaults() {
 		v := experience.DefaultActive
 		ec.mutation.SetActive(v)
 	}
+	if _, ok := ec.mutation.ID(); !ok {
+		v := experience.DefaultID()
+		ec.mutation.SetID(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -152,8 +171,13 @@ func (ec *ExperienceCreate) sqlSave(ctx context.Context) (*Experience, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	ec.mutation.id = &_node.ID
 	ec.mutation.done = true
 	return _node, nil
@@ -162,8 +186,12 @@ func (ec *ExperienceCreate) sqlSave(ctx context.Context) (*Experience, error) {
 func (ec *ExperienceCreate) createSpec() (*Experience, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Experience{config: ec.config}
-		_spec = sqlgraph.NewCreateSpec(experience.Table, sqlgraph.NewFieldSpec(experience.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(experience.Table, sqlgraph.NewFieldSpec(experience.FieldID, field.TypeUUID))
 	)
+	if id, ok := ec.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
 	if value, ok := ec.mutation.Employer(); ok {
 		_spec.SetField(experience.FieldEmployer, field.TypeString, value)
 		_node.Employer = value
@@ -192,7 +220,7 @@ func (ec *ExperienceCreate) createSpec() (*Experience, *sqlgraph.CreateSpec) {
 			Columns: []string{experience.DescriptionsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(description.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(description.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -244,10 +272,6 @@ func (ecb *ExperienceCreateBulk) Save(ctx context.Context) ([]*Experience, error
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

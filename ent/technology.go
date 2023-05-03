@@ -10,13 +10,14 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // Technology is the model entity for the Technology schema.
 type Technology struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// URL holds the value of the "url" field.
@@ -26,7 +27,7 @@ type Technology struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TechnologyQuery when eager-loading is set.
 	Edges                 TechnologyEdges `json:"edges"`
-	tech_stack_technology *int
+	tech_stack_technology *uuid.UUID
 	selectValues          sql.SelectValues
 }
 
@@ -68,12 +69,14 @@ func (*Technology) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case technology.FieldID, technology.FieldPriority:
+		case technology.FieldPriority:
 			values[i] = new(sql.NullInt64)
 		case technology.FieldName, technology.FieldURL:
 			values[i] = new(sql.NullString)
+		case technology.FieldID:
+			values[i] = new(uuid.UUID)
 		case technology.ForeignKeys[0]: // tech_stack_technology
-			values[i] = new(sql.NullInt64)
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -90,11 +93,11 @@ func (t *Technology) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case technology.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				t.ID = *value
 			}
-			t.ID = int(value.Int64)
 		case technology.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -114,11 +117,11 @@ func (t *Technology) assignValues(columns []string, values []any) error {
 				t.Priority = int32(value.Int64)
 			}
 		case technology.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field tech_stack_technology", value)
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field tech_stack_technology", values[i])
 			} else if value.Valid {
-				t.tech_stack_technology = new(int)
-				*t.tech_stack_technology = int(value.Int64)
+				t.tech_stack_technology = new(uuid.UUID)
+				*t.tech_stack_technology = *value.S.(*uuid.UUID)
 			}
 		default:
 			t.selectValues.Set(columns[i], values[i])

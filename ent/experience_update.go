@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // ExperienceUpdate is the builder for updating Experience entities.
@@ -108,14 +109,14 @@ func (eu *ExperienceUpdate) ClearPriority() *ExperienceUpdate {
 }
 
 // AddDescriptionIDs adds the "descriptions" edge to the Description entity by IDs.
-func (eu *ExperienceUpdate) AddDescriptionIDs(ids ...int) *ExperienceUpdate {
+func (eu *ExperienceUpdate) AddDescriptionIDs(ids ...uuid.UUID) *ExperienceUpdate {
 	eu.mutation.AddDescriptionIDs(ids...)
 	return eu
 }
 
 // AddDescriptions adds the "descriptions" edges to the Description entity.
 func (eu *ExperienceUpdate) AddDescriptions(d ...*Description) *ExperienceUpdate {
-	ids := make([]int, len(d))
+	ids := make([]uuid.UUID, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
@@ -134,14 +135,14 @@ func (eu *ExperienceUpdate) ClearDescriptions() *ExperienceUpdate {
 }
 
 // RemoveDescriptionIDs removes the "descriptions" edge to Description entities by IDs.
-func (eu *ExperienceUpdate) RemoveDescriptionIDs(ids ...int) *ExperienceUpdate {
+func (eu *ExperienceUpdate) RemoveDescriptionIDs(ids ...uuid.UUID) *ExperienceUpdate {
 	eu.mutation.RemoveDescriptionIDs(ids...)
 	return eu
 }
 
 // RemoveDescriptions removes "descriptions" edges to Description entities.
 func (eu *ExperienceUpdate) RemoveDescriptions(d ...*Description) *ExperienceUpdate {
-	ids := make([]int, len(d))
+	ids := make([]uuid.UUID, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
@@ -176,7 +177,7 @@ func (eu *ExperienceUpdate) ExecX(ctx context.Context) {
 }
 
 func (eu *ExperienceUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(experience.Table, experience.Columns, sqlgraph.NewFieldSpec(experience.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(experience.Table, experience.Columns, sqlgraph.NewFieldSpec(experience.FieldID, field.TypeUUID))
 	if ps := eu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -219,7 +220,7 @@ func (eu *ExperienceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{experience.DescriptionsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(description.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(description.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -232,7 +233,7 @@ func (eu *ExperienceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{experience.DescriptionsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(description.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(description.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -248,7 +249,7 @@ func (eu *ExperienceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{experience.DescriptionsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(description.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(description.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -356,14 +357,14 @@ func (euo *ExperienceUpdateOne) ClearPriority() *ExperienceUpdateOne {
 }
 
 // AddDescriptionIDs adds the "descriptions" edge to the Description entity by IDs.
-func (euo *ExperienceUpdateOne) AddDescriptionIDs(ids ...int) *ExperienceUpdateOne {
+func (euo *ExperienceUpdateOne) AddDescriptionIDs(ids ...uuid.UUID) *ExperienceUpdateOne {
 	euo.mutation.AddDescriptionIDs(ids...)
 	return euo
 }
 
 // AddDescriptions adds the "descriptions" edges to the Description entity.
 func (euo *ExperienceUpdateOne) AddDescriptions(d ...*Description) *ExperienceUpdateOne {
-	ids := make([]int, len(d))
+	ids := make([]uuid.UUID, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
@@ -382,14 +383,14 @@ func (euo *ExperienceUpdateOne) ClearDescriptions() *ExperienceUpdateOne {
 }
 
 // RemoveDescriptionIDs removes the "descriptions" edge to Description entities by IDs.
-func (euo *ExperienceUpdateOne) RemoveDescriptionIDs(ids ...int) *ExperienceUpdateOne {
+func (euo *ExperienceUpdateOne) RemoveDescriptionIDs(ids ...uuid.UUID) *ExperienceUpdateOne {
 	euo.mutation.RemoveDescriptionIDs(ids...)
 	return euo
 }
 
 // RemoveDescriptions removes "descriptions" edges to Description entities.
 func (euo *ExperienceUpdateOne) RemoveDescriptions(d ...*Description) *ExperienceUpdateOne {
-	ids := make([]int, len(d))
+	ids := make([]uuid.UUID, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
@@ -437,7 +438,7 @@ func (euo *ExperienceUpdateOne) ExecX(ctx context.Context) {
 }
 
 func (euo *ExperienceUpdateOne) sqlSave(ctx context.Context) (_node *Experience, err error) {
-	_spec := sqlgraph.NewUpdateSpec(experience.Table, experience.Columns, sqlgraph.NewFieldSpec(experience.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(experience.Table, experience.Columns, sqlgraph.NewFieldSpec(experience.FieldID, field.TypeUUID))
 	id, ok := euo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Experience.id" for update`)}
@@ -497,7 +498,7 @@ func (euo *ExperienceUpdateOne) sqlSave(ctx context.Context) (_node *Experience,
 			Columns: []string{experience.DescriptionsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(description.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(description.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -510,7 +511,7 @@ func (euo *ExperienceUpdateOne) sqlSave(ctx context.Context) (_node *Experience,
 			Columns: []string{experience.DescriptionsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(description.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(description.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -526,7 +527,7 @@ func (euo *ExperienceUpdateOne) sqlSave(ctx context.Context) (_node *Experience,
 			Columns: []string{experience.DescriptionsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(description.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(description.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

@@ -7,50 +7,51 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.TechStack {
+func ID(id uuid.UUID) predicate.TechStack {
 	return predicate.TechStack(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.TechStack {
+func IDEQ(id uuid.UUID) predicate.TechStack {
 	return predicate.TechStack(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.TechStack {
+func IDNEQ(id uuid.UUID) predicate.TechStack {
 	return predicate.TechStack(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.TechStack {
+func IDIn(ids ...uuid.UUID) predicate.TechStack {
 	return predicate.TechStack(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.TechStack {
+func IDNotIn(ids ...uuid.UUID) predicate.TechStack {
 	return predicate.TechStack(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.TechStack {
+func IDGT(id uuid.UUID) predicate.TechStack {
 	return predicate.TechStack(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.TechStack {
+func IDGTE(id uuid.UUID) predicate.TechStack {
 	return predicate.TechStack(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.TechStack {
+func IDLT(id uuid.UUID) predicate.TechStack {
 	return predicate.TechStack(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.TechStack {
+func IDLTE(id uuid.UUID) predicate.TechStack {
 	return predicate.TechStack(sql.FieldLTE(FieldID, id))
 }
 

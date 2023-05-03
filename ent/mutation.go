@@ -19,6 +19,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 const (
@@ -45,18 +46,18 @@ type ApplicationMutation struct {
 	config
 	op                  Op
 	typ                 string
-	id                  *int
+	id                  *uuid.UUID
 	name                *string
 	url                 *string
 	active              *bool
 	priority            *int32
 	addpriority         *int32
 	clearedFields       map[string]struct{}
-	descriptions        map[int]struct{}
-	removeddescriptions map[int]struct{}
+	descriptions        map[uuid.UUID]struct{}
+	removeddescriptions map[uuid.UUID]struct{}
 	cleareddescriptions bool
-	technologies        map[int]struct{}
-	removedtechnologies map[int]struct{}
+	technologies        map[uuid.UUID]struct{}
+	removedtechnologies map[uuid.UUID]struct{}
 	clearedtechnologies bool
 	done                bool
 	oldValue            func(context.Context) (*Application, error)
@@ -83,7 +84,7 @@ func newApplicationMutation(c config, op Op, opts ...applicationOption) *Applica
 }
 
 // withApplicationID sets the ID field of the mutation.
-func withApplicationID(id int) applicationOption {
+func withApplicationID(id uuid.UUID) applicationOption {
 	return func(m *ApplicationMutation) {
 		var (
 			err   error
@@ -133,9 +134,15 @@ func (m ApplicationMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Application entities.
+func (m *ApplicationMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ApplicationMutation) ID() (id int, exists bool) {
+func (m *ApplicationMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -146,12 +153,12 @@ func (m *ApplicationMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ApplicationMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ApplicationMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -379,9 +386,9 @@ func (m *ApplicationMutation) ResetPriority() {
 }
 
 // AddDescriptionIDs adds the "descriptions" edge to the Description entity by ids.
-func (m *ApplicationMutation) AddDescriptionIDs(ids ...int) {
+func (m *ApplicationMutation) AddDescriptionIDs(ids ...uuid.UUID) {
 	if m.descriptions == nil {
-		m.descriptions = make(map[int]struct{})
+		m.descriptions = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.descriptions[ids[i]] = struct{}{}
@@ -399,9 +406,9 @@ func (m *ApplicationMutation) DescriptionsCleared() bool {
 }
 
 // RemoveDescriptionIDs removes the "descriptions" edge to the Description entity by IDs.
-func (m *ApplicationMutation) RemoveDescriptionIDs(ids ...int) {
+func (m *ApplicationMutation) RemoveDescriptionIDs(ids ...uuid.UUID) {
 	if m.removeddescriptions == nil {
-		m.removeddescriptions = make(map[int]struct{})
+		m.removeddescriptions = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.descriptions, ids[i])
@@ -410,7 +417,7 @@ func (m *ApplicationMutation) RemoveDescriptionIDs(ids ...int) {
 }
 
 // RemovedDescriptions returns the removed IDs of the "descriptions" edge to the Description entity.
-func (m *ApplicationMutation) RemovedDescriptionsIDs() (ids []int) {
+func (m *ApplicationMutation) RemovedDescriptionsIDs() (ids []uuid.UUID) {
 	for id := range m.removeddescriptions {
 		ids = append(ids, id)
 	}
@@ -418,7 +425,7 @@ func (m *ApplicationMutation) RemovedDescriptionsIDs() (ids []int) {
 }
 
 // DescriptionsIDs returns the "descriptions" edge IDs in the mutation.
-func (m *ApplicationMutation) DescriptionsIDs() (ids []int) {
+func (m *ApplicationMutation) DescriptionsIDs() (ids []uuid.UUID) {
 	for id := range m.descriptions {
 		ids = append(ids, id)
 	}
@@ -433,9 +440,9 @@ func (m *ApplicationMutation) ResetDescriptions() {
 }
 
 // AddTechnologyIDs adds the "technologies" edge to the Technology entity by ids.
-func (m *ApplicationMutation) AddTechnologyIDs(ids ...int) {
+func (m *ApplicationMutation) AddTechnologyIDs(ids ...uuid.UUID) {
 	if m.technologies == nil {
-		m.technologies = make(map[int]struct{})
+		m.technologies = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.technologies[ids[i]] = struct{}{}
@@ -453,9 +460,9 @@ func (m *ApplicationMutation) TechnologiesCleared() bool {
 }
 
 // RemoveTechnologyIDs removes the "technologies" edge to the Technology entity by IDs.
-func (m *ApplicationMutation) RemoveTechnologyIDs(ids ...int) {
+func (m *ApplicationMutation) RemoveTechnologyIDs(ids ...uuid.UUID) {
 	if m.removedtechnologies == nil {
-		m.removedtechnologies = make(map[int]struct{})
+		m.removedtechnologies = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.technologies, ids[i])
@@ -464,7 +471,7 @@ func (m *ApplicationMutation) RemoveTechnologyIDs(ids ...int) {
 }
 
 // RemovedTechnologies returns the removed IDs of the "technologies" edge to the Technology entity.
-func (m *ApplicationMutation) RemovedTechnologiesIDs() (ids []int) {
+func (m *ApplicationMutation) RemovedTechnologiesIDs() (ids []uuid.UUID) {
 	for id := range m.removedtechnologies {
 		ids = append(ids, id)
 	}
@@ -472,7 +479,7 @@ func (m *ApplicationMutation) RemovedTechnologiesIDs() (ids []int) {
 }
 
 // TechnologiesIDs returns the "technologies" edge IDs in the mutation.
-func (m *ApplicationMutation) TechnologiesIDs() (ids []int) {
+func (m *ApplicationMutation) TechnologiesIDs() (ids []uuid.UUID) {
 	for id := range m.technologies {
 		ids = append(ids, id)
 	}
@@ -825,15 +832,15 @@ type DescriptionMutation struct {
 	config
 	op                 Op
 	typ                string
-	id                 *int
+	id                 *uuid.UUID
 	description        *string
 	active             *bool
 	priority           *int32
 	addpriority        *int32
 	clearedFields      map[string]struct{}
-	experience         *int
+	experience         *uuid.UUID
 	clearedexperience  bool
-	application        *int
+	application        *uuid.UUID
 	clearedapplication bool
 	done               bool
 	oldValue           func(context.Context) (*Description, error)
@@ -860,7 +867,7 @@ func newDescriptionMutation(c config, op Op, opts ...descriptionOption) *Descrip
 }
 
 // withDescriptionID sets the ID field of the mutation.
-func withDescriptionID(id int) descriptionOption {
+func withDescriptionID(id uuid.UUID) descriptionOption {
 	return func(m *DescriptionMutation) {
 		var (
 			err   error
@@ -910,9 +917,15 @@ func (m DescriptionMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Description entities.
+func (m *DescriptionMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *DescriptionMutation) ID() (id int, exists bool) {
+func (m *DescriptionMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -923,12 +936,12 @@ func (m *DescriptionMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *DescriptionMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *DescriptionMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -1094,7 +1107,7 @@ func (m *DescriptionMutation) ResetPriority() {
 }
 
 // SetExperienceID sets the "experience" edge to the Experience entity by id.
-func (m *DescriptionMutation) SetExperienceID(id int) {
+func (m *DescriptionMutation) SetExperienceID(id uuid.UUID) {
 	m.experience = &id
 }
 
@@ -1109,7 +1122,7 @@ func (m *DescriptionMutation) ExperienceCleared() bool {
 }
 
 // ExperienceID returns the "experience" edge ID in the mutation.
-func (m *DescriptionMutation) ExperienceID() (id int, exists bool) {
+func (m *DescriptionMutation) ExperienceID() (id uuid.UUID, exists bool) {
 	if m.experience != nil {
 		return *m.experience, true
 	}
@@ -1119,7 +1132,7 @@ func (m *DescriptionMutation) ExperienceID() (id int, exists bool) {
 // ExperienceIDs returns the "experience" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // ExperienceID instead. It exists only for internal usage by the builders.
-func (m *DescriptionMutation) ExperienceIDs() (ids []int) {
+func (m *DescriptionMutation) ExperienceIDs() (ids []uuid.UUID) {
 	if id := m.experience; id != nil {
 		ids = append(ids, *id)
 	}
@@ -1133,7 +1146,7 @@ func (m *DescriptionMutation) ResetExperience() {
 }
 
 // SetApplicationID sets the "application" edge to the Application entity by id.
-func (m *DescriptionMutation) SetApplicationID(id int) {
+func (m *DescriptionMutation) SetApplicationID(id uuid.UUID) {
 	m.application = &id
 }
 
@@ -1148,7 +1161,7 @@ func (m *DescriptionMutation) ApplicationCleared() bool {
 }
 
 // ApplicationID returns the "application" edge ID in the mutation.
-func (m *DescriptionMutation) ApplicationID() (id int, exists bool) {
+func (m *DescriptionMutation) ApplicationID() (id uuid.UUID, exists bool) {
 	if m.application != nil {
 		return *m.application, true
 	}
@@ -1158,7 +1171,7 @@ func (m *DescriptionMutation) ApplicationID() (id int, exists bool) {
 // ApplicationIDs returns the "application" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // ApplicationID instead. It exists only for internal usage by the builders.
-func (m *DescriptionMutation) ApplicationIDs() (ids []int) {
+func (m *DescriptionMutation) ApplicationIDs() (ids []uuid.UUID) {
 	if id := m.application; id != nil {
 		ids = append(ids, *id)
 	}
@@ -1463,7 +1476,7 @@ type EducationMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int
+	id            *uuid.UUID
 	school        *string
 	time          *string
 	certificate   *string
@@ -1497,7 +1510,7 @@ func newEducationMutation(c config, op Op, opts ...educationOption) *EducationMu
 }
 
 // withEducationID sets the ID field of the mutation.
-func withEducationID(id int) educationOption {
+func withEducationID(id uuid.UUID) educationOption {
 	return func(m *EducationMutation) {
 		var (
 			err   error
@@ -1547,9 +1560,15 @@ func (m EducationMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Education entities.
+func (m *EducationMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *EducationMutation) ID() (id int, exists bool) {
+func (m *EducationMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -1560,12 +1579,12 @@ func (m *EducationMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *EducationMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *EducationMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -2194,7 +2213,7 @@ type ExperienceMutation struct {
 	config
 	op                  Op
 	typ                 string
-	id                  *int
+	id                  *uuid.UUID
 	employer            *string
 	position            *string
 	time                *string
@@ -2202,8 +2221,8 @@ type ExperienceMutation struct {
 	priority            *int32
 	addpriority         *int32
 	clearedFields       map[string]struct{}
-	descriptions        map[int]struct{}
-	removeddescriptions map[int]struct{}
+	descriptions        map[uuid.UUID]struct{}
+	removeddescriptions map[uuid.UUID]struct{}
 	cleareddescriptions bool
 	done                bool
 	oldValue            func(context.Context) (*Experience, error)
@@ -2230,7 +2249,7 @@ func newExperienceMutation(c config, op Op, opts ...experienceOption) *Experienc
 }
 
 // withExperienceID sets the ID field of the mutation.
-func withExperienceID(id int) experienceOption {
+func withExperienceID(id uuid.UUID) experienceOption {
 	return func(m *ExperienceMutation) {
 		var (
 			err   error
@@ -2280,9 +2299,15 @@ func (m ExperienceMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Experience entities.
+func (m *ExperienceMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ExperienceMutation) ID() (id int, exists bool) {
+func (m *ExperienceMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -2293,12 +2318,12 @@ func (m *ExperienceMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ExperienceMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ExperienceMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -2549,9 +2574,9 @@ func (m *ExperienceMutation) ResetPriority() {
 }
 
 // AddDescriptionIDs adds the "descriptions" edge to the Description entity by ids.
-func (m *ExperienceMutation) AddDescriptionIDs(ids ...int) {
+func (m *ExperienceMutation) AddDescriptionIDs(ids ...uuid.UUID) {
 	if m.descriptions == nil {
-		m.descriptions = make(map[int]struct{})
+		m.descriptions = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.descriptions[ids[i]] = struct{}{}
@@ -2569,9 +2594,9 @@ func (m *ExperienceMutation) DescriptionsCleared() bool {
 }
 
 // RemoveDescriptionIDs removes the "descriptions" edge to the Description entity by IDs.
-func (m *ExperienceMutation) RemoveDescriptionIDs(ids ...int) {
+func (m *ExperienceMutation) RemoveDescriptionIDs(ids ...uuid.UUID) {
 	if m.removeddescriptions == nil {
-		m.removeddescriptions = make(map[int]struct{})
+		m.removeddescriptions = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.descriptions, ids[i])
@@ -2580,7 +2605,7 @@ func (m *ExperienceMutation) RemoveDescriptionIDs(ids ...int) {
 }
 
 // RemovedDescriptions returns the removed IDs of the "descriptions" edge to the Description entity.
-func (m *ExperienceMutation) RemovedDescriptionsIDs() (ids []int) {
+func (m *ExperienceMutation) RemovedDescriptionsIDs() (ids []uuid.UUID) {
 	for id := range m.removeddescriptions {
 		ids = append(ids, id)
 	}
@@ -2588,7 +2613,7 @@ func (m *ExperienceMutation) RemovedDescriptionsIDs() (ids []int) {
 }
 
 // DescriptionsIDs returns the "descriptions" edge IDs in the mutation.
-func (m *ExperienceMutation) DescriptionsIDs() (ids []int) {
+func (m *ExperienceMutation) DescriptionsIDs() (ids []uuid.UUID) {
 	for id := range m.descriptions {
 		ids = append(ids, id)
 	}
@@ -2926,7 +2951,7 @@ type InviteMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int
+	id            *uuid.UUID
 	email         *string
 	key           *string
 	registered    *bool
@@ -2958,7 +2983,7 @@ func newInviteMutation(c config, op Op, opts ...inviteOption) *InviteMutation {
 }
 
 // withInviteID sets the ID field of the mutation.
-func withInviteID(id int) inviteOption {
+func withInviteID(id uuid.UUID) inviteOption {
 	return func(m *InviteMutation) {
 		var (
 			err   error
@@ -3008,9 +3033,15 @@ func (m InviteMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Invite entities.
+func (m *InviteMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *InviteMutation) ID() (id int, exists bool) {
+func (m *InviteMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -3021,12 +3052,12 @@ func (m *InviteMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *InviteMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *InviteMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -3449,11 +3480,11 @@ type TechStackMutation struct {
 	config
 	op                Op
 	typ               string
-	id                *int
+	id                *uuid.UUID
 	stack             *string
 	clearedFields     map[string]struct{}
-	technology        map[int]struct{}
-	removedtechnology map[int]struct{}
+	technology        map[uuid.UUID]struct{}
+	removedtechnology map[uuid.UUID]struct{}
 	clearedtechnology bool
 	done              bool
 	oldValue          func(context.Context) (*TechStack, error)
@@ -3480,7 +3511,7 @@ func newTechStackMutation(c config, op Op, opts ...techstackOption) *TechStackMu
 }
 
 // withTechStackID sets the ID field of the mutation.
-func withTechStackID(id int) techstackOption {
+func withTechStackID(id uuid.UUID) techstackOption {
 	return func(m *TechStackMutation) {
 		var (
 			err   error
@@ -3530,9 +3561,15 @@ func (m TechStackMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of TechStack entities.
+func (m *TechStackMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *TechStackMutation) ID() (id int, exists bool) {
+func (m *TechStackMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -3543,12 +3580,12 @@ func (m *TechStackMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *TechStackMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *TechStackMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -3595,9 +3632,9 @@ func (m *TechStackMutation) ResetStack() {
 }
 
 // AddTechnologyIDs adds the "technology" edge to the Technology entity by ids.
-func (m *TechStackMutation) AddTechnologyIDs(ids ...int) {
+func (m *TechStackMutation) AddTechnologyIDs(ids ...uuid.UUID) {
 	if m.technology == nil {
-		m.technology = make(map[int]struct{})
+		m.technology = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.technology[ids[i]] = struct{}{}
@@ -3615,9 +3652,9 @@ func (m *TechStackMutation) TechnologyCleared() bool {
 }
 
 // RemoveTechnologyIDs removes the "technology" edge to the Technology entity by IDs.
-func (m *TechStackMutation) RemoveTechnologyIDs(ids ...int) {
+func (m *TechStackMutation) RemoveTechnologyIDs(ids ...uuid.UUID) {
 	if m.removedtechnology == nil {
-		m.removedtechnology = make(map[int]struct{})
+		m.removedtechnology = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.technology, ids[i])
@@ -3626,7 +3663,7 @@ func (m *TechStackMutation) RemoveTechnologyIDs(ids ...int) {
 }
 
 // RemovedTechnology returns the removed IDs of the "technology" edge to the Technology entity.
-func (m *TechStackMutation) RemovedTechnologyIDs() (ids []int) {
+func (m *TechStackMutation) RemovedTechnologyIDs() (ids []uuid.UUID) {
 	for id := range m.removedtechnology {
 		ids = append(ids, id)
 	}
@@ -3634,7 +3671,7 @@ func (m *TechStackMutation) RemovedTechnologyIDs() (ids []int) {
 }
 
 // TechnologyIDs returns the "technology" edge IDs in the mutation.
-func (m *TechStackMutation) TechnologyIDs() (ids []int) {
+func (m *TechStackMutation) TechnologyIDs() (ids []uuid.UUID) {
 	for id := range m.technology {
 		ids = append(ids, id)
 	}
@@ -3868,16 +3905,16 @@ type TechnologyMutation struct {
 	config
 	op                 Op
 	typ                string
-	id                 *int
+	id                 *uuid.UUID
 	name               *string
 	url                *string
 	priority           *int32
 	addpriority        *int32
 	clearedFields      map[string]struct{}
-	application        map[int]struct{}
-	removedapplication map[int]struct{}
+	application        map[uuid.UUID]struct{}
+	removedapplication map[uuid.UUID]struct{}
 	clearedapplication bool
-	stack              *int
+	stack              *uuid.UUID
 	clearedstack       bool
 	done               bool
 	oldValue           func(context.Context) (*Technology, error)
@@ -3904,7 +3941,7 @@ func newTechnologyMutation(c config, op Op, opts ...technologyOption) *Technolog
 }
 
 // withTechnologyID sets the ID field of the mutation.
-func withTechnologyID(id int) technologyOption {
+func withTechnologyID(id uuid.UUID) technologyOption {
 	return func(m *TechnologyMutation) {
 		var (
 			err   error
@@ -3954,9 +3991,15 @@ func (m TechnologyMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Technology entities.
+func (m *TechnologyMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *TechnologyMutation) ID() (id int, exists bool) {
+func (m *TechnologyMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -3967,12 +4010,12 @@ func (m *TechnologyMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *TechnologyMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *TechnologyMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -4138,9 +4181,9 @@ func (m *TechnologyMutation) ResetPriority() {
 }
 
 // AddApplicationIDs adds the "application" edge to the Application entity by ids.
-func (m *TechnologyMutation) AddApplicationIDs(ids ...int) {
+func (m *TechnologyMutation) AddApplicationIDs(ids ...uuid.UUID) {
 	if m.application == nil {
-		m.application = make(map[int]struct{})
+		m.application = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.application[ids[i]] = struct{}{}
@@ -4158,9 +4201,9 @@ func (m *TechnologyMutation) ApplicationCleared() bool {
 }
 
 // RemoveApplicationIDs removes the "application" edge to the Application entity by IDs.
-func (m *TechnologyMutation) RemoveApplicationIDs(ids ...int) {
+func (m *TechnologyMutation) RemoveApplicationIDs(ids ...uuid.UUID) {
 	if m.removedapplication == nil {
-		m.removedapplication = make(map[int]struct{})
+		m.removedapplication = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.application, ids[i])
@@ -4169,7 +4212,7 @@ func (m *TechnologyMutation) RemoveApplicationIDs(ids ...int) {
 }
 
 // RemovedApplication returns the removed IDs of the "application" edge to the Application entity.
-func (m *TechnologyMutation) RemovedApplicationIDs() (ids []int) {
+func (m *TechnologyMutation) RemovedApplicationIDs() (ids []uuid.UUID) {
 	for id := range m.removedapplication {
 		ids = append(ids, id)
 	}
@@ -4177,7 +4220,7 @@ func (m *TechnologyMutation) RemovedApplicationIDs() (ids []int) {
 }
 
 // ApplicationIDs returns the "application" edge IDs in the mutation.
-func (m *TechnologyMutation) ApplicationIDs() (ids []int) {
+func (m *TechnologyMutation) ApplicationIDs() (ids []uuid.UUID) {
 	for id := range m.application {
 		ids = append(ids, id)
 	}
@@ -4192,7 +4235,7 @@ func (m *TechnologyMutation) ResetApplication() {
 }
 
 // SetStackID sets the "stack" edge to the TechStack entity by id.
-func (m *TechnologyMutation) SetStackID(id int) {
+func (m *TechnologyMutation) SetStackID(id uuid.UUID) {
 	m.stack = &id
 }
 
@@ -4207,7 +4250,7 @@ func (m *TechnologyMutation) StackCleared() bool {
 }
 
 // StackID returns the "stack" edge ID in the mutation.
-func (m *TechnologyMutation) StackID() (id int, exists bool) {
+func (m *TechnologyMutation) StackID() (id uuid.UUID, exists bool) {
 	if m.stack != nil {
 		return *m.stack, true
 	}
@@ -4217,7 +4260,7 @@ func (m *TechnologyMutation) StackID() (id int, exists bool) {
 // StackIDs returns the "stack" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // StackID instead. It exists only for internal usage by the builders.
-func (m *TechnologyMutation) StackIDs() (ids []int) {
+func (m *TechnologyMutation) StackIDs() (ids []uuid.UUID) {
 	if id := m.stack; id != nil {
 		ids = append(ids, *id)
 	}
@@ -4539,8 +4582,8 @@ type UserMutation struct {
 	salt          *string
 	name          *string
 	clearedFields map[string]struct{}
-	invite        map[int]struct{}
-	removedinvite map[int]struct{}
+	invite        map[uuid.UUID]struct{}
+	removedinvite map[uuid.UUID]struct{}
 	clearedinvite bool
 	done          bool
 	oldValue      func(context.Context) (*User, error)
@@ -4839,9 +4882,9 @@ func (m *UserMutation) ResetName() {
 }
 
 // AddInviteIDs adds the "invite" edge to the Invite entity by ids.
-func (m *UserMutation) AddInviteIDs(ids ...int) {
+func (m *UserMutation) AddInviteIDs(ids ...uuid.UUID) {
 	if m.invite == nil {
-		m.invite = make(map[int]struct{})
+		m.invite = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.invite[ids[i]] = struct{}{}
@@ -4859,9 +4902,9 @@ func (m *UserMutation) InviteCleared() bool {
 }
 
 // RemoveInviteIDs removes the "invite" edge to the Invite entity by IDs.
-func (m *UserMutation) RemoveInviteIDs(ids ...int) {
+func (m *UserMutation) RemoveInviteIDs(ids ...uuid.UUID) {
 	if m.removedinvite == nil {
-		m.removedinvite = make(map[int]struct{})
+		m.removedinvite = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.invite, ids[i])
@@ -4870,7 +4913,7 @@ func (m *UserMutation) RemoveInviteIDs(ids ...int) {
 }
 
 // RemovedInvite returns the removed IDs of the "invite" edge to the Invite entity.
-func (m *UserMutation) RemovedInviteIDs() (ids []int) {
+func (m *UserMutation) RemovedInviteIDs() (ids []uuid.UUID) {
 	for id := range m.removedinvite {
 		ids = append(ids, id)
 	}
@@ -4878,7 +4921,7 @@ func (m *UserMutation) RemovedInviteIDs() (ids []int) {
 }
 
 // InviteIDs returns the "invite" edge IDs in the mutation.
-func (m *UserMutation) InviteIDs() (ids []int) {
+func (m *UserMutation) InviteIDs() (ids []uuid.UUID) {
 	for id := range m.invite {
 		ids = append(ids, id)
 	}

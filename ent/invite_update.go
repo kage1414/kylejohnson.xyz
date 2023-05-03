@@ -121,7 +121,7 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := iu.check(); err != nil {
 		return n, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(invite.Table, invite.Columns, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(invite.Table, invite.Columns, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeUUID))
 	if ps := iu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -296,7 +296,7 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 	if err := iuo.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(invite.Table, invite.Columns, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(invite.Table, invite.Columns, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeUUID))
 	id, ok := iuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Invite.id" for update`)}

@@ -40,7 +40,7 @@ func (id *InviteDelete) ExecX(ctx context.Context) int {
 }
 
 func (id *InviteDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(invite.Table, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewDeleteSpec(invite.Table, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeUUID))
 	if ps := id.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

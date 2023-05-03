@@ -173,7 +173,7 @@ func (eu *EducationUpdate) ExecX(ctx context.Context) {
 }
 
 func (eu *EducationUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(education.Table, education.Columns, sqlgraph.NewFieldSpec(education.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(education.Table, education.Columns, sqlgraph.NewFieldSpec(education.FieldID, field.TypeUUID))
 	if ps := eu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -396,7 +396,7 @@ func (euo *EducationUpdateOne) ExecX(ctx context.Context) {
 }
 
 func (euo *EducationUpdateOne) sqlSave(ctx context.Context) (_node *Education, err error) {
-	_spec := sqlgraph.NewUpdateSpec(education.Table, education.Columns, sqlgraph.NewFieldSpec(education.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(education.Table, education.Columns, sqlgraph.NewFieldSpec(education.FieldID, field.TypeUUID))
 	id, ok := euo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Education.id" for update`)}
