@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"kylejohnson-xyz/db"
@@ -80,6 +79,5 @@ func mapToStruct(a []*ent.Application, ctx context.Context) []ApplicationItem {
 		j = append(j, s)
 	}
 
-	fmt.Println(j)
 	return j
 }

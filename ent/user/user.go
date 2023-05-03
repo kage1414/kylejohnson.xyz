@@ -5,6 +5,7 @@ package user
 import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 const (
@@ -14,12 +15,10 @@ const (
 	FieldID = "id"
 	// FieldUsername holds the string denoting the username field in the database.
 	FieldUsername = "username"
+	// FieldPasswordHash holds the string denoting the password_hash field in the database.
+	FieldPasswordHash = "password_hash"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
-	// FieldHash holds the string denoting the hash field in the database.
-	FieldHash = "hash"
-	// FieldSalt holds the string denoting the salt field in the database.
-	FieldSalt = "salt"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// EdgeInvite holds the string denoting the invite edge name in mutations.
@@ -39,9 +38,8 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldUsername,
+	FieldPasswordHash,
 	FieldEmail,
-	FieldHash,
-	FieldSalt,
 	FieldName,
 }
 
@@ -54,6 +52,11 @@ func ValidColumn(column string) bool {
 	}
 	return false
 }
+
+var (
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
+)
 
 // OrderOption defines the ordering options for the User queries.
 type OrderOption func(*sql.Selector)
@@ -68,19 +71,14 @@ func ByUsername(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUsername, opts...).ToFunc()
 }
 
+// ByPasswordHash orders the results by the password_hash field.
+func ByPasswordHash(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPasswordHash, opts...).ToFunc()
+}
+
 // ByEmail orders the results by the email field.
 func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmail, opts...).ToFunc()
-}
-
-// ByHash orders the results by the hash field.
-func ByHash(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldHash, opts...).ToFunc()
-}
-
-// BySalt orders the results by the salt field.
-func BySalt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSalt, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

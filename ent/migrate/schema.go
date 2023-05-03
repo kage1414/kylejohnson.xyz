@@ -85,10 +85,10 @@ var (
 	// InvitesColumns holds the columns for the "invites" table.
 	InvitesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
-		{Name: "email", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString, Unique: true},
 		{Name: "key", Type: field.TypeString},
 		{Name: "registered", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "user_invite", Type: field.TypeInt},
+		{Name: "user_invite", Type: field.TypeUUID, Nullable: true},
 	}
 	// InvitesTable holds the schema information for the "invites" table.
 	InvitesTable = &schema.Table{
@@ -100,7 +100,7 @@ var (
 				Symbol:     "invites_users_invite",
 				Columns:    []*schema.Column{InvitesColumns[4]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.SetNull,
 			},
 		},
 	}
@@ -139,11 +139,10 @@ var (
 	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "username", Type: field.TypeString},
-		{Name: "email", Type: field.TypeString},
-		{Name: "hash", Type: field.TypeString},
-		{Name: "salt", Type: field.TypeString},
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "username", Type: field.TypeString, Unique: true},
+		{Name: "password_hash", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString, Unique: true},
 		{Name: "name", Type: field.TypeString, Nullable: true},
 	}
 	// UsersTable holds the schema information for the "users" table.

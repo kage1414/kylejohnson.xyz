@@ -11,6 +11,7 @@ import (
 	"kylejohnson-xyz/ent/schema"
 	"kylejohnson-xyz/ent/technology"
 	"kylejohnson-xyz/ent/techstack"
+	"kylejohnson-xyz/ent/user"
 
 	"github.com/google/uuid"
 )
@@ -81,4 +82,10 @@ func init() {
 	technologyDescID := technologyFields[0].Descriptor()
 	// technology.DefaultID holds the default value on creation for the id field.
 	technology.DefaultID = technologyDescID.Default.(func() uuid.UUID)
+	userFields := schema.User{}.Fields()
+	_ = userFields
+	// userDescID is the schema descriptor for id field.
+	userDescID := userFields[0].Descriptor()
+	// user.DefaultID holds the default value on creation for the id field.
+	user.DefaultID = userDescID.Default.(func() uuid.UUID)
 }

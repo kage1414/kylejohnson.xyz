@@ -410,8 +410,8 @@ func (iq *InviteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Invit
 }
 
 func (iq *InviteQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*Invite, init func(*Invite), assign func(*Invite, *User)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Invite)
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*Invite)
 	for i := range nodes {
 		if nodes[i].user_invite == nil {
 			continue

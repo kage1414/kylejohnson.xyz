@@ -62,8 +62,16 @@ func (ic *InviteCreate) SetNillableID(u *uuid.UUID) *InviteCreate {
 }
 
 // SetUserID sets the "user" edge to the User entity by ID.
-func (ic *InviteCreate) SetUserID(id int) *InviteCreate {
+func (ic *InviteCreate) SetUserID(id uuid.UUID) *InviteCreate {
 	ic.mutation.SetUserID(id)
+	return ic
+}
+
+// SetNillableUserID sets the "user" edge to the User entity by ID if the given value is not nil.
+func (ic *InviteCreate) SetNillableUserID(id *uuid.UUID) *InviteCreate {
+	if id != nil {
+		ic = ic.SetUserID(*id)
+	}
 	return ic
 }
 
@@ -125,9 +133,6 @@ func (ic *InviteCreate) check() error {
 	if _, ok := ic.mutation.Key(); !ok {
 		return &ValidationError{Name: "key", err: errors.New(`ent: missing required field "Invite.key"`)}
 	}
-	if _, ok := ic.mutation.UserID(); !ok {
-		return &ValidationError{Name: "user", err: errors.New(`ent: missing required edge "Invite.user"`)}
-	}
 	return nil
 }
 
@@ -183,7 +188,7 @@ func (ic *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 			Columns: []string{invite.UserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

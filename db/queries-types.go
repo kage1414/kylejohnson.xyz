@@ -3,10 +3,11 @@ package db
 import "github.com/google/uuid"
 
 type TUpdateUser struct {
-	Username string  `json:"username"`
-	Hash     string  `json:"hash"`
-	Salt     string  `json:"salt"`
-	Name     *string `json:"name,omitempty"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	// Hash     string  `json:"hash"`
+	// Salt     string  `json:"salt"`
+	Name *string `json:"name,omitempty"`
 }
 
 type TSetRegisteredInvite struct {
@@ -39,12 +40,12 @@ type TCreateInvite struct {
 }
 
 type TAddUser struct {
-	Username string    `json:"username"`
-	Hash     string    `json:"hash"`
-	Salt     string    `json:"salt"`
-	Name     *string   `json:"name,omitempty"`
-	Email    string    `json:"email"`
-	InviteId uuid.UUID `json:"invite_id"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	// Hash     string    `json:"hash"`
+	// Salt     string    `json:"salt"`
+	Name  *string `json:"name,omitempty"`
+	Email string  `json:"email"`
 }
 
 type TUpdateTechnology struct {

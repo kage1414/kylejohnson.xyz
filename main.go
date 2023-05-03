@@ -12,13 +12,15 @@ import (
 func setupRoutes(r *gin.Engine) {
 	client := db.GetClient()
 	ctx := context.Background()
+	script(ctx, client)
 	api.Application(r, ctx, client)
 	api.Applications(r, ctx, client)
 	api.Seed(r, ctx, client)
+	api.SignupEndpoint(r, ctx, client)
+	api.LoginEndpoint(r, ctx, client)
 }
 
 func main() {
-	script()
 	r := gin.Default()
 	setupRoutes(r)
 	r.Run("localhost:8080")

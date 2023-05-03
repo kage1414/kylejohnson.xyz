@@ -27,7 +27,7 @@ type Invite struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the InviteQuery when eager-loading is set.
 	Edges        InviteEdges `json:"edges"`
-	user_invite  *int
+	user_invite  *uuid.UUID
 	selectValues sql.SelectValues
 }
 
@@ -65,7 +65,7 @@ func (*Invite) scanValues(columns []string) ([]any, error) {
 		case invite.FieldID:
 			values[i] = new(uuid.UUID)
 		case invite.ForeignKeys[0]: // user_invite
-			values[i] = new(sql.NullInt64)
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -106,11 +106,11 @@ func (i *Invite) assignValues(columns []string, values []any) error {
 				i.Registered = value.Bool
 			}
 		case invite.ForeignKeys[0]:
-			if value, ok := values[j].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field user_invite", value)
+			if value, ok := values[j].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field user_invite", values[j])
 			} else if value.Valid {
-				i.user_invite = new(int)
-				*i.user_invite = int(value.Int64)
+				i.user_invite = new(uuid.UUID)
+				*i.user_invite = *value.S.(*uuid.UUID)
 			}
 		default:
 			i.selectValues.Set(columns[j], values[j])

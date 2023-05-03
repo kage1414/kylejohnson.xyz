@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // InviteUpdate is the builder for updating Invite entities.
@@ -61,8 +62,16 @@ func (iu *InviteUpdate) ClearRegistered() *InviteUpdate {
 }
 
 // SetUserID sets the "user" edge to the User entity by ID.
-func (iu *InviteUpdate) SetUserID(id int) *InviteUpdate {
+func (iu *InviteUpdate) SetUserID(id uuid.UUID) *InviteUpdate {
 	iu.mutation.SetUserID(id)
+	return iu
+}
+
+// SetNillableUserID sets the "user" edge to the User entity by ID if the given value is not nil.
+func (iu *InviteUpdate) SetNillableUserID(id *uuid.UUID) *InviteUpdate {
+	if id != nil {
+		iu = iu.SetUserID(*id)
+	}
 	return iu
 }
 
@@ -109,18 +118,7 @@ func (iu *InviteUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (iu *InviteUpdate) check() error {
-	if _, ok := iu.mutation.UserID(); iu.mutation.UserCleared() && !ok {
-		return errors.New(`ent: clearing a required unique edge "Invite.user"`)
-	}
-	return nil
-}
-
 func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := iu.check(); err != nil {
-		return n, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(invite.Table, invite.Columns, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeUUID))
 	if ps := iu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -149,7 +147,7 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{invite.UserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -162,7 +160,7 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{invite.UserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -223,8 +221,16 @@ func (iuo *InviteUpdateOne) ClearRegistered() *InviteUpdateOne {
 }
 
 // SetUserID sets the "user" edge to the User entity by ID.
-func (iuo *InviteUpdateOne) SetUserID(id int) *InviteUpdateOne {
+func (iuo *InviteUpdateOne) SetUserID(id uuid.UUID) *InviteUpdateOne {
 	iuo.mutation.SetUserID(id)
+	return iuo
+}
+
+// SetNillableUserID sets the "user" edge to the User entity by ID if the given value is not nil.
+func (iuo *InviteUpdateOne) SetNillableUserID(id *uuid.UUID) *InviteUpdateOne {
+	if id != nil {
+		iuo = iuo.SetUserID(*id)
+	}
 	return iuo
 }
 
@@ -284,18 +290,7 @@ func (iuo *InviteUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (iuo *InviteUpdateOne) check() error {
-	if _, ok := iuo.mutation.UserID(); iuo.mutation.UserCleared() && !ok {
-		return errors.New(`ent: clearing a required unique edge "Invite.user"`)
-	}
-	return nil
-}
-
 func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err error) {
-	if err := iuo.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(invite.Table, invite.Columns, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeUUID))
 	id, ok := iuo.mutation.ID()
 	if !ok {
@@ -341,7 +336,7 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 			Columns: []string{invite.UserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -354,7 +349,7 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 			Columns: []string{invite.UserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

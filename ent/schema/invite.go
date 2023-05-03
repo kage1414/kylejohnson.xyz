@@ -15,7 +15,7 @@ func (Invite) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).
 			Default(uuid.New),
-		field.String("email"),
+		field.String("email").Unique(),
 		field.String("key"),
 		field.Bool("registered").Optional().Default(false),
 	}
@@ -23,6 +23,6 @@ func (Invite) Fields() []ent.Field {
 
 func (Invite) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("user", User.Type).Ref("invite").Unique().Required(),
+		edge.From("user", User.Type).Ref("invite").Unique(),
 	}
 }

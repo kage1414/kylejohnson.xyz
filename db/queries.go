@@ -2,6 +2,8 @@ package db
 
 import (
 	"context"
+	"html"
+	"strings"
 
 	"kylejohnson-xyz/ent"
 	"kylejohnson-xyz/ent/application"
@@ -10,6 +12,7 @@ import (
 	"kylejohnson-xyz/ent/user"
 
 	"entgo.io/ent/dialect/sql"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func AddApplication(ctx context.Context, client *ent.Client, p TAddApplication) *ent.Application {
@@ -250,19 +253,47 @@ func UpdateTechnology(
 	return t
 }
 
-func AddUser(ctx context.Context, client *ent.Client, p TAddUser) *ent.User {
-	i := client.Invite.Query().Where(func(s *sql.Selector) {
-		s.Where(sql.InValues(invite.FieldID, p.InviteId))
-	}).FirstX(ctx)
-	u := client.User.Create().
+type BeforeSaveInput struct {
+	Username *string `json:"username"`
+	Password *string `json:"password"`
+}
+
+func beforeSave(p BeforeSaveInput) error {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(*p.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	password := string(hashedPassword)
+	username := *p.Username
+
+	trimmed := html.EscapeString(strings.TrimSpace(username))
+	*p.Username = trimmed
+	*p.Password = password
+	return nil
+}
+
+func AddUser(ctx context.Context, client *ent.Client, p TAddUser) (*ent.User, error) {
+	i, err := client.Invite.Query().Where(func(s *sql.Selector) {
+		s.Where(sql.InValues(invite.FieldEmail, p.Email))
+	}).First(ctx)
+	if err != nil {
+		return nil, err
+	}
+	hashErr := beforeSave(BeforeSaveInput{
+		Username: &p.Username,
+		Password: &p.Password,
+	})
+	if hashErr != nil {
+		return nil, hashErr
+	}
+	u, err := client.User.Create().
 		SetUsername(p.Username).
-		SetHash(p.Hash).
-		SetSalt(p.Salt).
+		SetPasswordHash(p.Password).
 		SetNillableName(p.Name).
 		SetEmail(p.Email).
 		AddInvite(i).
-		SaveX(ctx)
-	return u
+		Save(ctx)
+	return u, err
 }
 
 func CreateInvite(ctx context.Context, client *ent.Client, p TCreateInvite) *ent.Invite {
@@ -278,7 +309,7 @@ func DeleteInvite(ctx context.Context, client *ent.Client, p TDeleteInvite) {
 }
 
 func DeleteUser(ctx context.Context, client *ent.Client, p TDeleteUser) {
-	u := GetUser(ctx, client, TGetUser(p))
+	u, _ := GetUser(ctx, client, TGetUser(p))
 	client.User.DeleteOne(u).ExecX(ctx)
 }
 
@@ -294,18 +325,16 @@ func GetInvite(ctx context.Context, client *ent.Client, p TGetInvite) *ent.Invit
 	return i
 }
 
-func GetUser(ctx context.Context, client *ent.Client, p TGetUser) *ent.User {
-	u := client.User.Query().Where(func(s *sql.Selector) {
-		s.Where(sql.InValues(user.FieldUsername, p.Username))
-	}).FirstX(ctx)
-	return u
+func GetUser(ctx context.Context, client *ent.Client, p TGetUser) (*ent.User, error) {
+	u, err := client.User.Query().Where(user.UsernameContains(p.Username)).Only(ctx)
+	return u, err
 }
 
-func GetUserById(ctx context.Context, client *ent.Client, p TGetUserById) *ent.User {
-	u := client.User.Query().Where(func(s *sql.Selector) {
+func GetUserById(ctx context.Context, client *ent.Client, p TGetUserById) (*ent.User, error) {
+	u, err := client.User.Query().Where(func(s *sql.Selector) {
 		s.Where(sql.InValues(user.FieldID, p.Id))
-	}).FirstX(ctx)
-	return u
+	}).Only(ctx)
+	return u, err
 }
 
 func SetRegisteredInvite(ctx context.Context, client *ent.Client, p TSetRegisteredInvite) {
@@ -313,7 +342,23 @@ func SetRegisteredInvite(ctx context.Context, client *ent.Client, p TSetRegister
 	i.Update().SetRegistered(true).SaveX(ctx)
 }
 
-func UpdateUser(ctx context.Context, client *ent.Client, p TUpdateUser) {
-	u := GetUser(ctx, client, TGetUser{Username: p.Username})
-	u.Update().SetHash(p.Hash).SetSalt(p.Salt).SetNillableName(p.Name).SaveX(ctx)
+func UpdateUser(ctx context.Context, client *ent.Client, p TUpdateUser) error {
+	u, err := GetUser(ctx, client, TGetUser{Username: p.Username})
+	if err != nil {
+		return err
+	}
+	hashErr := beforeSave(BeforeSaveInput{
+		Username: &p.Username,
+		Password: &p.Password,
+	})
+	if hashErr != nil {
+		return hashErr
+	}
+	u.Update().
+		SetPasswordHash(p.Password).
+		// .SetHash(p.Hash)
+		// .SetSalt(p.Salt)
+		SetNillableName(p.Name).
+		SaveX(ctx)
+	return nil
 }
