@@ -15,11 +15,13 @@ func setupRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 	api.Applications(r, ctx, client)
 	api.Signup(r, ctx, client)
 	api.Login(r, ctx, client)
+	api.Description(r, ctx, client)
 }
 
 func setupProtectedRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 	api.ApplicationProtected(r, ctx, client)
 	api.SeedProtected(r, ctx, client)
+	api.DescriptionProtected(r, ctx, client)
 }
 
 func main() {
