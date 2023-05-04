@@ -1,12 +1,12 @@
-import { auth } from 'middleware';
-import nextConnect from 'next-connect';
+import { auth } from "middleware";
+import nextConnect from "next-connect";
 
 import {
   createUser,
   deleteUser,
   findUserByUsername,
   updateUserByUsername,
-} from '../../lib/db';
+} from "../../ui/src/lib/db";
 
 const handler = nextConnect();
 
@@ -26,13 +26,13 @@ handler
   .post((req, res) => {
     const { username, password, name } = req.body;
     createUser({ username, password, name });
-    res.status(200).json({ success: true, message: 'created new user' });
+    res.status(200).json({ success: true, message: "created new user" });
   })
   .use((req, res, next) => {
     // handlers after this (PUT, DELETE) all require an authenticated user
     // This middleware to check if user is authenticated before continuing
     if (!req.user) {
-      res.status(401).send('unauthenticated');
+      res.status(401).send("unauthenticated");
     } else {
       next();
     }

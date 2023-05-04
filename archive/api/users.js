@@ -1,14 +1,14 @@
-import { auth } from 'middleware';
-import nextConnect from 'next-connect';
+import { auth } from "middleware";
+import nextConnect from "next-connect";
 
-import { createUser } from '../../lib/db';
+import { createUser } from "../../ui/src/lib/db";
 
 const handler = nextConnect();
 
 handler.use(auth).post(async (req, res, next) => {
   const { username, password, fullname, email, key } = req.body;
   if (!username || !password || !fullname || !email) {
-    return res.status(400).send('Missing fields');
+    return res.status(400).send("Missing fields");
   }
   const user = {
     username,
