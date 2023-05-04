@@ -15,35 +15,35 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func AddApplication(ctx context.Context, client *ent.Client, p TAddApplication) *ent.Application {
-	a := client.Application.Create().
+func AddApplication(ctx context.Context, client *ent.Client, p TAddApplication) (*ent.Application, error) {
+	a, err := client.Application.Create().
 		SetNillableName(p.Name).
 		SetNillableURL(p.Url).
 		SetNillablePriority(p.Priority).
 		SetNillableActive(p.Active).
-		SaveX(ctx)
-	return a
+		Save(ctx)
+	return a, err
 }
 
 func AddApplicationDescription(
 	ctx context.Context,
 	client *ent.Client,
 	p TAddApplicationDescription,
-) *ent.Application {
-	t := client.Application.UpdateOneID(p.ApplicationId).
+) (*ent.Application, error) {
+	t, err := client.Application.UpdateOneID(p.ApplicationId).
 		AddDescriptionIDs(p.DescriptionId).
-		SaveX(ctx)
-	return t
+		Save(ctx)
+	return t, err
 }
 
 func AddApplicationTechnology(
 	ctx context.Context,
 	client *ent.Client,
 	p TAddApplicationTechnology,
-) *ent.Technology {
-	t := client.Technology.Create().SetName(p.Name).SaveX(ctx)
-	client.Application.UpdateOneID(p.Id).AddTechnologies(t).SaveX(ctx)
-	return t
+) (*ent.Technology, error) {
+	t, err := client.Technology.Create().SetName(p.Name).Save(ctx)
+	client.Application.UpdateOneID(p.Id).AddTechnologies(t).Save(ctx)
+	return t, err
 }
 
 func DeleteApplication(ctx context.Context, client *ent.Client, p TDeleteApplication) error {
@@ -60,9 +60,9 @@ func RemoveApplicationTechnology(
 	ctx context.Context,
 	client *ent.Client,
 	p TRemoveApplicationTechnology,
-) *ent.Application {
-	a := client.Application.UpdateOneID(p.Id).RemoveTechnologyIDs(p.TechnologyId).SaveX(ctx)
-	return a
+) (*ent.Application, error) {
+	a, err := client.Application.UpdateOneID(p.Id).RemoveTechnologyIDs(p.TechnologyId).Save(ctx)
+	return a, err
 }
 
 func UpdateApplication(
@@ -79,46 +79,48 @@ func UpdateApplication(
 	return a
 }
 
-func AddDescription(ctx context.Context, client *ent.Client, p TAddDescription) *ent.Description {
-	d := client.Description.Create().SetDescription(p.Description).SaveX(ctx)
-	return d
+func AddDescription(ctx context.Context, client *ent.Client, p TAddDescription) (*ent.Description, error) {
+	d, err := client.Description.Create().SetDescription(p.Description).Save(ctx)
+	return d, err
 }
 
-func DeleteDescription(ctx context.Context, client *ent.Client, p TDeleteDescription) {
-	client.Description.DeleteOneID(p.Id).ExecX(ctx)
+func DeleteDescription(ctx context.Context, client *ent.Client, p TDeleteDescription) error {
+	err := client.Description.DeleteOneID(p.Id).Exec(ctx)
+	return err
 }
 
-func GetDescription(ctx context.Context, client *ent.Client, p TGetDescription) *ent.Description {
-	d, _ := client.Description.Get(ctx, p.Id)
-	return d
+func GetDescription(ctx context.Context, client *ent.Client, p TGetDescription) (*ent.Description, error) {
+	d, err := client.Description.Get(ctx, p.Id)
+	return d, err
 }
 
 func UpdateDescription(
 	ctx context.Context,
 	client *ent.Client,
 	p TUpdateDescription,
-) *ent.Description {
-	d := client.Description.UpdateOneID(p.Id).
+) (*ent.Description, error) {
+	d, err := client.Description.UpdateOneID(p.Id).
 		SetDescription(p.Description).
 		SetNillablePriority(p.Priority).
-		SaveX(ctx)
-	return d
+		Save(ctx)
+	return d, err
 }
 
-func AddEducation(ctx context.Context, client *ent.Client, p TAddEducation) *ent.Education {
-	e := client.Education.Create().
+func AddEducation(ctx context.Context, client *ent.Client, p TAddEducation) (*ent.Education, error) {
+	e, err := client.Education.Create().
 		SetSchool(p.School).
 		SetNillableTime(p.Time).
 		SetNillableCertificate(p.Certificate).
 		SetNillableDegree(p.Degree).
 		SetNillableActive(p.Active).
 		SetNillablePriority(p.Priority).
-		SaveX(ctx)
-	return e
+		Save(ctx)
+	return e, err
 }
 
-func DeleteEducation(ctx context.Context, client *ent.Client, p TDeleteEducation) {
-	client.Education.DeleteOneID(p.Id).ExecX(ctx)
+func DeleteEducation(ctx context.Context, client *ent.Client, p TDeleteEducation) error {
+	err := client.Education.DeleteOneID(p.Id).Exec(ctx)
+	return err
 }
 
 func GetAllEducations(ctx context.Context, client *ent.Client) []*ent.Education {
@@ -126,42 +128,43 @@ func GetAllEducations(ctx context.Context, client *ent.Client) []*ent.Education 
 	return items
 }
 
-func UpdateEducation(ctx context.Context, client *ent.Client, p TUpdateEducation) *ent.Education {
-	e := client.Education.UpdateOneID(p.Id).
+func UpdateEducation(ctx context.Context, client *ent.Client, p TUpdateEducation) (*ent.Education, error) {
+	e, err := client.Education.UpdateOneID(p.Id).
 		SetSchool(p.School).
 		SetNillableTime(p.Time).
 		SetNillableCertificate(p.Certificate).
 		SetNillableDegree(p.Degree).
 		SetNillableActive(p.Active).
 		SetNillablePriority(p.Priority).
-		SaveX(ctx)
-	return e
+		Save(ctx)
+	return e, err
 }
 
-func AddExperience(ctx context.Context, client *ent.Client, p TAddExperience) *ent.Experience {
-	e := client.Experience.Create().
+func AddExperience(ctx context.Context, client *ent.Client, p TAddExperience) (*ent.Experience, error) {
+	e, err := client.Experience.Create().
 		SetEmployer(p.Employer).
 		SetNillableTime(p.Time).
 		SetPosition(p.Position).
 		SetNillableActive(p.Active).
 		SetNillablePriority(p.Priority).
-		SaveX(ctx)
-	return e
+		Save(ctx)
+	return e, err
 }
 
 func AddExperienceDescription(
 	ctx context.Context,
 	client *ent.Client,
 	p TAddExperienceDescription,
-) *ent.Experience {
-	e := client.Experience.UpdateOneID(p.ExperienceId).
+) (*ent.Experience, error) {
+	e, err := client.Experience.UpdateOneID(p.ExperienceId).
 		AddDescriptionIDs(p.DescriptionId).
-		SaveX(ctx)
-	return e
+		Save(ctx)
+	return e, err
 }
 
-func DeleteExperience(ctx context.Context, client *ent.Client, p TDeleteExperience) {
-	client.Experience.DeleteOneID(p.Id).ExecX(ctx)
+func DeleteExperience(ctx context.Context, client *ent.Client, p TDeleteExperience) error {
+	err := client.Experience.DeleteOneID(p.Id).Exec(ctx)
+	return err
 }
 
 func GetAllExperiences(ctx context.Context, client *ent.Client) []*ent.Experience {
@@ -173,15 +176,15 @@ func UpdateExperience(
 	ctx context.Context,
 	client *ent.Client,
 	p TUpdateExperience,
-) *ent.Experience {
-	e := client.Experience.UpdateOneID(p.Id).
+) (*ent.Experience, error) {
+	e, err := client.Experience.UpdateOneID(p.Id).
 		SetEmployer(p.Employer).
 		SetNillableTime(p.Time).
 		SetPosition(p.Position).
 		SetNillableActive(p.Active).
 		SetNillablePriority(p.Priority).
-		SaveX(ctx)
-	return e
+		Save(ctx)
+	return e, err
 }
 
 func SnapshotApplications(ctx context.Context, client *ent.Client) []*ent.Application {
@@ -204,53 +207,54 @@ func SnapshotTechnologies(ctx context.Context, client *ent.Client) []*ent.Techno
 	return items
 }
 
-func AddTechnology(ctx context.Context, client *ent.Client, p TAddTechnology) *ent.Technology {
+func AddTechnology(ctx context.Context, client *ent.Client, p TAddTechnology) (*ent.Technology, error) {
 	s := client.TechStack.Query().Where(func(s *sql.Selector) {
 		s.Where(sql.InValues(techstack.FieldStack, p.Stack))
 	}).FirstX(ctx)
-	t := client.Technology.Create().
+	t, err := client.Technology.Create().
 		SetName(p.Name).
 		SetNillableURL(p.Url).
 		SetNillablePriority(p.Priority).
 		SetStack(s).
-		SaveX(ctx)
-	return t
+		Save(ctx)
+	return t, err
 }
 
-func DeleteTechnology(ctx context.Context, client *ent.Client, p TDeleteTechnology) {
-	client.Technology.DeleteOneID(p.Id).ExecX(ctx)
+func DeleteTechnology(ctx context.Context, client *ent.Client, p TDeleteTechnology) error {
+	err := client.Technology.DeleteOneID(p.Id).Exec(ctx)
+	return err
 }
 
-func GetAllTechnicalSkills(ctx context.Context, client *ent.Client) []*ent.TechStack {
-	t := client.TechStack.Query().AllX(ctx)
-	return t
+func GetAllTechnicalSkills(ctx context.Context, client *ent.Client) ([]*ent.TechStack, error) {
+	t, err := client.TechStack.Query().All(ctx)
+	return t, err
 }
 
-func GetAllTechnologies(ctx context.Context, client *ent.Client) []*ent.Technology {
-	t := client.Technology.Query().AllX(ctx)
-	return t
+func GetAllTechnologies(ctx context.Context, client *ent.Client) ([]*ent.Technology, error) {
+	t, err := client.Technology.Query().All(ctx)
+	return t, err
 }
 
-func GetTechStacks(ctx context.Context, client *ent.Client) []*ent.TechStack {
-	t := client.TechStack.Query().AllX(ctx)
-	return t
+func GetTechStacks(ctx context.Context, client *ent.Client) ([]*ent.TechStack, error) {
+	t, err := client.TechStack.Query().All(ctx)
+	return t, err
 }
 
 func UpdateTechnology(
 	ctx context.Context,
 	client *ent.Client,
 	p TUpdateTechnology,
-) *ent.Technology {
+) (*ent.Technology, error) {
 	s := client.TechStack.Query().Where(func(s *sql.Selector) {
 		s.Where(sql.InValues(techstack.FieldStack, p.Stack))
 	}).FirstX(ctx)
-	t := client.Technology.UpdateOneID(p.Id).
+	t, err := client.Technology.UpdateOneID(p.Id).
 		SetName(p.Name).
 		SetNillableURL(p.Url).
 		SetNillablePriority(p.Priority).
 		SetStack(s).
-		SaveX(ctx)
-	return t
+		Save(ctx)
+	return t, err
 }
 
 type BeforeSaveInput struct {
@@ -296,21 +300,23 @@ func AddUser(ctx context.Context, client *ent.Client, p TAddUser) (*ent.User, er
 	return u, err
 }
 
-func CreateInvite(ctx context.Context, client *ent.Client, p TCreateInvite) *ent.Invite {
-	i := client.Invite.Create().SetEmail(p.Email).SetKey(p.Key).SaveX(ctx)
-	return i
+func CreateInvite(ctx context.Context, client *ent.Client, p TCreateInvite) (*ent.Invite, error) {
+	i, err := client.Invite.Create().SetEmail(p.Email).SetKey(p.Key).Save(ctx)
+	return i, err
 }
 
-func DeleteInvite(ctx context.Context, client *ent.Client, p TDeleteInvite) {
+func DeleteInvite(ctx context.Context, client *ent.Client, p TDeleteInvite) error {
 	i := client.Invite.Query().Where(func(s *sql.Selector) {
 		s.Where(sql.InValues(invite.FieldKey, p.Key))
 	}).FirstX(ctx)
-	client.Invite.DeleteOne(i).ExecX(ctx)
+	err := client.Invite.DeleteOne(i).Exec(ctx)
+	return err
 }
 
-func DeleteUser(ctx context.Context, client *ent.Client, p TDeleteUser) {
+func DeleteUser(ctx context.Context, client *ent.Client, p TDeleteUser) error {
 	u, _ := GetUser(ctx, client, TGetUser(p))
-	client.User.DeleteOne(u).ExecX(ctx)
+	err := client.User.DeleteOne(u).Exec(ctx)
+	return err
 }
 
 func GetAllUsers(ctx context.Context, client *ent.Client) []*ent.User {
@@ -339,7 +345,7 @@ func GetUserById(ctx context.Context, client *ent.Client, p TGetUserById) (*ent.
 
 func SetRegisteredInvite(ctx context.Context, client *ent.Client, p TSetRegisteredInvite) {
 	i := GetInvite(ctx, client, TGetInvite(p))
-	i.Update().SetRegistered(true).SaveX(ctx)
+	i.Update().SetRegistered(true).Save(ctx)
 }
 
 func UpdateUser(ctx context.Context, client *ent.Client, p TUpdateUser) error {
@@ -359,6 +365,6 @@ func UpdateUser(ctx context.Context, client *ent.Client, p TUpdateUser) error {
 		// .SetHash(p.Hash)
 		// .SetSalt(p.Salt)
 		SetNillableName(p.Name).
-		SaveX(ctx)
+		Save(ctx)
 	return nil
 }
