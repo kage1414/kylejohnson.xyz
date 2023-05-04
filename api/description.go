@@ -71,7 +71,11 @@ func DescriptionProtected(r *gin.RouterGroup, ctx context.Context, client *ent.C
 			c.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
-		d, err := db.UpdateDescription(ctx, client, desc)
+		d, dErr := db.UpdateDescription(ctx, client, desc)
+		if dErr != nil {
+			c.AbortWithError(http.StatusBadRequest, dErr)
+			return
+		}
 		c.JSON(http.StatusOK, gin.H{"data": d})
 	})
 
@@ -93,7 +97,7 @@ func DescriptionProtected(r *gin.RouterGroup, ctx context.Context, client *ent.C
 			return
 		}
 		switch descriptionRequestBody.Link {
-		case "experience":
+		case experience:
 			_, eErr := db.AddExperienceDescription(ctx, client, db.TAddExperienceDescription{
 				ExperienceId:  id,
 				DescriptionId: d.ID,
@@ -103,7 +107,7 @@ func DescriptionProtected(r *gin.RouterGroup, ctx context.Context, client *ent.C
 				return
 			}
 			c.JSON(http.StatusOK, gin.H{"data": d})
-		case "application":
+		case application:
 			_, aErr := db.AddApplicationDescription(ctx, client, db.TAddApplicationDescription{
 				ApplicationId: id,
 				DescriptionId: d.ID,
