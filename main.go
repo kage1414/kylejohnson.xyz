@@ -28,6 +28,9 @@ func setupProtectedRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.C
 	api.EducationProtected(r, ctx, client)
 	api.ExperienceProtected(r, ctx, client)
 	api.InviteProtected(r, ctx, client)
+	api.UserProtected(r, ctx, client)
+	api.LogoutProtected(r, ctx, client)
+	api.SnapshotProtected(r, ctx, client)
 }
 
 func main() {
