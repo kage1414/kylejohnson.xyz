@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UserProtected(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
+func User(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 	ROUTE := "/user"
 
 	r.GET(ROUTE, func(c *gin.Context) {
