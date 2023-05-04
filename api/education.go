@@ -17,8 +17,20 @@ type PostBody = db.TAddEducation
 
 type DeleteBody = db.TDeleteEducation
 
+func Education(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
+	ROUTE := "/education"
+	r.GET(ROUTE, func(c *gin.Context) {
+		e, err := db.GetAllEducations(ctx, client)
+		if err != nil {
+			c.AbortWithError(http.StatusBadRequest, err)
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"data": e})
+	})
+}
+
 func EducationProtected(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
-	ROUTE := "education"
+	ROUTE := "/education"
 
 	r.PUT(ROUTE, func(c *gin.Context) {
 		var body PutBody

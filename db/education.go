@@ -38,9 +38,9 @@ func DeleteEducation(ctx context.Context, client *ent.Client, p TDeleteEducation
 	return err
 }
 
-func GetAllEducations(ctx context.Context, client *ent.Client) []*ent.Education {
-	items, _ := client.Education.Query().All(ctx)
-	return items
+func GetAllEducations(ctx context.Context, client *ent.Client) ([]*ent.Education, error) {
+	items, err := client.Education.Query().All(ctx)
+	return items, err
 }
 
 type TUpdateEducation struct {

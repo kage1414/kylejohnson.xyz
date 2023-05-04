@@ -16,6 +16,7 @@ func setupRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 	api.Signup(r, ctx, client)
 	api.Login(r, ctx, client)
 	api.Description(r, ctx, client)
+	api.Education(r, ctx, client)
 }
 
 func setupProtectedRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
