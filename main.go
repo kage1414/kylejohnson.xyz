@@ -28,11 +28,11 @@ func main() {
 	ctx := context.Background()
 	script(ctx, client)
 
-	public := r.Group("/api")
+	api := r.Group("/api")
 
-	setupRoutes(public, ctx, client)
-	public.Use(middleware.JwtAuthMiddleware())
-	setupProtectedRoutes(public, ctx, client)
+	setupRoutes(api, ctx, client)
+	api.Use(middleware.JwtAuthMiddleware())
+	setupProtectedRoutes(api, ctx, client)
 
 	r.Run("localhost:8080")
 }
