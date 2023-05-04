@@ -11,16 +11,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type putEducationBody = db.TUpdateEducation
-
-type postEducationBody = db.TAddEducation
-
-type deleteEducationBody = db.TDeleteEducation
-
-func Education(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
-	ROUTE := "/education"
+func Experience(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
+	ROUTE := "/experience"
 	r.GET(ROUTE, func(c *gin.Context) {
-		e, err := db.GetAllEducations(ctx, client)
+		e, err := db.GetAllExperiences(ctx, client)
 		if err != nil {
 			c.AbortWithError(http.StatusBadRequest, err)
 			return
@@ -29,17 +23,23 @@ func Education(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 	})
 }
 
-func EducationProtected(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
-	ROUTE := "/education"
+type (
+	putExperienceBody    = db.TUpdateExperience
+	postExperienceBody   = db.TAddExperience
+	deleteExperienceBody = db.TDeleteExperience
+)
+
+func ExperienceProtected(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
+	ROUTE := "/experience"
 
 	r.PUT(ROUTE, func(c *gin.Context) {
-		var body putEducationBody
+		var body putExperienceBody
 		err := json.NewDecoder(c.Request.Body).Decode(&body)
 		if err != nil {
 			c.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
-		e, eErr := db.UpdateEducation(ctx, client, body)
+		e, eErr := db.UpdateExperience(ctx, client, body)
 		if eErr != nil {
 			c.AbortWithError(http.StatusBadRequest, err)
 			return
@@ -48,13 +48,13 @@ func EducationProtected(r *gin.RouterGroup, ctx context.Context, client *ent.Cli
 	})
 
 	r.POST(ROUTE, func(c *gin.Context) {
-		var body postEducationBody
+		var body postExperienceBody
 		err := json.NewDecoder(c.Request.Body).Decode(&body)
 		if err != nil {
 			c.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
-		e, eErr := db.AddEducation(ctx, client, body)
+		e, eErr := db.AddExperience(ctx, client, body)
 		if eErr != nil {
 			c.AbortWithError(http.StatusBadRequest, err)
 			return
@@ -63,13 +63,13 @@ func EducationProtected(r *gin.RouterGroup, ctx context.Context, client *ent.Cli
 	})
 
 	r.DELETE(ROUTE, func(c *gin.Context) {
-		var body deleteEducationBody
+		var body deleteExperienceBody
 		err := json.NewDecoder(c.Request.Body).Decode(&body)
 		if err != nil {
 			c.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
-		eErr := db.DeleteEducation(ctx, client, body)
+		eErr := db.DeleteExperience(ctx, client, body)
 		if eErr != nil {
 			c.AbortWithError(http.StatusBadRequest, err)
 			return

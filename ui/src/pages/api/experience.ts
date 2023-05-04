@@ -33,16 +33,6 @@ async function experienceModifier(req: NextApiRequest, res: NextApiResponse) {
   const { body, method } = req;
   const { id, employer, position, time, active, priority } = body;
   switch (method) {
-    case 'GET':
-      await getAllExperiences(client)
-        .then((value) => {
-          res.status(200).json(value);
-        })
-        .catch((error) => {
-          res.write(JSON.stringify(error));
-          res.status(400);
-        });
-      break;
     case 'PUT':
       if (!id) {
         res.status(400);

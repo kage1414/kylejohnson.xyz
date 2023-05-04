@@ -17,6 +17,7 @@ func setupRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 	api.Login(r, ctx, client)
 	api.Description(r, ctx, client)
 	api.Education(r, ctx, client)
+	api.Experience(r, ctx, client)
 }
 
 func setupProtectedRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
@@ -24,6 +25,7 @@ func setupProtectedRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.C
 	api.SeedProtected(r, ctx, client)
 	api.DescriptionProtected(r, ctx, client)
 	api.EducationProtected(r, ctx, client)
+	api.ExperienceProtected(r, ctx, client)
 }
 
 func main() {

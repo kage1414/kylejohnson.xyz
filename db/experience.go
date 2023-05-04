@@ -52,9 +52,9 @@ func DeleteExperience(ctx context.Context, client *ent.Client, p TDeleteExperien
 	return err
 }
 
-func GetAllExperiences(ctx context.Context, client *ent.Client) []*ent.Experience {
-	items, _ := client.Experience.Query().All(ctx)
-	return items
+func GetAllExperiences(ctx context.Context, client *ent.Client) ([]*ent.Experience, error) {
+	items, err := client.Experience.Query().All(ctx)
+	return items, err
 }
 
 type TUpdateExperience struct {
