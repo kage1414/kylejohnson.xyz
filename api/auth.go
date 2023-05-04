@@ -12,22 +12,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func CurrentUser(c *gin.Context, ctx context.Context, client *ent.Client) {
-	user_id, err := token.ExtractTokenID(c)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	u, err := db.GetUserById(ctx, client, db.TGetUserById{Id: user_id})
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"message": "success", "data": u})
-}
-
 type SignupInput struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
