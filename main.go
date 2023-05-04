@@ -21,6 +21,7 @@ func setupRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 	api.Experience(r, ctx, client)
 	api.TechStacks(r, ctx, client)
 	api.TechnicalSkills(r, ctx, client)
+	api.Technology(r, ctx, client)
 }
 
 func setupProtectedRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
@@ -33,6 +34,7 @@ func setupProtectedRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.C
 	api.UserProtected(r, ctx, client)
 	api.LogoutProtected(r, ctx, client)
 	api.SnapshotProtected(r, ctx, client)
+	api.TechnologyProtected(r, ctx, client)
 }
 
 func main() {
