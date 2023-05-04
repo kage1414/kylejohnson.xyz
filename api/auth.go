@@ -58,29 +58,6 @@ func Signup(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 	})
 }
 
-type LoginInput struct {
-	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required"`
-}
-
-func Login(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
-	r.POST("/login", func(c *gin.Context) {
-		var input LoginInput
-		if err := c.ShouldBindJSON(&input); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-
-		token, err := LoginCheck(input.Username, input.Password, ctx, client)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{"token": token})
-	})
-}
-
 func LoginCheck(username string, password string, ctx context.Context, client *ent.Client) (string, error) {
 	var err error
 
