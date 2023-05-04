@@ -22,6 +22,7 @@ func setupProtectedRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.C
 	api.ApplicationProtected(r, ctx, client)
 	api.SeedProtected(r, ctx, client)
 	api.DescriptionProtected(r, ctx, client)
+	api.EducationProtected(r, ctx, client)
 }
 
 func main() {
