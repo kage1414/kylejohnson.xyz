@@ -33,8 +33,8 @@ type ApplicationItem struct {
 	Priority     int32             `json:"priority"`
 }
 
-func Applications(r *gin.Engine, ctx context.Context, client *ent.Client) {
-	ROUTE := "/api/applications"
+func Applications(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
+	ROUTE := "/applications"
 
 	r.GET(ROUTE, func(c *gin.Context) {
 		a := db.GetAllApplications(ctx, client)

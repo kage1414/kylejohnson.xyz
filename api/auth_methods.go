@@ -35,8 +35,8 @@ type SignupInput struct {
 	Name     string `json:"name"`
 }
 
-func SignupEndpoint(r *gin.Engine, ctx context.Context, client *ent.Client) {
-	r.POST("/api/signup", func(c *gin.Context) {
+func Signup(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
+	r.POST("/signup", func(c *gin.Context) {
 		var input SignupInput
 
 		if err := c.ShouldBindJSON(&input); err != nil {
@@ -63,8 +63,8 @@ type LoginInput struct {
 	Password string `json:"password" binding:"required"`
 }
 
-func LoginEndpoint(r *gin.Engine, ctx context.Context, client *ent.Client) {
-	r.POST("/api/login", func(c *gin.Context) {
+func Login(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
+	r.POST("/login", func(c *gin.Context) {
 		var input LoginInput
 		if err := c.ShouldBindJSON(&input); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

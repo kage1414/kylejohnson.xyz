@@ -5,23 +5,34 @@ import (
 
 	"kylejohnson-xyz/api"
 	"kylejohnson-xyz/db"
+	"kylejohnson-xyz/ent"
+	"kylejohnson-xyz/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
-func setupRoutes(r *gin.Engine) {
-	client := db.GetClient()
-	ctx := context.Background()
-	script(ctx, client)
-	api.Application(r, ctx, client)
+func setupRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 	api.Applications(r, ctx, client)
-	api.Seed(r, ctx, client)
-	api.SignupEndpoint(r, ctx, client)
-	api.LoginEndpoint(r, ctx, client)
+	api.Signup(r, ctx, client)
+	api.Login(r, ctx, client)
+}
+
+func setupProtectedRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
+	api.ApplicationProtected(r, ctx, client)
+	api.SeedProtected(r, ctx, client)
 }
 
 func main() {
 	r := gin.Default()
-	setupRoutes(r)
+	client := db.GetClient()
+	ctx := context.Background()
+	script(ctx, client)
+
+	public := r.Group("/api")
+
+	setupRoutes(public, ctx, client)
+	public.Use(middleware.JwtAuthMiddleware())
+	setupProtectedRoutes(public, ctx, client)
+
 	r.Run("localhost:8080")
 }

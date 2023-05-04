@@ -343,6 +343,10 @@ func GetUserById(ctx context.Context, client *ent.Client, p TGetUserById) (*ent.
 	return u, err
 }
 
+func PrepareGive(u *ent.User) {
+	u.PasswordHash = ""
+}
+
 func SetRegisteredInvite(ctx context.Context, client *ent.Client, p TSetRegisteredInvite) {
 	i := GetInvite(ctx, client, TGetInvite(p))
 	i.Update().SetRegistered(true).Save(ctx)

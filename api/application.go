@@ -11,8 +11,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Application(r *gin.Engine, ctx context.Context, client *ent.Client) {
-	ROUTE := "/api/application"
+func ApplicationProtected(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
+	ROUTE := "/application"
 
 	r.PUT(ROUTE, func(c *gin.Context) {
 		var p db.TUpdateApplication
@@ -34,7 +34,10 @@ func Application(r *gin.Engine, ctx context.Context, client *ent.Client) {
 			c.AbortWithError(http.StatusNotAcceptable, err)
 			return
 		}
-		a := db.AddApplication(ctx, client, p)
+		a, err := db.AddApplication(ctx, client, p)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}
 
 		c.JSON(http.StatusOK, gin.H{"data": a})
 	})
