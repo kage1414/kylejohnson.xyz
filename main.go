@@ -9,6 +9,7 @@ import (
 	"kylejohnson-xyz/middleware"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func setupRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
@@ -26,9 +27,14 @@ func setupProtectedRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.C
 	api.DescriptionProtected(r, ctx, client)
 	api.EducationProtected(r, ctx, client)
 	api.ExperienceProtected(r, ctx, client)
+	api.InviteProtected(r, ctx, client)
 }
 
 func main() {
+	err := godotenv.Load(".env")
+	if err != nil {
+		return
+	}
 	r := gin.Default()
 	client := db.GetClient()
 	ctx := context.Background()
