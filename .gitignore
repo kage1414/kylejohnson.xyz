@@ -37,6 +37,7 @@ ui/dbschema/edgeql-js
 ui/dbschema/interfaces/*
 ui/dbschema/queries/*
 *.pem
+ui/.next
 
 # debug
 npm-debug.log*
