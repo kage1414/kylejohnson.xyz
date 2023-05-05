@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 
+	"kylejohnson-xyz/api_types"
 	"kylejohnson-xyz/ent"
 	"kylejohnson-xyz/ent/application"
 
@@ -26,16 +27,6 @@ type TechnologyItem struct {
 	Id       uuid.UUID `json:"id"`
 	Url      string    `json:"url"`
 	Priority int32     `json:"priority"`
-}
-
-type ApplicationJSON struct {
-	Id           uuid.UUID         `json:"id"`
-	Name         string            `json:"name"`
-	Url          string            `json:"url"`
-	Active       bool              `json:"active"`
-	Descriptions []DescriptionJSON `json:"descriptions"`
-	Technologies []TechnologyJSON  `json:"technologies"`
-	Priority     int32             `json:"priority"`
 }
 
 func AddApplication(ctx context.Context, client *ent.Client, p TAddApplication) (*ent.Application, error) {
@@ -88,7 +79,7 @@ func DeleteApplication(ctx context.Context, client *ent.Client, p TDeleteApplica
 	return err
 }
 
-func GetAllApplications(ctx context.Context, client *ent.Client) []ApplicationJSON {
+func GetAllApplications(ctx context.Context, client *ent.Client) []api_types.ApplicationJSON {
 	items, _ := client.Application.Query().Order(ent.Asc(application.FieldPriority)).All(ctx)
 	return mapApplicationEntSliceToJSON(items, ctx)
 }
@@ -102,7 +93,7 @@ func RemoveApplicationTechnology(
 	ctx context.Context,
 	client *ent.Client,
 	p TRemoveApplicationTechnology,
-) (ApplicationJSON, error) {
+) (api_types.ApplicationJSON, error) {
 	a, err := client.Application.UpdateOneID(p.Id).RemoveTechnologyIDs(p.TechnologyId).Save(ctx)
 	return mapApplicationEntToJSON(a, ctx), err
 }
@@ -119,7 +110,7 @@ func UpdateApplication(
 	ctx context.Context,
 	client *ent.Client,
 	p TUpdateApplication,
-) ApplicationJSON {
+) api_types.ApplicationJSON {
 	a, _ := client.Application.UpdateOneID(p.Id).
 		SetNillableName(p.Name).
 		SetNillableURL(p.Url).
@@ -129,20 +120,20 @@ func UpdateApplication(
 	return mapApplicationEntToJSON(a, ctx)
 }
 
-func mapApplicationEntToJSON(x *ent.Application, ctx context.Context) ApplicationJSON {
+func mapApplicationEntToJSON(x *ent.Application, ctx context.Context) api_types.ApplicationJSON {
 	d := x.QueryDescriptions().AllX(ctx)
-	descriptions := []DescriptionJSON{}
+	descriptions := []api_types.DescriptionJSON{}
 	for _, y := range d {
 		i := mapDescriptionEntToJSON(y)
 		descriptions = append(descriptions, i)
 	}
 	t := x.QueryTechnologies().AllX(ctx)
-	technologies := []TechnologyJSON{}
+	technologies := []api_types.TechnologyJSON{}
 	for _, z := range t {
 		i := mapTechnologyEntToJSON(z)
 		technologies = append(technologies, i)
 	}
-	s := ApplicationJSON{
+	s := api_types.ApplicationJSON{
 		Id:           x.ID,
 		Name:         x.Name,
 		Url:          x.URL,
@@ -154,8 +145,8 @@ func mapApplicationEntToJSON(x *ent.Application, ctx context.Context) Applicatio
 	return s
 }
 
-func mapApplicationEntSliceToJSON(a []*ent.Application, ctx context.Context) []ApplicationJSON {
-	j := []ApplicationJSON{}
+func mapApplicationEntSliceToJSON(a []*ent.Application, ctx context.Context) []api_types.ApplicationJSON {
+	j := []api_types.ApplicationJSON{}
 
 	for _, x := range a {
 		s := mapApplicationEntToJSON(x, ctx)

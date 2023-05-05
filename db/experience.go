@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 
+	"kylejohnson-xyz/api_types"
 	"kylejohnson-xyz/ent"
 
 	"github.com/google/uuid"
@@ -16,7 +17,7 @@ type TAddExperience struct {
 	Priority *int32  `json:"priority,omitempty"`
 }
 
-func AddExperience(ctx context.Context, client *ent.Client, p TAddExperience) (ExperienceJSON, error) {
+func AddExperience(ctx context.Context, client *ent.Client, p TAddExperience) (api_types.ExperienceJSON, error) {
 	e, err := client.Experience.Create().
 		SetEmployer(p.Employer).
 		SetNillableTime(p.Time).
@@ -36,7 +37,7 @@ func AddExperienceDescription(
 	ctx context.Context,
 	client *ent.Client,
 	p TAddExperienceDescription,
-) (ExperienceJSON, error) {
+) (api_types.ExperienceJSON, error) {
 	e, err := client.Experience.UpdateOneID(p.ExperienceId).
 		AddDescriptionIDs(p.DescriptionId).
 		Save(ctx)
@@ -52,7 +53,7 @@ func DeleteExperience(ctx context.Context, client *ent.Client, p TDeleteExperien
 	return err
 }
 
-func GetAllExperiences(ctx context.Context, client *ent.Client) ([]ExperienceJSON, error) {
+func GetAllExperiences(ctx context.Context, client *ent.Client) ([]api_types.ExperienceJSON, error) {
 	items, err := client.Experience.Query().All(ctx)
 	return mapExperienceEntSliceToJSON(items, ctx), err
 }
@@ -70,7 +71,7 @@ func UpdateExperience(
 	ctx context.Context,
 	client *ent.Client,
 	p TUpdateExperience,
-) (ExperienceJSON, error) {
+) (api_types.ExperienceJSON, error) {
 	e, err := client.Experience.UpdateOneID(p.Id).
 		SetEmployer(p.Employer).
 		SetNillableTime(p.Time).
@@ -81,19 +82,9 @@ func UpdateExperience(
 	return mapExperienceEntToJSON(e, ctx), err
 }
 
-type ExperienceJSON struct {
-	Id           uuid.UUID         `json:"id"`
-	Employer     string            `json:"employer"`
-	Time         *string           `json:"time,omitempty"`
-	Position     string            `json:"position"`
-	Active       *bool             `json:"active,omitempty"`
-	Priority     *int32            `json:"priority,omitempty"`
-	Descriptions []DescriptionJSON `json:"descriptions"`
-}
-
-func mapExperienceEntToJSON(e *ent.Experience, ctx context.Context) ExperienceJSON {
+func mapExperienceEntToJSON(e *ent.Experience, ctx context.Context) api_types.ExperienceJSON {
 	d := e.QueryDescriptions().AllX(ctx)
-	r := ExperienceJSON{
+	r := api_types.ExperienceJSON{
 		Id:           e.ID,
 		Employer:     e.Employer,
 		Time:         &e.Time,
@@ -105,8 +96,8 @@ func mapExperienceEntToJSON(e *ent.Experience, ctx context.Context) ExperienceJS
 	return r
 }
 
-func mapExperienceEntSliceToJSON(e []*ent.Experience, ctx context.Context) []ExperienceJSON {
-	a := []ExperienceJSON{}
+func mapExperienceEntSliceToJSON(e []*ent.Experience, ctx context.Context) []api_types.ExperienceJSON {
+	a := []api_types.ExperienceJSON{}
 	for _, x := range e {
 		y := mapExperienceEntToJSON(x, ctx)
 		a = append(a, y)

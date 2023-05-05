@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 
+	"kylejohnson-xyz/api_types"
 	"kylejohnson-xyz/ent"
 
 	"github.com/google/uuid"
@@ -17,7 +18,7 @@ type TAddEducation struct {
 	Priority    *int32  `json:"priority,omitempty"`
 }
 
-func AddEducation(ctx context.Context, client *ent.Client, p TAddEducation) (EducationJSON, error) {
+func AddEducation(ctx context.Context, client *ent.Client, p TAddEducation) (api_types.EducationJSON, error) {
 	e, err := client.Education.Create().
 		SetSchool(p.School).
 		SetNillableTime(p.Time).
@@ -38,7 +39,7 @@ func DeleteEducation(ctx context.Context, client *ent.Client, p TDeleteEducation
 	return err
 }
 
-func GetAllEducations(ctx context.Context, client *ent.Client) ([]EducationJSON, error) {
+func GetAllEducations(ctx context.Context, client *ent.Client) ([]api_types.EducationJSON, error) {
 	items, err := client.Education.Query().All(ctx)
 	return mapEducationEntSliceToJSON(items), err
 }
@@ -53,7 +54,7 @@ type TUpdateEducation struct {
 	Priority    *int32    `json:"priority,omitempty"`
 }
 
-func UpdateEducation(ctx context.Context, client *ent.Client, p TUpdateEducation) (EducationJSON, error) {
+func UpdateEducation(ctx context.Context, client *ent.Client, p TUpdateEducation) (api_types.EducationJSON, error) {
 	e, err := client.Education.UpdateOneID(p.Id).
 		SetSchool(p.School).
 		SetNillableTime(p.Time).
@@ -65,10 +66,8 @@ func UpdateEducation(ctx context.Context, client *ent.Client, p TUpdateEducation
 	return mapEducationEntToJSON(e), err
 }
 
-type EducationJSON = TUpdateEducation
-
-func mapEducationEntToJSON(e *ent.Education) EducationJSON {
-	r := EducationJSON{
+func mapEducationEntToJSON(e *ent.Education) api_types.EducationJSON {
+	r := api_types.EducationJSON{
 		Id:          e.ID,
 		School:      e.School,
 		Time:        &e.Time,
@@ -80,8 +79,8 @@ func mapEducationEntToJSON(e *ent.Education) EducationJSON {
 	return r
 }
 
-func mapEducationEntSliceToJSON(e []*ent.Education) []EducationJSON {
-	a := []EducationJSON{}
+func mapEducationEntSliceToJSON(e []*ent.Education) []api_types.EducationJSON {
+	a := []api_types.EducationJSON{}
 
 	for _, x := range e {
 		y := mapEducationEntToJSON(x)

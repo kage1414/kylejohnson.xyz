@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 
+	"kylejohnson-xyz/api_types"
 	"kylejohnson-xyz/ent"
 	"kylejohnson-xyz/ent/techstack"
 
@@ -17,7 +18,7 @@ type TAddTechnology struct {
 	Stack    *string `json:"stack,omitempty"`
 }
 
-func AddTechnology(ctx context.Context, client *ent.Client, p TAddTechnology) (TechnologyJSON, error) {
+func AddTechnology(ctx context.Context, client *ent.Client, p TAddTechnology) (api_types.TechnologyJSON, error) {
 	s := client.TechStack.Query().Where(func(s *sql.Selector) {
 		s.Where(sql.InValues(techstack.FieldStack, p.Stack))
 	}).FirstX(ctx)
@@ -44,7 +45,7 @@ func GetAllTechnicalSkills(ctx context.Context, client *ent.Client) ([]*ent.Tech
 	return t, err
 }
 
-func GetAllTechnologies(ctx context.Context, client *ent.Client) ([]TechnologyJSON, error) {
+func GetAllTechnologies(ctx context.Context, client *ent.Client) ([]api_types.TechnologyJSON, error) {
 	t, err := client.Technology.Query().All(ctx)
 	return mapTechnologiesToJSON(t), err
 }
@@ -66,7 +67,7 @@ func UpdateTechnology(
 	ctx context.Context,
 	client *ent.Client,
 	p TUpdateTechnology,
-) (TechnologyJSON, error) {
+) (api_types.TechnologyJSON, error) {
 	s := client.TechStack.Query().Where(func(s *sql.Selector) {
 		s.Where(sql.InValues(techstack.FieldStack, p.Stack))
 	}).FirstX(ctx)
@@ -79,16 +80,8 @@ func UpdateTechnology(
 	return mapTechnologyEntToJSON(t), err
 }
 
-type TechnologyJSON struct {
-	Id       uuid.UUID `json:"id"`
-	Name     string    `json:"name"`
-	Stack    string    `json:"stack"`
-	Priority int32     `json:"priority"`
-	Url      string    `json:"url"`
-}
-
-func mapTechnologyEntToJSON(t *ent.Technology) TechnologyJSON {
-	j := TechnologyJSON{
+func mapTechnologyEntToJSON(t *ent.Technology) api_types.TechnologyJSON {
+	j := api_types.TechnologyJSON{
 		Id:       t.ID,
 		Name:     t.Name,
 		Stack:    t.Edges.Stack.Stack,
@@ -99,8 +92,8 @@ func mapTechnologyEntToJSON(t *ent.Technology) TechnologyJSON {
 	return j
 }
 
-func mapTechnologiesToJSON(tech []*ent.Technology) []TechnologyJSON {
-	arr := []TechnologyJSON{}
+func mapTechnologiesToJSON(tech []*ent.Technology) []api_types.TechnologyJSON {
+	arr := []api_types.TechnologyJSON{}
 
 	for _, t := range tech {
 		j := mapTechnologyEntToJSON(t)
