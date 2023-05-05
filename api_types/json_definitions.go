@@ -46,3 +46,8 @@ type TechnologyJSON struct {
 	Priority int32     `json:"priority"`
 	Url      string    `json:"url"`
 }
+
+type TechStackJSON struct {
+	Id    uuid.UUID `json:"id"`
+	Stack string    `json:"stack"`
+}

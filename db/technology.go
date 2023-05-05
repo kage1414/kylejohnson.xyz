@@ -40,9 +40,9 @@ func DeleteTechnology(ctx context.Context, client *ent.Client, p TDeleteTechnolo
 	return err
 }
 
-func GetAllTechnicalSkills(ctx context.Context, client *ent.Client) ([]*ent.TechStack, error) {
+func GetAllTechnicalSkills(ctx context.Context, client *ent.Client) ([]api_types.TechStackJSON, error) {
 	t, err := client.TechStack.Query().All(ctx)
-	return t, err
+	return mapTechStackEntSliceToJSON(t), err
 }
 
 func GetAllTechnologies(ctx context.Context, client *ent.Client) ([]api_types.TechnologyJSON, error) {
@@ -97,6 +97,26 @@ func mapTechnologiesToJSON(tech []*ent.Technology) []api_types.TechnologyJSON {
 
 	for _, t := range tech {
 		j := mapTechnologyEntToJSON(t)
+		arr = append(arr, j)
+	}
+
+	return arr
+}
+
+func mapTechStackEntToJSON(t *ent.TechStack) api_types.TechStackJSON {
+	j := api_types.TechStackJSON{
+		Id:    t.ID,
+		Stack: t.Stack,
+	}
+
+	return j
+}
+
+func mapTechStackEntSliceToJSON(tech []*ent.TechStack) []api_types.TechStackJSON {
+	arr := []api_types.TechStackJSON{}
+
+	for _, t := range tech {
+		j := mapTechStackEntToJSON(t)
 		arr = append(arr, j)
 	}
 
