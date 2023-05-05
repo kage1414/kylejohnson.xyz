@@ -16,6 +16,28 @@ type TAddApplication struct {
 	Active   *bool   `json:"active,omitempty"`
 }
 
+type DescriptionItem struct {
+	Description string    `json:"descriptions"`
+	Id          uuid.UUID `json:"id"`
+}
+
+type TechnologyItem struct {
+	Name     string    `json:"name"`
+	Id       uuid.UUID `json:"id"`
+	Url      string    `json:"url"`
+	Priority int32     `json:"priority"`
+}
+
+type ApplicationJSON struct {
+	Id           uuid.UUID         `json:"id"`
+	Name         string            `json:"name"`
+	Url          string            `json:"url"`
+	Active       bool              `json:"active"`
+	Descriptions []DescriptionJSON `json:"descriptions"`
+	Technologies []TechnologyJSON  `json:"technologies"`
+	Priority     int32             `json:"priority"`
+}
+
 func AddApplication(ctx context.Context, client *ent.Client, p TAddApplication) (*ent.Application, error) {
 	a, err := client.Application.Create().
 		SetNillableName(p.Name).
@@ -66,9 +88,9 @@ func DeleteApplication(ctx context.Context, client *ent.Client, p TDeleteApplica
 	return err
 }
 
-func GetAllApplications(ctx context.Context, client *ent.Client) []*ent.Application {
+func GetAllApplications(ctx context.Context, client *ent.Client) []ApplicationJSON {
 	items, _ := client.Application.Query().Order(ent.Asc(application.FieldPriority)).All(ctx)
-	return items
+	return mapApplicationEntSliceToJSON(items, ctx)
 }
 
 type TRemoveApplicationTechnology struct {
@@ -80,9 +102,9 @@ func RemoveApplicationTechnology(
 	ctx context.Context,
 	client *ent.Client,
 	p TRemoveApplicationTechnology,
-) (*ent.Application, error) {
+) (ApplicationJSON, error) {
 	a, err := client.Application.UpdateOneID(p.Id).RemoveTechnologyIDs(p.TechnologyId).Save(ctx)
-	return a, err
+	return mapApplicationEntToJSON(a, ctx), err
 }
 
 type TUpdateApplication struct {
@@ -97,12 +119,48 @@ func UpdateApplication(
 	ctx context.Context,
 	client *ent.Client,
 	p TUpdateApplication,
-) *ent.Application {
+) ApplicationJSON {
 	a, _ := client.Application.UpdateOneID(p.Id).
 		SetNillableName(p.Name).
 		SetNillableURL(p.Url).
 		SetNillablePriority(p.Priority).
 		SetNillableActive(p.Active).
 		Save(ctx)
-	return a
+	return mapApplicationEntToJSON(a, ctx)
+}
+
+func mapApplicationEntToJSON(x *ent.Application, ctx context.Context) ApplicationJSON {
+	d := x.QueryDescriptions().AllX(ctx)
+	descriptions := []DescriptionJSON{}
+	for _, y := range d {
+		i := mapDescriptionEntToJSON(y)
+		descriptions = append(descriptions, i)
+	}
+	t := x.QueryTechnologies().AllX(ctx)
+	technologies := []TechnologyJSON{}
+	for _, z := range t {
+		i := mapTechnologyEntToJSON(z)
+		technologies = append(technologies, i)
+	}
+	s := ApplicationJSON{
+		Id:           x.ID,
+		Name:         x.Name,
+		Url:          x.URL,
+		Active:       x.Active,
+		Priority:     x.Priority,
+		Descriptions: descriptions,
+		Technologies: technologies,
+	}
+	return s
+}
+
+func mapApplicationEntSliceToJSON(a []*ent.Application, ctx context.Context) []ApplicationJSON {
+	j := []ApplicationJSON{}
+
+	for _, x := range a {
+		s := mapApplicationEntToJSON(x, ctx)
+		j = append(j, s)
+	}
+
+	return j
 }

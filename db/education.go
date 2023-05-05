@@ -17,7 +17,7 @@ type TAddEducation struct {
 	Priority    *int32  `json:"priority,omitempty"`
 }
 
-func AddEducation(ctx context.Context, client *ent.Client, p TAddEducation) (*ent.Education, error) {
+func AddEducation(ctx context.Context, client *ent.Client, p TAddEducation) (EducationJSON, error) {
 	e, err := client.Education.Create().
 		SetSchool(p.School).
 		SetNillableTime(p.Time).
@@ -26,7 +26,7 @@ func AddEducation(ctx context.Context, client *ent.Client, p TAddEducation) (*en
 		SetNillableActive(p.Active).
 		SetNillablePriority(p.Priority).
 		Save(ctx)
-	return e, err
+	return mapEducationEntToJSON(e), err
 }
 
 type TDeleteEducation struct {
@@ -38,9 +38,9 @@ func DeleteEducation(ctx context.Context, client *ent.Client, p TDeleteEducation
 	return err
 }
 
-func GetAllEducations(ctx context.Context, client *ent.Client) ([]*ent.Education, error) {
+func GetAllEducations(ctx context.Context, client *ent.Client) ([]EducationJSON, error) {
 	items, err := client.Education.Query().All(ctx)
-	return items, err
+	return mapEducationEntSliceToJSON(items), err
 }
 
 type TUpdateEducation struct {
@@ -53,7 +53,7 @@ type TUpdateEducation struct {
 	Priority    *int32    `json:"priority,omitempty"`
 }
 
-func UpdateEducation(ctx context.Context, client *ent.Client, p TUpdateEducation) (*ent.Education, error) {
+func UpdateEducation(ctx context.Context, client *ent.Client, p TUpdateEducation) (EducationJSON, error) {
 	e, err := client.Education.UpdateOneID(p.Id).
 		SetSchool(p.School).
 		SetNillableTime(p.Time).
@@ -62,5 +62,30 @@ func UpdateEducation(ctx context.Context, client *ent.Client, p TUpdateEducation
 		SetNillableActive(p.Active).
 		SetNillablePriority(p.Priority).
 		Save(ctx)
-	return e, err
+	return mapEducationEntToJSON(e), err
+}
+
+type EducationJSON = TUpdateEducation
+
+func mapEducationEntToJSON(e *ent.Education) EducationJSON {
+	r := EducationJSON{
+		Id:          e.ID,
+		School:      e.School,
+		Time:        &e.Time,
+		Certificate: &e.Certificate,
+		Degree:      &e.Degree,
+		Active:      &e.Active,
+		Priority:    &e.Priority,
+	}
+	return r
+}
+
+func mapEducationEntSliceToJSON(e []*ent.Education) []EducationJSON {
+	a := []EducationJSON{}
+
+	for _, x := range e {
+		y := mapEducationEntToJSON(x)
+		a = append(a, y)
+	}
+	return a
 }

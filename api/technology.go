@@ -9,7 +9,6 @@ import (
 	"kylejohnson-xyz/ent"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 func Technology(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
@@ -19,39 +18,8 @@ func Technology(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 		if err != nil {
 			c.AbortWithError(http.StatusBadRequest, err)
 		}
-		c.JSON(http.StatusOK, gin.H{"data": mapTechnologiesToJSON(t)})
+		c.JSON(http.StatusOK, gin.H{"data": t})
 	})
-}
-
-type TechnologyJson struct {
-	Id       uuid.UUID `json:"id"`
-	Name     string    `json:"name"`
-	Stack    string    `json:"stack"`
-	Priority int32     `json:"priority"`
-	Url      string    `json:"url"`
-}
-
-func mapTechnologyToJSON(t *ent.Technology) TechnologyJson {
-	j := TechnologyJson{
-		Id:       t.ID,
-		Name:     t.Name,
-		Stack:    t.Edges.Stack.Stack,
-		Priority: t.Priority,
-		Url:      t.URL,
-	}
-
-	return j
-}
-
-func mapTechnologiesToJSON(tech []*ent.Technology) []TechnologyJson {
-	arr := []TechnologyJson{}
-
-	for _, t := range tech {
-		j := mapTechnologyToJSON(t)
-		arr = append(arr, j)
-	}
-
-	return arr
 }
 
 type (
@@ -73,7 +41,7 @@ func TechnologyProtected(r *gin.RouterGroup, ctx context.Context, client *ent.Cl
 		if err != nil {
 			c.AbortWithError(http.StatusBadRequest, err)
 		}
-		c.JSON(http.StatusOK, gin.H{"data": mapTechnologyToJSON(t)})
+		c.JSON(http.StatusOK, gin.H{"data": t})
 	})
 
 	r.POST(ROUTE, func(c *gin.Context) {
@@ -86,7 +54,7 @@ func TechnologyProtected(r *gin.RouterGroup, ctx context.Context, client *ent.Cl
 		if err != nil {
 			c.AbortWithError(http.StatusBadRequest, err)
 		}
-		c.JSON(http.StatusOK, gin.H{"data": mapTechnologyToJSON(t)})
+		c.JSON(http.StatusOK, gin.H{"data": t})
 	})
 
 	r.DELETE(ROUTE, func(c *gin.Context) {

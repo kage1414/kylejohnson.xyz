@@ -100,7 +100,7 @@ func DescriptionProtected(r *gin.RouterGroup, ctx context.Context, client *ent.C
 		case experience:
 			_, eErr := db.AddExperienceDescription(ctx, client, db.TAddExperienceDescription{
 				ExperienceId:  id,
-				DescriptionId: d.ID,
+				DescriptionId: d.Id,
 			})
 			if eErr != nil {
 				c.AbortWithError(http.StatusBadRequest, eErr)
@@ -110,7 +110,7 @@ func DescriptionProtected(r *gin.RouterGroup, ctx context.Context, client *ent.C
 		case application:
 			_, aErr := db.AddApplicationDescription(ctx, client, db.TAddApplicationDescription{
 				ApplicationId: id,
-				DescriptionId: d.ID,
+				DescriptionId: d.Id,
 			})
 			if aErr != nil {
 				c.AbortWithError(http.StatusBadRequest, aErr)
