@@ -1,12 +1,12 @@
 import { Box } from '@mui/material';
 import { ReactElement } from 'react';
 
-import { Education as EducationData } from 'dbschema/interfaces';
+import { Education as EducationJSON } from 'dbschema/interfaces';
 
 import { FullPost } from '../FullPost';
 
 type Props = {
-  data: EducationData[];
+  data: EducationJSON[];
   display: boolean;
 };
 

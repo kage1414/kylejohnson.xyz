@@ -40,11 +40,11 @@ type ExperienceJSON struct {
 }
 
 type TechnologyJSON struct {
-	Id       uuid.UUID `json:"id"`
-	Name     string    `json:"name"`
-	Stack    string    `json:"stack"`
-	Priority int32     `json:"priority"`
-	Url      string    `json:"url"`
+	Id       uuid.UUID     `json:"id"`
+	Name     string        `json:"name"`
+	Stack    TechStackJSON `json:"stack"`
+	Priority int32         `json:"priority"`
+	Url      string        `json:"url"`
 }
 
 type TechStackJSON struct {

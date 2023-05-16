@@ -5,7 +5,7 @@ import { ReactElement, useEffect, useState } from 'react';
 
 import {
   Description as DescriptionData,
-  Experience as ExperienceData,
+  Experience as ExperienceJSON,
 } from 'dbschema/interfaces';
 
 import {
@@ -21,7 +21,7 @@ import {
 } from '../description-crud';
 
 export function EditExperience(): ReactElement {
-  const [experience, setExperience] = useState<ExperienceData[]>([]);
+  const [experience, setExperience] = useState<ExperienceJSON[]>([]);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState<GridRowModel | null>(null);
   const [editingDescriptions, setEditingDescriptions] = useState<
@@ -70,7 +70,7 @@ export function EditExperience(): ReactElement {
       width: 500,
     },
   ];
-  const getExperienceData = () => {
+  const getExperienceJSON = () => {
     setLoading(true);
     axios
       .get('/api/experience')
@@ -89,11 +89,11 @@ export function EditExperience(): ReactElement {
 
   const onClose = () => {
     setIsOpen(null);
-    getExperienceData();
+    getExperienceJSON();
   };
 
   useEffect(() => {
-    getExperienceData();
+    getExperienceJSON();
   }, []);
 
   return (

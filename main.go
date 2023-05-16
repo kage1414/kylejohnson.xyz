@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"os"
 
 	"kylejohnson-xyz/api"
 	"kylejohnson-xyz/db"
@@ -23,15 +24,15 @@ func setupRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 	api.TechnicalSkills(r, ctx, client)
 	api.Technology(r, ctx, client)
 	api.User(r, ctx, client)
+	api.InviteProtected(r, ctx, client)
 }
 
 func setupProtectedRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
-	api.ApplicationProtected(r, ctx, client)
 	api.SeedProtected(r, ctx, client)
+	api.ApplicationProtected(r, ctx, client)
 	api.DescriptionProtected(r, ctx, client)
 	api.EducationProtected(r, ctx, client)
 	api.ExperienceProtected(r, ctx, client)
-	api.InviteProtected(r, ctx, client)
 	// api.UserProtected(r, ctx, client)
 	api.LogoutProtected(r, ctx, client)
 	api.SnapshotProtected(r, ctx, client)
@@ -46,7 +47,9 @@ func main() {
 	r := gin.Default()
 	client := db.GetClient()
 	ctx := context.Background()
-	script(ctx, client)
+	if os.Getenv("GO_ENV") == "development" {
+		script(ctx, client)
+	}
 
 	api := r.Group("/api")
 

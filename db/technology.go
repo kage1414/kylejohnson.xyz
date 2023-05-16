@@ -84,7 +84,7 @@ func mapTechnologyEntToJSON(t *ent.Technology) api_types.TechnologyJSON {
 	j := api_types.TechnologyJSON{
 		Id:       t.ID,
 		Name:     t.Name,
-		Stack:    t.Edges.Stack.Stack,
+		Stack:    mapTechStackEntToJSON(t.Edges.Stack),
 		Priority: t.Priority,
 		Url:      t.URL,
 	}

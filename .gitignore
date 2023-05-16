@@ -38,7 +38,7 @@ ui/dbschema/interfaces/*
 ui/dbschema/queries/*
 *.pem
 ui/.next
-ui/api_types.ts
+ui/apiTypes.ts
 
 # debug
 npm-debug.log*

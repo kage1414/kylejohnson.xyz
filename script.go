@@ -15,10 +15,11 @@ func script(ctx context.Context, client *ent.Client) {
 		User.
 		Delete().
 		ExecX(ctx)
-	client.
-		Invite.
-		Create().
-		SetKey("asdf").
-		SetEmail("kylejohnson92294@gmail.com").
-		SaveX(ctx)
+	// client.
+	//
+	//	Invite.
+	//	Create().
+	//	SetKey("asdf").
+	//	SetEmail("kylejohnson92294@gmail.com").
+	//	SaveX(ctx)
 }

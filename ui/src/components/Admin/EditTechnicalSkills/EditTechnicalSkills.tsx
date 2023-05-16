@@ -43,7 +43,7 @@ export function EditTechnicalSkills(): ReactElement {
         console.error(response);
       });
   };
-  const getTechnicalSkillsData = () => {
+  const getTechnologyJSON = () => {
     setLoading(true);
     axios
       .get('/api/technologies')
@@ -62,7 +62,7 @@ export function EditTechnicalSkills(): ReactElement {
 
   useEffect(() => {
     getStackOptions();
-    getTechnicalSkillsData();
+    getTechnologyJSON();
   }, []);
 
   return (

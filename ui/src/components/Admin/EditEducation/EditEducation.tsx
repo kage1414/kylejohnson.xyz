@@ -39,7 +39,7 @@ export function EditEducation(): ReactElement {
       type: 'boolean',
     },
   ];
-  const getEducationData = () => {
+  const getEducationJSON = () => {
     setLoading(true);
     axios
       .get('/api/educations')
@@ -57,7 +57,7 @@ export function EditEducation(): ReactElement {
   };
 
   useEffect(() => {
-    getEducationData();
+    getEducationJSON();
   }, []);
 
   return (

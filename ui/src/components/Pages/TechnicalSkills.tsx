@@ -3,22 +3,22 @@ import { ReactElement } from 'react';
 
 import { Post } from '../Post';
 
-export type TechnicalSkillsData = Array<any>;
+export type TechnologyJSON = Array<any>;
 
 type Props = {
-  technicalSkillsData: TechnicalSkillsData;
+  TechnologyJSON: TechnologyJSON;
   display: boolean;
 };
 
 export function TechnicalSkills({
-  technicalSkillsData,
+  TechnologyJSON,
   display,
 }: Props): ReactElement {
   return (
     <>
       {display && (
         <Grid container>
-          {technicalSkillsData.map(({ stack, technologies }, idx) => (
+          {TechnologyJSON.map(({ stack, technologies }, idx) => (
             <Grid
               item
               key={`${JSON.stringify(stack)} ${JSON.stringify(

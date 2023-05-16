@@ -1,12 +1,11 @@
 import { Box } from '@mui/material';
 import { ReactElement } from 'react';
 
-import { Application as ApplicationData } from 'dbschema/interfaces';
-
+import { ApplicationJSON } from '../../../apiTypes';
 import { FullPost } from '../FullPost';
 
 type Props = {
-  data: ApplicationData;
+  data: ApplicationJSON;
 };
 
 export function Application({

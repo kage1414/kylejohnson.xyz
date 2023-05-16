@@ -8,7 +8,7 @@ import axios from 'axios';
 import { ReactElement, useEffect, useState } from 'react';
 
 import {
-  Application as ApplicationData,
+  Application as ApplicationJSON,
   Description as DescriptionData,
   Technology as TechnologyData,
 } from 'dbschema/interfaces';
@@ -31,7 +31,7 @@ import {
 } from '../description-crud';
 
 export function EditApplication(): ReactElement {
-  const [application, setApplication] = useState<ApplicationData[]>([]);
+  const [application, setApplication] = useState<ApplicationJSON[]>([]);
   const [loading, setLoading] = useState(false);
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] =
     useState<GridRowModel | null>(null);
@@ -115,7 +115,7 @@ export function EditApplication(): ReactElement {
     { field: 'url', headerName: 'Url', editable: false, width: 300 },
     { field: 'priority', headerName: 'Priority', editable: true },
   ];
-  const getApplicationData = () => {
+  const getApplicationJSON = () => {
     setLoading(true);
     axios
       .get('/api/applications')
@@ -142,11 +142,11 @@ export function EditApplication(): ReactElement {
   const onClose = () => {
     setIsDescriptionModalOpen(null);
     setIsTechnologyModalOpen(null);
-    getApplicationData();
+    getApplicationJSON();
   };
 
   useEffect(() => {
-    getApplicationData();
+    getApplicationJSON();
     getTechnologyOptions();
   }, []);
 

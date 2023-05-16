@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"kylejohnson-xyz/db"
@@ -19,6 +20,7 @@ func Experience(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 			c.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
+		fmt.Println(e)
 		c.JSON(http.StatusOK, gin.H{"data": e})
 	})
 }
