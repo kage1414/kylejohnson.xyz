@@ -1,12 +1,13 @@
 import { Grid } from '@mui/material';
+import axios from 'axios';
+import { ReactElement, useEffect, useState } from 'react';
+
 import {
   ApplicationJSON,
   EducationJSON,
   ExperienceJSON,
-  TechnologyJSON,
+  TechStackJSON,
 } from 'apiTypes';
-import axios from 'axios';
-import { ReactElement, useEffect, useState } from 'react';
 
 import { Applications, Education, Experience, TechnicalSkills } from './Pages';
 
@@ -18,7 +19,7 @@ export function Feed({ selectedTab }: Props): ReactElement {
   const [ApplicationJSON, setApplicationJSON] = useState<ApplicationJSON[]>([]);
   const [EducationJSON, setEducationJSON] = useState<EducationJSON[]>([]);
   const [ExperienceJSON, setExperienceJSON] = useState<ExperienceJSON[]>([]);
-  const [TechnologyJSON, setTechnologyJSON] = useState<TechnologyJSON[]>([]);
+  const [TechnologyJSON, setTechnologyJSON] = useState<TechStackJSON[]>([]);
 
   const fetchApplicationJSON = () => {
     axios
@@ -35,9 +36,11 @@ export function Feed({ selectedTab }: Props): ReactElement {
   };
 
   const fetchTechnologyJSON = () => {
-    axios.get('/api/technical_skills').then(({ data }) => {
-      setTechnologyJSON(data || []);
-    });
+    axios
+      .get('/api/technical_skills')
+      .then(({ data }: { data: TechStackJSON[] }) => {
+        setTechnologyJSON(data || []);
+      });
   };
 
   const fetchExperienceJSON = () => {

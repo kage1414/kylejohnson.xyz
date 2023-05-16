@@ -18,6 +18,6 @@ func TechnicalSkills(r *gin.RouterGroup, ctx context.Context, client *ent.Client
 		if err != nil {
 			c.AbortWithError(http.StatusBadRequest, err)
 		}
-		c.JSON(http.StatusOK, gin.H{"data": t})
+		c.JSON(http.StatusOK, t)
 	})
 }

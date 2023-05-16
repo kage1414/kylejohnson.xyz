@@ -25,7 +25,7 @@ func ApplicationTechnologyProtected(r *gin.RouterGroup, ctx context.Context, cli
 		if dbErr != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		}
-		c.JSON(http.StatusOK, gin.H{"data": a})
+		c.JSON(http.StatusOK, a)
 	})
 
 	r.DELETE(ROUTE, func(c *gin.Context) {
@@ -39,6 +39,6 @@ func ApplicationTechnologyProtected(r *gin.RouterGroup, ctx context.Context, cli
 		if dbErr != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		}
-		c.JSON(http.StatusOK, gin.H{"data": a})
+		c.JSON(http.StatusOK, a)
 	})
 }

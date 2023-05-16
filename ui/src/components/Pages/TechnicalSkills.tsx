@@ -3,10 +3,10 @@ import { ReactElement } from 'react';
 
 import { Post } from '../Post';
 
-export type TechnologyJSON = Array<any>;
+import { TechStackJSON } from 'apiTypes';
 
 type Props = {
-  TechnologyJSON: TechnologyJSON;
+  TechnologyJSON: TechStackJSON[];
   display: boolean;
 };
 

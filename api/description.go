@@ -43,7 +43,7 @@ func Description(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 			c.AbortWithError(http.StatusBadRequest, rErr)
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"data": d})
+		c.JSON(http.StatusOK, d)
 	})
 }
 
@@ -76,7 +76,7 @@ func DescriptionProtected(r *gin.RouterGroup, ctx context.Context, client *ent.C
 			c.AbortWithError(http.StatusBadRequest, dErr)
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"data": d})
+		c.JSON(http.StatusOK, d)
 	})
 
 	r.POST(ROUTE, func(c *gin.Context) {
@@ -106,7 +106,7 @@ func DescriptionProtected(r *gin.RouterGroup, ctx context.Context, client *ent.C
 				c.AbortWithError(http.StatusBadRequest, eErr)
 				return
 			}
-			c.JSON(http.StatusOK, gin.H{"data": d})
+			c.JSON(http.StatusOK, d)
 		case application:
 			_, aErr := db.AddApplicationDescription(ctx, client, db.TAddApplicationDescription{
 				ApplicationId: id,
@@ -116,9 +116,9 @@ func DescriptionProtected(r *gin.RouterGroup, ctx context.Context, client *ent.C
 				c.AbortWithError(http.StatusBadRequest, aErr)
 				return
 			}
-			c.JSON(http.StatusOK, gin.H{"data": d})
+			c.JSON(http.StatusOK, d)
 		default:
-			c.JSON(http.StatusOK, gin.H{"data": d})
+			c.JSON(http.StatusOK, d)
 		}
 	})
 

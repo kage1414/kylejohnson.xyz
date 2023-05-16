@@ -1,12 +1,8 @@
 import { Button } from '@mui/material';
 import { GridColDef, GridColumns, GridRowModel } from '@mui/x-data-grid';
+import { DescriptionJSON, ExperienceJSON } from 'apiTypes';
 import axios from 'axios';
 import { ReactElement, useEffect, useState } from 'react';
-
-import {
-  Description as DescriptionData,
-  Experience as ExperienceJSON,
-} from 'dbschema/interfaces';
 
 import {
   onAddExperience,
@@ -25,7 +21,7 @@ export function EditExperience(): ReactElement {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState<GridRowModel | null>(null);
   const [editingDescriptions, setEditingDescriptions] = useState<
-    DescriptionData[]
+    DescriptionJSON[]
   >([]);
   const columns: GridColumns = [
     { field: 'employer', headerName: 'Employer', editable: true, width: 300 },

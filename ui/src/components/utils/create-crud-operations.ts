@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { CrudOperations } from '../Admin/DataGridContainer';
 
-export default (url: string, resourceName: string): CrudOperations => ({
+const crud = (url: string): CrudOperations => ({
   c: (id, options = {}) => {
     const { technology_id } = options;
     return axios({
@@ -48,3 +48,5 @@ export default (url: string, resourceName: string): CrudOperations => ({
       });
   },
 });
+
+export default crud;

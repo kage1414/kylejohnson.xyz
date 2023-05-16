@@ -48,6 +48,7 @@ type TechnologyJSON struct {
 }
 
 type TechStackJSON struct {
-	Id    uuid.UUID `json:"id"`
-	Stack string    `json:"stack"`
+	Id           uuid.UUID        `json:"id"`
+	Stack        string           `json:"stack"`
+	Technologies []TechnologyJSON `json:"technologies"`
 }

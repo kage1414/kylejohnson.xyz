@@ -2,6 +2,9 @@ package main
 
 import (
 	"context"
+	"net/http"
+	"net/http/httputil"
+	"net/url"
 	"os"
 
 	"kylejohnson-xyz/api"
@@ -33,10 +36,23 @@ func setupProtectedRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.C
 	api.DescriptionProtected(r, ctx, client)
 	api.EducationProtected(r, ctx, client)
 	api.ExperienceProtected(r, ctx, client)
-	// api.UserProtected(r, ctx, client)
 	api.LogoutProtected(r, ctx, client)
 	api.SnapshotProtected(r, ctx, client)
 	api.TechnologyProtected(r, ctx, client)
+}
+
+func ReverseProxy(c *gin.Context) {
+	remote, _ := url.Parse("http://localhost:3000")
+	proxy := httputil.NewSingleHostReverseProxy(remote)
+	proxy.Director = func(req *http.Request) {
+		req.Header = c.Request.Header
+		req.Host = remote.Host
+		req.URL = c.Request.URL
+		req.URL.Scheme = remote.Scheme
+		req.URL.Host = remote.Host
+	}
+
+	proxy.ServeHTTP(c.Writer, c.Request)
 }
 
 func main() {
@@ -45,6 +61,7 @@ func main() {
 		return
 	}
 	r := gin.Default()
+
 	client := db.GetClient()
 	ctx := context.Background()
 	if os.Getenv("GO_ENV") == "development" {
@@ -57,5 +74,6 @@ func main() {
 	api.Use(middleware.JwtAuthMiddleware())
 	setupProtectedRoutes(api, ctx, client)
 
+	r.NoRoute(ReverseProxy)
 	r.Run("localhost:8080")
 }

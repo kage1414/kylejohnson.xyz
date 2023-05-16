@@ -5,7 +5,10 @@ export function Login(): ReactElement {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  useEffect(() => {}, [username, password]);
+  useEffect(() => {
+    username;
+    password;
+  }, [username, password]);
 
   return (
     <Box

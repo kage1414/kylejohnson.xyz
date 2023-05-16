@@ -29,14 +29,15 @@ type TechnologyItem struct {
 	Priority int32     `json:"priority"`
 }
 
-func AddApplication(ctx context.Context, client *ent.Client, p TAddApplication) (*ent.Application, error) {
+func AddApplication(ctx context.Context, client *ent.Client, p TAddApplication) (api_types.ApplicationJSON, error) {
 	a, err := client.Application.Create().
 		SetNillableName(p.Name).
 		SetNillableURL(p.Url).
 		SetNillablePriority(p.Priority).
 		SetNillableActive(p.Active).
 		Save(ctx)
-	return a, err
+
+	return mapApplicationEntToJSON(a, ctx), err
 }
 
 type TAddApplicationDescription struct {
@@ -48,11 +49,11 @@ func AddApplicationDescription(
 	ctx context.Context,
 	client *ent.Client,
 	p TAddApplicationDescription,
-) (*ent.Application, error) {
+) (api_types.ApplicationJSON, error) {
 	t, err := client.Application.UpdateOneID(p.ApplicationId).
 		AddDescriptionIDs(p.DescriptionId).
 		Save(ctx)
-	return t, err
+	return mapApplicationEntToJSON(t, ctx), err
 }
 
 type TAddApplicationTechnology struct {
@@ -64,10 +65,10 @@ func AddApplicationTechnology(
 	ctx context.Context,
 	client *ent.Client,
 	p TAddApplicationTechnology,
-) (*ent.Technology, error) {
+) (api_types.TechnologyJSON, error) {
 	t, err := client.Technology.Create().SetName(p.Name).Save(ctx)
 	client.Application.UpdateOneID(p.Id).AddTechnologies(t).Save(ctx)
-	return t, err
+	return mapTechnologyEntToJSON(t, ctx), err
 }
 
 type TDeleteApplication struct {
@@ -79,9 +80,9 @@ func DeleteApplication(ctx context.Context, client *ent.Client, p TDeleteApplica
 	return err
 }
 
-func GetAllApplications(ctx context.Context, client *ent.Client) []api_types.ApplicationJSON {
-	items, _ := client.Application.Query().Order(ent.Asc(application.FieldPriority)).All(ctx)
-	return mapApplicationEntSliceToJSON(items, ctx)
+func GetAllApplications(ctx context.Context, client *ent.Client) ([]api_types.ApplicationJSON, error) {
+	items, err := client.Application.Query().Order(ent.Asc(application.FieldPriority)).All(ctx)
+	return mapApplicationEntSliceToJSON(items, ctx), err
 }
 
 type TRemoveApplicationTechnology struct {
@@ -130,7 +131,7 @@ func mapApplicationEntToJSON(x *ent.Application, ctx context.Context) api_types.
 	t := x.QueryTechnologies().AllX(ctx)
 	technologies := []api_types.TechnologyJSON{}
 	for _, z := range t {
-		i := mapTechnologyEntToJSON(z)
+		i := mapTechnologyEntToJSON(z, ctx)
 		technologies = append(technologies, i)
 	}
 	s := api_types.ApplicationJSON{

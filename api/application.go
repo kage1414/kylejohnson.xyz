@@ -24,7 +24,7 @@ func ApplicationProtected(r *gin.RouterGroup, ctx context.Context, client *ent.C
 
 		a := db.UpdateApplication(ctx, client, p)
 
-		c.JSON(http.StatusOK, gin.H{"data": a})
+		c.JSON(http.StatusOK, a)
 	})
 
 	r.POST(ROUTE, func(c *gin.Context) {
@@ -39,7 +39,7 @@ func ApplicationProtected(r *gin.RouterGroup, ctx context.Context, client *ent.C
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		}
 
-		c.JSON(http.StatusOK, gin.H{"data": a})
+		c.JSON(http.StatusOK, a)
 	})
 
 	r.DELETE(ROUTE, func(c *gin.Context) {

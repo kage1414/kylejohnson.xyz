@@ -1,7 +1,6 @@
 import { Box } from '@mui/material';
+import { ExperienceJSON } from 'apiTypes';
 import { ReactElement } from 'react';
-
-import { Experience as ExperienceJSON } from 'dbschema/interfaces';
 
 import { FullPost } from '../FullPost';
 

@@ -25,7 +25,7 @@ func Education(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 			c.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"data": e})
+		c.JSON(http.StatusOK, e)
 	})
 }
 
@@ -44,7 +44,7 @@ func EducationProtected(r *gin.RouterGroup, ctx context.Context, client *ent.Cli
 			c.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"data": e})
+		c.JSON(http.StatusOK, e)
 	})
 
 	r.POST(ROUTE, func(c *gin.Context) {
@@ -59,7 +59,7 @@ func EducationProtected(r *gin.RouterGroup, ctx context.Context, client *ent.Cli
 			c.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"data": e})
+		c.JSON(http.StatusOK, e)
 	})
 
 	r.DELETE(ROUTE, func(c *gin.Context) {

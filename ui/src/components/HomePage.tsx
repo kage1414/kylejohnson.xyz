@@ -56,8 +56,6 @@ export default function HomePage({ Component, disableTabs }: Props) {
 
   const [user, { mutate, loading }] = useUser();
 
-  console.log({ user });
-
   return (
     <ThemeProvider theme={theme}>
       <Grid container flexDirection={'column'}>

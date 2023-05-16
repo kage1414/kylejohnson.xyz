@@ -1,8 +1,7 @@
 import { GridColDef } from '@mui/x-data-grid';
+import { TechnologyJSON } from 'apiTypes';
 import axios from 'axios';
 import { ReactElement, useEffect, useState } from 'react';
-
-import { Technology as TechnologyData } from 'dbschema/interfaces';
 
 import {
   onAddTechnology,
@@ -12,7 +11,7 @@ import {
 import { EditSection } from '../EditSection';
 
 export function EditTechnicalSkills(): ReactElement {
-  const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
+  const [technologies, setTechnologies] = useState<TechnologyJSON[]>([]);
   const [loading, setLoading] = useState(false);
   const [stackOptions, setStackOptions] = useState([]);
   const columns: GridColDef[] = [

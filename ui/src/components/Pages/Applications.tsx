@@ -1,7 +1,6 @@
 import { Box } from '@mui/material';
+import { ApplicationJSON } from 'apiTypes';
 import { ReactElement } from 'react';
-
-import { Application as ApplicationJSON } from 'dbschema/interfaces';
 
 import { Application } from './Application';
 

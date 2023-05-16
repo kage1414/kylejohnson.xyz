@@ -18,7 +18,7 @@ func Technology(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 		if err != nil {
 			c.AbortWithError(http.StatusBadRequest, err)
 		}
-		c.JSON(http.StatusOK, gin.H{"data": t})
+		c.JSON(http.StatusOK, t)
 	})
 }
 
@@ -41,7 +41,7 @@ func TechnologyProtected(r *gin.RouterGroup, ctx context.Context, client *ent.Cl
 		if err != nil {
 			c.AbortWithError(http.StatusBadRequest, err)
 		}
-		c.JSON(http.StatusOK, gin.H{"data": t})
+		c.JSON(http.StatusOK, t)
 	})
 
 	r.POST(ROUTE, func(c *gin.Context) {
@@ -54,7 +54,7 @@ func TechnologyProtected(r *gin.RouterGroup, ctx context.Context, client *ent.Cl
 		if err != nil {
 			c.AbortWithError(http.StatusBadRequest, err)
 		}
-		c.JSON(http.StatusOK, gin.H{"data": t})
+		c.JSON(http.StatusOK, t)
 	})
 
 	r.DELETE(ROUTE, func(c *gin.Context) {

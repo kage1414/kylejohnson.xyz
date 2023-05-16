@@ -4,14 +4,9 @@ import {
   GridRowModel,
   GridValueGetterParams,
 } from '@mui/x-data-grid';
+import { ApplicationJSON, DescriptionJSON, TechnologyJSON } from 'apiTypes';
 import axios from 'axios';
 import { ReactElement, useEffect, useState } from 'react';
-
-import {
-  Application as ApplicationJSON,
-  Description as DescriptionData,
-  Technology as TechnologyData,
-} from 'dbschema/interfaces';
 
 import {
   onAddApplication,
@@ -38,10 +33,10 @@ export function EditApplication(): ReactElement {
   const [isTechnologyModalOpen, setIsTechnologyModalOpen] =
     useState<GridRowModel | null>(null);
   const [editingDescriptions, setEditingDescriptions] = useState<
-    DescriptionData[]
+    DescriptionJSON[]
   >([]);
   const [editingTechnologies, setEditingTechnologies] = useState<
-    TechnologyData[]
+    TechnologyJSON[]
   >([]);
   const [technologyOptions, setTechnologyOptions] = useState([]);
   const columns: GridColDef[] = [

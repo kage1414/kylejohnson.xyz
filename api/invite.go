@@ -112,7 +112,6 @@ func InviteProtected(r *gin.RouterGroup, ctx context.Context, client *ent.Client
 		// Now send E-Mail
 		if eErr := d.DialAndSend(m); eErr != nil {
 			client.Invite.DeleteOneID(i.ID).Exec(ctx)
-			fmt.Println(err)
 			c.AbortWithError(http.StatusBadRequest, eErr)
 			// panic(err)
 			return

@@ -28,7 +28,7 @@ func AddTechnology(ctx context.Context, client *ent.Client, p TAddTechnology) (a
 		SetNillablePriority(p.Priority).
 		SetStack(s).
 		Save(ctx)
-	return mapTechnologyEntToJSON(t), err
+	return mapTechnologyEntToJSON(t, ctx), err
 }
 
 type TDeleteTechnology struct {
@@ -42,12 +42,12 @@ func DeleteTechnology(ctx context.Context, client *ent.Client, p TDeleteTechnolo
 
 func GetAllTechnicalSkills(ctx context.Context, client *ent.Client) ([]api_types.TechStackJSON, error) {
 	t, err := client.TechStack.Query().All(ctx)
-	return mapTechStackEntSliceToJSON(t), err
+	return mapTechStackEntSliceToJSON(t, ctx), err
 }
 
 func GetAllTechnologies(ctx context.Context, client *ent.Client) ([]api_types.TechnologyJSON, error) {
 	t, err := client.Technology.Query().All(ctx)
-	return mapTechnologiesToJSON(t), err
+	return mapTechnologiesToJSON(t, ctx), err
 }
 
 func GetTechStacks(ctx context.Context, client *ent.Client) ([]*ent.TechStack, error) {
@@ -77,14 +77,14 @@ func UpdateTechnology(
 		SetNillablePriority(p.Priority).
 		SetStack(s).
 		Save(ctx)
-	return mapTechnologyEntToJSON(t), err
+	return mapTechnologyEntToJSON(t, ctx), err
 }
 
-func mapTechnologyEntToJSON(t *ent.Technology) api_types.TechnologyJSON {
+func mapTechnologyEntToJSON(t *ent.Technology, ctx context.Context) api_types.TechnologyJSON {
 	j := api_types.TechnologyJSON{
 		Id:       t.ID,
 		Name:     t.Name,
-		Stack:    mapTechStackEntToJSON(t.Edges.Stack),
+		Stack:    mapTechStackEntToJSON(t.QueryStack().OnlyX(ctx), ctx, false),
 		Priority: t.Priority,
 		Url:      t.URL,
 	}
@@ -92,31 +92,43 @@ func mapTechnologyEntToJSON(t *ent.Technology) api_types.TechnologyJSON {
 	return j
 }
 
-func mapTechnologiesToJSON(tech []*ent.Technology) []api_types.TechnologyJSON {
+func mapTechnologiesToJSON(tech []*ent.Technology, ctx context.Context) []api_types.TechnologyJSON {
 	arr := []api_types.TechnologyJSON{}
 
 	for _, t := range tech {
-		j := mapTechnologyEntToJSON(t)
+		j := mapTechnologyEntToJSON(t, ctx)
 		arr = append(arr, j)
 	}
 
 	return arr
 }
 
-func mapTechStackEntToJSON(t *ent.TechStack) api_types.TechStackJSON {
+func mapTechStackEntToJSON(t *ent.TechStack, ctx context.Context, includeTechnologies bool) api_types.TechStackJSON {
+	var technologies []api_types.TechnologyJSON
+	if includeTechnologies {
+		entTechnologies, err := t.QueryTechnology().All(ctx)
+		if err != nil {
+			technologies = []api_types.TechnologyJSON{}
+		} else {
+			technologies = mapTechnologiesToJSON(entTechnologies, ctx)
+		}
+	} else {
+		technologies = []api_types.TechnologyJSON{}
+	}
 	j := api_types.TechStackJSON{
-		Id:    t.ID,
-		Stack: t.Stack,
+		Id:           t.ID,
+		Stack:        t.Stack,
+		Technologies: technologies,
 	}
 
 	return j
 }
 
-func mapTechStackEntSliceToJSON(tech []*ent.TechStack) []api_types.TechStackJSON {
+func mapTechStackEntSliceToJSON(tech []*ent.TechStack, ctx context.Context) []api_types.TechStackJSON {
 	arr := []api_types.TechStackJSON{}
 
 	for _, t := range tech {
-		j := mapTechStackEntToJSON(t)
+		j := mapTechStackEntToJSON(t, ctx, true)
 		arr = append(arr, j)
 	}
 
