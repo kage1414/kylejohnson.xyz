@@ -24,10 +24,10 @@ func setupRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 	api.TechnicalSkills(r, ctx, client)
 	api.Technology(r, ctx, client)
 	api.User(r, ctx, client)
-	api.InviteProtected(r, ctx, client)
 }
 
 func setupProtectedRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
+	api.InviteProtected(r, ctx, client)
 	api.SeedProtected(r, ctx, client)
 	api.ApplicationProtected(r, ctx, client)
 	api.DescriptionProtected(r, ctx, client)
