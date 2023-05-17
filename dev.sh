@@ -1,3 +1,3 @@
+alias air='$(go env GOPATH)/bin/air'
 cd ui;
-# npx yarn build;
-npx yarn dev & (cd .. && go run .);
+npx yarn dev & (cd .. && air);
