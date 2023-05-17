@@ -18,7 +18,7 @@ type postEducationBody = db.TAddEducation
 type deleteEducationBody = db.TDeleteEducation
 
 func Education(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
-	ROUTE := "/education"
+	ROUTE := "/educations"
 	r.GET(ROUTE, func(c *gin.Context) {
 		e, err := db.GetAllEducations(ctx, client)
 		if err != nil {

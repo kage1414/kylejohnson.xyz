@@ -81,10 +81,18 @@ func UpdateTechnology(
 }
 
 func mapTechnologyEntToJSON(t *ent.Technology, ctx context.Context) api_types.TechnologyJSON {
+	s, err := t.QueryStack().Only(ctx)
+	var stackJson api_types.TechStackJSON
+	if err != nil {
+		stackJson = api_types.TechStackJSON{}
+	} else {
+		stackJson = mapTechStackEntToJSON(s, ctx, false)
+	}
+
 	j := api_types.TechnologyJSON{
 		Id:       t.ID,
 		Name:     t.Name,
-		Stack:    mapTechStackEntToJSON(t.QueryStack().OnlyX(ctx), ctx, false),
+		Stack:    &stackJson,
 		Priority: t.Priority,
 		Url:      t.URL,
 	}

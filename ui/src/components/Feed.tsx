@@ -25,13 +25,17 @@ export function Feed({ selectedTab }: Props): ReactElement {
     axios
       .get('/api/applications')
       .then(({ data }: { data: ApplicationJSON[] }) => {
-        setApplicationJSON(data.filter((ele) => !!ele.active) || []);
+        if (data) {
+          setApplicationJSON(data.filter((ele) => !!ele.active) || []);
+        }
       });
   };
 
   const fetchEducationJSON = () => {
     axios.get('/api/educations').then(({ data }: { data: EducationJSON[] }) => {
-      setEducationJSON(data.filter((ele) => !!ele.active) || []);
+      if (data) {
+        setEducationJSON(data.filter((ele) => !!ele.active) || []);
+      }
     });
   };
 
@@ -39,7 +43,9 @@ export function Feed({ selectedTab }: Props): ReactElement {
     axios
       .get('/api/technical_skills')
       .then(({ data }: { data: TechStackJSON[] }) => {
-        setTechnologyJSON(data || []);
+        if (data) {
+          setTechnologyJSON(data);
+        }
       });
   };
 
@@ -47,7 +53,10 @@ export function Feed({ selectedTab }: Props): ReactElement {
     axios
       .get('/api/experience')
       .then(({ data }: { data: ExperienceJSON[] }) => {
-        setExperienceJSON(data.filter((ele) => !!ele.active) || []);
+        console.log({ data });
+        if (data) {
+          setExperienceJSON(data.filter((ele) => !!ele.active) || []);
+        }
       })
       .catch((err) => {
         console.error(err);

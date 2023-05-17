@@ -19,7 +19,7 @@ func Experience(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 			c.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"data": e})
+		c.JSON(http.StatusOK, e)
 	})
 }
 
