@@ -9,7 +9,7 @@ import {
   getUserById,
   setRegisteredInvite,
   updateUser,
-} from 'dbschema/queries';
+} from 'queries';
 
 import { client } from './edgedb';
 
@@ -21,7 +21,19 @@ export function getAllUsers() {
   return getAllUsersDb(client);
 }
 
-export async function createUser({ username, password, name, email, key }) {
+export async function createUser({
+  username,
+  password,
+  name,
+  email,
+  key = '',
+}: {
+  username: string;
+  password: string;
+  name: string;
+  email: string;
+  key: string;
+}) {
   const existingUser = await findUserByUsername(username);
   if (existingUser) {
     const err = new Error('The username has already been used');
@@ -42,7 +54,7 @@ export async function createUser({ username, password, name, email, key }) {
       hash,
       salt,
       email,
-      invite_id: invite?.id || '',
+      invite_id: invite?.id,
     };
     const newUser = await addUser(client, user);
     await setRegisteredInvite(client, { key });
@@ -55,24 +67,24 @@ export async function createUser({ username, password, name, email, key }) {
   }
 }
 
-export async function findUserByUsername(username) {
+export async function findUserByUsername(username: string) {
   const result = await getUser(client, { username });
   return result;
 }
 
-export async function findUserById(id) {
+export async function findUserById(id: string) {
   const result = await getUserById(client, { id });
   return result;
 }
 
-export async function updateUserByUsername(username, update) {
+export async function updateUserByUsername(username: string, update: any) {
   // Here you update the user based on id/username in the database
   // const user = await db.updateUserById(id, update)
   const user = await updateUser(client, { username, ...update });
   return user;
 }
 
-export async function deleteUser(username) {
+export async function deleteUser(username: string) {
   // Here you should delete the user in the database
   // await db.deleteUser(req.user)
   await deleteUserDb(client, { username });
@@ -80,7 +92,10 @@ export async function deleteUser(username) {
 
 // Compare the password of an already fetched user (using `findUserByUsername`) and compare the
 // password for a potential match
-export function validatePassword(user, inputPassword) {
+export function validatePassword(
+  user: { salt: string; hash: string },
+  inputPassword: string
+) {
   const inputHash = crypto
     .pbkdf2Sync(inputPassword, user.salt, 1000, 64, 'sha512')
     .toString('hex');

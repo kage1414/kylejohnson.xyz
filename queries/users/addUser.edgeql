@@ -7,6 +7,6 @@ insert User
   email := <str>$email,
   invite := (
     select Invite
-    filter .id = <uuid>$invite_id
+    filter .id = <optional uuid>$invite_id
   )
 };

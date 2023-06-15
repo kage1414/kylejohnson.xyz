@@ -15,6 +15,7 @@ export function BottomBar(): ReactElement {
         bottom: 0,
         position: pinBottomBar ? 'fixed' : 'static',
         width: '100%',
+        marginLeft: '100px',
       }}
       value={value}
       onChange={(event, newValue) => {

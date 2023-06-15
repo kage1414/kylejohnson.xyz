@@ -4,9 +4,10 @@
   "description": "Personal website",
   "private": true,
   "scripts": {
-    "dev": "yarn gen:all && next dev",
-    "build": "yarn gen:all && next build",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
+    "deploy-check-in": "yarn gen:all",
     "lint": "next lint",
     "migrate": "edgedb migration create && edgedb migrate",
     "gen:queries": "npx @edgedb/generate queries --file dbschema/queries/index",

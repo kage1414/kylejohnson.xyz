@@ -150,21 +150,20 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
                       <Button onClick={onInviteOpen}>{'Invite'}</Button>
                     </span>
                   </li>
-                  {process.env.NODE_ENV === 'development' && (
-                    <li style={style}>
-                      <Button
-                        onClick={() => {
-                          axios({
-                            url: '/api/seed',
-                            method: 'post',
-                            timeout: 10000,
-                          });
-                        }}
-                      >
-                        Seed
-                      </Button>
-                    </li>
-                  )}
+                  <li style={style}>
+                    <Button
+                      disabled
+                      onClick={() => {
+                        axios({
+                          url: '/api/seed',
+                          method: 'post',
+                          timeout: 10000,
+                        });
+                      }}
+                    >
+                      Seed
+                    </Button>
+                  </li>
                 </>
               )}
             </>
