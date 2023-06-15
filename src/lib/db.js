@@ -13,6 +13,8 @@ import {
 
 import { client } from './edgedb';
 
+const { SUPER_EMAIL } = process.env;
+
 Error.stackTraceLimit = Infinity;
 
 export function getAllUsers() {
@@ -26,7 +28,10 @@ export async function createUser({ username, password, name, email, key }) {
     throw err;
   }
   const invite = await getInvite(client, { key });
-  if (invite && !invite.registered && invite.email === email) {
+  if (
+    (invite && !invite.registered && invite.email === email) ||
+    email === SUPER_EMAIL
+  ) {
     const salt = crypto.randomBytes(16).toString('hex');
     const hash = crypto
       .pbkdf2Sync(password, salt, 1000, 64, 'sha512')
@@ -37,7 +42,7 @@ export async function createUser({ username, password, name, email, key }) {
       hash,
       salt,
       email,
-      invite_id: invite.id,
+      invite_id: invite?.id || '',
     };
     const newUser = await addUser(client, user);
     await setRegisteredInvite(client, { key });
