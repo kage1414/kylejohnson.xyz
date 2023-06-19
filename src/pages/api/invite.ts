@@ -1,4 +1,3 @@
-import { auth, isAuthenticated } from 'middleware';
 import { NextApiRequest, NextApiResponse } from 'next';
 import nextConnect from 'next-connect';
 import * as nodemailer from 'nodemailer';
@@ -6,6 +5,7 @@ import * as nodemailer from 'nodemailer';
 import { client } from '@/lib/edgedb';
 import { random32CharString } from '@/lib/generate';
 import inviteEmailTemplate from '@/lib/inviteEmailTemplate';
+import { auth, isAuthenticated } from 'middleware';
 import { createInvite, deleteInvite } from 'queries';
 
 const handler = nextConnect();

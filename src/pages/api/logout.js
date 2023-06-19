@@ -1,5 +1,6 @@
-import { auth } from 'middleware';
 import nextConnect from 'next-connect';
+
+import { auth } from 'middleware';
 
 const handler = nextConnect();
 

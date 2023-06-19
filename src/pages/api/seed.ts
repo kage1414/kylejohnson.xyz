@@ -1,6 +1,7 @@
-import { auth, isAuthenticated } from 'middleware';
 import { NextApiRequest, NextApiResponse } from 'next';
 import nextConnect from 'next-connect';
+
+import { auth, isAuthenticated } from 'middleware';
 
 import { seed } from '../../lib/seed';
 
