@@ -1,7 +1,7 @@
 CREATE MIGRATION m1qvddtloo4xyv3rhvuqys2onur2fstqnmcrufktes7gmtyozy5wiq
     ONTO initial
 {
-  CREATE FUTURE nonrecursive_access_policies;
+#   CREATE FUTURE nonrecursive_access_policies;
   CREATE TYPE default::Description {
       CREATE REQUIRED PROPERTY description -> std::str;
       CREATE PROPERTY priority -> std::int32;
