@@ -33,7 +33,7 @@ function TechnologiesContainer({
 
   const handleAdd = (name?: string | null) => {
     if (parentId && name && setTechnologyData) {
-      c(parentId.id, name).then((response) => {
+      c(parentId.id, { technology_id: name }).then((response) => {
         setTechnologyData((oldState) => {
           const newState = oldState;
           delete response.stack;
