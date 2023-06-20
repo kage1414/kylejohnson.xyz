@@ -4,15 +4,15 @@ import {
   CircularProgress,
   Dialog,
   Paper,
-  Snackbar,
   TextField,
   Typography,
 } from '@mui/material';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactElement, useState } from 'react';
+import { ReactElement, useContext, useEffect, useState } from 'react';
 
+import { ToastContext } from './HomePage';
 import { useLogout } from './hooks';
 
 interface Props {
@@ -26,7 +26,7 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
   const [inviteOpen, setInviteOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
+  const { setToastMessage } = useContext(ToastContext);
 
   const onInviteOpen = () => {
     setInviteOpen(true);
@@ -42,11 +42,15 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
       .then(({ data }) => {
         setLoading(false);
         setInviteOpen(false);
-        setToastMessage(data);
+        if (setToastMessage) {
+          setToastMessage(data);
+        }
       })
       .catch((err) => {
         setLoading(false);
-        setToastMessage(err.response.data);
+        if (setToastMessage) {
+          setToastMessage(err.response.data);
+        }
         console.error(err);
       });
   };
@@ -55,6 +59,10 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
     mutateUser('/api/logout', undefined);
     logout();
   };
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   const style = {
     minHeight: 50,
@@ -152,13 +160,23 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
                   </li>
                   <li style={style}>
                     <Button
-                      disabled
+                      // disabled
                       onClick={() => {
                         axios({
                           url: '/api/seed',
                           method: 'post',
                           timeout: 10000,
-                        });
+                        })
+                          .then(() => {
+                            if (setToastMessage) {
+                              setToastMessage('Seed complete');
+                            }
+                          })
+                          .catch(() => {
+                            if (setToastMessage) {
+                              setToastMessage('Error seeding');
+                            }
+                          });
                       }}
                     >
                       Seed
@@ -204,14 +222,6 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
           </Box>
         </Paper>
       </Dialog>
-      <Snackbar
-        open={!!toastMessage}
-        autoHideDuration={6000}
-        onClose={() => {
-          setToastMessage('');
-        }}
-        message={toastMessage}
-      />
     </Box>
   );
 }
