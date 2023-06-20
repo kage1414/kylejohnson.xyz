@@ -10,7 +10,7 @@ import {
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactElement, useContext, useEffect, useState } from 'react';
+import { ReactElement, useContext, useState } from 'react';
 
 import { ToastContext } from './HomePage';
 import { useLogout } from './hooks';
