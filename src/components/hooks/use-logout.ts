@@ -2,6 +2,8 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 
+import { useUser } from '@/lib/hooks';
+
 interface SecondaryAttributes {
   loading: boolean;
 }
@@ -9,7 +11,8 @@ interface SecondaryAttributes {
 type Return = [() => void, SecondaryAttributes];
 
 export const useLogout = (): Return => {
-  const { route, push, reload } = useRouter();
+  const { route, push } = useRouter();
+  const [, { mutate }] = useUser();
   const [loading, setLoading] = useState(false);
   const logout = useCallback(() => {
     setLoading(true);
@@ -20,12 +23,11 @@ export const useLogout = (): Return => {
     }).then(() => {
       if (route !== '/') {
         push('/');
-      } else {
-        reload();
       }
+      mutate({ user: undefined });
       setLoading(false);
     });
-  }, [push, reload, route]);
+  }, [mutate, push, route]);
 
   return [logout, { loading }];
 };

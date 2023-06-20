@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import { ReactElement, useContext, useState } from 'react';
 
 import { ToastContext } from './HomePage';
-import { useLogout } from './hooks';
+import { useLogout, useUser } from './hooks';
 
 interface Props {
   mutateUser: any;
@@ -55,9 +55,9 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
       });
   };
 
-  const onLogout = () => {
+  const onLogout = async () => {
     mutateUser('/api/logout', undefined);
-    logout();
+    await logout();
   };
 
   const style = {
