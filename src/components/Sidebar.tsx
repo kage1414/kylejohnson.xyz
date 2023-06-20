@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import { ReactElement, useContext, useState } from 'react';
 
 import { ToastContext } from './HomePage';
-import { useLogout, useUser } from './hooks';
+import { useLogout } from './hooks';
 
 interface Props {
   mutateUser: any;
