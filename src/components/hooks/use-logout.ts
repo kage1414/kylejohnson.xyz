@@ -20,11 +20,11 @@ export const useLogout = (): Return => {
       url: '/api/logout',
       method: 'POST',
       timeout: 10000,
-    }).then(() => {
+    }).then((response) => {
       if (route !== '/') {
         push('/');
       }
-      mutate({ user: undefined });
+      mutate(undefined);
       setLoading(false);
     });
   }, [mutate, push, route]);
