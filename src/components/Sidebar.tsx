@@ -60,10 +60,6 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
     logout();
   };
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   const style = {
     minHeight: 50,
     display: 'flex',
