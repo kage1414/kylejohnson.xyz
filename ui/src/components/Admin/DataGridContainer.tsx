@@ -1,11 +1,11 @@
-import AddIcon from '@mui/icons-material/Add';
-import CancelIcon from '@mui/icons-material/Close';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import EditIcon from '@mui/icons-material/Edit';
-import SaveIcon from '@mui/icons-material/Save';
-import { Dialog, DialogContent, DialogTitle, Paper } from '@mui/material';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import AddIcon from "@mui/icons-material/Add";
+import CancelIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
+import { Dialog, DialogContent, DialogTitle, Paper } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import {
   DataGrid,
   GridActionsCellItem,
@@ -20,15 +20,15 @@ import {
   GridToolbarContainer,
   GridValidRowModel,
   MuiEvent,
-} from '@mui/x-data-grid';
-import { Dispatch, SetStateAction, useState } from 'react';
+} from "@mui/x-data-grid";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
   setRowModesModel: (
     newModel: (oldModel: GridRowModesModel) => GridRowModesModel
   ) => void;
-  onRowAdd: CrudOperations['c'];
+  onRowAdd: CrudOperations["c"];
   parentRow?: GridRowModel;
 }
 
@@ -46,7 +46,7 @@ function EditToolbar(props: EditToolbarProps) {
 
   return (
     <GridToolbarContainer>
-      <Button color='primary' startIcon={<AddIcon />} onClick={handleClick}>
+      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
         Add record
       </Button>
     </GridToolbarContainer>
@@ -89,7 +89,7 @@ export default function DataGridContainer({
     event.defaultMuiPrevented = true;
   };
 
-  const handleRowEditStop: GridEventListener<'rowEditStop'> = (
+  const handleRowEditStop: GridEventListener<"rowEditStop"> = (
     params,
     event
   ) => {
@@ -97,14 +97,14 @@ export default function DataGridContainer({
   };
   const getTitleFromId = (id: GridRowId | null): string => {
     const row = rows.find((row) => row.id === id);
-    if (row && row.hasOwnProperty('employer')) {
-      return row.employer ?? 'row';
-    } else if (row && row.hasOwnProperty('name')) {
-      return row.name ?? 'row';
-    } else if (row && row.hasOwnProperty('school')) {
-      return row.school ?? 'row';
+    if (row && row.employer) {
+      return row.employer ?? "row";
+    } else if (row && row.name) {
+      return row.name ?? "row";
+    } else if (row && row.school) {
+      return row.school ?? "row";
     } else {
-      return 'row';
+      return "row";
     }
   };
 
@@ -158,11 +158,11 @@ export default function DataGridContainer({
   const actionColumns: GridColumns = [
     ...columns,
     {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
       width: 100,
-      cellClassName: 'actions',
+      cellClassName: "actions",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -170,17 +170,17 @@ export default function DataGridContainer({
           return [
             <GridActionsCellItem
               icon={<SaveIcon />}
-              label='Save'
+              label="Save"
               onClick={handleSaveClick(id)}
-              key={'grid-actions-cell-item-save'}
+              key={"grid-actions-cell-item-save"}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
-              label='Cancel'
-              className='textPrimary'
+              label="Cancel"
+              className="textPrimary"
               onClick={handleCancelClick(id)}
-              color='inherit'
-              key={'grid-actions-cell-item-cancel'}
+              color="inherit"
+              key={"grid-actions-cell-item-cancel"}
             />,
           ];
         }
@@ -188,21 +188,21 @@ export default function DataGridContainer({
         return [
           <GridActionsCellItem
             icon={<EditIcon />}
-            label='Edit'
-            className='textPrimary'
+            label="Edit"
+            className="textPrimary"
             onClick={handleEditClick(id)}
-            color='inherit'
-            key={'grid-actions-cell-item-edit'}
+            color="inherit"
+            key={"grid-actions-cell-item-edit"}
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
-            label='Delete'
+            label="Delete"
             onClick={() => {
               setToDeleteId(id);
               setDeleteModalOpen(true);
             }}
-            color='inherit'
-            key={'grid-actions-cell-item-delete'}
+            color="inherit"
+            key={"grid-actions-cell-item-delete"}
           />,
         ];
       },
@@ -212,20 +212,20 @@ export default function DataGridContainer({
   return (
     <Box
       sx={{
-        height: '100%',
-        width: '100%',
-        '& .actions': {
-          color: 'text.secondary',
+        height: "100%",
+        width: "100%",
+        "& .actions": {
+          color: "text.secondary",
         },
-        '& .textPrimary': {
-          color: 'text.primary',
+        "& .textPrimary": {
+          color: "text.primary",
         },
       }}
     >
       <DataGrid
         rows={rows}
         columns={actionColumns}
-        editMode='row'
+        editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
         onRowEditStart={handleRowEditStart}
@@ -256,14 +256,14 @@ export default function DataGridContainer({
                 ? `Are you sure you want to delete ${getTitleFromId(
                     toDeleteId
                   )}?`
-                : ''}
+                : ""}
             </DialogTitle>
             <DialogContent>
-              <Box display={'flex'} justifyContent={'center'}>
-                <Button color='secondary' onClick={onNo}>
+              <Box display={"flex"} justifyContent={"center"}>
+                <Button color="secondary" onClick={onNo}>
                   No
                 </Button>
-                <Button color='warning' onClick={onYes}>
+                <Button color="warning" onClick={onYes}>
                   Yes
                 </Button>
               </Box>

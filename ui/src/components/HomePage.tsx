@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useState } from "react";
 
 import { BottomBar } from "./BottomBar";
 import { Navbar } from "./Navbar";
