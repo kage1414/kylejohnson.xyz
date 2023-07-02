@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -42,7 +43,7 @@ func setupProtectedRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.C
 }
 
 func ReverseProxy(c *gin.Context) {
-	remote, _ := url.Parse("http://localhost:3000")
+	remote, _ := url.Parse("http://localhost:5173")
 	proxy := httputil.NewSingleHostReverseProxy(remote)
 	proxy.Director = func(req *http.Request) {
 		req.Header = c.Request.Header
@@ -74,6 +75,11 @@ func main() {
 	api.Use(middleware.JwtAuthMiddleware())
 	setupProtectedRoutes(api, ctx, client)
 
-	r.NoRoute(ReverseProxy)
+	if os.Getenv("GO_ENV") == "development" {
+		fmt.Println("Dev environment detected. Reverse proxying dev server")
+		r.NoRoute(ReverseProxy)
+	} else {
+		r.Static("/", "ui/dist")
+	}
 	r.Run("localhost:8080")
 }
