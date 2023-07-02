@@ -4,14 +4,9 @@ import {
   GridRowModel,
   GridValueGetterParams,
 } from '@mui/x-data-grid';
+import { ApplicationJSON, DescriptionJSON, TechnologyJSON } from 'apiTypes';
 import axios from 'axios';
 import { ReactElement, useEffect, useState } from 'react';
-
-import {
-  Application as ApplicationData,
-  Description as DescriptionData,
-  Technology as TechnologyData,
-} from 'dbschema/interfaces';
 
 import {
   onAddApplication,
@@ -31,17 +26,17 @@ import {
 } from '../description-crud';
 
 export function EditApplication(): ReactElement {
-  const [application, setApplication] = useState<ApplicationData[]>([]);
+  const [application, setApplication] = useState<ApplicationJSON[]>([]);
   const [loading, setLoading] = useState(false);
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] =
     useState<GridRowModel | null>(null);
   const [isTechnologyModalOpen, setIsTechnologyModalOpen] =
     useState<GridRowModel | null>(null);
   const [editingDescriptions, setEditingDescriptions] = useState<
-    DescriptionData[]
+    DescriptionJSON[]
   >([]);
   const [editingTechnologies, setEditingTechnologies] = useState<
-    TechnologyData[]
+    TechnologyJSON[]
   >([]);
   const [technologyOptions, setTechnologyOptions] = useState([]);
   const columns: GridColDef[] = [
@@ -115,7 +110,7 @@ export function EditApplication(): ReactElement {
     { field: 'url', headerName: 'Url', editable: false, width: 300 },
     { field: 'priority', headerName: 'Priority', editable: true },
   ];
-  const getApplicationData = () => {
+  const getApplicationJSON = () => {
     setLoading(true);
     axios
       .get('/api/applications')
@@ -142,11 +137,11 @@ export function EditApplication(): ReactElement {
   const onClose = () => {
     setIsDescriptionModalOpen(null);
     setIsTechnologyModalOpen(null);
-    getApplicationData();
+    getApplicationJSON();
   };
 
   useEffect(() => {
-    getApplicationData();
+    getApplicationJSON();
     getTechnologyOptions();
   }, []);
 

@@ -3,11 +3,11 @@ import axios from 'axios';
 import { ReactElement, useEffect, useState } from 'react';
 
 import {
-  Application as ApplicationData,
-  Education as EducationData,
-  Experience as ExperienceData,
-  TechStack as TechnicalSkillsData,
-} from 'dbschema/interfaces';
+  ApplicationJSON,
+  EducationJSON,
+  ExperienceJSON,
+  TechStackJSON,
+} from 'apiTypes';
 
 import { Applications, Education, Experience, TechnicalSkills } from './Pages';
 
@@ -16,38 +16,47 @@ interface Props {
 }
 
 export function Feed({ selectedTab }: Props): ReactElement {
-  const [applicationData, setApplicationData] = useState<ApplicationData[]>([]);
-  const [educationData, setEducationData] = useState<EducationData[]>([]);
-  const [experienceData, setExperienceData] = useState<ExperienceData[]>([]);
-  const [technicalSkillsData, setTechnicalSkillsData] = useState<
-    TechnicalSkillsData[]
-  >([]);
+  const [ApplicationJSON, setApplicationJSON] = useState<ApplicationJSON[]>([]);
+  const [EducationJSON, setEducationJSON] = useState<EducationJSON[]>([]);
+  const [ExperienceJSON, setExperienceJSON] = useState<ExperienceJSON[]>([]);
+  const [TechnologyJSON, setTechnologyJSON] = useState<TechStackJSON[]>([]);
 
-  const fetchApplicationData = () => {
+  const fetchApplicationJSON = () => {
     axios
       .get('/api/applications')
-      .then(({ data }: { data: ApplicationData[] }) => {
-        setApplicationData(data.filter((ele) => !!ele.active) || []);
+      .then(({ data }: { data: ApplicationJSON[] }) => {
+        if (data) {
+          setApplicationJSON(data.filter((ele) => !!ele.active) || []);
+        }
       });
   };
 
-  const fetchEducationData = () => {
-    axios.get('/api/educations').then(({ data }: { data: EducationData[] }) => {
-      setEducationData(data.filter((ele) => !!ele.active) || []);
+  const fetchEducationJSON = () => {
+    axios.get('/api/educations').then(({ data }: { data: EducationJSON[] }) => {
+      if (data) {
+        setEducationJSON(data.filter((ele) => !!ele.active) || []);
+      }
     });
   };
 
-  const fetchTechnicalSkillsData = () => {
-    axios.get('/api/technical_skills').then(({ data }) => {
-      setTechnicalSkillsData(data || []);
-    });
+  const fetchTechnologyJSON = () => {
+    axios
+      .get('/api/technical_skills')
+      .then(({ data }: { data: TechStackJSON[] }) => {
+        if (data) {
+          setTechnologyJSON(data);
+        }
+      });
   };
 
-  const fetchExperienceData = () => {
+  const fetchExperienceJSON = () => {
     axios
       .get('/api/experience')
-      .then(({ data }: { data: ExperienceData[] }) => {
-        setExperienceData(data.filter((ele) => !!ele.active) || []);
+      .then(({ data }: { data: ExperienceJSON[] }) => {
+        console.log({ data });
+        if (data) {
+          setExperienceJSON(data.filter((ele) => !!ele.active) || []);
+        }
       })
       .catch((err) => {
         console.error(err);
@@ -55,21 +64,21 @@ export function Feed({ selectedTab }: Props): ReactElement {
   };
 
   useEffect(() => {
-    fetchApplicationData();
-    fetchEducationData();
-    fetchExperienceData();
-    fetchTechnicalSkillsData();
+    fetchApplicationJSON();
+    fetchEducationJSON();
+    fetchExperienceJSON();
+    fetchTechnologyJSON();
   }, []);
   return (
     <Grid container wrap='nowrap' marginBottom={10}>
       <Grid item>
-        <Experience data={experienceData} display={selectedTab === 0} />
+        <Experience data={ExperienceJSON} display={selectedTab === 0} />
         <TechnicalSkills
-          technicalSkillsData={technicalSkillsData}
+          TechnologyJSON={TechnologyJSON}
           display={selectedTab === 1}
         />
-        <Applications data={applicationData} display={selectedTab === 2} />
-        <Education data={educationData} display={selectedTab === 3} />
+        <Applications data={ApplicationJSON} display={selectedTab === 2} />
+        <Education data={EducationJSON} display={selectedTab === 3} />
       </Grid>
     </Grid>
   );

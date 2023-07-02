@@ -7,50 +7,51 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Experience {
+func ID(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Experience {
+func IDEQ(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Experience {
+func IDNEQ(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Experience {
+func IDIn(ids ...uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Experience {
+func IDNotIn(ids ...uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Experience {
+func IDGT(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Experience {
+func IDGTE(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Experience {
+func IDLT(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Experience {
+func IDLTE(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldLTE(FieldID, id))
 }
 
@@ -72,6 +73,11 @@ func Time(v string) predicate.Experience {
 // Active applies equality check predicate on the "active" field. It's identical to ActiveEQ.
 func Active(v bool) predicate.Experience {
 	return predicate.Experience(sql.FieldEQ(FieldActive, v))
+}
+
+// Priority applies equality check predicate on the "priority" field. It's identical to PriorityEQ.
+func Priority(v int32) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldPriority, v))
 }
 
 // EmployerEQ applies the EQ predicate on the "employer" field.
@@ -287,6 +293,66 @@ func ActiveEQ(v bool) predicate.Experience {
 // ActiveNEQ applies the NEQ predicate on the "active" field.
 func ActiveNEQ(v bool) predicate.Experience {
 	return predicate.Experience(sql.FieldNEQ(FieldActive, v))
+}
+
+// ActiveIsNil applies the IsNil predicate on the "active" field.
+func ActiveIsNil() predicate.Experience {
+	return predicate.Experience(sql.FieldIsNull(FieldActive))
+}
+
+// ActiveNotNil applies the NotNil predicate on the "active" field.
+func ActiveNotNil() predicate.Experience {
+	return predicate.Experience(sql.FieldNotNull(FieldActive))
+}
+
+// PriorityEQ applies the EQ predicate on the "priority" field.
+func PriorityEQ(v int32) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldPriority, v))
+}
+
+// PriorityNEQ applies the NEQ predicate on the "priority" field.
+func PriorityNEQ(v int32) predicate.Experience {
+	return predicate.Experience(sql.FieldNEQ(FieldPriority, v))
+}
+
+// PriorityIn applies the In predicate on the "priority" field.
+func PriorityIn(vs ...int32) predicate.Experience {
+	return predicate.Experience(sql.FieldIn(FieldPriority, vs...))
+}
+
+// PriorityNotIn applies the NotIn predicate on the "priority" field.
+func PriorityNotIn(vs ...int32) predicate.Experience {
+	return predicate.Experience(sql.FieldNotIn(FieldPriority, vs...))
+}
+
+// PriorityGT applies the GT predicate on the "priority" field.
+func PriorityGT(v int32) predicate.Experience {
+	return predicate.Experience(sql.FieldGT(FieldPriority, v))
+}
+
+// PriorityGTE applies the GTE predicate on the "priority" field.
+func PriorityGTE(v int32) predicate.Experience {
+	return predicate.Experience(sql.FieldGTE(FieldPriority, v))
+}
+
+// PriorityLT applies the LT predicate on the "priority" field.
+func PriorityLT(v int32) predicate.Experience {
+	return predicate.Experience(sql.FieldLT(FieldPriority, v))
+}
+
+// PriorityLTE applies the LTE predicate on the "priority" field.
+func PriorityLTE(v int32) predicate.Experience {
+	return predicate.Experience(sql.FieldLTE(FieldPriority, v))
+}
+
+// PriorityIsNil applies the IsNil predicate on the "priority" field.
+func PriorityIsNil() predicate.Experience {
+	return predicate.Experience(sql.FieldIsNull(FieldPriority))
+}
+
+// PriorityNotNil applies the NotNil predicate on the "priority" field.
+func PriorityNotNil() predicate.Experience {
+	return predicate.Experience(sql.FieldNotNull(FieldPriority))
 }
 
 // HasDescriptions applies the HasEdge predicate on the "descriptions" edge.

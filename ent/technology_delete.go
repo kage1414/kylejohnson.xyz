@@ -40,7 +40,7 @@ func (td *TechnologyDelete) ExecX(ctx context.Context) int {
 }
 
 func (td *TechnologyDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(technology.Table, sqlgraph.NewFieldSpec(technology.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewDeleteSpec(technology.Table, sqlgraph.NewFieldSpec(technology.FieldID, field.TypeUUID))
 	if ps := td.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

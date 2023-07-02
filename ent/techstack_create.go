@@ -11,6 +11,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // TechStackCreate is the builder for creating a TechStack entity.
@@ -26,15 +27,29 @@ func (tsc *TechStackCreate) SetStack(s string) *TechStackCreate {
 	return tsc
 }
 
+// SetID sets the "id" field.
+func (tsc *TechStackCreate) SetID(u uuid.UUID) *TechStackCreate {
+	tsc.mutation.SetID(u)
+	return tsc
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (tsc *TechStackCreate) SetNillableID(u *uuid.UUID) *TechStackCreate {
+	if u != nil {
+		tsc.SetID(*u)
+	}
+	return tsc
+}
+
 // AddTechnologyIDs adds the "technology" edge to the Technology entity by IDs.
-func (tsc *TechStackCreate) AddTechnologyIDs(ids ...int) *TechStackCreate {
+func (tsc *TechStackCreate) AddTechnologyIDs(ids ...uuid.UUID) *TechStackCreate {
 	tsc.mutation.AddTechnologyIDs(ids...)
 	return tsc
 }
 
 // AddTechnology adds the "technology" edges to the Technology entity.
 func (tsc *TechStackCreate) AddTechnology(t ...*Technology) *TechStackCreate {
-	ids := make([]int, len(t))
+	ids := make([]uuid.UUID, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
@@ -48,6 +63,7 @@ func (tsc *TechStackCreate) Mutation() *TechStackMutation {
 
 // Save creates the TechStack in the database.
 func (tsc *TechStackCreate) Save(ctx context.Context) (*TechStack, error) {
+	tsc.defaults()
 	return withHooks[*TechStack, TechStackMutation](ctx, tsc.sqlSave, tsc.mutation, tsc.hooks)
 }
 
@@ -73,6 +89,14 @@ func (tsc *TechStackCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (tsc *TechStackCreate) defaults() {
+	if _, ok := tsc.mutation.ID(); !ok {
+		v := techstack.DefaultID()
+		tsc.mutation.SetID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (tsc *TechStackCreate) check() error {
 	if _, ok := tsc.mutation.Stack(); !ok {
@@ -92,8 +116,13 @@ func (tsc *TechStackCreate) sqlSave(ctx context.Context) (*TechStack, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	tsc.mutation.id = &_node.ID
 	tsc.mutation.done = true
 	return _node, nil
@@ -102,8 +131,12 @@ func (tsc *TechStackCreate) sqlSave(ctx context.Context) (*TechStack, error) {
 func (tsc *TechStackCreate) createSpec() (*TechStack, *sqlgraph.CreateSpec) {
 	var (
 		_node = &TechStack{config: tsc.config}
-		_spec = sqlgraph.NewCreateSpec(techstack.Table, sqlgraph.NewFieldSpec(techstack.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(techstack.Table, sqlgraph.NewFieldSpec(techstack.FieldID, field.TypeUUID))
 	)
+	if id, ok := tsc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
 	if value, ok := tsc.mutation.Stack(); ok {
 		_spec.SetField(techstack.FieldStack, field.TypeString, value)
 		_node.Stack = value
@@ -116,7 +149,7 @@ func (tsc *TechStackCreate) createSpec() (*TechStack, *sqlgraph.CreateSpec) {
 			Columns: []string{techstack.TechnologyColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(technology.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(technology.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -141,6 +174,7 @@ func (tscb *TechStackCreateBulk) Save(ctx context.Context) ([]*TechStack, error)
 	for i := range tscb.builders {
 		func(i int, root context.Context) {
 			builder := tscb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TechStackMutation)
 				if !ok {
@@ -167,10 +201,6 @@ func (tscb *TechStackCreateBulk) Save(ctx context.Context) ([]*TechStack, error)
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

@@ -5,6 +5,7 @@ package experience
 import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 const (
@@ -20,6 +21,8 @@ const (
 	FieldTime = "time"
 	// FieldActive holds the string denoting the active field in the database.
 	FieldActive = "active"
+	// FieldPriority holds the string denoting the priority field in the database.
+	FieldPriority = "priority"
 	// EdgeDescriptions holds the string denoting the descriptions edge name in mutations.
 	EdgeDescriptions = "descriptions"
 	// Table holds the table name of the experience in the database.
@@ -40,6 +43,7 @@ var Columns = []string{
 	FieldPosition,
 	FieldTime,
 	FieldActive,
+	FieldPriority,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -55,6 +59,8 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultActive holds the default value on creation for the "active" field.
 	DefaultActive bool
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
 )
 
 // OrderOption defines the ordering options for the Experience queries.
@@ -83,6 +89,11 @@ func ByTime(opts ...sql.OrderTermOption) OrderOption {
 // ByActive orders the results by the active field.
 func ByActive(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldActive, opts...).ToFunc()
+}
+
+// ByPriority orders the results by the priority field.
+func ByPriority(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPriority, opts...).ToFunc()
 }
 
 // ByDescriptionsCount orders the results by descriptions count.

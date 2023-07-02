@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // DescriptionUpdate is the builder for updating Description entities.
@@ -49,14 +50,47 @@ func (du *DescriptionUpdate) SetNillableActive(b *bool) *DescriptionUpdate {
 	return du
 }
 
+// ClearActive clears the value of the "active" field.
+func (du *DescriptionUpdate) ClearActive() *DescriptionUpdate {
+	du.mutation.ClearActive()
+	return du
+}
+
+// SetPriority sets the "priority" field.
+func (du *DescriptionUpdate) SetPriority(i int32) *DescriptionUpdate {
+	du.mutation.ResetPriority()
+	du.mutation.SetPriority(i)
+	return du
+}
+
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (du *DescriptionUpdate) SetNillablePriority(i *int32) *DescriptionUpdate {
+	if i != nil {
+		du.SetPriority(*i)
+	}
+	return du
+}
+
+// AddPriority adds i to the "priority" field.
+func (du *DescriptionUpdate) AddPriority(i int32) *DescriptionUpdate {
+	du.mutation.AddPriority(i)
+	return du
+}
+
+// ClearPriority clears the value of the "priority" field.
+func (du *DescriptionUpdate) ClearPriority() *DescriptionUpdate {
+	du.mutation.ClearPriority()
+	return du
+}
+
 // SetExperienceID sets the "experience" edge to the Experience entity by ID.
-func (du *DescriptionUpdate) SetExperienceID(id int) *DescriptionUpdate {
+func (du *DescriptionUpdate) SetExperienceID(id uuid.UUID) *DescriptionUpdate {
 	du.mutation.SetExperienceID(id)
 	return du
 }
 
 // SetNillableExperienceID sets the "experience" edge to the Experience entity by ID if the given value is not nil.
-func (du *DescriptionUpdate) SetNillableExperienceID(id *int) *DescriptionUpdate {
+func (du *DescriptionUpdate) SetNillableExperienceID(id *uuid.UUID) *DescriptionUpdate {
 	if id != nil {
 		du = du.SetExperienceID(*id)
 	}
@@ -69,13 +103,13 @@ func (du *DescriptionUpdate) SetExperience(e *Experience) *DescriptionUpdate {
 }
 
 // SetApplicationID sets the "application" edge to the Application entity by ID.
-func (du *DescriptionUpdate) SetApplicationID(id int) *DescriptionUpdate {
+func (du *DescriptionUpdate) SetApplicationID(id uuid.UUID) *DescriptionUpdate {
 	du.mutation.SetApplicationID(id)
 	return du
 }
 
 // SetNillableApplicationID sets the "application" edge to the Application entity by ID if the given value is not nil.
-func (du *DescriptionUpdate) SetNillableApplicationID(id *int) *DescriptionUpdate {
+func (du *DescriptionUpdate) SetNillableApplicationID(id *uuid.UUID) *DescriptionUpdate {
 	if id != nil {
 		du = du.SetApplicationID(*id)
 	}
@@ -132,7 +166,7 @@ func (du *DescriptionUpdate) ExecX(ctx context.Context) {
 }
 
 func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(description.Table, description.Columns, sqlgraph.NewFieldSpec(description.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(description.Table, description.Columns, sqlgraph.NewFieldSpec(description.FieldID, field.TypeUUID))
 	if ps := du.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -146,6 +180,18 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := du.mutation.Active(); ok {
 		_spec.SetField(description.FieldActive, field.TypeBool, value)
 	}
+	if du.mutation.ActiveCleared() {
+		_spec.ClearField(description.FieldActive, field.TypeBool)
+	}
+	if value, ok := du.mutation.Priority(); ok {
+		_spec.SetField(description.FieldPriority, field.TypeInt32, value)
+	}
+	if value, ok := du.mutation.AddedPriority(); ok {
+		_spec.AddField(description.FieldPriority, field.TypeInt32, value)
+	}
+	if du.mutation.PriorityCleared() {
+		_spec.ClearField(description.FieldPriority, field.TypeInt32)
+	}
 	if du.mutation.ExperienceCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -154,7 +200,7 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{description.ExperienceColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(experience.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(experience.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -167,7 +213,7 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{description.ExperienceColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(experience.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(experience.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -183,7 +229,7 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{description.ApplicationColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -196,7 +242,7 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{description.ApplicationColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -244,14 +290,47 @@ func (duo *DescriptionUpdateOne) SetNillableActive(b *bool) *DescriptionUpdateOn
 	return duo
 }
 
+// ClearActive clears the value of the "active" field.
+func (duo *DescriptionUpdateOne) ClearActive() *DescriptionUpdateOne {
+	duo.mutation.ClearActive()
+	return duo
+}
+
+// SetPriority sets the "priority" field.
+func (duo *DescriptionUpdateOne) SetPriority(i int32) *DescriptionUpdateOne {
+	duo.mutation.ResetPriority()
+	duo.mutation.SetPriority(i)
+	return duo
+}
+
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (duo *DescriptionUpdateOne) SetNillablePriority(i *int32) *DescriptionUpdateOne {
+	if i != nil {
+		duo.SetPriority(*i)
+	}
+	return duo
+}
+
+// AddPriority adds i to the "priority" field.
+func (duo *DescriptionUpdateOne) AddPriority(i int32) *DescriptionUpdateOne {
+	duo.mutation.AddPriority(i)
+	return duo
+}
+
+// ClearPriority clears the value of the "priority" field.
+func (duo *DescriptionUpdateOne) ClearPriority() *DescriptionUpdateOne {
+	duo.mutation.ClearPriority()
+	return duo
+}
+
 // SetExperienceID sets the "experience" edge to the Experience entity by ID.
-func (duo *DescriptionUpdateOne) SetExperienceID(id int) *DescriptionUpdateOne {
+func (duo *DescriptionUpdateOne) SetExperienceID(id uuid.UUID) *DescriptionUpdateOne {
 	duo.mutation.SetExperienceID(id)
 	return duo
 }
 
 // SetNillableExperienceID sets the "experience" edge to the Experience entity by ID if the given value is not nil.
-func (duo *DescriptionUpdateOne) SetNillableExperienceID(id *int) *DescriptionUpdateOne {
+func (duo *DescriptionUpdateOne) SetNillableExperienceID(id *uuid.UUID) *DescriptionUpdateOne {
 	if id != nil {
 		duo = duo.SetExperienceID(*id)
 	}
@@ -264,13 +343,13 @@ func (duo *DescriptionUpdateOne) SetExperience(e *Experience) *DescriptionUpdate
 }
 
 // SetApplicationID sets the "application" edge to the Application entity by ID.
-func (duo *DescriptionUpdateOne) SetApplicationID(id int) *DescriptionUpdateOne {
+func (duo *DescriptionUpdateOne) SetApplicationID(id uuid.UUID) *DescriptionUpdateOne {
 	duo.mutation.SetApplicationID(id)
 	return duo
 }
 
 // SetNillableApplicationID sets the "application" edge to the Application entity by ID if the given value is not nil.
-func (duo *DescriptionUpdateOne) SetNillableApplicationID(id *int) *DescriptionUpdateOne {
+func (duo *DescriptionUpdateOne) SetNillableApplicationID(id *uuid.UUID) *DescriptionUpdateOne {
 	if id != nil {
 		duo = duo.SetApplicationID(*id)
 	}
@@ -340,7 +419,7 @@ func (duo *DescriptionUpdateOne) ExecX(ctx context.Context) {
 }
 
 func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Description, err error) {
-	_spec := sqlgraph.NewUpdateSpec(description.Table, description.Columns, sqlgraph.NewFieldSpec(description.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(description.Table, description.Columns, sqlgraph.NewFieldSpec(description.FieldID, field.TypeUUID))
 	id, ok := duo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Description.id" for update`)}
@@ -371,6 +450,18 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 	if value, ok := duo.mutation.Active(); ok {
 		_spec.SetField(description.FieldActive, field.TypeBool, value)
 	}
+	if duo.mutation.ActiveCleared() {
+		_spec.ClearField(description.FieldActive, field.TypeBool)
+	}
+	if value, ok := duo.mutation.Priority(); ok {
+		_spec.SetField(description.FieldPriority, field.TypeInt32, value)
+	}
+	if value, ok := duo.mutation.AddedPriority(); ok {
+		_spec.AddField(description.FieldPriority, field.TypeInt32, value)
+	}
+	if duo.mutation.PriorityCleared() {
+		_spec.ClearField(description.FieldPriority, field.TypeInt32)
+	}
 	if duo.mutation.ExperienceCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -379,7 +470,7 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 			Columns: []string{description.ExperienceColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(experience.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(experience.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -392,7 +483,7 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 			Columns: []string{description.ExperienceColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(experience.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(experience.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -408,7 +499,7 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 			Columns: []string{description.ApplicationColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -421,7 +512,7 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 			Columns: []string{description.ApplicationColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

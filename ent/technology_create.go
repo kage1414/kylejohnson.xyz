@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // TechnologyCreate is the builder for creating a Technology entity.
@@ -33,39 +34,65 @@ func (tc *TechnologyCreate) SetURL(s string) *TechnologyCreate {
 	return tc
 }
 
+// SetNillableURL sets the "url" field if the given value is not nil.
+func (tc *TechnologyCreate) SetNillableURL(s *string) *TechnologyCreate {
+	if s != nil {
+		tc.SetURL(*s)
+	}
+	return tc
+}
+
 // SetPriority sets the "priority" field.
 func (tc *TechnologyCreate) SetPriority(i int32) *TechnologyCreate {
 	tc.mutation.SetPriority(i)
 	return tc
 }
 
-// SetApplicationID sets the "application" edge to the Application entity by ID.
-func (tc *TechnologyCreate) SetApplicationID(id int) *TechnologyCreate {
-	tc.mutation.SetApplicationID(id)
-	return tc
-}
-
-// SetNillableApplicationID sets the "application" edge to the Application entity by ID if the given value is not nil.
-func (tc *TechnologyCreate) SetNillableApplicationID(id *int) *TechnologyCreate {
-	if id != nil {
-		tc = tc.SetApplicationID(*id)
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (tc *TechnologyCreate) SetNillablePriority(i *int32) *TechnologyCreate {
+	if i != nil {
+		tc.SetPriority(*i)
 	}
 	return tc
 }
 
-// SetApplication sets the "application" edge to the Application entity.
-func (tc *TechnologyCreate) SetApplication(a *Application) *TechnologyCreate {
-	return tc.SetApplicationID(a.ID)
+// SetID sets the "id" field.
+func (tc *TechnologyCreate) SetID(u uuid.UUID) *TechnologyCreate {
+	tc.mutation.SetID(u)
+	return tc
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (tc *TechnologyCreate) SetNillableID(u *uuid.UUID) *TechnologyCreate {
+	if u != nil {
+		tc.SetID(*u)
+	}
+	return tc
+}
+
+// AddApplicationIDs adds the "application" edge to the Application entity by IDs.
+func (tc *TechnologyCreate) AddApplicationIDs(ids ...uuid.UUID) *TechnologyCreate {
+	tc.mutation.AddApplicationIDs(ids...)
+	return tc
+}
+
+// AddApplication adds the "application" edges to the Application entity.
+func (tc *TechnologyCreate) AddApplication(a ...*Application) *TechnologyCreate {
+	ids := make([]uuid.UUID, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return tc.AddApplicationIDs(ids...)
 }
 
 // SetStackID sets the "stack" edge to the TechStack entity by ID.
-func (tc *TechnologyCreate) SetStackID(id int) *TechnologyCreate {
+func (tc *TechnologyCreate) SetStackID(id uuid.UUID) *TechnologyCreate {
 	tc.mutation.SetStackID(id)
 	return tc
 }
 
 // SetNillableStackID sets the "stack" edge to the TechStack entity by ID if the given value is not nil.
-func (tc *TechnologyCreate) SetNillableStackID(id *int) *TechnologyCreate {
+func (tc *TechnologyCreate) SetNillableStackID(id *uuid.UUID) *TechnologyCreate {
 	if id != nil {
 		tc = tc.SetStackID(*id)
 	}
@@ -84,6 +111,7 @@ func (tc *TechnologyCreate) Mutation() *TechnologyMutation {
 
 // Save creates the Technology in the database.
 func (tc *TechnologyCreate) Save(ctx context.Context) (*Technology, error) {
+	tc.defaults()
 	return withHooks[*Technology, TechnologyMutation](ctx, tc.sqlSave, tc.mutation, tc.hooks)
 }
 
@@ -109,16 +137,18 @@ func (tc *TechnologyCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (tc *TechnologyCreate) defaults() {
+	if _, ok := tc.mutation.ID(); !ok {
+		v := technology.DefaultID()
+		tc.mutation.SetID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (tc *TechnologyCreate) check() error {
 	if _, ok := tc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Technology.name"`)}
-	}
-	if _, ok := tc.mutation.URL(); !ok {
-		return &ValidationError{Name: "url", err: errors.New(`ent: missing required field "Technology.url"`)}
-	}
-	if _, ok := tc.mutation.Priority(); !ok {
-		return &ValidationError{Name: "priority", err: errors.New(`ent: missing required field "Technology.priority"`)}
 	}
 	return nil
 }
@@ -134,8 +164,13 @@ func (tc *TechnologyCreate) sqlSave(ctx context.Context) (*Technology, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	tc.mutation.id = &_node.ID
 	tc.mutation.done = true
 	return _node, nil
@@ -144,8 +179,12 @@ func (tc *TechnologyCreate) sqlSave(ctx context.Context) (*Technology, error) {
 func (tc *TechnologyCreate) createSpec() (*Technology, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Technology{config: tc.config}
-		_spec = sqlgraph.NewCreateSpec(technology.Table, sqlgraph.NewFieldSpec(technology.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(technology.Table, sqlgraph.NewFieldSpec(technology.FieldID, field.TypeUUID))
 	)
+	if id, ok := tc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
 	if value, ok := tc.mutation.Name(); ok {
 		_spec.SetField(technology.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -160,19 +199,18 @@ func (tc *TechnologyCreate) createSpec() (*Technology, *sqlgraph.CreateSpec) {
 	}
 	if nodes := tc.mutation.ApplicationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   technology.ApplicationTable,
-			Columns: []string{technology.ApplicationColumn},
+			Columns: technology.ApplicationPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.application_technologies = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := tc.mutation.StackIDs(); len(nodes) > 0 {
@@ -183,7 +221,7 @@ func (tc *TechnologyCreate) createSpec() (*Technology, *sqlgraph.CreateSpec) {
 			Columns: []string{technology.StackColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(techstack.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(techstack.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -209,6 +247,7 @@ func (tcb *TechnologyCreateBulk) Save(ctx context.Context) ([]*Technology, error
 	for i := range tcb.builders {
 		func(i int, root context.Context) {
 			builder := tcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TechnologyMutation)
 				if !ok {
@@ -235,10 +274,6 @@ func (tcb *TechnologyCreateBulk) Save(ctx context.Context) ([]*Technology, error
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

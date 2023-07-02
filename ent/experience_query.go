@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // ExperienceQuery is the builder for querying Experience entities.
@@ -106,8 +107,8 @@ func (eq *ExperienceQuery) FirstX(ctx context.Context) *Experience {
 
 // FirstID returns the first Experience ID from the query.
 // Returns a *NotFoundError when no Experience ID was found.
-func (eq *ExperienceQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (eq *ExperienceQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = eq.Limit(1).IDs(setContextOp(ctx, eq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -119,7 +120,7 @@ func (eq *ExperienceQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (eq *ExperienceQuery) FirstIDX(ctx context.Context) int {
+func (eq *ExperienceQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := eq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -157,8 +158,8 @@ func (eq *ExperienceQuery) OnlyX(ctx context.Context) *Experience {
 // OnlyID is like Only, but returns the only Experience ID in the query.
 // Returns a *NotSingularError when more than one Experience ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (eq *ExperienceQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (eq *ExperienceQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = eq.Limit(2).IDs(setContextOp(ctx, eq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -174,7 +175,7 @@ func (eq *ExperienceQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (eq *ExperienceQuery) OnlyIDX(ctx context.Context) int {
+func (eq *ExperienceQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := eq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -202,7 +203,7 @@ func (eq *ExperienceQuery) AllX(ctx context.Context) []*Experience {
 }
 
 // IDs executes the query and returns a list of Experience IDs.
-func (eq *ExperienceQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (eq *ExperienceQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if eq.ctx.Unique == nil && eq.path != nil {
 		eq.Unique(true)
 	}
@@ -214,7 +215,7 @@ func (eq *ExperienceQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (eq *ExperienceQuery) IDsX(ctx context.Context) []int {
+func (eq *ExperienceQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := eq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -404,7 +405,7 @@ func (eq *ExperienceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*E
 
 func (eq *ExperienceQuery) loadDescriptions(ctx context.Context, query *DescriptionQuery, nodes []*Experience, init func(*Experience), assign func(*Experience, *Description)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Experience)
+	nodeids := make(map[uuid.UUID]*Experience)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -444,7 +445,7 @@ func (eq *ExperienceQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (eq *ExperienceQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(experience.Table, experience.Columns, sqlgraph.NewFieldSpec(experience.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(experience.Table, experience.Columns, sqlgraph.NewFieldSpec(experience.FieldID, field.TypeUUID))
 	_spec.From = eq.sql
 	if unique := eq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

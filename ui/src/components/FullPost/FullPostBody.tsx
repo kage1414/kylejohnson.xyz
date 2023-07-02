@@ -1,15 +1,14 @@
 import { Box, Divider, List, ListItemText, Paper } from '@mui/material';
+import { DescriptionJSON, TechnologyJSON } from 'apiTypes';
 import { ReactElement } from 'react';
 
-import { Description, Technology } from 'dbschema/interfaces';
-
 interface Props {
-  descriptions?: Description[];
-  technologies?: Technology[];
+  descriptions?: DescriptionJSON[];
+  technologies?: TechnologyJSON[];
 }
 
 interface TechnologiesListProps {
-  technologies: Technology[];
+  technologies: TechnologyJSON[];
 }
 
 const TechnologiesList = ({

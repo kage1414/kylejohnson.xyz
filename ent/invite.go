@@ -5,25 +5,52 @@ package ent
 import (
 	"fmt"
 	"kylejohnson-xyz/ent/invite"
+	"kylejohnson-xyz/ent/user"
 	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // Invite is the model entity for the Invite schema.
 type Invite struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
 	// Email holds the value of the "email" field.
 	Email string `json:"email,omitempty"`
 	// Key holds the value of the "key" field.
 	Key string `json:"key,omitempty"`
 	// Registered holds the value of the "registered" field.
-	Registered   bool `json:"registered,omitempty"`
-	user_invite  *int
+	Registered bool `json:"registered,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the InviteQuery when eager-loading is set.
+	Edges        InviteEdges `json:"edges"`
+	user_invite  *uuid.UUID
 	selectValues sql.SelectValues
+}
+
+// InviteEdges holds the relations/edges for other nodes in the graph.
+type InviteEdges struct {
+	// User holds the value of the user edge.
+	User *User `json:"user,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// UserOrErr returns the User value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e InviteEdges) UserOrErr() (*User, error) {
+	if e.loadedTypes[0] {
+		if e.User == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: user.Label}
+		}
+		return e.User, nil
+	}
+	return nil, &NotLoadedError{edge: "user"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -33,12 +60,12 @@ func (*Invite) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case invite.FieldRegistered:
 			values[i] = new(sql.NullBool)
-		case invite.FieldID:
-			values[i] = new(sql.NullInt64)
 		case invite.FieldEmail, invite.FieldKey:
 			values[i] = new(sql.NullString)
+		case invite.FieldID:
+			values[i] = new(uuid.UUID)
 		case invite.ForeignKeys[0]: // user_invite
-			values[i] = new(sql.NullInt64)
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -55,11 +82,11 @@ func (i *Invite) assignValues(columns []string, values []any) error {
 	for j := range columns {
 		switch columns[j] {
 		case invite.FieldID:
-			value, ok := values[j].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[j].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[j])
+			} else if value != nil {
+				i.ID = *value
 			}
-			i.ID = int(value.Int64)
 		case invite.FieldEmail:
 			if value, ok := values[j].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field email", values[j])
@@ -79,11 +106,11 @@ func (i *Invite) assignValues(columns []string, values []any) error {
 				i.Registered = value.Bool
 			}
 		case invite.ForeignKeys[0]:
-			if value, ok := values[j].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field user_invite", value)
+			if value, ok := values[j].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field user_invite", values[j])
 			} else if value.Valid {
-				i.user_invite = new(int)
-				*i.user_invite = int(value.Int64)
+				i.user_invite = new(uuid.UUID)
+				*i.user_invite = *value.S.(*uuid.UUID)
 			}
 		default:
 			i.selectValues.Set(columns[j], values[j])
@@ -96,6 +123,11 @@ func (i *Invite) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (i *Invite) Value(name string) (ent.Value, error) {
 	return i.selectValues.Get(name)
+}
+
+// QueryUser queries the "user" edge of the Invite entity.
+func (i *Invite) QueryUser() *UserQuery {
+	return NewInviteClient(i.config).QueryUser(i)
 }
 
 // Update returns a builder for updating this Invite.

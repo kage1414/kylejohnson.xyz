@@ -8,15 +8,14 @@ import {
   ListItemText,
 } from '@mui/material';
 import { GridColDef, GridRowModel } from '@mui/x-data-grid';
+import { TechnologyJSON } from 'apiTypes';
 import { Dispatch, ReactElement, SetStateAction } from 'react';
-
-import { Technology as TechnologyData } from 'dbschema/interfaces';
 
 import DataGridContainer, { CrudOperations } from './DataGridContainer';
 
 interface TechnologiesContainerProps {
-  technologies: TechnologyData[];
-  technologyOptions: TechnologyData[];
+  technologies: TechnologyJSON[];
+  technologyOptions: TechnologyJSON[];
   tertiaryCrud: CrudOperations;
   parentId?: GridRowModel | null;
   setTechnologyData?: Dispatch<SetStateAction<any[]>>;
@@ -25,7 +24,7 @@ interface TechnologiesContainerProps {
 function TechnologiesContainer({
   technologies,
   technologyOptions,
-  tertiaryCrud: { c, d },
+  tertiaryCrud: { c },
   parentId,
   setTechnologyData,
 }: TechnologiesContainerProps): ReactElement {
@@ -42,7 +41,7 @@ function TechnologiesContainer({
             onClick={(e) => {
               e.preventDefault();
               if (parentId && name && setTechnologyData) {
-                c(parentId.id, name).then((response) => {
+                c(parentId.id, { technology_id: name }).then((response) => {
                   setTechnologyData((oldState) => {
                     const newState = oldState;
                     delete response.stack;
@@ -90,7 +89,7 @@ interface Props {
   onClose?: () => void;
   isSecondaryOpen?: GridRowModel | null;
   isTertiaryOpen?: GridRowModel | null;
-  tertiaryOptions?: TechnologyData[];
+  tertiaryOptions?: TechnologyJSON[];
 }
 
 export function EditSection({
@@ -102,12 +101,10 @@ export function EditSection({
   secondaryCrud,
   secondaryData,
   setSecondaryData,
-  tertiaryColumns,
   tertiaryData,
   tertiaryCrud,
   setTertiaryData,
   isTertiaryOpen,
-  onUpdateRowError,
   loading,
   onClose,
   isSecondaryOpen,

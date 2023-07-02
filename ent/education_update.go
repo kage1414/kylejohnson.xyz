@@ -107,6 +107,12 @@ func (eu *EducationUpdate) SetNillableActive(b *bool) *EducationUpdate {
 	return eu
 }
 
+// ClearActive clears the value of the "active" field.
+func (eu *EducationUpdate) ClearActive() *EducationUpdate {
+	eu.mutation.ClearActive()
+	return eu
+}
+
 // SetPriority sets the "priority" field.
 func (eu *EducationUpdate) SetPriority(i int32) *EducationUpdate {
 	eu.mutation.ResetPriority()
@@ -167,7 +173,7 @@ func (eu *EducationUpdate) ExecX(ctx context.Context) {
 }
 
 func (eu *EducationUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(education.Table, education.Columns, sqlgraph.NewFieldSpec(education.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(education.Table, education.Columns, sqlgraph.NewFieldSpec(education.FieldID, field.TypeUUID))
 	if ps := eu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -198,6 +204,9 @@ func (eu *EducationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := eu.mutation.Active(); ok {
 		_spec.SetField(education.FieldActive, field.TypeBool, value)
+	}
+	if eu.mutation.ActiveCleared() {
+		_spec.ClearField(education.FieldActive, field.TypeBool)
 	}
 	if value, ok := eu.mutation.Priority(); ok {
 		_spec.SetField(education.FieldPriority, field.TypeInt32, value)
@@ -308,6 +317,12 @@ func (euo *EducationUpdateOne) SetNillableActive(b *bool) *EducationUpdateOne {
 	return euo
 }
 
+// ClearActive clears the value of the "active" field.
+func (euo *EducationUpdateOne) ClearActive() *EducationUpdateOne {
+	euo.mutation.ClearActive()
+	return euo
+}
+
 // SetPriority sets the "priority" field.
 func (euo *EducationUpdateOne) SetPriority(i int32) *EducationUpdateOne {
 	euo.mutation.ResetPriority()
@@ -381,7 +396,7 @@ func (euo *EducationUpdateOne) ExecX(ctx context.Context) {
 }
 
 func (euo *EducationUpdateOne) sqlSave(ctx context.Context) (_node *Education, err error) {
-	_spec := sqlgraph.NewUpdateSpec(education.Table, education.Columns, sqlgraph.NewFieldSpec(education.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(education.Table, education.Columns, sqlgraph.NewFieldSpec(education.FieldID, field.TypeUUID))
 	id, ok := euo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Education.id" for update`)}
@@ -429,6 +444,9 @@ func (euo *EducationUpdateOne) sqlSave(ctx context.Context) (_node *Education, e
 	}
 	if value, ok := euo.mutation.Active(); ok {
 		_spec.SetField(education.FieldActive, field.TypeBool, value)
+	}
+	if euo.mutation.ActiveCleared() {
+		_spec.ClearField(education.FieldActive, field.TypeBool)
 	}
 	if value, ok := euo.mutation.Priority(); ok {
 		_spec.SetField(education.FieldPriority, field.TypeInt32, value)

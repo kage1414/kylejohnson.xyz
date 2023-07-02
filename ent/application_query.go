@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // ApplicationQuery is the builder for querying Application entities.
@@ -98,7 +99,7 @@ func (aq *ApplicationQuery) QueryTechnologies() *TechnologyQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(application.Table, application.FieldID, selector),
 			sqlgraph.To(technology.Table, technology.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, application.TechnologiesTable, application.TechnologiesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, application.TechnologiesTable, application.TechnologiesPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
 		return fromU, nil
@@ -130,8 +131,8 @@ func (aq *ApplicationQuery) FirstX(ctx context.Context) *Application {
 
 // FirstID returns the first Application ID from the query.
 // Returns a *NotFoundError when no Application ID was found.
-func (aq *ApplicationQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (aq *ApplicationQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = aq.Limit(1).IDs(setContextOp(ctx, aq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -143,7 +144,7 @@ func (aq *ApplicationQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (aq *ApplicationQuery) FirstIDX(ctx context.Context) int {
+func (aq *ApplicationQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := aq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -181,8 +182,8 @@ func (aq *ApplicationQuery) OnlyX(ctx context.Context) *Application {
 // OnlyID is like Only, but returns the only Application ID in the query.
 // Returns a *NotSingularError when more than one Application ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (aq *ApplicationQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (aq *ApplicationQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = aq.Limit(2).IDs(setContextOp(ctx, aq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -198,7 +199,7 @@ func (aq *ApplicationQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (aq *ApplicationQuery) OnlyIDX(ctx context.Context) int {
+func (aq *ApplicationQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := aq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -226,7 +227,7 @@ func (aq *ApplicationQuery) AllX(ctx context.Context) []*Application {
 }
 
 // IDs executes the query and returns a list of Application IDs.
-func (aq *ApplicationQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (aq *ApplicationQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if aq.ctx.Unique == nil && aq.path != nil {
 		aq.Unique(true)
 	}
@@ -238,7 +239,7 @@ func (aq *ApplicationQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (aq *ApplicationQuery) IDsX(ctx context.Context) []int {
+func (aq *ApplicationQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := aq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -448,7 +449,7 @@ func (aq *ApplicationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 
 func (aq *ApplicationQuery) loadDescriptions(ctx context.Context, query *DescriptionQuery, nodes []*Application, init func(*Application), assign func(*Application, *Description)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Application)
+	nodeids := make(map[uuid.UUID]*Application)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -478,33 +479,63 @@ func (aq *ApplicationQuery) loadDescriptions(ctx context.Context, query *Descrip
 	return nil
 }
 func (aq *ApplicationQuery) loadTechnologies(ctx context.Context, query *TechnologyQuery, nodes []*Application, init func(*Application), assign func(*Application, *Technology)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Application)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[uuid.UUID]*Application)
+	nids := make(map[uuid.UUID]map[*Application]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Technology(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(application.TechnologiesColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(application.TechnologiesTable)
+		s.Join(joinT).On(s.C(technology.FieldID), joinT.C(application.TechnologiesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(application.TechnologiesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(application.TechnologiesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(uuid.UUID)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := *values[0].(*uuid.UUID)
+				inValue := *values[1].(*uuid.UUID)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Application]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Technology](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.application_technologies
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "application_technologies" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "application_technologies" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "technologies" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -519,7 +550,7 @@ func (aq *ApplicationQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (aq *ApplicationQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(application.Table, application.Columns, sqlgraph.NewFieldSpec(application.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(application.Table, application.Columns, sqlgraph.NewFieldSpec(application.FieldID, field.TypeUUID))
 	_spec.From = aq.sql
 	if unique := aq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

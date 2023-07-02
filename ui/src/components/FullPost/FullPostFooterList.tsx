@@ -1,7 +1,7 @@
-import { Box, Grid, Theme } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     '&$span $awardSpan': {
       textDecorationColor: 'rgb(136, 136, 136)',

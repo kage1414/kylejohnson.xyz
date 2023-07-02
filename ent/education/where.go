@@ -6,50 +6,51 @@ import (
 	"kylejohnson-xyz/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Education {
+func ID(id uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Education {
+func IDEQ(id uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Education {
+func IDNEQ(id uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Education {
+func IDIn(ids ...uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Education {
+func IDNotIn(ids ...uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Education {
+func IDGT(id uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Education {
+func IDGTE(id uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Education {
+func IDLT(id uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Education {
+func IDLTE(id uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldLTE(FieldID, id))
 }
 
@@ -381,6 +382,16 @@ func ActiveEQ(v bool) predicate.Education {
 // ActiveNEQ applies the NEQ predicate on the "active" field.
 func ActiveNEQ(v bool) predicate.Education {
 	return predicate.Education(sql.FieldNEQ(FieldActive, v))
+}
+
+// ActiveIsNil applies the IsNil predicate on the "active" field.
+func ActiveIsNil() predicate.Education {
+	return predicate.Education(sql.FieldIsNull(FieldActive))
+}
+
+// ActiveNotNil applies the NotNil predicate on the "active" field.
+func ActiveNotNil() predicate.Education {
+	return predicate.Education(sql.FieldNotNull(FieldActive))
 }
 
 // PriorityEQ applies the EQ predicate on the "priority" field.

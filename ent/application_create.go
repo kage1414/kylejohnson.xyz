@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"kylejohnson-xyz/ent/application"
 	"kylejohnson-xyz/ent/description"
@@ -12,6 +11,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // ApplicationCreate is the builder for creating a Application entity.
@@ -77,15 +77,29 @@ func (ac *ApplicationCreate) SetNillablePriority(i *int32) *ApplicationCreate {
 	return ac
 }
 
+// SetID sets the "id" field.
+func (ac *ApplicationCreate) SetID(u uuid.UUID) *ApplicationCreate {
+	ac.mutation.SetID(u)
+	return ac
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (ac *ApplicationCreate) SetNillableID(u *uuid.UUID) *ApplicationCreate {
+	if u != nil {
+		ac.SetID(*u)
+	}
+	return ac
+}
+
 // AddDescriptionIDs adds the "descriptions" edge to the Description entity by IDs.
-func (ac *ApplicationCreate) AddDescriptionIDs(ids ...int) *ApplicationCreate {
+func (ac *ApplicationCreate) AddDescriptionIDs(ids ...uuid.UUID) *ApplicationCreate {
 	ac.mutation.AddDescriptionIDs(ids...)
 	return ac
 }
 
 // AddDescriptions adds the "descriptions" edges to the Description entity.
 func (ac *ApplicationCreate) AddDescriptions(d ...*Description) *ApplicationCreate {
-	ids := make([]int, len(d))
+	ids := make([]uuid.UUID, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
@@ -93,14 +107,14 @@ func (ac *ApplicationCreate) AddDescriptions(d ...*Description) *ApplicationCrea
 }
 
 // AddTechnologyIDs adds the "technologies" edge to the Technology entity by IDs.
-func (ac *ApplicationCreate) AddTechnologyIDs(ids ...int) *ApplicationCreate {
+func (ac *ApplicationCreate) AddTechnologyIDs(ids ...uuid.UUID) *ApplicationCreate {
 	ac.mutation.AddTechnologyIDs(ids...)
 	return ac
 }
 
 // AddTechnologies adds the "technologies" edges to the Technology entity.
 func (ac *ApplicationCreate) AddTechnologies(t ...*Technology) *ApplicationCreate {
-	ids := make([]int, len(t))
+	ids := make([]uuid.UUID, len(t))
 	for i := range t {
 		ids[i] = t[i].ID
 	}
@@ -146,13 +160,14 @@ func (ac *ApplicationCreate) defaults() {
 		v := application.DefaultActive
 		ac.mutation.SetActive(v)
 	}
+	if _, ok := ac.mutation.ID(); !ok {
+		v := application.DefaultID()
+		ac.mutation.SetID(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (ac *ApplicationCreate) check() error {
-	if _, ok := ac.mutation.Active(); !ok {
-		return &ValidationError{Name: "active", err: errors.New(`ent: missing required field "Application.active"`)}
-	}
 	return nil
 }
 
@@ -167,8 +182,13 @@ func (ac *ApplicationCreate) sqlSave(ctx context.Context) (*Application, error) 
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	ac.mutation.id = &_node.ID
 	ac.mutation.done = true
 	return _node, nil
@@ -177,8 +197,12 @@ func (ac *ApplicationCreate) sqlSave(ctx context.Context) (*Application, error) 
 func (ac *ApplicationCreate) createSpec() (*Application, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Application{config: ac.config}
-		_spec = sqlgraph.NewCreateSpec(application.Table, sqlgraph.NewFieldSpec(application.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(application.Table, sqlgraph.NewFieldSpec(application.FieldID, field.TypeUUID))
 	)
+	if id, ok := ac.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
 	if value, ok := ac.mutation.Name(); ok {
 		_spec.SetField(application.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -203,7 +227,7 @@ func (ac *ApplicationCreate) createSpec() (*Application, *sqlgraph.CreateSpec) {
 			Columns: []string{application.DescriptionsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(description.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(description.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -213,13 +237,13 @@ func (ac *ApplicationCreate) createSpec() (*Application, *sqlgraph.CreateSpec) {
 	}
 	if nodes := ac.mutation.TechnologiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   application.TechnologiesTable,
-			Columns: []string{application.TechnologiesColumn},
+			Columns: application.TechnologiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(technology.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(technology.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -271,10 +295,6 @@ func (acb *ApplicationCreateBulk) Save(ctx context.Context) ([]*Application, err
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

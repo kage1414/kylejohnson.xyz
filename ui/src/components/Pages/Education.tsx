@@ -1,12 +1,11 @@
 import { Box } from '@mui/material';
+import { EducationJSON } from 'apiTypes';
 import { ReactElement } from 'react';
-
-import { Education as EducationData } from 'dbschema/interfaces';
 
 import { FullPost } from '../FullPost';
 
 type Props = {
-  data: EducationData[];
+  data: EducationJSON[];
   display: boolean;
 };
 
@@ -16,16 +15,14 @@ export function Education({ data, display }: Props): ReactElement {
       {display && (
         <Box>
           {data &&
-            data.map(
-              ({ id, school, time, certificate, degree }, idx: number) => (
-                <FullPost
-                  title={school}
-                  subtitles={[degree, certificate]}
-                  time={time}
-                  key={id}
-                />
-              )
-            )}
+            data.map(({ id, school, time, certificate, degree }) => (
+              <FullPost
+                title={school}
+                subtitles={[degree, certificate]}
+                time={time}
+                key={id}
+              />
+            ))}
         </Box>
       )}
     </>

@@ -19,6 +19,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 const (
@@ -37,7 +38,6 @@ const (
 	TypeInvite      = "Invite"
 	TypeTechStack   = "TechStack"
 	TypeTechnology  = "Technology"
-	TypeTest        = "Test"
 	TypeUser        = "User"
 )
 
@@ -46,18 +46,18 @@ type ApplicationMutation struct {
 	config
 	op                  Op
 	typ                 string
-	id                  *int
+	id                  *uuid.UUID
 	name                *string
 	url                 *string
 	active              *bool
 	priority            *int32
 	addpriority         *int32
 	clearedFields       map[string]struct{}
-	descriptions        map[int]struct{}
-	removeddescriptions map[int]struct{}
+	descriptions        map[uuid.UUID]struct{}
+	removeddescriptions map[uuid.UUID]struct{}
 	cleareddescriptions bool
-	technologies        map[int]struct{}
-	removedtechnologies map[int]struct{}
+	technologies        map[uuid.UUID]struct{}
+	removedtechnologies map[uuid.UUID]struct{}
 	clearedtechnologies bool
 	done                bool
 	oldValue            func(context.Context) (*Application, error)
@@ -84,7 +84,7 @@ func newApplicationMutation(c config, op Op, opts ...applicationOption) *Applica
 }
 
 // withApplicationID sets the ID field of the mutation.
-func withApplicationID(id int) applicationOption {
+func withApplicationID(id uuid.UUID) applicationOption {
 	return func(m *ApplicationMutation) {
 		var (
 			err   error
@@ -134,9 +134,15 @@ func (m ApplicationMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Application entities.
+func (m *ApplicationMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ApplicationMutation) ID() (id int, exists bool) {
+func (m *ApplicationMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -147,12 +153,12 @@ func (m *ApplicationMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ApplicationMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ApplicationMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -291,9 +297,22 @@ func (m *ApplicationMutation) OldActive(ctx context.Context) (v bool, err error)
 	return oldValue.Active, nil
 }
 
+// ClearActive clears the value of the "active" field.
+func (m *ApplicationMutation) ClearActive() {
+	m.active = nil
+	m.clearedFields[application.FieldActive] = struct{}{}
+}
+
+// ActiveCleared returns if the "active" field was cleared in this mutation.
+func (m *ApplicationMutation) ActiveCleared() bool {
+	_, ok := m.clearedFields[application.FieldActive]
+	return ok
+}
+
 // ResetActive resets all changes to the "active" field.
 func (m *ApplicationMutation) ResetActive() {
 	m.active = nil
+	delete(m.clearedFields, application.FieldActive)
 }
 
 // SetPriority sets the "priority" field.
@@ -367,9 +386,9 @@ func (m *ApplicationMutation) ResetPriority() {
 }
 
 // AddDescriptionIDs adds the "descriptions" edge to the Description entity by ids.
-func (m *ApplicationMutation) AddDescriptionIDs(ids ...int) {
+func (m *ApplicationMutation) AddDescriptionIDs(ids ...uuid.UUID) {
 	if m.descriptions == nil {
-		m.descriptions = make(map[int]struct{})
+		m.descriptions = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.descriptions[ids[i]] = struct{}{}
@@ -387,9 +406,9 @@ func (m *ApplicationMutation) DescriptionsCleared() bool {
 }
 
 // RemoveDescriptionIDs removes the "descriptions" edge to the Description entity by IDs.
-func (m *ApplicationMutation) RemoveDescriptionIDs(ids ...int) {
+func (m *ApplicationMutation) RemoveDescriptionIDs(ids ...uuid.UUID) {
 	if m.removeddescriptions == nil {
-		m.removeddescriptions = make(map[int]struct{})
+		m.removeddescriptions = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.descriptions, ids[i])
@@ -398,7 +417,7 @@ func (m *ApplicationMutation) RemoveDescriptionIDs(ids ...int) {
 }
 
 // RemovedDescriptions returns the removed IDs of the "descriptions" edge to the Description entity.
-func (m *ApplicationMutation) RemovedDescriptionsIDs() (ids []int) {
+func (m *ApplicationMutation) RemovedDescriptionsIDs() (ids []uuid.UUID) {
 	for id := range m.removeddescriptions {
 		ids = append(ids, id)
 	}
@@ -406,7 +425,7 @@ func (m *ApplicationMutation) RemovedDescriptionsIDs() (ids []int) {
 }
 
 // DescriptionsIDs returns the "descriptions" edge IDs in the mutation.
-func (m *ApplicationMutation) DescriptionsIDs() (ids []int) {
+func (m *ApplicationMutation) DescriptionsIDs() (ids []uuid.UUID) {
 	for id := range m.descriptions {
 		ids = append(ids, id)
 	}
@@ -421,9 +440,9 @@ func (m *ApplicationMutation) ResetDescriptions() {
 }
 
 // AddTechnologyIDs adds the "technologies" edge to the Technology entity by ids.
-func (m *ApplicationMutation) AddTechnologyIDs(ids ...int) {
+func (m *ApplicationMutation) AddTechnologyIDs(ids ...uuid.UUID) {
 	if m.technologies == nil {
-		m.technologies = make(map[int]struct{})
+		m.technologies = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.technologies[ids[i]] = struct{}{}
@@ -441,9 +460,9 @@ func (m *ApplicationMutation) TechnologiesCleared() bool {
 }
 
 // RemoveTechnologyIDs removes the "technologies" edge to the Technology entity by IDs.
-func (m *ApplicationMutation) RemoveTechnologyIDs(ids ...int) {
+func (m *ApplicationMutation) RemoveTechnologyIDs(ids ...uuid.UUID) {
 	if m.removedtechnologies == nil {
-		m.removedtechnologies = make(map[int]struct{})
+		m.removedtechnologies = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.technologies, ids[i])
@@ -452,7 +471,7 @@ func (m *ApplicationMutation) RemoveTechnologyIDs(ids ...int) {
 }
 
 // RemovedTechnologies returns the removed IDs of the "technologies" edge to the Technology entity.
-func (m *ApplicationMutation) RemovedTechnologiesIDs() (ids []int) {
+func (m *ApplicationMutation) RemovedTechnologiesIDs() (ids []uuid.UUID) {
 	for id := range m.removedtechnologies {
 		ids = append(ids, id)
 	}
@@ -460,7 +479,7 @@ func (m *ApplicationMutation) RemovedTechnologiesIDs() (ids []int) {
 }
 
 // TechnologiesIDs returns the "technologies" edge IDs in the mutation.
-func (m *ApplicationMutation) TechnologiesIDs() (ids []int) {
+func (m *ApplicationMutation) TechnologiesIDs() (ids []uuid.UUID) {
 	for id := range m.technologies {
 		ids = append(ids, id)
 	}
@@ -642,6 +661,9 @@ func (m *ApplicationMutation) ClearedFields() []string {
 	if m.FieldCleared(application.FieldURL) {
 		fields = append(fields, application.FieldURL)
 	}
+	if m.FieldCleared(application.FieldActive) {
+		fields = append(fields, application.FieldActive)
+	}
 	if m.FieldCleared(application.FieldPriority) {
 		fields = append(fields, application.FieldPriority)
 	}
@@ -664,6 +686,9 @@ func (m *ApplicationMutation) ClearField(name string) error {
 		return nil
 	case application.FieldURL:
 		m.ClearURL()
+		return nil
+	case application.FieldActive:
+		m.ClearActive()
 		return nil
 	case application.FieldPriority:
 		m.ClearPriority()
@@ -807,13 +832,15 @@ type DescriptionMutation struct {
 	config
 	op                 Op
 	typ                string
-	id                 *int
+	id                 *uuid.UUID
 	description        *string
 	active             *bool
+	priority           *int32
+	addpriority        *int32
 	clearedFields      map[string]struct{}
-	experience         *int
+	experience         *uuid.UUID
 	clearedexperience  bool
-	application        *int
+	application        *uuid.UUID
 	clearedapplication bool
 	done               bool
 	oldValue           func(context.Context) (*Description, error)
@@ -840,7 +867,7 @@ func newDescriptionMutation(c config, op Op, opts ...descriptionOption) *Descrip
 }
 
 // withDescriptionID sets the ID field of the mutation.
-func withDescriptionID(id int) descriptionOption {
+func withDescriptionID(id uuid.UUID) descriptionOption {
 	return func(m *DescriptionMutation) {
 		var (
 			err   error
@@ -890,9 +917,15 @@ func (m DescriptionMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Description entities.
+func (m *DescriptionMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *DescriptionMutation) ID() (id int, exists bool) {
+func (m *DescriptionMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -903,12 +936,12 @@ func (m *DescriptionMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *DescriptionMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *DescriptionMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -985,13 +1018,96 @@ func (m *DescriptionMutation) OldActive(ctx context.Context) (v bool, err error)
 	return oldValue.Active, nil
 }
 
+// ClearActive clears the value of the "active" field.
+func (m *DescriptionMutation) ClearActive() {
+	m.active = nil
+	m.clearedFields[description.FieldActive] = struct{}{}
+}
+
+// ActiveCleared returns if the "active" field was cleared in this mutation.
+func (m *DescriptionMutation) ActiveCleared() bool {
+	_, ok := m.clearedFields[description.FieldActive]
+	return ok
+}
+
 // ResetActive resets all changes to the "active" field.
 func (m *DescriptionMutation) ResetActive() {
 	m.active = nil
+	delete(m.clearedFields, description.FieldActive)
+}
+
+// SetPriority sets the "priority" field.
+func (m *DescriptionMutation) SetPriority(i int32) {
+	m.priority = &i
+	m.addpriority = nil
+}
+
+// Priority returns the value of the "priority" field in the mutation.
+func (m *DescriptionMutation) Priority() (r int32, exists bool) {
+	v := m.priority
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPriority returns the old "priority" field's value of the Description entity.
+// If the Description object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DescriptionMutation) OldPriority(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPriority is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPriority requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPriority: %w", err)
+	}
+	return oldValue.Priority, nil
+}
+
+// AddPriority adds i to the "priority" field.
+func (m *DescriptionMutation) AddPriority(i int32) {
+	if m.addpriority != nil {
+		*m.addpriority += i
+	} else {
+		m.addpriority = &i
+	}
+}
+
+// AddedPriority returns the value that was added to the "priority" field in this mutation.
+func (m *DescriptionMutation) AddedPriority() (r int32, exists bool) {
+	v := m.addpriority
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearPriority clears the value of the "priority" field.
+func (m *DescriptionMutation) ClearPriority() {
+	m.priority = nil
+	m.addpriority = nil
+	m.clearedFields[description.FieldPriority] = struct{}{}
+}
+
+// PriorityCleared returns if the "priority" field was cleared in this mutation.
+func (m *DescriptionMutation) PriorityCleared() bool {
+	_, ok := m.clearedFields[description.FieldPriority]
+	return ok
+}
+
+// ResetPriority resets all changes to the "priority" field.
+func (m *DescriptionMutation) ResetPriority() {
+	m.priority = nil
+	m.addpriority = nil
+	delete(m.clearedFields, description.FieldPriority)
 }
 
 // SetExperienceID sets the "experience" edge to the Experience entity by id.
-func (m *DescriptionMutation) SetExperienceID(id int) {
+func (m *DescriptionMutation) SetExperienceID(id uuid.UUID) {
 	m.experience = &id
 }
 
@@ -1006,7 +1122,7 @@ func (m *DescriptionMutation) ExperienceCleared() bool {
 }
 
 // ExperienceID returns the "experience" edge ID in the mutation.
-func (m *DescriptionMutation) ExperienceID() (id int, exists bool) {
+func (m *DescriptionMutation) ExperienceID() (id uuid.UUID, exists bool) {
 	if m.experience != nil {
 		return *m.experience, true
 	}
@@ -1016,7 +1132,7 @@ func (m *DescriptionMutation) ExperienceID() (id int, exists bool) {
 // ExperienceIDs returns the "experience" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // ExperienceID instead. It exists only for internal usage by the builders.
-func (m *DescriptionMutation) ExperienceIDs() (ids []int) {
+func (m *DescriptionMutation) ExperienceIDs() (ids []uuid.UUID) {
 	if id := m.experience; id != nil {
 		ids = append(ids, *id)
 	}
@@ -1030,7 +1146,7 @@ func (m *DescriptionMutation) ResetExperience() {
 }
 
 // SetApplicationID sets the "application" edge to the Application entity by id.
-func (m *DescriptionMutation) SetApplicationID(id int) {
+func (m *DescriptionMutation) SetApplicationID(id uuid.UUID) {
 	m.application = &id
 }
 
@@ -1045,7 +1161,7 @@ func (m *DescriptionMutation) ApplicationCleared() bool {
 }
 
 // ApplicationID returns the "application" edge ID in the mutation.
-func (m *DescriptionMutation) ApplicationID() (id int, exists bool) {
+func (m *DescriptionMutation) ApplicationID() (id uuid.UUID, exists bool) {
 	if m.application != nil {
 		return *m.application, true
 	}
@@ -1055,7 +1171,7 @@ func (m *DescriptionMutation) ApplicationID() (id int, exists bool) {
 // ApplicationIDs returns the "application" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // ApplicationID instead. It exists only for internal usage by the builders.
-func (m *DescriptionMutation) ApplicationIDs() (ids []int) {
+func (m *DescriptionMutation) ApplicationIDs() (ids []uuid.UUID) {
 	if id := m.application; id != nil {
 		ids = append(ids, *id)
 	}
@@ -1102,12 +1218,15 @@ func (m *DescriptionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DescriptionMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 3)
 	if m.description != nil {
 		fields = append(fields, description.FieldDescription)
 	}
 	if m.active != nil {
 		fields = append(fields, description.FieldActive)
+	}
+	if m.priority != nil {
+		fields = append(fields, description.FieldPriority)
 	}
 	return fields
 }
@@ -1121,6 +1240,8 @@ func (m *DescriptionMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case description.FieldActive:
 		return m.Active()
+	case description.FieldPriority:
+		return m.Priority()
 	}
 	return nil, false
 }
@@ -1134,6 +1255,8 @@ func (m *DescriptionMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldDescription(ctx)
 	case description.FieldActive:
 		return m.OldActive(ctx)
+	case description.FieldPriority:
+		return m.OldPriority(ctx)
 	}
 	return nil, fmt.Errorf("unknown Description field %s", name)
 }
@@ -1157,6 +1280,13 @@ func (m *DescriptionMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetActive(v)
 		return nil
+	case description.FieldPriority:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPriority(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Description field %s", name)
 }
@@ -1164,13 +1294,21 @@ func (m *DescriptionMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *DescriptionMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addpriority != nil {
+		fields = append(fields, description.FieldPriority)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *DescriptionMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case description.FieldPriority:
+		return m.AddedPriority()
+	}
 	return nil, false
 }
 
@@ -1179,6 +1317,13 @@ func (m *DescriptionMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *DescriptionMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case description.FieldPriority:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPriority(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Description numeric field %s", name)
 }
@@ -1186,7 +1331,14 @@ func (m *DescriptionMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *DescriptionMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(description.FieldActive) {
+		fields = append(fields, description.FieldActive)
+	}
+	if m.FieldCleared(description.FieldPriority) {
+		fields = append(fields, description.FieldPriority)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -1199,6 +1351,14 @@ func (m *DescriptionMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *DescriptionMutation) ClearField(name string) error {
+	switch name {
+	case description.FieldActive:
+		m.ClearActive()
+		return nil
+	case description.FieldPriority:
+		m.ClearPriority()
+		return nil
+	}
 	return fmt.Errorf("unknown Description nullable field %s", name)
 }
 
@@ -1211,6 +1371,9 @@ func (m *DescriptionMutation) ResetField(name string) error {
 		return nil
 	case description.FieldActive:
 		m.ResetActive()
+		return nil
+	case description.FieldPriority:
+		m.ResetPriority()
 		return nil
 	}
 	return fmt.Errorf("unknown Description field %s", name)
@@ -1313,7 +1476,7 @@ type EducationMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int
+	id            *uuid.UUID
 	school        *string
 	time          *string
 	certificate   *string
@@ -1347,7 +1510,7 @@ func newEducationMutation(c config, op Op, opts ...educationOption) *EducationMu
 }
 
 // withEducationID sets the ID field of the mutation.
-func withEducationID(id int) educationOption {
+func withEducationID(id uuid.UUID) educationOption {
 	return func(m *EducationMutation) {
 		var (
 			err   error
@@ -1397,9 +1560,15 @@ func (m EducationMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Education entities.
+func (m *EducationMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *EducationMutation) ID() (id int, exists bool) {
+func (m *EducationMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -1410,12 +1579,12 @@ func (m *EducationMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *EducationMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *EducationMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -1639,9 +1808,22 @@ func (m *EducationMutation) OldActive(ctx context.Context) (v bool, err error) {
 	return oldValue.Active, nil
 }
 
+// ClearActive clears the value of the "active" field.
+func (m *EducationMutation) ClearActive() {
+	m.active = nil
+	m.clearedFields[education.FieldActive] = struct{}{}
+}
+
+// ActiveCleared returns if the "active" field was cleared in this mutation.
+func (m *EducationMutation) ActiveCleared() bool {
+	_, ok := m.clearedFields[education.FieldActive]
+	return ok
+}
+
 // ResetActive resets all changes to the "active" field.
 func (m *EducationMutation) ResetActive() {
 	m.active = nil
+	delete(m.clearedFields, education.FieldActive)
 }
 
 // SetPriority sets the "priority" field.
@@ -1913,6 +2095,9 @@ func (m *EducationMutation) ClearedFields() []string {
 	if m.FieldCleared(education.FieldDegree) {
 		fields = append(fields, education.FieldDegree)
 	}
+	if m.FieldCleared(education.FieldActive) {
+		fields = append(fields, education.FieldActive)
+	}
 	if m.FieldCleared(education.FieldPriority) {
 		fields = append(fields, education.FieldPriority)
 	}
@@ -1938,6 +2123,9 @@ func (m *EducationMutation) ClearField(name string) error {
 		return nil
 	case education.FieldDegree:
 		m.ClearDegree()
+		return nil
+	case education.FieldActive:
+		m.ClearActive()
 		return nil
 	case education.FieldPriority:
 		m.ClearPriority()
@@ -2025,14 +2213,16 @@ type ExperienceMutation struct {
 	config
 	op                  Op
 	typ                 string
-	id                  *int
+	id                  *uuid.UUID
 	employer            *string
 	position            *string
 	time                *string
 	active              *bool
+	priority            *int32
+	addpriority         *int32
 	clearedFields       map[string]struct{}
-	descriptions        map[int]struct{}
-	removeddescriptions map[int]struct{}
+	descriptions        map[uuid.UUID]struct{}
+	removeddescriptions map[uuid.UUID]struct{}
 	cleareddescriptions bool
 	done                bool
 	oldValue            func(context.Context) (*Experience, error)
@@ -2059,7 +2249,7 @@ func newExperienceMutation(c config, op Op, opts ...experienceOption) *Experienc
 }
 
 // withExperienceID sets the ID field of the mutation.
-func withExperienceID(id int) experienceOption {
+func withExperienceID(id uuid.UUID) experienceOption {
 	return func(m *ExperienceMutation) {
 		var (
 			err   error
@@ -2109,9 +2299,15 @@ func (m ExperienceMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Experience entities.
+func (m *ExperienceMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ExperienceMutation) ID() (id int, exists bool) {
+func (m *ExperienceMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -2122,12 +2318,12 @@ func (m *ExperienceMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ExperienceMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ExperienceMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -2289,15 +2485,98 @@ func (m *ExperienceMutation) OldActive(ctx context.Context) (v bool, err error) 
 	return oldValue.Active, nil
 }
 
+// ClearActive clears the value of the "active" field.
+func (m *ExperienceMutation) ClearActive() {
+	m.active = nil
+	m.clearedFields[experience.FieldActive] = struct{}{}
+}
+
+// ActiveCleared returns if the "active" field was cleared in this mutation.
+func (m *ExperienceMutation) ActiveCleared() bool {
+	_, ok := m.clearedFields[experience.FieldActive]
+	return ok
+}
+
 // ResetActive resets all changes to the "active" field.
 func (m *ExperienceMutation) ResetActive() {
 	m.active = nil
+	delete(m.clearedFields, experience.FieldActive)
+}
+
+// SetPriority sets the "priority" field.
+func (m *ExperienceMutation) SetPriority(i int32) {
+	m.priority = &i
+	m.addpriority = nil
+}
+
+// Priority returns the value of the "priority" field in the mutation.
+func (m *ExperienceMutation) Priority() (r int32, exists bool) {
+	v := m.priority
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPriority returns the old "priority" field's value of the Experience entity.
+// If the Experience object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ExperienceMutation) OldPriority(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPriority is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPriority requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPriority: %w", err)
+	}
+	return oldValue.Priority, nil
+}
+
+// AddPriority adds i to the "priority" field.
+func (m *ExperienceMutation) AddPriority(i int32) {
+	if m.addpriority != nil {
+		*m.addpriority += i
+	} else {
+		m.addpriority = &i
+	}
+}
+
+// AddedPriority returns the value that was added to the "priority" field in this mutation.
+func (m *ExperienceMutation) AddedPriority() (r int32, exists bool) {
+	v := m.addpriority
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearPriority clears the value of the "priority" field.
+func (m *ExperienceMutation) ClearPriority() {
+	m.priority = nil
+	m.addpriority = nil
+	m.clearedFields[experience.FieldPriority] = struct{}{}
+}
+
+// PriorityCleared returns if the "priority" field was cleared in this mutation.
+func (m *ExperienceMutation) PriorityCleared() bool {
+	_, ok := m.clearedFields[experience.FieldPriority]
+	return ok
+}
+
+// ResetPriority resets all changes to the "priority" field.
+func (m *ExperienceMutation) ResetPriority() {
+	m.priority = nil
+	m.addpriority = nil
+	delete(m.clearedFields, experience.FieldPriority)
 }
 
 // AddDescriptionIDs adds the "descriptions" edge to the Description entity by ids.
-func (m *ExperienceMutation) AddDescriptionIDs(ids ...int) {
+func (m *ExperienceMutation) AddDescriptionIDs(ids ...uuid.UUID) {
 	if m.descriptions == nil {
-		m.descriptions = make(map[int]struct{})
+		m.descriptions = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.descriptions[ids[i]] = struct{}{}
@@ -2315,9 +2594,9 @@ func (m *ExperienceMutation) DescriptionsCleared() bool {
 }
 
 // RemoveDescriptionIDs removes the "descriptions" edge to the Description entity by IDs.
-func (m *ExperienceMutation) RemoveDescriptionIDs(ids ...int) {
+func (m *ExperienceMutation) RemoveDescriptionIDs(ids ...uuid.UUID) {
 	if m.removeddescriptions == nil {
-		m.removeddescriptions = make(map[int]struct{})
+		m.removeddescriptions = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.descriptions, ids[i])
@@ -2326,7 +2605,7 @@ func (m *ExperienceMutation) RemoveDescriptionIDs(ids ...int) {
 }
 
 // RemovedDescriptions returns the removed IDs of the "descriptions" edge to the Description entity.
-func (m *ExperienceMutation) RemovedDescriptionsIDs() (ids []int) {
+func (m *ExperienceMutation) RemovedDescriptionsIDs() (ids []uuid.UUID) {
 	for id := range m.removeddescriptions {
 		ids = append(ids, id)
 	}
@@ -2334,7 +2613,7 @@ func (m *ExperienceMutation) RemovedDescriptionsIDs() (ids []int) {
 }
 
 // DescriptionsIDs returns the "descriptions" edge IDs in the mutation.
-func (m *ExperienceMutation) DescriptionsIDs() (ids []int) {
+func (m *ExperienceMutation) DescriptionsIDs() (ids []uuid.UUID) {
 	for id := range m.descriptions {
 		ids = append(ids, id)
 	}
@@ -2382,7 +2661,7 @@ func (m *ExperienceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ExperienceMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 5)
 	if m.employer != nil {
 		fields = append(fields, experience.FieldEmployer)
 	}
@@ -2394,6 +2673,9 @@ func (m *ExperienceMutation) Fields() []string {
 	}
 	if m.active != nil {
 		fields = append(fields, experience.FieldActive)
+	}
+	if m.priority != nil {
+		fields = append(fields, experience.FieldPriority)
 	}
 	return fields
 }
@@ -2411,6 +2693,8 @@ func (m *ExperienceMutation) Field(name string) (ent.Value, bool) {
 		return m.Time()
 	case experience.FieldActive:
 		return m.Active()
+	case experience.FieldPriority:
+		return m.Priority()
 	}
 	return nil, false
 }
@@ -2428,6 +2712,8 @@ func (m *ExperienceMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldTime(ctx)
 	case experience.FieldActive:
 		return m.OldActive(ctx)
+	case experience.FieldPriority:
+		return m.OldPriority(ctx)
 	}
 	return nil, fmt.Errorf("unknown Experience field %s", name)
 }
@@ -2465,6 +2751,13 @@ func (m *ExperienceMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetActive(v)
 		return nil
+	case experience.FieldPriority:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPriority(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Experience field %s", name)
 }
@@ -2472,13 +2765,21 @@ func (m *ExperienceMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *ExperienceMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addpriority != nil {
+		fields = append(fields, experience.FieldPriority)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *ExperienceMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case experience.FieldPriority:
+		return m.AddedPriority()
+	}
 	return nil, false
 }
 
@@ -2487,6 +2788,13 @@ func (m *ExperienceMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ExperienceMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case experience.FieldPriority:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPriority(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Experience numeric field %s", name)
 }
@@ -2497,6 +2805,12 @@ func (m *ExperienceMutation) ClearedFields() []string {
 	var fields []string
 	if m.FieldCleared(experience.FieldTime) {
 		fields = append(fields, experience.FieldTime)
+	}
+	if m.FieldCleared(experience.FieldActive) {
+		fields = append(fields, experience.FieldActive)
+	}
+	if m.FieldCleared(experience.FieldPriority) {
+		fields = append(fields, experience.FieldPriority)
 	}
 	return fields
 }
@@ -2514,6 +2828,12 @@ func (m *ExperienceMutation) ClearField(name string) error {
 	switch name {
 	case experience.FieldTime:
 		m.ClearTime()
+		return nil
+	case experience.FieldActive:
+		m.ClearActive()
+		return nil
+	case experience.FieldPriority:
+		m.ClearPriority()
 		return nil
 	}
 	return fmt.Errorf("unknown Experience nullable field %s", name)
@@ -2534,6 +2854,9 @@ func (m *ExperienceMutation) ResetField(name string) error {
 		return nil
 	case experience.FieldActive:
 		m.ResetActive()
+		return nil
+	case experience.FieldPriority:
+		m.ResetPriority()
 		return nil
 	}
 	return fmt.Errorf("unknown Experience field %s", name)
@@ -2628,11 +2951,13 @@ type InviteMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int
+	id            *uuid.UUID
 	email         *string
 	key           *string
 	registered    *bool
 	clearedFields map[string]struct{}
+	user          *uuid.UUID
+	cleareduser   bool
 	done          bool
 	oldValue      func(context.Context) (*Invite, error)
 	predicates    []predicate.Invite
@@ -2658,7 +2983,7 @@ func newInviteMutation(c config, op Op, opts ...inviteOption) *InviteMutation {
 }
 
 // withInviteID sets the ID field of the mutation.
-func withInviteID(id int) inviteOption {
+func withInviteID(id uuid.UUID) inviteOption {
 	return func(m *InviteMutation) {
 		var (
 			err   error
@@ -2708,9 +3033,15 @@ func (m InviteMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Invite entities.
+func (m *InviteMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *InviteMutation) ID() (id int, exists bool) {
+func (m *InviteMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -2721,12 +3052,12 @@ func (m *InviteMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *InviteMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *InviteMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -2839,9 +3170,61 @@ func (m *InviteMutation) OldRegistered(ctx context.Context) (v bool, err error) 
 	return oldValue.Registered, nil
 }
 
+// ClearRegistered clears the value of the "registered" field.
+func (m *InviteMutation) ClearRegistered() {
+	m.registered = nil
+	m.clearedFields[invite.FieldRegistered] = struct{}{}
+}
+
+// RegisteredCleared returns if the "registered" field was cleared in this mutation.
+func (m *InviteMutation) RegisteredCleared() bool {
+	_, ok := m.clearedFields[invite.FieldRegistered]
+	return ok
+}
+
 // ResetRegistered resets all changes to the "registered" field.
 func (m *InviteMutation) ResetRegistered() {
 	m.registered = nil
+	delete(m.clearedFields, invite.FieldRegistered)
+}
+
+// SetUserID sets the "user" edge to the User entity by id.
+func (m *InviteMutation) SetUserID(id uuid.UUID) {
+	m.user = &id
+}
+
+// ClearUser clears the "user" edge to the User entity.
+func (m *InviteMutation) ClearUser() {
+	m.cleareduser = true
+}
+
+// UserCleared reports if the "user" edge to the User entity was cleared.
+func (m *InviteMutation) UserCleared() bool {
+	return m.cleareduser
+}
+
+// UserID returns the "user" edge ID in the mutation.
+func (m *InviteMutation) UserID() (id uuid.UUID, exists bool) {
+	if m.user != nil {
+		return *m.user, true
+	}
+	return
+}
+
+// UserIDs returns the "user" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// UserID instead. It exists only for internal usage by the builders.
+func (m *InviteMutation) UserIDs() (ids []uuid.UUID) {
+	if id := m.user; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetUser resets all changes to the "user" edge.
+func (m *InviteMutation) ResetUser() {
+	m.user = nil
+	m.cleareduser = false
 }
 
 // Where appends a list predicates to the InviteMutation builder.
@@ -2976,7 +3359,11 @@ func (m *InviteMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *InviteMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(invite.FieldRegistered) {
+		fields = append(fields, invite.FieldRegistered)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -2989,6 +3376,11 @@ func (m *InviteMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *InviteMutation) ClearField(name string) error {
+	switch name {
+	case invite.FieldRegistered:
+		m.ClearRegistered()
+		return nil
+	}
 	return fmt.Errorf("unknown Invite nullable field %s", name)
 }
 
@@ -3011,19 +3403,28 @@ func (m *InviteMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *InviteMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.user != nil {
+		edges = append(edges, invite.EdgeUser)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *InviteMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case invite.EdgeUser:
+		if id := m.user; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *InviteMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
 	return edges
 }
 
@@ -3035,25 +3436,42 @@ func (m *InviteMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *InviteMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.cleareduser {
+		edges = append(edges, invite.EdgeUser)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *InviteMutation) EdgeCleared(name string) bool {
+	switch name {
+	case invite.EdgeUser:
+		return m.cleareduser
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *InviteMutation) ClearEdge(name string) error {
+	switch name {
+	case invite.EdgeUser:
+		m.ClearUser()
+		return nil
+	}
 	return fmt.Errorf("unknown Invite unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *InviteMutation) ResetEdge(name string) error {
+	switch name {
+	case invite.EdgeUser:
+		m.ResetUser()
+		return nil
+	}
 	return fmt.Errorf("unknown Invite edge %s", name)
 }
 
@@ -3062,11 +3480,11 @@ type TechStackMutation struct {
 	config
 	op                Op
 	typ               string
-	id                *int
+	id                *uuid.UUID
 	stack             *string
 	clearedFields     map[string]struct{}
-	technology        map[int]struct{}
-	removedtechnology map[int]struct{}
+	technology        map[uuid.UUID]struct{}
+	removedtechnology map[uuid.UUID]struct{}
 	clearedtechnology bool
 	done              bool
 	oldValue          func(context.Context) (*TechStack, error)
@@ -3093,7 +3511,7 @@ func newTechStackMutation(c config, op Op, opts ...techstackOption) *TechStackMu
 }
 
 // withTechStackID sets the ID field of the mutation.
-func withTechStackID(id int) techstackOption {
+func withTechStackID(id uuid.UUID) techstackOption {
 	return func(m *TechStackMutation) {
 		var (
 			err   error
@@ -3143,9 +3561,15 @@ func (m TechStackMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of TechStack entities.
+func (m *TechStackMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *TechStackMutation) ID() (id int, exists bool) {
+func (m *TechStackMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -3156,12 +3580,12 @@ func (m *TechStackMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *TechStackMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *TechStackMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -3208,9 +3632,9 @@ func (m *TechStackMutation) ResetStack() {
 }
 
 // AddTechnologyIDs adds the "technology" edge to the Technology entity by ids.
-func (m *TechStackMutation) AddTechnologyIDs(ids ...int) {
+func (m *TechStackMutation) AddTechnologyIDs(ids ...uuid.UUID) {
 	if m.technology == nil {
-		m.technology = make(map[int]struct{})
+		m.technology = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.technology[ids[i]] = struct{}{}
@@ -3228,9 +3652,9 @@ func (m *TechStackMutation) TechnologyCleared() bool {
 }
 
 // RemoveTechnologyIDs removes the "technology" edge to the Technology entity by IDs.
-func (m *TechStackMutation) RemoveTechnologyIDs(ids ...int) {
+func (m *TechStackMutation) RemoveTechnologyIDs(ids ...uuid.UUID) {
 	if m.removedtechnology == nil {
-		m.removedtechnology = make(map[int]struct{})
+		m.removedtechnology = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.technology, ids[i])
@@ -3239,7 +3663,7 @@ func (m *TechStackMutation) RemoveTechnologyIDs(ids ...int) {
 }
 
 // RemovedTechnology returns the removed IDs of the "technology" edge to the Technology entity.
-func (m *TechStackMutation) RemovedTechnologyIDs() (ids []int) {
+func (m *TechStackMutation) RemovedTechnologyIDs() (ids []uuid.UUID) {
 	for id := range m.removedtechnology {
 		ids = append(ids, id)
 	}
@@ -3247,7 +3671,7 @@ func (m *TechStackMutation) RemovedTechnologyIDs() (ids []int) {
 }
 
 // TechnologyIDs returns the "technology" edge IDs in the mutation.
-func (m *TechStackMutation) TechnologyIDs() (ids []int) {
+func (m *TechStackMutation) TechnologyIDs() (ids []uuid.UUID) {
 	for id := range m.technology {
 		ids = append(ids, id)
 	}
@@ -3481,15 +3905,16 @@ type TechnologyMutation struct {
 	config
 	op                 Op
 	typ                string
-	id                 *int
+	id                 *uuid.UUID
 	name               *string
 	url                *string
 	priority           *int32
 	addpriority        *int32
 	clearedFields      map[string]struct{}
-	application        *int
+	application        map[uuid.UUID]struct{}
+	removedapplication map[uuid.UUID]struct{}
 	clearedapplication bool
-	stack              *int
+	stack              *uuid.UUID
 	clearedstack       bool
 	done               bool
 	oldValue           func(context.Context) (*Technology, error)
@@ -3516,7 +3941,7 @@ func newTechnologyMutation(c config, op Op, opts ...technologyOption) *Technolog
 }
 
 // withTechnologyID sets the ID field of the mutation.
-func withTechnologyID(id int) technologyOption {
+func withTechnologyID(id uuid.UUID) technologyOption {
 	return func(m *TechnologyMutation) {
 		var (
 			err   error
@@ -3566,9 +3991,15 @@ func (m TechnologyMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Technology entities.
+func (m *TechnologyMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *TechnologyMutation) ID() (id int, exists bool) {
+func (m *TechnologyMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -3579,12 +4010,12 @@ func (m *TechnologyMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *TechnologyMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *TechnologyMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -3661,9 +4092,22 @@ func (m *TechnologyMutation) OldURL(ctx context.Context) (v string, err error) {
 	return oldValue.URL, nil
 }
 
+// ClearURL clears the value of the "url" field.
+func (m *TechnologyMutation) ClearURL() {
+	m.url = nil
+	m.clearedFields[technology.FieldURL] = struct{}{}
+}
+
+// URLCleared returns if the "url" field was cleared in this mutation.
+func (m *TechnologyMutation) URLCleared() bool {
+	_, ok := m.clearedFields[technology.FieldURL]
+	return ok
+}
+
 // ResetURL resets all changes to the "url" field.
 func (m *TechnologyMutation) ResetURL() {
 	m.url = nil
+	delete(m.clearedFields, technology.FieldURL)
 }
 
 // SetPriority sets the "priority" field.
@@ -3716,15 +4160,34 @@ func (m *TechnologyMutation) AddedPriority() (r int32, exists bool) {
 	return *v, true
 }
 
+// ClearPriority clears the value of the "priority" field.
+func (m *TechnologyMutation) ClearPriority() {
+	m.priority = nil
+	m.addpriority = nil
+	m.clearedFields[technology.FieldPriority] = struct{}{}
+}
+
+// PriorityCleared returns if the "priority" field was cleared in this mutation.
+func (m *TechnologyMutation) PriorityCleared() bool {
+	_, ok := m.clearedFields[technology.FieldPriority]
+	return ok
+}
+
 // ResetPriority resets all changes to the "priority" field.
 func (m *TechnologyMutation) ResetPriority() {
 	m.priority = nil
 	m.addpriority = nil
+	delete(m.clearedFields, technology.FieldPriority)
 }
 
-// SetApplicationID sets the "application" edge to the Application entity by id.
-func (m *TechnologyMutation) SetApplicationID(id int) {
-	m.application = &id
+// AddApplicationIDs adds the "application" edge to the Application entity by ids.
+func (m *TechnologyMutation) AddApplicationIDs(ids ...uuid.UUID) {
+	if m.application == nil {
+		m.application = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		m.application[ids[i]] = struct{}{}
+	}
 }
 
 // ClearApplication clears the "application" edge to the Application entity.
@@ -3737,20 +4200,29 @@ func (m *TechnologyMutation) ApplicationCleared() bool {
 	return m.clearedapplication
 }
 
-// ApplicationID returns the "application" edge ID in the mutation.
-func (m *TechnologyMutation) ApplicationID() (id int, exists bool) {
-	if m.application != nil {
-		return *m.application, true
+// RemoveApplicationIDs removes the "application" edge to the Application entity by IDs.
+func (m *TechnologyMutation) RemoveApplicationIDs(ids ...uuid.UUID) {
+	if m.removedapplication == nil {
+		m.removedapplication = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		delete(m.application, ids[i])
+		m.removedapplication[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedApplication returns the removed IDs of the "application" edge to the Application entity.
+func (m *TechnologyMutation) RemovedApplicationIDs() (ids []uuid.UUID) {
+	for id := range m.removedapplication {
+		ids = append(ids, id)
 	}
 	return
 }
 
 // ApplicationIDs returns the "application" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// ApplicationID instead. It exists only for internal usage by the builders.
-func (m *TechnologyMutation) ApplicationIDs() (ids []int) {
-	if id := m.application; id != nil {
-		ids = append(ids, *id)
+func (m *TechnologyMutation) ApplicationIDs() (ids []uuid.UUID) {
+	for id := range m.application {
+		ids = append(ids, id)
 	}
 	return
 }
@@ -3759,10 +4231,11 @@ func (m *TechnologyMutation) ApplicationIDs() (ids []int) {
 func (m *TechnologyMutation) ResetApplication() {
 	m.application = nil
 	m.clearedapplication = false
+	m.removedapplication = nil
 }
 
 // SetStackID sets the "stack" edge to the TechStack entity by id.
-func (m *TechnologyMutation) SetStackID(id int) {
+func (m *TechnologyMutation) SetStackID(id uuid.UUID) {
 	m.stack = &id
 }
 
@@ -3777,7 +4250,7 @@ func (m *TechnologyMutation) StackCleared() bool {
 }
 
 // StackID returns the "stack" edge ID in the mutation.
-func (m *TechnologyMutation) StackID() (id int, exists bool) {
+func (m *TechnologyMutation) StackID() (id uuid.UUID, exists bool) {
 	if m.stack != nil {
 		return *m.stack, true
 	}
@@ -3787,7 +4260,7 @@ func (m *TechnologyMutation) StackID() (id int, exists bool) {
 // StackIDs returns the "stack" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // StackID instead. It exists only for internal usage by the builders.
-func (m *TechnologyMutation) StackIDs() (ids []int) {
+func (m *TechnologyMutation) StackIDs() (ids []uuid.UUID) {
 	if id := m.stack; id != nil {
 		ids = append(ids, *id)
 	}
@@ -3947,7 +4420,14 @@ func (m *TechnologyMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *TechnologyMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(technology.FieldURL) {
+		fields = append(fields, technology.FieldURL)
+	}
+	if m.FieldCleared(technology.FieldPriority) {
+		fields = append(fields, technology.FieldPriority)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -3960,6 +4440,14 @@ func (m *TechnologyMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *TechnologyMutation) ClearField(name string) error {
+	switch name {
+	case technology.FieldURL:
+		m.ClearURL()
+		return nil
+	case technology.FieldPriority:
+		m.ClearPriority()
+		return nil
+	}
 	return fmt.Errorf("unknown Technology nullable field %s", name)
 }
 
@@ -3997,9 +4485,11 @@ func (m *TechnologyMutation) AddedEdges() []string {
 func (m *TechnologyMutation) AddedIDs(name string) []ent.Value {
 	switch name {
 	case technology.EdgeApplication:
-		if id := m.application; id != nil {
-			return []ent.Value{*id}
+		ids := make([]ent.Value, 0, len(m.application))
+		for id := range m.application {
+			ids = append(ids, id)
 		}
+		return ids
 	case technology.EdgeStack:
 		if id := m.stack; id != nil {
 			return []ent.Value{*id}
@@ -4011,12 +4501,23 @@ func (m *TechnologyMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *TechnologyMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 2)
+	if m.removedapplication != nil {
+		edges = append(edges, technology.EdgeApplication)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *TechnologyMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case technology.EdgeApplication:
+		ids := make([]ent.Value, 0, len(m.removedapplication))
+		for id := range m.removedapplication {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
@@ -4048,9 +4549,6 @@ func (m *TechnologyMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *TechnologyMutation) ClearEdge(name string) error {
 	switch name {
-	case technology.EdgeApplication:
-		m.ClearApplication()
-		return nil
 	case technology.EdgeStack:
 		m.ClearStack()
 		return nil
@@ -4072,284 +4570,19 @@ func (m *TechnologyMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Technology edge %s", name)
 }
 
-// TestMutation represents an operation that mutates the Test nodes in the graph.
-type TestMutation struct {
-	config
-	op            Op
-	typ           string
-	id            *int
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*Test, error)
-	predicates    []predicate.Test
-}
-
-var _ ent.Mutation = (*TestMutation)(nil)
-
-// testOption allows management of the mutation configuration using functional options.
-type testOption func(*TestMutation)
-
-// newTestMutation creates new mutation for the Test entity.
-func newTestMutation(c config, op Op, opts ...testOption) *TestMutation {
-	m := &TestMutation{
-		config:        c,
-		op:            op,
-		typ:           TypeTest,
-		clearedFields: make(map[string]struct{}),
-	}
-	for _, opt := range opts {
-		opt(m)
-	}
-	return m
-}
-
-// withTestID sets the ID field of the mutation.
-func withTestID(id int) testOption {
-	return func(m *TestMutation) {
-		var (
-			err   error
-			once  sync.Once
-			value *Test
-		)
-		m.oldValue = func(ctx context.Context) (*Test, error) {
-			once.Do(func() {
-				if m.done {
-					err = errors.New("querying old values post mutation is not allowed")
-				} else {
-					value, err = m.Client().Test.Get(ctx, id)
-				}
-			})
-			return value, err
-		}
-		m.id = &id
-	}
-}
-
-// withTest sets the old Test of the mutation.
-func withTest(node *Test) testOption {
-	return func(m *TestMutation) {
-		m.oldValue = func(context.Context) (*Test, error) {
-			return node, nil
-		}
-		m.id = &node.ID
-	}
-}
-
-// Client returns a new `ent.Client` from the mutation. If the mutation was
-// executed in a transaction (ent.Tx), a transactional client is returned.
-func (m TestMutation) Client() *Client {
-	client := &Client{config: m.config}
-	client.init()
-	return client
-}
-
-// Tx returns an `ent.Tx` for mutations that were executed in transactions;
-// it returns an error otherwise.
-func (m TestMutation) Tx() (*Tx, error) {
-	if _, ok := m.driver.(*txDriver); !ok {
-		return nil, errors.New("ent: mutation is not running in a transaction")
-	}
-	tx := &Tx{config: m.config}
-	tx.init()
-	return tx, nil
-}
-
-// ID returns the ID value in the mutation. Note that the ID is only available
-// if it was provided to the builder or after it was returned from the database.
-func (m *TestMutation) ID() (id int, exists bool) {
-	if m.id == nil {
-		return
-	}
-	return *m.id, true
-}
-
-// IDs queries the database and returns the entity ids that match the mutation's predicate.
-// That means, if the mutation is applied within a transaction with an isolation level such
-// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
-// or updated by the mutation.
-func (m *TestMutation) IDs(ctx context.Context) ([]int, error) {
-	switch {
-	case m.op.Is(OpUpdateOne | OpDeleteOne):
-		id, exists := m.ID()
-		if exists {
-			return []int{id}, nil
-		}
-		fallthrough
-	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().Test.Query().Where(m.predicates...).IDs(ctx)
-	default:
-		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
-	}
-}
-
-// Where appends a list predicates to the TestMutation builder.
-func (m *TestMutation) Where(ps ...predicate.Test) {
-	m.predicates = append(m.predicates, ps...)
-}
-
-// WhereP appends storage-level predicates to the TestMutation builder. Using this method,
-// users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *TestMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.Test, len(ps))
-	for i := range ps {
-		p[i] = ps[i]
-	}
-	m.Where(p...)
-}
-
-// Op returns the operation name.
-func (m *TestMutation) Op() Op {
-	return m.op
-}
-
-// SetOp allows setting the mutation operation.
-func (m *TestMutation) SetOp(op Op) {
-	m.op = op
-}
-
-// Type returns the node type of this mutation (Test).
-func (m *TestMutation) Type() string {
-	return m.typ
-}
-
-// Fields returns all fields that were changed during this mutation. Note that in
-// order to get all numeric fields that were incremented/decremented, call
-// AddedFields().
-func (m *TestMutation) Fields() []string {
-	fields := make([]string, 0, 0)
-	return fields
-}
-
-// Field returns the value of a field with the given name. The second boolean
-// return value indicates that this field was not set, or was not defined in the
-// schema.
-func (m *TestMutation) Field(name string) (ent.Value, bool) {
-	return nil, false
-}
-
-// OldField returns the old value of the field from the database. An error is
-// returned if the mutation operation is not UpdateOne, or the query to the
-// database failed.
-func (m *TestMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
-	return nil, fmt.Errorf("unknown Test field %s", name)
-}
-
-// SetField sets the value of a field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *TestMutation) SetField(name string, value ent.Value) error {
-	switch name {
-	}
-	return fmt.Errorf("unknown Test field %s", name)
-}
-
-// AddedFields returns all numeric fields that were incremented/decremented during
-// this mutation.
-func (m *TestMutation) AddedFields() []string {
-	return nil
-}
-
-// AddedField returns the numeric value that was incremented/decremented on a field
-// with the given name. The second boolean return value indicates that this field
-// was not set, or was not defined in the schema.
-func (m *TestMutation) AddedField(name string) (ent.Value, bool) {
-	return nil, false
-}
-
-// AddField adds the value to the field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *TestMutation) AddField(name string, value ent.Value) error {
-	return fmt.Errorf("unknown Test numeric field %s", name)
-}
-
-// ClearedFields returns all nullable fields that were cleared during this
-// mutation.
-func (m *TestMutation) ClearedFields() []string {
-	return nil
-}
-
-// FieldCleared returns a boolean indicating if a field with the given name was
-// cleared in this mutation.
-func (m *TestMutation) FieldCleared(name string) bool {
-	_, ok := m.clearedFields[name]
-	return ok
-}
-
-// ClearField clears the value of the field with the given name. It returns an
-// error if the field is not defined in the schema.
-func (m *TestMutation) ClearField(name string) error {
-	return fmt.Errorf("unknown Test nullable field %s", name)
-}
-
-// ResetField resets all changes in the mutation for the field with the given name.
-// It returns an error if the field is not defined in the schema.
-func (m *TestMutation) ResetField(name string) error {
-	return fmt.Errorf("unknown Test field %s", name)
-}
-
-// AddedEdges returns all edge names that were set/added in this mutation.
-func (m *TestMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
-	return edges
-}
-
-// AddedIDs returns all IDs (to other nodes) that were added for the given edge
-// name in this mutation.
-func (m *TestMutation) AddedIDs(name string) []ent.Value {
-	return nil
-}
-
-// RemovedEdges returns all edge names that were removed in this mutation.
-func (m *TestMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
-	return edges
-}
-
-// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
-// the given name in this mutation.
-func (m *TestMutation) RemovedIDs(name string) []ent.Value {
-	return nil
-}
-
-// ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *TestMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
-	return edges
-}
-
-// EdgeCleared returns a boolean which indicates if the edge with the given name
-// was cleared in this mutation.
-func (m *TestMutation) EdgeCleared(name string) bool {
-	return false
-}
-
-// ClearEdge clears the value of the edge with the given name. It returns an error
-// if that edge is not defined in the schema.
-func (m *TestMutation) ClearEdge(name string) error {
-	return fmt.Errorf("unknown Test unique edge %s", name)
-}
-
-// ResetEdge resets all changes to the edge with the given name in this mutation.
-// It returns an error if the edge is not defined in the schema.
-func (m *TestMutation) ResetEdge(name string) error {
-	return fmt.Errorf("unknown Test edge %s", name)
-}
-
 // UserMutation represents an operation that mutates the User nodes in the graph.
 type UserMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int
+	id            *uuid.UUID
 	username      *string
+	password_hash *string
 	email         *string
-	hash          *string
-	salt          *string
 	name          *string
 	clearedFields map[string]struct{}
-	invite        map[int]struct{}
-	removedinvite map[int]struct{}
+	invite        map[uuid.UUID]struct{}
+	removedinvite map[uuid.UUID]struct{}
 	clearedinvite bool
 	done          bool
 	oldValue      func(context.Context) (*User, error)
@@ -4376,7 +4609,7 @@ func newUserMutation(c config, op Op, opts ...userOption) *UserMutation {
 }
 
 // withUserID sets the ID field of the mutation.
-func withUserID(id int) userOption {
+func withUserID(id uuid.UUID) userOption {
 	return func(m *UserMutation) {
 		var (
 			err   error
@@ -4426,9 +4659,15 @@ func (m UserMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of User entities.
+func (m *UserMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *UserMutation) ID() (id int, exists bool) {
+func (m *UserMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -4439,12 +4678,12 @@ func (m *UserMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *UserMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *UserMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -4490,6 +4729,42 @@ func (m *UserMutation) ResetUsername() {
 	m.username = nil
 }
 
+// SetPasswordHash sets the "password_hash" field.
+func (m *UserMutation) SetPasswordHash(s string) {
+	m.password_hash = &s
+}
+
+// PasswordHash returns the value of the "password_hash" field in the mutation.
+func (m *UserMutation) PasswordHash() (r string, exists bool) {
+	v := m.password_hash
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPasswordHash returns the old "password_hash" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldPasswordHash(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPasswordHash is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPasswordHash requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPasswordHash: %w", err)
+	}
+	return oldValue.PasswordHash, nil
+}
+
+// ResetPasswordHash resets all changes to the "password_hash" field.
+func (m *UserMutation) ResetPasswordHash() {
+	m.password_hash = nil
+}
+
 // SetEmail sets the "email" field.
 func (m *UserMutation) SetEmail(s string) {
 	m.email = &s
@@ -4524,78 +4799,6 @@ func (m *UserMutation) OldEmail(ctx context.Context) (v string, err error) {
 // ResetEmail resets all changes to the "email" field.
 func (m *UserMutation) ResetEmail() {
 	m.email = nil
-}
-
-// SetHash sets the "hash" field.
-func (m *UserMutation) SetHash(s string) {
-	m.hash = &s
-}
-
-// Hash returns the value of the "hash" field in the mutation.
-func (m *UserMutation) Hash() (r string, exists bool) {
-	v := m.hash
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldHash returns the old "hash" field's value of the User entity.
-// If the User object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldHash(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldHash is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldHash requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldHash: %w", err)
-	}
-	return oldValue.Hash, nil
-}
-
-// ResetHash resets all changes to the "hash" field.
-func (m *UserMutation) ResetHash() {
-	m.hash = nil
-}
-
-// SetSalt sets the "salt" field.
-func (m *UserMutation) SetSalt(s string) {
-	m.salt = &s
-}
-
-// Salt returns the value of the "salt" field in the mutation.
-func (m *UserMutation) Salt() (r string, exists bool) {
-	v := m.salt
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldSalt returns the old "salt" field's value of the User entity.
-// If the User object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldSalt(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldSalt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldSalt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldSalt: %w", err)
-	}
-	return oldValue.Salt, nil
-}
-
-// ResetSalt resets all changes to the "salt" field.
-func (m *UserMutation) ResetSalt() {
-	m.salt = nil
 }
 
 // SetName sets the "name" field.
@@ -4648,9 +4851,9 @@ func (m *UserMutation) ResetName() {
 }
 
 // AddInviteIDs adds the "invite" edge to the Invite entity by ids.
-func (m *UserMutation) AddInviteIDs(ids ...int) {
+func (m *UserMutation) AddInviteIDs(ids ...uuid.UUID) {
 	if m.invite == nil {
-		m.invite = make(map[int]struct{})
+		m.invite = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.invite[ids[i]] = struct{}{}
@@ -4668,9 +4871,9 @@ func (m *UserMutation) InviteCleared() bool {
 }
 
 // RemoveInviteIDs removes the "invite" edge to the Invite entity by IDs.
-func (m *UserMutation) RemoveInviteIDs(ids ...int) {
+func (m *UserMutation) RemoveInviteIDs(ids ...uuid.UUID) {
 	if m.removedinvite == nil {
-		m.removedinvite = make(map[int]struct{})
+		m.removedinvite = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.invite, ids[i])
@@ -4679,7 +4882,7 @@ func (m *UserMutation) RemoveInviteIDs(ids ...int) {
 }
 
 // RemovedInvite returns the removed IDs of the "invite" edge to the Invite entity.
-func (m *UserMutation) RemovedInviteIDs() (ids []int) {
+func (m *UserMutation) RemovedInviteIDs() (ids []uuid.UUID) {
 	for id := range m.removedinvite {
 		ids = append(ids, id)
 	}
@@ -4687,7 +4890,7 @@ func (m *UserMutation) RemovedInviteIDs() (ids []int) {
 }
 
 // InviteIDs returns the "invite" edge IDs in the mutation.
-func (m *UserMutation) InviteIDs() (ids []int) {
+func (m *UserMutation) InviteIDs() (ids []uuid.UUID) {
 	for id := range m.invite {
 		ids = append(ids, id)
 	}
@@ -4735,18 +4938,15 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 4)
 	if m.username != nil {
 		fields = append(fields, user.FieldUsername)
 	}
+	if m.password_hash != nil {
+		fields = append(fields, user.FieldPasswordHash)
+	}
 	if m.email != nil {
 		fields = append(fields, user.FieldEmail)
-	}
-	if m.hash != nil {
-		fields = append(fields, user.FieldHash)
-	}
-	if m.salt != nil {
-		fields = append(fields, user.FieldSalt)
 	}
 	if m.name != nil {
 		fields = append(fields, user.FieldName)
@@ -4761,12 +4961,10 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case user.FieldUsername:
 		return m.Username()
+	case user.FieldPasswordHash:
+		return m.PasswordHash()
 	case user.FieldEmail:
 		return m.Email()
-	case user.FieldHash:
-		return m.Hash()
-	case user.FieldSalt:
-		return m.Salt()
 	case user.FieldName:
 		return m.Name()
 	}
@@ -4780,12 +4978,10 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 	switch name {
 	case user.FieldUsername:
 		return m.OldUsername(ctx)
+	case user.FieldPasswordHash:
+		return m.OldPasswordHash(ctx)
 	case user.FieldEmail:
 		return m.OldEmail(ctx)
-	case user.FieldHash:
-		return m.OldHash(ctx)
-	case user.FieldSalt:
-		return m.OldSalt(ctx)
 	case user.FieldName:
 		return m.OldName(ctx)
 	}
@@ -4804,26 +5000,19 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUsername(v)
 		return nil
+	case user.FieldPasswordHash:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPasswordHash(v)
+		return nil
 	case user.FieldEmail:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetEmail(v)
-		return nil
-	case user.FieldHash:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetHash(v)
-		return nil
-	case user.FieldSalt:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetSalt(v)
 		return nil
 	case user.FieldName:
 		v, ok := value.(string)
@@ -4893,14 +5082,11 @@ func (m *UserMutation) ResetField(name string) error {
 	case user.FieldUsername:
 		m.ResetUsername()
 		return nil
+	case user.FieldPasswordHash:
+		m.ResetPasswordHash()
+		return nil
 	case user.FieldEmail:
 		m.ResetEmail()
-		return nil
-	case user.FieldHash:
-		m.ResetHash()
-		return nil
-	case user.FieldSalt:
-		m.ResetSalt()
 		return nil
 	case user.FieldName:
 		m.ResetName()

@@ -53,14 +53,14 @@ function EditToolbar(props: EditToolbarProps) {
   );
 }
 
-interface DeleteOptions {
+interface Options {
   technology_id?: string;
 }
 
 export interface CrudOperations {
-  c: (id: string, technology_id?: string) => Promise<GridRowModel>;
+  c: (id: string, options?: Options) => Promise<GridRowModel>;
   u: (newRow: GridRowModel) => Promise<GridRowModel>;
-  d: (id: GridRowId, options?: DeleteOptions) => Promise<GridRowId>;
+  d: (id: GridRowId, options?: Options) => Promise<GridRowId>;
 }
 
 interface DataGridContainerProps {
@@ -130,7 +130,7 @@ export default function DataGridContainer({
     });
 
     const editedRow = rows.find((row) => row.id === id);
-    if (editedRow!.isNew) {
+    if (editedRow?.isNew) {
       d(id);
       setRows(rows.filter((row) => row.id !== id));
     }

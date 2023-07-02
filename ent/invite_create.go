@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"kylejohnson-xyz/ent/invite"
+	"kylejohnson-xyz/ent/user"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // InviteCreate is the builder for creating a Invite entity.
@@ -43,6 +45,39 @@ func (ic *InviteCreate) SetNillableRegistered(b *bool) *InviteCreate {
 		ic.SetRegistered(*b)
 	}
 	return ic
+}
+
+// SetID sets the "id" field.
+func (ic *InviteCreate) SetID(u uuid.UUID) *InviteCreate {
+	ic.mutation.SetID(u)
+	return ic
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (ic *InviteCreate) SetNillableID(u *uuid.UUID) *InviteCreate {
+	if u != nil {
+		ic.SetID(*u)
+	}
+	return ic
+}
+
+// SetUserID sets the "user" edge to the User entity by ID.
+func (ic *InviteCreate) SetUserID(id uuid.UUID) *InviteCreate {
+	ic.mutation.SetUserID(id)
+	return ic
+}
+
+// SetNillableUserID sets the "user" edge to the User entity by ID if the given value is not nil.
+func (ic *InviteCreate) SetNillableUserID(id *uuid.UUID) *InviteCreate {
+	if id != nil {
+		ic = ic.SetUserID(*id)
+	}
+	return ic
+}
+
+// SetUser sets the "user" edge to the User entity.
+func (ic *InviteCreate) SetUser(u *User) *InviteCreate {
+	return ic.SetUserID(u.ID)
 }
 
 // Mutation returns the InviteMutation object of the builder.
@@ -84,6 +119,10 @@ func (ic *InviteCreate) defaults() {
 		v := invite.DefaultRegistered
 		ic.mutation.SetRegistered(v)
 	}
+	if _, ok := ic.mutation.ID(); !ok {
+		v := invite.DefaultID()
+		ic.mutation.SetID(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -93,9 +132,6 @@ func (ic *InviteCreate) check() error {
 	}
 	if _, ok := ic.mutation.Key(); !ok {
 		return &ValidationError{Name: "key", err: errors.New(`ent: missing required field "Invite.key"`)}
-	}
-	if _, ok := ic.mutation.Registered(); !ok {
-		return &ValidationError{Name: "registered", err: errors.New(`ent: missing required field "Invite.registered"`)}
 	}
 	return nil
 }
@@ -111,8 +147,13 @@ func (ic *InviteCreate) sqlSave(ctx context.Context) (*Invite, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	ic.mutation.id = &_node.ID
 	ic.mutation.done = true
 	return _node, nil
@@ -121,8 +162,12 @@ func (ic *InviteCreate) sqlSave(ctx context.Context) (*Invite, error) {
 func (ic *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Invite{config: ic.config}
-		_spec = sqlgraph.NewCreateSpec(invite.Table, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(invite.Table, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeUUID))
 	)
+	if id, ok := ic.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
 	if value, ok := ic.mutation.Email(); ok {
 		_spec.SetField(invite.FieldEmail, field.TypeString, value)
 		_node.Email = value
@@ -134,6 +179,23 @@ func (ic *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 	if value, ok := ic.mutation.Registered(); ok {
 		_spec.SetField(invite.FieldRegistered, field.TypeBool, value)
 		_node.Registered = value
+	}
+	if nodes := ic.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   invite.UserTable,
+			Columns: []string{invite.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.user_invite = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }
@@ -179,10 +241,6 @@ func (icb *InviteCreateBulk) Save(ctx context.Context) ([]*Invite, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

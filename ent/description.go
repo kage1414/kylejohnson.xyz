@@ -11,22 +11,25 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // Description is the model entity for the Description schema.
 type Description struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// Active holds the value of the "active" field.
 	Active bool `json:"active,omitempty"`
+	// Priority holds the value of the "priority" field.
+	Priority int32 `json:"priority,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DescriptionQuery when eager-loading is set.
 	Edges                    DescriptionEdges `json:"edges"`
-	application_descriptions *int
-	experience_descriptions  *int
+	application_descriptions *uuid.UUID
+	experience_descriptions  *uuid.UUID
 	selectValues             sql.SelectValues
 }
 
@@ -74,14 +77,16 @@ func (*Description) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case description.FieldActive:
 			values[i] = new(sql.NullBool)
-		case description.FieldID:
+		case description.FieldPriority:
 			values[i] = new(sql.NullInt64)
 		case description.FieldDescription:
 			values[i] = new(sql.NullString)
+		case description.FieldID:
+			values[i] = new(uuid.UUID)
 		case description.ForeignKeys[0]: // application_descriptions
-			values[i] = new(sql.NullInt64)
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		case description.ForeignKeys[1]: // experience_descriptions
-			values[i] = new(sql.NullInt64)
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -98,11 +103,11 @@ func (d *Description) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case description.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				d.ID = *value
 			}
-			d.ID = int(value.Int64)
 		case description.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
@@ -115,19 +120,25 @@ func (d *Description) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				d.Active = value.Bool
 			}
-		case description.ForeignKeys[0]:
+		case description.FieldPriority:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field application_descriptions", value)
+				return fmt.Errorf("unexpected type %T for field priority", values[i])
 			} else if value.Valid {
-				d.application_descriptions = new(int)
-				*d.application_descriptions = int(value.Int64)
+				d.Priority = int32(value.Int64)
+			}
+		case description.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field application_descriptions", values[i])
+			} else if value.Valid {
+				d.application_descriptions = new(uuid.UUID)
+				*d.application_descriptions = *value.S.(*uuid.UUID)
 			}
 		case description.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field experience_descriptions", value)
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field experience_descriptions", values[i])
 			} else if value.Valid {
-				d.experience_descriptions = new(int)
-				*d.experience_descriptions = int(value.Int64)
+				d.experience_descriptions = new(uuid.UUID)
+				*d.experience_descriptions = *value.S.(*uuid.UUID)
 			}
 		default:
 			d.selectValues.Set(columns[i], values[i])
@@ -180,6 +191,9 @@ func (d *Description) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("active=")
 	builder.WriteString(fmt.Sprintf("%v", d.Active))
+	builder.WriteString(", ")
+	builder.WriteString("priority=")
+	builder.WriteString(fmt.Sprintf("%v", d.Priority))
 	builder.WriteByte(')')
 	return builder.String()
 }

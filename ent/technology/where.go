@@ -7,50 +7,51 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Technology {
+func ID(id uuid.UUID) predicate.Technology {
 	return predicate.Technology(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Technology {
+func IDEQ(id uuid.UUID) predicate.Technology {
 	return predicate.Technology(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Technology {
+func IDNEQ(id uuid.UUID) predicate.Technology {
 	return predicate.Technology(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Technology {
+func IDIn(ids ...uuid.UUID) predicate.Technology {
 	return predicate.Technology(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Technology {
+func IDNotIn(ids ...uuid.UUID) predicate.Technology {
 	return predicate.Technology(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Technology {
+func IDGT(id uuid.UUID) predicate.Technology {
 	return predicate.Technology(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Technology {
+func IDGTE(id uuid.UUID) predicate.Technology {
 	return predicate.Technology(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Technology {
+func IDLT(id uuid.UUID) predicate.Technology {
 	return predicate.Technology(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Technology {
+func IDLTE(id uuid.UUID) predicate.Technology {
 	return predicate.Technology(sql.FieldLTE(FieldID, id))
 }
 
@@ -189,6 +190,16 @@ func URLHasSuffix(v string) predicate.Technology {
 	return predicate.Technology(sql.FieldHasSuffix(FieldURL, v))
 }
 
+// URLIsNil applies the IsNil predicate on the "url" field.
+func URLIsNil() predicate.Technology {
+	return predicate.Technology(sql.FieldIsNull(FieldURL))
+}
+
+// URLNotNil applies the NotNil predicate on the "url" field.
+func URLNotNil() predicate.Technology {
+	return predicate.Technology(sql.FieldNotNull(FieldURL))
+}
+
 // URLEqualFold applies the EqualFold predicate on the "url" field.
 func URLEqualFold(v string) predicate.Technology {
 	return predicate.Technology(sql.FieldEqualFold(FieldURL, v))
@@ -239,12 +250,22 @@ func PriorityLTE(v int32) predicate.Technology {
 	return predicate.Technology(sql.FieldLTE(FieldPriority, v))
 }
 
+// PriorityIsNil applies the IsNil predicate on the "priority" field.
+func PriorityIsNil() predicate.Technology {
+	return predicate.Technology(sql.FieldIsNull(FieldPriority))
+}
+
+// PriorityNotNil applies the NotNil predicate on the "priority" field.
+func PriorityNotNil() predicate.Technology {
+	return predicate.Technology(sql.FieldNotNull(FieldPriority))
+}
+
 // HasApplication applies the HasEdge predicate on the "application" edge.
 func HasApplication() predicate.Technology {
 	return predicate.Technology(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, ApplicationTable, ApplicationColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, ApplicationTable, ApplicationPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})

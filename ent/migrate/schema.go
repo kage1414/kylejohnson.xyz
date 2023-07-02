@@ -10,10 +10,10 @@ import (
 var (
 	// ApplicationsColumns holds the columns for the "applications" table.
 	ApplicationsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID},
 		{Name: "name", Type: field.TypeString, Nullable: true},
 		{Name: "url", Type: field.TypeString, Nullable: true},
-		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "active", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "priority", Type: field.TypeInt32, Nullable: true},
 	}
 	// ApplicationsTable holds the schema information for the "applications" table.
@@ -24,11 +24,12 @@ var (
 	}
 	// DescriptionsColumns holds the columns for the "descriptions" table.
 	DescriptionsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID},
 		{Name: "description", Type: field.TypeString},
-		{Name: "active", Type: field.TypeBool, Default: true},
-		{Name: "application_descriptions", Type: field.TypeInt, Nullable: true},
-		{Name: "experience_descriptions", Type: field.TypeInt, Nullable: true},
+		{Name: "active", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "priority", Type: field.TypeInt32, Nullable: true},
+		{Name: "application_descriptions", Type: field.TypeUUID, Nullable: true},
+		{Name: "experience_descriptions", Type: field.TypeUUID, Nullable: true},
 	}
 	// DescriptionsTable holds the schema information for the "descriptions" table.
 	DescriptionsTable = &schema.Table{
@@ -38,13 +39,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "descriptions_applications_descriptions",
-				Columns:    []*schema.Column{DescriptionsColumns[3]},
+				Columns:    []*schema.Column{DescriptionsColumns[4]},
 				RefColumns: []*schema.Column{ApplicationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "descriptions_experiences_descriptions",
-				Columns:    []*schema.Column{DescriptionsColumns[4]},
+				Columns:    []*schema.Column{DescriptionsColumns[5]},
 				RefColumns: []*schema.Column{ExperiencesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -52,12 +53,12 @@ var (
 	}
 	// EducationsColumns holds the columns for the "educations" table.
 	EducationsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID},
 		{Name: "school", Type: field.TypeString},
 		{Name: "time", Type: field.TypeString, Nullable: true},
 		{Name: "certificate", Type: field.TypeString, Nullable: true},
 		{Name: "degree", Type: field.TypeString, Nullable: true},
-		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "active", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "priority", Type: field.TypeInt32, Nullable: true},
 	}
 	// EducationsTable holds the schema information for the "educations" table.
@@ -68,11 +69,12 @@ var (
 	}
 	// ExperiencesColumns holds the columns for the "experiences" table.
 	ExperiencesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID},
 		{Name: "employer", Type: field.TypeString},
 		{Name: "position", Type: field.TypeString},
 		{Name: "time", Type: field.TypeString, Nullable: true},
-		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "active", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "priority", Type: field.TypeInt32, Nullable: true},
 	}
 	// ExperiencesTable holds the schema information for the "experiences" table.
 	ExperiencesTable = &schema.Table{
@@ -82,11 +84,11 @@ var (
 	}
 	// InvitesColumns holds the columns for the "invites" table.
 	InvitesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "email", Type: field.TypeString},
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "email", Type: field.TypeString, Unique: true},
 		{Name: "key", Type: field.TypeString},
-		{Name: "registered", Type: field.TypeBool, Default: false},
-		{Name: "user_invite", Type: field.TypeInt, Nullable: true},
+		{Name: "registered", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "user_invite", Type: field.TypeUUID, Nullable: true},
 	}
 	// InvitesTable holds the schema information for the "invites" table.
 	InvitesTable = &schema.Table{
@@ -104,8 +106,8 @@ var (
 	}
 	// TechStacksColumns holds the columns for the "tech_stacks" table.
 	TechStacksColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "stack", Type: field.TypeString},
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "stack", Type: field.TypeString, Unique: true},
 	}
 	// TechStacksTable holds the schema information for the "tech_stacks" table.
 	TechStacksTable = &schema.Table{
@@ -115,12 +117,11 @@ var (
 	}
 	// TechnologiesColumns holds the columns for the "technologies" table.
 	TechnologiesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "url", Type: field.TypeString},
-		{Name: "priority", Type: field.TypeInt32},
-		{Name: "application_technologies", Type: field.TypeInt, Nullable: true},
-		{Name: "tech_stack_technology", Type: field.TypeInt, Nullable: true},
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "name", Type: field.TypeString, Unique: true},
+		{Name: "url", Type: field.TypeString, Nullable: true},
+		{Name: "priority", Type: field.TypeInt32, Nullable: true},
+		{Name: "tech_stack_technology", Type: field.TypeUUID, Nullable: true},
 	}
 	// TechnologiesTable holds the schema information for the "technologies" table.
 	TechnologiesTable = &schema.Table{
@@ -129,36 +130,19 @@ var (
 		PrimaryKey: []*schema.Column{TechnologiesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "technologies_applications_technologies",
-				Columns:    []*schema.Column{TechnologiesColumns[4]},
-				RefColumns: []*schema.Column{ApplicationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "technologies_tech_stacks_technology",
-				Columns:    []*schema.Column{TechnologiesColumns[5]},
+				Columns:    []*schema.Column{TechnologiesColumns[4]},
 				RefColumns: []*schema.Column{TechStacksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
 	}
-	// TestsColumns holds the columns for the "tests" table.
-	TestsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-	}
-	// TestsTable holds the schema information for the "tests" table.
-	TestsTable = &schema.Table{
-		Name:       "tests",
-		Columns:    TestsColumns,
-		PrimaryKey: []*schema.Column{TestsColumns[0]},
-	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "username", Type: field.TypeString},
-		{Name: "email", Type: field.TypeString},
-		{Name: "hash", Type: field.TypeString},
-		{Name: "salt", Type: field.TypeString},
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "username", Type: field.TypeString, Unique: true},
+		{Name: "password_hash", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString, Unique: true},
 		{Name: "name", Type: field.TypeString, Nullable: true},
 	}
 	// UsersTable holds the schema information for the "users" table.
@@ -166,6 +150,31 @@ var (
 		Name:       "users",
 		Columns:    UsersColumns,
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
+	}
+	// ApplicationTechnologiesColumns holds the columns for the "application_technologies" table.
+	ApplicationTechnologiesColumns = []*schema.Column{
+		{Name: "application_id", Type: field.TypeUUID},
+		{Name: "technology_id", Type: field.TypeUUID},
+	}
+	// ApplicationTechnologiesTable holds the schema information for the "application_technologies" table.
+	ApplicationTechnologiesTable = &schema.Table{
+		Name:       "application_technologies",
+		Columns:    ApplicationTechnologiesColumns,
+		PrimaryKey: []*schema.Column{ApplicationTechnologiesColumns[0], ApplicationTechnologiesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "application_technologies_application_id",
+				Columns:    []*schema.Column{ApplicationTechnologiesColumns[0]},
+				RefColumns: []*schema.Column{ApplicationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "application_technologies_technology_id",
+				Columns:    []*schema.Column{ApplicationTechnologiesColumns[1]},
+				RefColumns: []*schema.Column{TechnologiesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
@@ -176,8 +185,8 @@ var (
 		InvitesTable,
 		TechStacksTable,
 		TechnologiesTable,
-		TestsTable,
 		UsersTable,
+		ApplicationTechnologiesTable,
 	}
 )
 
@@ -185,6 +194,7 @@ func init() {
 	DescriptionsTable.ForeignKeys[0].RefTable = ApplicationsTable
 	DescriptionsTable.ForeignKeys[1].RefTable = ExperiencesTable
 	InvitesTable.ForeignKeys[0].RefTable = UsersTable
-	TechnologiesTable.ForeignKeys[0].RefTable = ApplicationsTable
-	TechnologiesTable.ForeignKeys[1].RefTable = TechStacksTable
+	TechnologiesTable.ForeignKeys[0].RefTable = TechStacksTable
+	ApplicationTechnologiesTable.ForeignKeys[0].RefTable = ApplicationsTable
+	ApplicationTechnologiesTable.ForeignKeys[1].RefTable = TechnologiesTable
 }

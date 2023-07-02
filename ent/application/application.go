@@ -5,6 +5,7 @@ package application
 import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 const (
@@ -33,13 +34,11 @@ const (
 	DescriptionsInverseTable = "descriptions"
 	// DescriptionsColumn is the table column denoting the descriptions relation/edge.
 	DescriptionsColumn = "application_descriptions"
-	// TechnologiesTable is the table that holds the technologies relation/edge.
-	TechnologiesTable = "technologies"
+	// TechnologiesTable is the table that holds the technologies relation/edge. The primary key declared below.
+	TechnologiesTable = "application_technologies"
 	// TechnologiesInverseTable is the table name for the Technology entity.
 	// It exists in this package in order to avoid circular dependency with the "technology" package.
 	TechnologiesInverseTable = "technologies"
-	// TechnologiesColumn is the table column denoting the technologies relation/edge.
-	TechnologiesColumn = "application_technologies"
 )
 
 // Columns holds all SQL columns for application fields.
@@ -50,6 +49,12 @@ var Columns = []string{
 	FieldActive,
 	FieldPriority,
 }
+
+var (
+	// TechnologiesPrimaryKey and TechnologiesColumn2 are the table columns denoting the
+	// primary key for the technologies relation (M2M).
+	TechnologiesPrimaryKey = []string{"application_id", "technology_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -64,6 +69,8 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultActive holds the default value on creation for the "active" field.
 	DefaultActive bool
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
 )
 
 // OrderOption defines the ordering options for the Application queries.
@@ -132,6 +139,6 @@ func newTechnologiesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TechnologiesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, TechnologiesTable, TechnologiesColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, TechnologiesTable, TechnologiesPrimaryKey...),
 	)
 }

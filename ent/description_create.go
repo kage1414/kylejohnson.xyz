@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // DescriptionCreate is the builder for creating a Description entity.
@@ -41,14 +42,42 @@ func (dc *DescriptionCreate) SetNillableActive(b *bool) *DescriptionCreate {
 	return dc
 }
 
+// SetPriority sets the "priority" field.
+func (dc *DescriptionCreate) SetPriority(i int32) *DescriptionCreate {
+	dc.mutation.SetPriority(i)
+	return dc
+}
+
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (dc *DescriptionCreate) SetNillablePriority(i *int32) *DescriptionCreate {
+	if i != nil {
+		dc.SetPriority(*i)
+	}
+	return dc
+}
+
+// SetID sets the "id" field.
+func (dc *DescriptionCreate) SetID(u uuid.UUID) *DescriptionCreate {
+	dc.mutation.SetID(u)
+	return dc
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (dc *DescriptionCreate) SetNillableID(u *uuid.UUID) *DescriptionCreate {
+	if u != nil {
+		dc.SetID(*u)
+	}
+	return dc
+}
+
 // SetExperienceID sets the "experience" edge to the Experience entity by ID.
-func (dc *DescriptionCreate) SetExperienceID(id int) *DescriptionCreate {
+func (dc *DescriptionCreate) SetExperienceID(id uuid.UUID) *DescriptionCreate {
 	dc.mutation.SetExperienceID(id)
 	return dc
 }
 
 // SetNillableExperienceID sets the "experience" edge to the Experience entity by ID if the given value is not nil.
-func (dc *DescriptionCreate) SetNillableExperienceID(id *int) *DescriptionCreate {
+func (dc *DescriptionCreate) SetNillableExperienceID(id *uuid.UUID) *DescriptionCreate {
 	if id != nil {
 		dc = dc.SetExperienceID(*id)
 	}
@@ -61,13 +90,13 @@ func (dc *DescriptionCreate) SetExperience(e *Experience) *DescriptionCreate {
 }
 
 // SetApplicationID sets the "application" edge to the Application entity by ID.
-func (dc *DescriptionCreate) SetApplicationID(id int) *DescriptionCreate {
+func (dc *DescriptionCreate) SetApplicationID(id uuid.UUID) *DescriptionCreate {
 	dc.mutation.SetApplicationID(id)
 	return dc
 }
 
 // SetNillableApplicationID sets the "application" edge to the Application entity by ID if the given value is not nil.
-func (dc *DescriptionCreate) SetNillableApplicationID(id *int) *DescriptionCreate {
+func (dc *DescriptionCreate) SetNillableApplicationID(id *uuid.UUID) *DescriptionCreate {
 	if id != nil {
 		dc = dc.SetApplicationID(*id)
 	}
@@ -118,15 +147,16 @@ func (dc *DescriptionCreate) defaults() {
 		v := description.DefaultActive
 		dc.mutation.SetActive(v)
 	}
+	if _, ok := dc.mutation.ID(); !ok {
+		v := description.DefaultID()
+		dc.mutation.SetID(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (dc *DescriptionCreate) check() error {
 	if _, ok := dc.mutation.Description(); !ok {
 		return &ValidationError{Name: "description", err: errors.New(`ent: missing required field "Description.description"`)}
-	}
-	if _, ok := dc.mutation.Active(); !ok {
-		return &ValidationError{Name: "active", err: errors.New(`ent: missing required field "Description.active"`)}
 	}
 	return nil
 }
@@ -142,8 +172,13 @@ func (dc *DescriptionCreate) sqlSave(ctx context.Context) (*Description, error) 
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	dc.mutation.id = &_node.ID
 	dc.mutation.done = true
 	return _node, nil
@@ -152,8 +187,12 @@ func (dc *DescriptionCreate) sqlSave(ctx context.Context) (*Description, error) 
 func (dc *DescriptionCreate) createSpec() (*Description, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Description{config: dc.config}
-		_spec = sqlgraph.NewCreateSpec(description.Table, sqlgraph.NewFieldSpec(description.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(description.Table, sqlgraph.NewFieldSpec(description.FieldID, field.TypeUUID))
 	)
+	if id, ok := dc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
 	if value, ok := dc.mutation.Description(); ok {
 		_spec.SetField(description.FieldDescription, field.TypeString, value)
 		_node.Description = value
@@ -161,6 +200,10 @@ func (dc *DescriptionCreate) createSpec() (*Description, *sqlgraph.CreateSpec) {
 	if value, ok := dc.mutation.Active(); ok {
 		_spec.SetField(description.FieldActive, field.TypeBool, value)
 		_node.Active = value
+	}
+	if value, ok := dc.mutation.Priority(); ok {
+		_spec.SetField(description.FieldPriority, field.TypeInt32, value)
+		_node.Priority = value
 	}
 	if nodes := dc.mutation.ExperienceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -170,7 +213,7 @@ func (dc *DescriptionCreate) createSpec() (*Description, *sqlgraph.CreateSpec) {
 			Columns: []string{description.ExperienceColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(experience.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(experience.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -187,7 +230,7 @@ func (dc *DescriptionCreate) createSpec() (*Description, *sqlgraph.CreateSpec) {
 			Columns: []string{description.ApplicationColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(application.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -240,10 +283,6 @@ func (dcb *DescriptionCreateBulk) Save(ctx context.Context) ([]*Description, err
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // TechStackQuery is the builder for querying TechStack entities.
@@ -106,8 +107,8 @@ func (tsq *TechStackQuery) FirstX(ctx context.Context) *TechStack {
 
 // FirstID returns the first TechStack ID from the query.
 // Returns a *NotFoundError when no TechStack ID was found.
-func (tsq *TechStackQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (tsq *TechStackQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = tsq.Limit(1).IDs(setContextOp(ctx, tsq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -119,7 +120,7 @@ func (tsq *TechStackQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (tsq *TechStackQuery) FirstIDX(ctx context.Context) int {
+func (tsq *TechStackQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := tsq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -157,8 +158,8 @@ func (tsq *TechStackQuery) OnlyX(ctx context.Context) *TechStack {
 // OnlyID is like Only, but returns the only TechStack ID in the query.
 // Returns a *NotSingularError when more than one TechStack ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (tsq *TechStackQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (tsq *TechStackQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = tsq.Limit(2).IDs(setContextOp(ctx, tsq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -174,7 +175,7 @@ func (tsq *TechStackQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (tsq *TechStackQuery) OnlyIDX(ctx context.Context) int {
+func (tsq *TechStackQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := tsq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -202,7 +203,7 @@ func (tsq *TechStackQuery) AllX(ctx context.Context) []*TechStack {
 }
 
 // IDs executes the query and returns a list of TechStack IDs.
-func (tsq *TechStackQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (tsq *TechStackQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if tsq.ctx.Unique == nil && tsq.path != nil {
 		tsq.Unique(true)
 	}
@@ -214,7 +215,7 @@ func (tsq *TechStackQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (tsq *TechStackQuery) IDsX(ctx context.Context) []int {
+func (tsq *TechStackQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := tsq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -404,7 +405,7 @@ func (tsq *TechStackQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*T
 
 func (tsq *TechStackQuery) loadTechnology(ctx context.Context, query *TechnologyQuery, nodes []*TechStack, init func(*TechStack), assign func(*TechStack, *Technology)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*TechStack)
+	nodeids := make(map[uuid.UUID]*TechStack)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -444,7 +445,7 @@ func (tsq *TechStackQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (tsq *TechStackQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(techstack.Table, techstack.Columns, sqlgraph.NewFieldSpec(techstack.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(techstack.Table, techstack.Columns, sqlgraph.NewFieldSpec(techstack.FieldID, field.TypeUUID))
 	_spec.From = tsq.sql
 	if unique := tsq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

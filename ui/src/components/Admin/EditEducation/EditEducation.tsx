@@ -1,8 +1,7 @@
 import { GridColDef } from '@mui/x-data-grid';
+import { TechnologyJSON } from 'apiTypes';
 import axios from 'axios';
 import { ReactElement, useEffect, useState } from 'react';
-
-import { Technology as TechnologyData } from 'dbschema/interfaces';
 
 import {
   onAddEducation,
@@ -12,7 +11,7 @@ import {
 import { EditSection } from '../EditSection';
 
 export function EditEducation(): ReactElement {
-  const [education, setEducation] = useState<TechnologyData[]>([]);
+  const [education, setEducation] = useState<TechnologyJSON[]>([]);
   const [loading, setLoading] = useState(false);
   const columns: GridColDef[] = [
     { field: 'school', headerName: 'School', editable: true, width: 150 },
@@ -39,7 +38,7 @@ export function EditEducation(): ReactElement {
       type: 'boolean',
     },
   ];
-  const getEducationData = () => {
+  const getEducationJSON = () => {
     setLoading(true);
     axios
       .get('/api/educations')
@@ -57,7 +56,7 @@ export function EditEducation(): ReactElement {
   };
 
   useEffect(() => {
-    getEducationData();
+    getEducationJSON();
   }, []);
 
   return (

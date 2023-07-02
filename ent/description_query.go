@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // DescriptionQuery is the builder for querying Description entities.
@@ -130,8 +131,8 @@ func (dq *DescriptionQuery) FirstX(ctx context.Context) *Description {
 
 // FirstID returns the first Description ID from the query.
 // Returns a *NotFoundError when no Description ID was found.
-func (dq *DescriptionQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (dq *DescriptionQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = dq.Limit(1).IDs(setContextOp(ctx, dq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -143,7 +144,7 @@ func (dq *DescriptionQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (dq *DescriptionQuery) FirstIDX(ctx context.Context) int {
+func (dq *DescriptionQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := dq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -181,8 +182,8 @@ func (dq *DescriptionQuery) OnlyX(ctx context.Context) *Description {
 // OnlyID is like Only, but returns the only Description ID in the query.
 // Returns a *NotSingularError when more than one Description ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (dq *DescriptionQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (dq *DescriptionQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = dq.Limit(2).IDs(setContextOp(ctx, dq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -198,7 +199,7 @@ func (dq *DescriptionQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (dq *DescriptionQuery) OnlyIDX(ctx context.Context) int {
+func (dq *DescriptionQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := dq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -226,7 +227,7 @@ func (dq *DescriptionQuery) AllX(ctx context.Context) []*Description {
 }
 
 // IDs executes the query and returns a list of Description IDs.
-func (dq *DescriptionQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (dq *DescriptionQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if dq.ctx.Unique == nil && dq.path != nil {
 		dq.Unique(true)
 	}
@@ -238,7 +239,7 @@ func (dq *DescriptionQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (dq *DescriptionQuery) IDsX(ctx context.Context) []int {
+func (dq *DescriptionQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := dq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -452,8 +453,8 @@ func (dq *DescriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 }
 
 func (dq *DescriptionQuery) loadExperience(ctx context.Context, query *ExperienceQuery, nodes []*Description, init func(*Description), assign func(*Description, *Experience)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Description)
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*Description)
 	for i := range nodes {
 		if nodes[i].experience_descriptions == nil {
 			continue
@@ -484,8 +485,8 @@ func (dq *DescriptionQuery) loadExperience(ctx context.Context, query *Experienc
 	return nil
 }
 func (dq *DescriptionQuery) loadApplication(ctx context.Context, query *ApplicationQuery, nodes []*Description, init func(*Description), assign func(*Description, *Application)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Description)
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*Description)
 	for i := range nodes {
 		if nodes[i].application_descriptions == nil {
 			continue
@@ -526,7 +527,7 @@ func (dq *DescriptionQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (dq *DescriptionQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(description.Table, description.Columns, sqlgraph.NewFieldSpec(description.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(description.Table, description.Columns, sqlgraph.NewFieldSpec(description.FieldID, field.TypeUUID))
 	_spec.From = dq.sql
 	if unique := dq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

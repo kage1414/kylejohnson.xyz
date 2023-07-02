@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // EducationQuery is the builder for querying Education entities.
@@ -81,8 +82,8 @@ func (eq *EducationQuery) FirstX(ctx context.Context) *Education {
 
 // FirstID returns the first Education ID from the query.
 // Returns a *NotFoundError when no Education ID was found.
-func (eq *EducationQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (eq *EducationQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = eq.Limit(1).IDs(setContextOp(ctx, eq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -94,7 +95,7 @@ func (eq *EducationQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (eq *EducationQuery) FirstIDX(ctx context.Context) int {
+func (eq *EducationQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := eq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -132,8 +133,8 @@ func (eq *EducationQuery) OnlyX(ctx context.Context) *Education {
 // OnlyID is like Only, but returns the only Education ID in the query.
 // Returns a *NotSingularError when more than one Education ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (eq *EducationQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (eq *EducationQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = eq.Limit(2).IDs(setContextOp(ctx, eq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -149,7 +150,7 @@ func (eq *EducationQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (eq *EducationQuery) OnlyIDX(ctx context.Context) int {
+func (eq *EducationQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := eq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,7 +178,7 @@ func (eq *EducationQuery) AllX(ctx context.Context) []*Education {
 }
 
 // IDs executes the query and returns a list of Education IDs.
-func (eq *EducationQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (eq *EducationQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if eq.ctx.Unique == nil && eq.path != nil {
 		eq.Unique(true)
 	}
@@ -189,7 +190,7 @@ func (eq *EducationQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (eq *EducationQuery) IDsX(ctx context.Context) []int {
+func (eq *EducationQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := eq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -364,7 +365,7 @@ func (eq *EducationQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (eq *EducationQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(education.Table, education.Columns, sqlgraph.NewFieldSpec(education.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(education.Table, education.Columns, sqlgraph.NewFieldSpec(education.FieldID, field.TypeUUID))
 	_spec.From = eq.sql
 	if unique := eq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

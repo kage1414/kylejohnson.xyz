@@ -8,10 +8,12 @@ import (
 	"fmt"
 	"kylejohnson-xyz/ent/invite"
 	"kylejohnson-xyz/ent/predicate"
+	"kylejohnson-xyz/ent/user"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // InviteUpdate is the builder for updating Invite entities.
@@ -53,9 +55,40 @@ func (iu *InviteUpdate) SetNillableRegistered(b *bool) *InviteUpdate {
 	return iu
 }
 
+// ClearRegistered clears the value of the "registered" field.
+func (iu *InviteUpdate) ClearRegistered() *InviteUpdate {
+	iu.mutation.ClearRegistered()
+	return iu
+}
+
+// SetUserID sets the "user" edge to the User entity by ID.
+func (iu *InviteUpdate) SetUserID(id uuid.UUID) *InviteUpdate {
+	iu.mutation.SetUserID(id)
+	return iu
+}
+
+// SetNillableUserID sets the "user" edge to the User entity by ID if the given value is not nil.
+func (iu *InviteUpdate) SetNillableUserID(id *uuid.UUID) *InviteUpdate {
+	if id != nil {
+		iu = iu.SetUserID(*id)
+	}
+	return iu
+}
+
+// SetUser sets the "user" edge to the User entity.
+func (iu *InviteUpdate) SetUser(u *User) *InviteUpdate {
+	return iu.SetUserID(u.ID)
+}
+
 // Mutation returns the InviteMutation object of the builder.
 func (iu *InviteUpdate) Mutation() *InviteMutation {
 	return iu.mutation
+}
+
+// ClearUser clears the "user" edge to the User entity.
+func (iu *InviteUpdate) ClearUser() *InviteUpdate {
+	iu.mutation.ClearUser()
+	return iu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -86,7 +119,7 @@ func (iu *InviteUpdate) ExecX(ctx context.Context) {
 }
 
 func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(invite.Table, invite.Columns, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(invite.Table, invite.Columns, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeUUID))
 	if ps := iu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -102,6 +135,38 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := iu.mutation.Registered(); ok {
 		_spec.SetField(invite.FieldRegistered, field.TypeBool, value)
+	}
+	if iu.mutation.RegisteredCleared() {
+		_spec.ClearField(invite.FieldRegistered, field.TypeBool)
+	}
+	if iu.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   invite.UserTable,
+			Columns: []string{invite.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iu.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   invite.UserTable,
+			Columns: []string{invite.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, iu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -149,9 +214,40 @@ func (iuo *InviteUpdateOne) SetNillableRegistered(b *bool) *InviteUpdateOne {
 	return iuo
 }
 
+// ClearRegistered clears the value of the "registered" field.
+func (iuo *InviteUpdateOne) ClearRegistered() *InviteUpdateOne {
+	iuo.mutation.ClearRegistered()
+	return iuo
+}
+
+// SetUserID sets the "user" edge to the User entity by ID.
+func (iuo *InviteUpdateOne) SetUserID(id uuid.UUID) *InviteUpdateOne {
+	iuo.mutation.SetUserID(id)
+	return iuo
+}
+
+// SetNillableUserID sets the "user" edge to the User entity by ID if the given value is not nil.
+func (iuo *InviteUpdateOne) SetNillableUserID(id *uuid.UUID) *InviteUpdateOne {
+	if id != nil {
+		iuo = iuo.SetUserID(*id)
+	}
+	return iuo
+}
+
+// SetUser sets the "user" edge to the User entity.
+func (iuo *InviteUpdateOne) SetUser(u *User) *InviteUpdateOne {
+	return iuo.SetUserID(u.ID)
+}
+
 // Mutation returns the InviteMutation object of the builder.
 func (iuo *InviteUpdateOne) Mutation() *InviteMutation {
 	return iuo.mutation
+}
+
+// ClearUser clears the "user" edge to the User entity.
+func (iuo *InviteUpdateOne) ClearUser() *InviteUpdateOne {
+	iuo.mutation.ClearUser()
+	return iuo
 }
 
 // Where appends a list predicates to the InviteUpdate builder.
@@ -195,7 +291,7 @@ func (iuo *InviteUpdateOne) ExecX(ctx context.Context) {
 }
 
 func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err error) {
-	_spec := sqlgraph.NewUpdateSpec(invite.Table, invite.Columns, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(invite.Table, invite.Columns, sqlgraph.NewFieldSpec(invite.FieldID, field.TypeUUID))
 	id, ok := iuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Invite.id" for update`)}
@@ -228,6 +324,38 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 	}
 	if value, ok := iuo.mutation.Registered(); ok {
 		_spec.SetField(invite.FieldRegistered, field.TypeBool, value)
+	}
+	if iuo.mutation.RegisteredCleared() {
+		_spec.ClearField(invite.FieldRegistered, field.TypeBool)
+	}
+	if iuo.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   invite.UserTable,
+			Columns: []string{invite.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iuo.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   invite.UserTable,
+			Columns: []string{invite.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Invite{config: iuo.config}
 	_spec.Assign = _node.assignValues

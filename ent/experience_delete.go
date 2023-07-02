@@ -40,7 +40,7 @@ func (ed *ExperienceDelete) ExecX(ctx context.Context) int {
 }
 
 func (ed *ExperienceDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(experience.Table, sqlgraph.NewFieldSpec(experience.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewDeleteSpec(experience.Table, sqlgraph.NewFieldSpec(experience.FieldID, field.TypeUUID))
 	if ps := ed.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

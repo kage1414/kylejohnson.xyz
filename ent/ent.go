@@ -13,7 +13,6 @@ import (
 	"kylejohnson-xyz/ent/invite"
 	"kylejohnson-xyz/ent/technology"
 	"kylejohnson-xyz/ent/techstack"
-	"kylejohnson-xyz/ent/test"
 	"kylejohnson-xyz/ent/user"
 	"reflect"
 	"sync"
@@ -88,7 +87,6 @@ func checkColumn(table, column string) error {
 			invite.Table:      invite.ValidColumn,
 			techstack.Table:   techstack.ValidColumn,
 			technology.Table:  technology.ValidColumn,
-			test.Table:        test.ValidColumn,
 			user.Table:        user.ValidColumn,
 		})
 	})

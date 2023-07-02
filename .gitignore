@@ -33,10 +33,12 @@ privkey.pem
 dist
 config.js
 
-dbschema/edgeql-js
-dbschema/interfaces/*
-dbschema/queries/*
+ui/dbschema/edgeql-js
+ui/dbschema/interfaces/*
+ui/dbschema/queries/*
 *.pem
+ui/.next
+ui/apiTypes.ts
 
 # debug
 npm-debug.log*
@@ -54,4 +56,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-tmp/*
+tmp

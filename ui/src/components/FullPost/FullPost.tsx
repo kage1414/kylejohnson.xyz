@@ -1,15 +1,14 @@
 import { Box, Paper } from '@mui/material';
+import { DescriptionJSON, TechnologyJSON } from 'apiTypes';
 import { ReactElement } from 'react';
-
-import { Description, Technology } from 'dbschema/interfaces';
 
 import { FullPostBody, FullPostFooterList, FullPostHeader } from '.';
 
 interface Props {
   title?: string | null | undefined;
   subtitles?: string | Array<string | null | undefined>;
-  descriptions?: Description[];
-  technologies?: Technology[];
+  descriptions?: DescriptionJSON[];
+  technologies?: TechnologyJSON[];
   time?: string | null | undefined;
   url?: string | null | undefined;
 }

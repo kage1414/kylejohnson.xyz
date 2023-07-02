@@ -9,13 +9,14 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // TechStack is the model entity for the TechStack schema.
 type TechStack struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
 	// Stack holds the value of the "stack" field.
 	Stack string `json:"stack,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -47,10 +48,10 @@ func (*TechStack) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case techstack.FieldID:
-			values[i] = new(sql.NullInt64)
 		case techstack.FieldStack:
 			values[i] = new(sql.NullString)
+		case techstack.FieldID:
+			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -67,11 +68,11 @@ func (ts *TechStack) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case techstack.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				ts.ID = *value
 			}
-			ts.ID = int(value.Int64)
 		case techstack.FieldStack:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field stack", values[i])
