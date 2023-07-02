@@ -9,12 +9,12 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import Link from "next/link";
 
 import { ReactElement, useState } from "react";
 
 import { useLogout } from "./hooks";
 import { useLocation } from "react-router";
+import { Link } from "react-router-dom";
 
 interface Props {
   mutateUser: any;
@@ -121,7 +121,7 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
           </li>
           <li style={style}>
             <div>
-              <Link href={"/admin"}>admin</Link>
+              <Link to={"/admin"}>admin</Link>
             </div>
           </li>
           {user?.username && (

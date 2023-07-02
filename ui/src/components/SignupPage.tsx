@@ -11,12 +11,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Link from "next/link";
 
 import { FormEventHandler, MouseEvent, useEffect, useState } from "react";
 
 import { ComponentProps } from "./HomePage";
 import { useNavigate, useParams } from "react-router";
+import { Link } from "react-router-dom";
 
 export function SignupPage({ user, mutateUser }: ComponentProps) {
   const [errorMsg, setErrorMsg] = useState("");
@@ -140,7 +140,7 @@ export function SignupPage({ user, mutateUser }: ComponentProps) {
               {loading ? <CircularProgress /> : "Sign Up"}
             </Button>
           </Box>
-          <Link href="/login">I already have an account</Link>
+          <Link to="/login">I already have an account</Link>
         </form>
       </Box>
     </Box>

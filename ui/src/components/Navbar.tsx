@@ -36,7 +36,7 @@ export function Navbar({
     >
       <Grid container pb={0}>
         <Grid display="flex" alignItems="flex-end" item>
-          <Link href={"/"}>
+          <Link to={"/"}>
             <Typography variant="h5">{`kyle johnson`}</Typography>
           </Link>
         </Grid>

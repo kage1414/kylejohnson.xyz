@@ -1,7 +1,7 @@
-import { Box, Link, Typography } from '@mui/material';
-import { ReactElement } from 'react';
+import { Box, Link, Typography } from "@mui/material";
+import { ReactElement } from "react";
 
-import { FullPostHeaderSubmittedText } from '.';
+import { FullPostHeaderSubmittedText } from ".";
 
 interface Props {
   title?: string | null | undefined;
@@ -16,16 +16,16 @@ export function FullPostHeader({
   url,
   time,
 }: Props): ReactElement {
-  if (!Array.isArray(subtitles) && typeof subtitles === 'string') {
+  if (!Array.isArray(subtitles) && typeof subtitles === "string") {
     subtitles = [subtitles];
   }
 
   return (
     <Box>
       <Link
-        href={url || ''}
-        color='secondary'
-        underline={url ? 'hover' : 'none'}
+        href={url || ""}
+        color="secondary"
+        underline={url ? "hover" : "none"}
         component={Typography}
       >
         {title}
