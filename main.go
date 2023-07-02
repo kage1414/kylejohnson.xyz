@@ -57,17 +57,14 @@ func ReverseProxy(c *gin.Context) {
 }
 
 func main() {
-	err := godotenv.Load(".env")
+	err := godotenv.Load(".env.local")
 	if err != nil {
 		return
 	}
+	client := db.GetClient()
 	r := gin.Default()
 
-	client := db.GetClient()
 	ctx := context.Background()
-	if os.Getenv("GO_ENV") == "development" {
-		script(ctx, client)
-	}
 
 	api := r.Group("/api")
 
