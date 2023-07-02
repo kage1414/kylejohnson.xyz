@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"kylejohnson-xyz/db"
@@ -21,6 +22,7 @@ func User(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 
 func CurrentUser(c *gin.Context, ctx context.Context, client *ent.Client) {
 	user_id, err := token.ExtractTokenID(c)
+	fmt.Println(user_id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

@@ -39,7 +39,7 @@ func InviteProtected(r *gin.RouterGroup, ctx context.Context, client *ent.Client
 		}
 		var origin string
 		if os.Getenv("GO_ENV") == "development" {
-			origin = "http://127.0.0.1:3000"
+			origin = "http://localhost:8080"
 		} else {
 			origin = "https://www.kylejohnson.xyz"
 		}
