@@ -7,13 +7,14 @@ import {
   Snackbar,
   TextField,
   Typography,
-} from '@mui/material';
-import axios from 'axios';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { ReactElement, useState } from 'react';
+} from "@mui/material";
+import axios from "axios";
+import Link from "next/link";
 
-import { useLogout } from './hooks';
+import { ReactElement, useState } from "react";
+
+import { useLogout } from "./hooks";
+import { useLocation } from "react-router";
 
 interface Props {
   mutateUser: any;
@@ -21,12 +22,12 @@ interface Props {
 }
 
 export function Sidebar({ mutateUser, user }: Props): ReactElement {
-  const { route } = useRouter();
   const [logout] = useLogout();
+  const location = useLocation();
   const [inviteOpen, setInviteOpen] = useState(false);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
+  const [toastMessage, setToastMessage] = useState("");
 
   const onInviteOpen = () => {
     setInviteOpen(true);
@@ -35,8 +36,8 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
   const onInviteSubmit = () => {
     setLoading(true);
     axios({
-      method: 'POST',
-      url: '/api/invite',
+      method: "POST",
+      url: "/api/invite",
       data: { email },
     })
       .then(({ data }) => {
@@ -52,40 +53,40 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
   };
 
   const onLogout = () => {
-    mutateUser('/api/logout', undefined);
+    mutateUser("/api/logout", undefined);
     logout();
   };
 
   const style = {
     minHeight: 50,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     width: 85,
-    margin: '10px 0 3px 12px',
-    border: 'rgb(204, 204, 204) 1px solid',
-    backgroundColor: 'white',
-    borderBottomLeftRadius: '5px',
-    borderTopLeftRadius: '5px',
-    borderRightWidth: '0',
-    overflow: 'auto',
-    fontSize: '12px',
-    fontFamily: 'verdana, arial, helvetica, sans-serif',
+    margin: "10px 0 3px 12px",
+    border: "rgb(204, 204, 204) 1px solid",
+    backgroundColor: "white",
+    borderBottomLeftRadius: "5px",
+    borderTopLeftRadius: "5px",
+    borderRightWidth: "0",
+    overflow: "auto",
+    fontSize: "12px",
+    fontFamily: "verdana, arial, helvetica, sans-serif",
   };
 
   return (
     <Box
       style={{
-        width: '100px',
-        backgroundColor: 'rgb(247, 247, 247)',
+        width: "100px",
+        backgroundColor: "rgb(247, 247, 247)",
         margin: 0,
       }}
     >
       <Box style={{ margin: 0 }}>
         <ul
           style={{
-            display: 'flex',
-            flexDirection: 'column',
+            display: "flex",
+            flexDirection: "column",
             padding: 0,
           }}
         >
@@ -98,7 +99,7 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
           </li>
 
           <li style={style}>
-            <a href={'mailto:kylejohnson92294@gmail.com'}>
+            <a href={"mailto:kylejohnson92294@gmail.com"}>
               kylejohnson
               <br />
               92294
@@ -113,31 +114,31 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
             <span>Remote</span>
           </li>
           <li style={style}>
-            <a href={'https://github.com/kage1414'}>github</a>
+            <a href={"https://github.com/kage1414"}>github</a>
           </li>
           <li style={style}>
-            <a href={'https://www.linkedin.com/in/kylejohnson922/'}>linkedin</a>
+            <a href={"https://www.linkedin.com/in/kylejohnson922/"}>linkedin</a>
           </li>
           <li style={style}>
             <div>
-              <Link href={'/admin'}>admin</Link>
+              <Link href={"/admin"}>admin</Link>
             </div>
           </li>
           {user?.username && (
             <>
               <li style={style}>
                 <span>
-                  <Button onClick={onLogout}>{'Logout'}</Button>
+                  <Button onClick={onLogout}>{"Logout"}</Button>
                 </span>
               </li>
-              {route === '/admin' && (
+              {location.pathname === "/admin" && (
                 <>
                   <li style={style}>
                     <Button
                       onClick={() => {
                         axios({
-                          url: '/api/snapshot',
-                          method: 'post',
+                          url: "/api/snapshot",
+                          method: "post",
                           timeout: 10000,
                         });
                       }}
@@ -147,16 +148,16 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
                   </li>
                   <li style={style}>
                     <span>
-                      <Button onClick={onInviteOpen}>{'Invite'}</Button>
+                      <Button onClick={onInviteOpen}>{"Invite"}</Button>
                     </span>
                   </li>
-                  {process.env.NODE_ENV === 'development' && (
+                  {import.meta.env.NODE_ENV === "development" && (
                     <li style={style}>
                       <Button
                         onClick={() => {
                           axios({
-                            url: '/api/seed',
-                            method: 'post',
+                            url: "/api/seed",
+                            method: "post",
                             timeout: 10000,
                           });
                         }}
@@ -174,12 +175,12 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
       <Dialog open={inviteOpen}>
         <Paper>
           <Box
-            width={'30vw'}
-            height={'20vh'}
-            display='flex'
-            alignItems={'center'}
-            flexDirection='column'
-            justifyContent={'space-around'}
+            width={"30vw"}
+            height={"20vh"}
+            display="flex"
+            alignItems={"center"}
+            flexDirection="column"
+            justifyContent={"space-around"}
             padding={4}
           >
             <Box>
@@ -194,7 +195,7 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
             </Box>
             <Box>
               <Button onClick={onInviteSubmit}>
-                {loading ? <CircularProgress /> : 'Send'}
+                {loading ? <CircularProgress /> : "Send"}
               </Button>
             </Box>
           </Box>
@@ -204,7 +205,7 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
         open={!!toastMessage}
         autoHideDuration={6000}
         onClose={() => {
-          setToastMessage('');
+          setToastMessage("");
         }}
         message={toastMessage}
       />

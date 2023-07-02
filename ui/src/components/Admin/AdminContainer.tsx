@@ -1,26 +1,29 @@
-import { Grid } from '@mui/material';
-import Router from 'next/router';
-import { ReactElement, useEffect } from 'react';
+import { Grid } from "@mui/material";
+
+import { ReactElement, useEffect } from "react";
 
 import {
   EditApplicationContainer,
   EditEducationContainer,
   EditExperienceContainer,
   EditTechnicalSkillsContainer,
-} from '.';
-import { ComponentProps } from '../HomePage';
+} from ".";
+import { ComponentProps } from "../HomePage";
+import { useNavigate } from "react-router";
 
 export function AdminContainer({
   selectedTab,
   user,
   loadingUser,
 }: ComponentProps): ReactElement {
+  const navigate = useNavigate();
   useEffect(() => {
-    if (!loadingUser && !user) Router.replace('/login');
-  }, [user, loadingUser]);
+    console.log({ user, loadingUser });
+    if (!loadingUser && !user) navigate("/login");
+  }, [user, loadingUser, navigate]);
 
   return (
-    <Grid container wrap='nowrap'>
+    <Grid container wrap="nowrap">
       {user?.username && (
         <>
           <EditExperienceContainer display={selectedTab === 0} />

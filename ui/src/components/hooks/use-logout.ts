@@ -1,6 +1,7 @@
-import axios from 'axios';
-import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
+import axios from "axios";
+
+import { useCallback, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 
 interface SecondaryAttributes {
   loading: boolean;
@@ -9,23 +10,24 @@ interface SecondaryAttributes {
 type Return = [() => void, SecondaryAttributes];
 
 export const useLogout = (): Return => {
-  const { route, push, reload } = useRouter();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const logout = useCallback(() => {
     setLoading(true);
     axios({
-      url: '/api/logout',
-      method: 'POST',
+      url: "/api/logout",
+      method: "POST",
       timeout: 10000,
     }).then(() => {
-      if (route !== '/') {
-        push('/');
+      if (location.pathname !== "/") {
+        navigate("/");
       } else {
-        reload();
+        navigate(0);
       }
       setLoading(false);
     });
-  }, [push, reload, route]);
+  }, [location.pathname, navigate]);
 
   return [logout, { loading }];
 };

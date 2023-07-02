@@ -1,27 +1,26 @@
-import { Grid } from '@mui/material';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { ReactElement, useState } from 'react';
+import { Grid } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ReactElement, useEffect, useState } from "react";
 
-import { useUser } from '@/lib/hooks';
-
-import { BottomBar } from './BottomBar';
-import { Navbar } from './Navbar';
-import { Sidebar } from './Sidebar';
+import { BottomBar } from "./BottomBar";
+import { Navbar } from "./Navbar";
+import { Sidebar } from "./Sidebar";
+import { useUser } from "../lib/hooks";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#fb4620',
+      main: "#fb4620",
     },
     secondary: {
-      main: '#0000ff',
+      main: "#0000ff",
     },
     warning: {
-      main: '#ff0000',
+      main: "#ff0000",
     },
   },
   typography: {
-    fontFamily: ['verdana', 'arial', 'helvetica', 'sans-serif'].join(','),
+    fontFamily: ["verdana", "arial", "helvetica", "sans-serif"].join(","),
   },
   components: {
     MuiButtonBase: {
@@ -32,7 +31,7 @@ const theme = createTheme({
     MuiTab: {
       styleOverrides: {
         root: {
-          justifyContent: 'flex-end',
+          justifyContent: "flex-end",
         },
       },
     },
@@ -58,7 +57,7 @@ export default function HomePage({ Component, disableTabs }: Props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container flexDirection={'column'}>
+      <Grid container flexDirection={"column"}>
         <Grid item>
           <Navbar
             selectedTab={selectedTab}
@@ -67,7 +66,7 @@ export default function HomePage({ Component, disableTabs }: Props) {
           />
         </Grid>
         <Grid item>
-          <Grid container flexDirection='row' wrap='nowrap'>
+          <Grid container flexDirection="row" wrap="nowrap">
             <Grid item>
               <Sidebar user={user} mutateUser={mutate} />
             </Grid>
