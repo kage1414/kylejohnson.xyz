@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -12,9 +11,7 @@ import (
 	"kylejohnson-xyz/api"
 	"kylejohnson-xyz/db"
 	"kylejohnson-xyz/ent"
-	"kylejohnson-xyz/middleware"
 
-	jwt "github.com/appleboy/gin-jwt"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -71,28 +68,6 @@ func main() {
 	api := r.Group("/api")
 
 	setupRoutes(api, ctx, client)
-	authMiddleware, err := middleware.JwtAuthMiddleware()
-	if err != nil {
-		log.Fatal("JWT Error:" + err.Error())
-	}
-
-	// When you use jwt.New(), the function is already automatically called for checking,
-	// which means you don't need to call it again.
-	errInit := authMiddleware.MiddlewareInit()
-
-	if errInit != nil {
-		log.Fatal("authMiddleware.MiddlewareInit() Error:" + errInit.Error())
-	}
-
-	api.POST("/login", authMiddleware.LoginHandler)
-
-	r.NoRoute(authMiddleware.MiddlewareFunc(), func(c *gin.Context) {
-		claims := jwt.ExtractClaims(c)
-		log.Printf("NoRoute claims: %#v\n", claims)
-		c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})
-	})
-
-	api.Use(authMiddleware.MiddlewareFunc())
 	setupProtectedRoutes(api, ctx, client)
 
 	if os.Getenv("GO_ENV") == "development" {
