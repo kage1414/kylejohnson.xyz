@@ -64,10 +64,12 @@ export function SignupPage({ user, mutateUser }: ComponentProps) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
+
     setLoading(false);
 
     if (res.status === 201) {
       const userObj = await res.json();
+      console.log({ userObj });
       // set user to useSWR state
       mutateUser(userObj);
     } else {

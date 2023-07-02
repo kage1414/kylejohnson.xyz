@@ -9,10 +9,11 @@ import (
 	"os"
 
 	"kylejohnson-xyz/api"
+	"kylejohnson-xyz/auth"
 	"kylejohnson-xyz/db"
 	"kylejohnson-xyz/ent"
-	"kylejohnson-xyz/middleware"
 
+	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -28,6 +29,7 @@ func setupRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
 	api.TechnicalSkills(r, ctx, client)
 	api.Technology(r, ctx, client)
 	api.User(r, ctx, client)
+	auth.SetupUserSignup(r, ctx, client)
 }
 
 func setupProtectedRoutes(r *gin.RouterGroup, ctx context.Context, client *ent.Client) {
@@ -56,6 +58,14 @@ func ReverseProxy(c *gin.Context) {
 	proxy.ServeHTTP(c.Writer, c.Request)
 }
 
+func seedUser(ctx context.Context, client *ent.Client) {
+	client.Invite.
+		Create().
+		SetKey("asdf").
+		SetEmail("kylejohnson92294@gmail.com").
+		Save(ctx)
+}
+
 func main() {
 	err := godotenv.Load(".env.local")
 	if err != nil {
@@ -68,15 +78,16 @@ func main() {
 
 	api := r.Group("/api")
 
+	seedUser(ctx, client)
 	setupRoutes(api, ctx, client)
-	api.Use(middleware.JwtAuthMiddleware())
+	// api.Use(middleware.JwtAuthMiddleware())
 	setupProtectedRoutes(api, ctx, client)
 
 	if os.Getenv("GO_ENV") == "development" {
 		fmt.Println("Dev environment detected. Reverse proxying dev server")
 		r.NoRoute(ReverseProxy)
 	} else {
-		r.Static("/", "ui/dist")
+		r.Use(static.Serve("/", static.LocalFile("./ui/dist", true)))
 	}
 	r.Run("localhost:8080")
 }
