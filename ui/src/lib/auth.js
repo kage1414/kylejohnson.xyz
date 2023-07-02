@@ -2,10 +2,10 @@ import { defaults, seal, unseal } from '@hapi/iron';
 
 const ironConfig = defaults;
 ironConfig.encryption.minPasswordlength = Number(
-  process.env.NEXT_PUBLIC_MIN_CHARS
+  import.meta.env.NEXT_PUBLIC_MIN_CHARS
 );
 ironConfig.integrity.minPasswordlength = Number(
-  process.env.NEXT_PUBLIC_MIN_CHARS
+  import.meta.env.NEXT_PUBLIC_MIN_CHARS
 );
 
 export async function createLoginSession(session, secret) {

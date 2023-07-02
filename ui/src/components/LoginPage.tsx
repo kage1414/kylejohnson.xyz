@@ -10,13 +10,15 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import Router from 'next/router';
 import { FormEventHandler, MouseEvent, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { ComponentProps } from './HomePage';
 
 export const LoginPage = function ({ mutateUser, user }: ComponentProps) {
   const [errorMsg, setErrorMsg] = useState('');
+
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -48,7 +50,7 @@ export const LoginPage = function ({ mutateUser, user }: ComponentProps) {
   };
 
   useEffect(() => {
-    if (user) Router.push('/admin');
+    if (user) navigate('/admin');
   }, [user]);
 
   return (

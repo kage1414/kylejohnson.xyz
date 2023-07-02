@@ -11,15 +11,17 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import Link from 'next/link';
-import Router, { useRouter } from 'next/router';
 import { FormEventHandler, MouseEvent, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import { ComponentProps } from './HomePage';
 
 export function SignupPage({ user, mutateUser }: ComponentProps) {
   const [errorMsg, setErrorMsg] = useState('');
-  const router = useRouter();
+
+  const navigate = useNavigate();
+  const { key } = useParams();
 
   const [loading, setLoading] = useState(false);
 
@@ -40,7 +42,7 @@ export function SignupPage({ user, mutateUser }: ComponentProps) {
       password: e.currentTarget.password.value,
       fullname: e.currentTarget.fullname.value,
       email: e.currentTarget.email.value,
-      key: router.query.key,
+      key,
     };
 
     if (body.password !== e.currentTarget.rpassword.value) {
@@ -48,9 +50,11 @@ export function SignupPage({ user, mutateUser }: ComponentProps) {
       return;
     }
 
-    if (body.password.length < Number(process.env.NEXT_PUBLIC_MIN_CHARS)) {
+    if (body.password.length < Number(import.meta.env.NEXT_PUBLIC_MIN_CHARS)) {
       setErrorMsg(
-        `Password must be at least ${process.env.NEXT_PUBLIC_MIN_CHARS} characters long`
+        `Password must be at least ${
+          import.meta.env.NEXT_PUBLIC_MIN_CHARS
+        } characters long`
       );
       return;
     }
@@ -73,8 +77,8 @@ export function SignupPage({ user, mutateUser }: ComponentProps) {
 
   useEffect(() => {
     // redirect to home if user is authenticated
-    if (user) Router.push('/admin');
-  }, [user]);
+    if (user) navigate('/admin');
+  }, [navigate, user]);
 
   return (
     <Box padding={2}>
@@ -136,7 +140,7 @@ export function SignupPage({ user, mutateUser }: ComponentProps) {
               {loading ? <CircularProgress /> : 'Sign Up'}
             </Button>
           </Box>
-          <Link href='/login'>I already have an account</Link>
+          <Link to='/login'>I already have an account</Link>
         </form>
       </Box>
     </Box>

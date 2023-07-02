@@ -9,8 +9,9 @@ import {
   Typography,
 } from '@mui/material';
 import axios from 'axios';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
 import { ReactElement, useState } from 'react';
 
 import { useLogout } from './hooks';
@@ -21,7 +22,7 @@ interface Props {
 }
 
 export function Sidebar({ mutateUser, user }: Props): ReactElement {
-  const { route } = useRouter();
+  const location = useLocation();
   const [logout] = useLogout();
   const [inviteOpen, setInviteOpen] = useState(false);
   const [email, setEmail] = useState('');
@@ -120,7 +121,7 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
           </li>
           <li style={style}>
             <div>
-              <Link href={'/admin'}>admin</Link>
+              <Link to={'/admin'}>admin</Link>
             </div>
           </li>
           {user?.username && (
@@ -130,7 +131,7 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
                   <Button onClick={onLogout}>{'Logout'}</Button>
                 </span>
               </li>
-              {route === '/admin' && (
+              {location.pathname === '/admin' && (
                 <>
                   <li style={style}>
                     <Button
@@ -150,7 +151,7 @@ export function Sidebar({ mutateUser, user }: Props): ReactElement {
                       <Button onClick={onInviteOpen}>{'Invite'}</Button>
                     </span>
                   </li>
-                  {process.env.NODE_ENV === 'development' && (
+                  {import.meta.env.NODE_ENV === 'development' && (
                     <li style={style}>
                       <Button
                         onClick={() => {

@@ -21,7 +21,7 @@ async function inviteHandler(req: NextApiRequest, res: NextApiResponse) {
         async (invite) => {
           if (invite) {
             const signupLink = `${origin}/signup?key=${invite.key}`;
-            const { EMAIL, APP_PASSWORD } = process.env;
+            const { EMAIL, APP_PASSWORD } = import.meta.env;
             const emailBody = inviteEmailTemplate({
               baseUrl: origin,
               signupLink,

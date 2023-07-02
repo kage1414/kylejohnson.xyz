@@ -1,6 +1,6 @@
 import { Grid, Tab, Tabs, Toolbar, Typography } from '@mui/material';
-import Link from 'next/link';
 import { Dispatch, ReactElement, SetStateAction } from 'react';
+import { Link } from 'react-router-dom';
 
 interface Props {
   setSelectedTab: Dispatch<SetStateAction<number>>;
@@ -36,7 +36,7 @@ export function Navbar({
     >
       <Grid container pb={0}>
         <Grid display='flex' alignItems='flex-end' item>
-          <Link href={'/'}>
+          <Link to={'/'}>
             <Typography variant='h5'>{`kyle johnson`}</Typography>
           </Link>
         </Grid>

@@ -1,12 +1,10 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
-const CopyPlugin = require('copy-webpack-plugin');
+import path from 'path';
+
+import CopyPlugin from 'copy-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+
 const SRC_DIR = path.join(__dirname, 'src', 'app');
 const DIST_DIR = path.join(__dirname, 'src', 'dist');
-
-var environment =
-  process.env.NODE_ENV === 'production' ? 'production' : 'development';
 
 module.exports = {
   entry: `${SRC_DIR}/index.tsx`,
