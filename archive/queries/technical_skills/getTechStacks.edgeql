@@ -1,1 +1,0 @@
-select TechStack {id, stack};
