@@ -11,6 +11,7 @@ module.exports = {
         "React.js",
         "React Router",
         "GraphQL",
+        "D3",
         "Redux",
         "Material UI",
         "Mantine UI",
