@@ -82,10 +82,21 @@ module.exports = {
   ],
   applications: [
     {
+      name: "Orglab Teams",
+      technologies: ["Typescript", "React", "D3", "Cypress", "Material UI"],
+      description: [
+        "Collaborated with cross-functional teams to workshop new visualization designs, optimizing data fetching techniques to improve performance and support large-scale datasets with 40k+ data points.",
+        "Built a custom React hook to automate the retrieval of terminology data from backend servers.",
+        "Successfully migrated application privilege systems, ensuring smooth transition and improved user access control.",
+        "Enhanced table functionality to enable persistent header visibility while seamlessly navigating through extensive datasets.",
+      ],
+    },
+    {
       name: "HWSpec",
       technologies: [
         "Javascript",
         "Flow",
+        "React",
         "MySQL",
         "Ent",
         "Relay",
@@ -209,6 +220,7 @@ module.exports = {
         "Collaborated closely with client development teams, fostering effective communication and teamwork to deliver high-quality applications.",
         "Participated in code reviews and provided valuable feedback to improve code quality, maintainability, and performance.",
         "Successfully resolved application bugs and provided timely support to clients, ensuring smooth operation and minimal disruptions.",
+        "Actively engaged in regular lab days to foster skill development and advance company-wide expertise.",
       ],
     },
     {
