@@ -1,8 +1,8 @@
-import { auth, isAuthenticated } from 'middleware';
 import { NextApiRequest, NextApiResponse } from 'next';
 import nextConnect from 'next-connect';
 
 import { takeSnapshot } from '@/lib/take-snapshot';
+import { auth, isAuthenticated } from 'middleware';
 
 const handler = nextConnect();
 

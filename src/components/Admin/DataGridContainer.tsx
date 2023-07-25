@@ -58,7 +58,10 @@ interface DeleteOptions {
 }
 
 export interface CrudOperations {
-  c: (id: string, technology_id?: string) => Promise<GridRowModel>;
+  c: (
+    id: string,
+    options?: { technology_id?: string }
+  ) => Promise<GridRowModel>;
   u: (newRow: GridRowModel) => Promise<GridRowModel>;
   d: (id: GridRowId, options?: DeleteOptions) => Promise<GridRowId>;
 }
