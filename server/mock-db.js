@@ -92,7 +92,7 @@ module.exports = {
   applications: [
     {
       name: "Orglab Teams",
-      technologies: ["Typescript", "React", "D3", "Cypress", "Material UI"],
+      technologies: ["Typescript", "React", "D3.js", "Cypress", "Material UI"],
       description: [
         "Collaborated with cross-functional teams to workshop new visualization designs, optimizing data fetching techniques to improve performance and support large-scale datasets with 40k+ data points.",
         "Built a custom React hook to automate the retrieval of terminology data from backend servers.",
@@ -219,9 +219,20 @@ module.exports = {
   ],
   experience: [
     {
+      employer: "Authenticx",
+      position: "Frontend Engineer",
+      time: "2023 - present",
+      description: [
+        "Lead the development of an installation wizard application to seamlessly integrate Authenticx platform with backend client pipelines.",
+        "Enhanced chat exploration feature using React and MobX to offer deeper insights into client-customer interactions.",
+        "Strategically devised and executed fundamental CRUD functions with a focus on ensuring future reusability.",
+        "Effectively relayed project requirements to the backend development team to fulfill product objectives.",
+      ],
+    },
+    {
       employer: "Crema",
       position: "Developer II",
-      time: "2022 - present",
+      time: "2022 - 2023",
       description: [
         "Developed and maintained applications supporting organizational restructuring efforts, improving organizational efficiency.",
         "Conducted weekly meetings with clients to ensure alignment on application objectives and gather feedback for continuous improvement.",
