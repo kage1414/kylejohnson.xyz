@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "yarn gen:all && next start",
     "deploy-check-in": "yarn gen:all",
     "lint": "next lint",
     "migrate": "edgedb migration create && edgedb migrate",
