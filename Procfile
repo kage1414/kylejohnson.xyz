@@ -1,1 +1,1 @@
-web: start-edgedb npm start
+web: start-edgedb && yarn install && yarn gen:all && yarn start
