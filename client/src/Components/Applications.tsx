@@ -16,10 +16,9 @@ const Applications: FC<IProps> = ({ applicationData }): ReactElement => {
   return (
     <div
       style={{
-        marginLeft: "15px",
         display: "flex",
         alignContent: "flex-start",
-        flexFlow: "row wrap",
+        flexDirection: "column",
       }}
     >
       {applicationData.map(({ name, technologies, url, description }, idx) => (

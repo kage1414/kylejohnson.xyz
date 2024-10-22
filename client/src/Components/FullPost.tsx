@@ -136,31 +136,33 @@ const FullPost: FC<Props> = ({
             </p>
           )}
         </div>
-        <div style={{ margin: "8px" }}>
-          <div
-            style={{
-              backgroundColor: "rgb(250, 250, 250)",
-              borderRadius: "8px",
-              border: "1px black solid",
-              padding: "10px",
-              display: "inline-block",
-            }}
-          >
-            {body && (
-              <div>
-                <PostBodyContent body={body} />
-              </div>
-            )}
-            {secondaryBody && (
-              <div>
-                <PostBodyContent
-                  body={secondaryBody}
-                  title={secondaryBodyTitle}
-                />
-              </div>
-            )}
+        {(body || secondaryBody) && (
+          <div style={{ margin: "8px" }}>
+            <div
+              style={{
+                backgroundColor: "rgb(250, 250, 250)",
+                borderRadius: "8px",
+                border: "1px black solid",
+                padding: "10px",
+                display: "inline-block",
+              }}
+            >
+              {body && (
+                <div>
+                  <PostBodyContent body={body} />
+                </div>
+              )}
+              {secondaryBody && (
+                <div>
+                  <PostBodyContent
+                    body={secondaryBody}
+                    title={secondaryBodyTitle}
+                  />
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
         <ul
           style={{
             padding: "0 1px",
