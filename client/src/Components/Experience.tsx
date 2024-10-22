@@ -12,6 +12,7 @@ const Experience: FC<IProps> = ({ experienceData }): ReactElement => {
         display: "flex",
         alignContent: "flex-start",
         flexDirection: "column",
+        width: "100%",
       }}
     >
       {experienceData.map(

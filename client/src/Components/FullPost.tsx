@@ -32,12 +32,14 @@ const FullPost: FC<IProps> = ({
       style={{
         margin: "10px 3px",
         flex: "1",
+        width: "100%",
       }}
     >
       <div
         style={{
           backgroundColor: "rgb(240, 243, 252)",
           display: "inline-block",
+          width: "100%",
         }}
       >
         <div
@@ -96,10 +98,9 @@ const FullPost: FC<IProps> = ({
         </div>
         <div>
           {body && (
-            <div style={{ margin: "4px" }}>
+            <div style={{ margin: "8px" }}>
               <div
                 style={{
-                  margin: "4px 0",
                   backgroundColor: "rgb(250, 250, 250)",
                   borderRadius: "8px",
                   border: "1px black solid",
