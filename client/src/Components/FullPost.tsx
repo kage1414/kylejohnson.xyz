@@ -1,19 +1,59 @@
 import React, { FC, ReactElement } from "react";
 
-interface IProps {
+interface Props {
   title: string;
   subtitle?: string;
   body?: Array<string>;
   time?: string;
   url?: string;
+  secondaryBody?: string[];
+  secondaryBodyTitle?: string;
 }
 
-const FullPost: FC<IProps> = ({
+interface PostBodyProps {
+  body: string[];
+  title?: string;
+}
+
+const PostBodyContent: FC<PostBodyProps> = ({ body, title }) => {
+  return (
+    <>
+      {title && (
+        <div
+          style={{
+            fontSize: "14px",
+            fontWeight: 600,
+            marginTop: "8px",
+            marginBottom: "4px",
+          }}
+        >
+          {title}
+        </div>
+      )}
+      {body.map((text: string, idx: number) => (
+        <p
+          key={text + idx}
+          style={{
+            marginBottom: "4px",
+            minWidth: "300px",
+            fontSize: "14px",
+            fontWeight: 400,
+            lineHeight: "20px",
+          }}
+        >{`${text}`}</p>
+      ))}
+    </>
+  );
+};
+
+const FullPost: FC<Props> = ({
   title,
   subtitle,
   body,
   time,
   url,
+  secondaryBody,
+  secondaryBodyTitle,
 }): ReactElement => {
   const flatListButtons = [
     `${Math.floor(Math.random() * 100)} comments`,
@@ -30,7 +70,7 @@ const FullPost: FC<IProps> = ({
   return (
     <div
       style={{
-        margin: "10px 3px",
+        margin: "10px 0px",
         flex: "1",
         width: "100%",
       }}
@@ -44,7 +84,7 @@ const FullPost: FC<IProps> = ({
       >
         <div
           style={{
-            margin: "6px",
+            margin: "8px",
           }}
         >
           <a
@@ -96,33 +136,30 @@ const FullPost: FC<IProps> = ({
             </p>
           )}
         </div>
-        <div>
-          {body && (
-            <div style={{ margin: "8px" }}>
-              <div
-                style={{
-                  backgroundColor: "rgb(250, 250, 250)",
-                  borderRadius: "8px",
-                  border: "1px black solid",
-                  padding: "10px",
-                  display: "inline-block",
-                }}
-              >
-                {body.map((text: string, idx: number) => (
-                  <p
-                    key={text + idx}
-                    style={{
-                      marginBottom: "4px",
-                      minWidth: "300px",
-                      fontSize: "14px",
-                      fontWeight: 400,
-                      lineHeight: "20px",
-                    }}
-                  >{`${text}`}</p>
-                ))}
+        <div style={{ margin: "8px" }}>
+          <div
+            style={{
+              backgroundColor: "rgb(250, 250, 250)",
+              borderRadius: "8px",
+              border: "1px black solid",
+              padding: "10px",
+              display: "inline-block",
+            }}
+          >
+            {body && (
+              <div>
+                <PostBodyContent body={body} />
               </div>
-            </div>
-          )}
+            )}
+            {secondaryBody && (
+              <div>
+                <PostBodyContent
+                  body={secondaryBody}
+                  title={secondaryBodyTitle}
+                />
+              </div>
+            )}
+          </div>
         </div>
         <ul
           style={{
