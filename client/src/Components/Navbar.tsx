@@ -10,15 +10,13 @@ const Navbar: FC<IProps> = ({ tabs, switchTabs }): ReactElement => {
   return (
     <div
       style={{
-        paddingLeft: "12px",
         paddingTop: "15px",
         minHeight: "30px",
         display: "flex",
         borderBottom: "solid rgb(95, 153, 207) 1px",
-        width: "100vw",
       }}
     >
-      <div style={{ alignSelf: "flex-end" }}>
+      <div style={{ alignSelf: "flex-end", paddingLeft: "12px" }}>
         <span style={{ fontSize: "30px" }}>kyle johnson</span>
       </div>
       <div
