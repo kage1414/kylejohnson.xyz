@@ -4,7 +4,7 @@
   "description": "Personal website",
   "private": true,
   "engines": {
-    "node": "16.*"
+    "node": "20.*"
   },
   "dependencies": {
     "axios": "^0.25.0",

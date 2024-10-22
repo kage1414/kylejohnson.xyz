@@ -28,3 +28,4 @@ fullchain.pem
 privkey.pem
 dist
 config.js
+.vscode
