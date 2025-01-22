@@ -159,7 +159,7 @@ module.exports = {
     },
     {
       name: "Bike Lockr",
-      url: "https://github.com/kage1414/mvp",
+      url: "https://github.com/kage1414/BikeLockr",
       technologies: [
         "Javascript",
         "React",
