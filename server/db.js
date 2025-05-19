@@ -91,6 +91,24 @@ module.exports = {
   ],
   applications: [
     {
+      name: "RevWire.co",
+      url: "https://revwire.co",
+      technologies: [
+        "Typescript",
+        "Next.js",
+        "Node.js",
+        "Prisma ORM",
+        "PostgreSQL",
+        "OpenAi API",
+      ],
+      description: [
+        "Built a full-stack web application that aggregates automotive news articles from various sources, synthesizes the content using the OpenAI API, and generates original summaries with natural language generation.",
+        "Leveraged Next.js for a performant, SEO-optimized frontend and server-side rendering to maximize visibility and ranking in search engines.",
+        "Implemented a robust backend using PostgreSQL and Prisma ORM for scalable data management and efficient querying of source content and generated articles.",
+        "Designed the system to continuously ingest new articles, categorize and summarize content, and present clean, readable summaries to users." 
+      ],
+    },
+    {
       name: "Overseerr",
       url: "https://github.com/sct/Overseerr",
       technologies: [
